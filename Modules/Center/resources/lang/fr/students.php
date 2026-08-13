@@ -26,6 +26,7 @@ return [
     'inactive' => 'Inactif',
     'edit' => 'Modifier',
     'delete' => 'Supprimer',
+    'delete_confirm_title' => 'Êtes-vous sûr de vouloir supprimer cet étudiant ?',
     'no_students' => 'Aucun étudiant trouvé.',
     'view_details' => 'Voir les détails',
     'student_settings' => 'Paramètres de l\'étudiant',

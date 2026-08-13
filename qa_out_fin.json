@@ -1,0 +1,35 @@
+{
+  "checks": [
+    {
+      "name": "students page for sale",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "sale create",
+      "passed": false,
+      "detail": "status=422"
+    },
+    {
+      "name": "sales list",
+      "passed": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "sale show",
+      "passed": true,
+      "detail": "status=200 hasItem=false"
+    },
+    {
+      "name": "receipt endpoint responds",
+      "passed": false,
+      "detail": "status=404"
+    },
+    {
+      "name": "statement page",
+      "passed": true,
+      "detail": "status=200"
+    }
+  ],
+  "errors": []
+}

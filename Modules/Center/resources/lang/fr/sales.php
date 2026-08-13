@@ -4,6 +4,7 @@ return [
     'title' => 'Historique des Ventes',
     'new_sale' => 'Nouvelle Vente (POS)',
     'invoice_number' => 'N° Facture',
+    'deleted_student' => 'Étudiant supprimé',
     'student' => 'Étudiant',
     'amount' => 'Montant',
     'paid' => 'Payé',

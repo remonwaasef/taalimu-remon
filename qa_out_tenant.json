@@ -1,0 +1,55 @@
+{
+  "checks": [
+    {
+      "name": "T1 session does not cross into T2 (must prompt login)",
+      "passed": true,
+      "detail": "http://ra3y.localhost:8000/login"
+    },
+    {
+      "name": "T2 student id 1 in T1",
+      "passed": false,
+      "detail": "status=200"
+    },
+    {
+      "name": "nonexistent student",
+      "passed": true,
+      "detail": "status=404"
+    },
+    {
+      "name": "T2 sale id 1 in T1",
+      "passed": false,
+      "detail": "status=200"
+    },
+    {
+      "name": "T2 course id 1 in T1",
+      "passed": false,
+      "detail": "status=500"
+    },
+    {
+      "name": "T2 instructor id 1 in T1",
+      "passed": false,
+      "detail": "status=200"
+    },
+    {
+      "name": "T1 search does not leak T2 students",
+      "passed": true,
+      "detail": "status=200 count=0"
+    },
+    {
+      "name": "T1 empty search returns empty (no global leak)",
+      "passed": true,
+      "detail": "count=0"
+    },
+    {
+      "name": "guest cannot reach T2 students (redirects to login)",
+      "passed": true,
+      "detail": "http://ra3y.localhost:8000/login"
+    },
+    {
+      "name": "T1 student results belong to T1",
+      "passed": true,
+      "detail": "count=10"
+    }
+  ],
+  "errors": []
+}

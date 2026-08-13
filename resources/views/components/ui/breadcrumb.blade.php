@@ -14,6 +14,12 @@
         </li>
 
         @foreach($items as $label => $url)
+            @php
+                if (is_array($url)) {
+                    $label = $url['label'] ?? $label;
+                    $url = $url['url'] ?? null;
+                }
+            @endphp
             <li>
                 <div class="flex items-center">
                     <svg class="w-3 h-3 text-slate-400 mx-1 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -1,0 +1,95 @@
+{
+  "checks": [
+    {
+      "name": "admin logged in",
+      "passed": true,
+      "detail": "url=http://qa-center-194003.localhost:8000/"
+    },
+    {
+      "name": "quizzes index accessible",
+      "passed": true,
+      "detail": "status=200 len=300"
+    },
+    {
+      "name": "quiz store creates quiz + redirect to edit",
+      "passed": true,
+      "detail": "status=200 url=http://qa-center-194003.localhost:8000/quizzes/34/edit"
+    },
+    {
+      "name": "quiz persisted in DB",
+      "passed": true,
+      "detail": "id=34 pass=60"
+    },
+    {
+      "name": "quiz edit page 200",
+      "passed": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "quiz updated in DB via form",
+      "passed": true,
+      "detail": "title=اختبار QA مؤقت معدل pass=75"
+    },
+    {
+      "name": "question stored (mcq) with 2 default options",
+      "passed": true,
+      "detail": "q=32 options=2"
+    },
+    {
+      "name": "option store persisted",
+      "passed": true,
+      "detail": "id=72"
+    },
+    {
+      "name": "option updated in DB",
+      "passed": true,
+      "detail": "content=خيار معدل QA 9"
+    },
+    {
+      "name": "exactly one correct option after set",
+      "passed": true,
+      "detail": "{\"correct\":1}"
+    },
+    {
+      "name": "question updated in DB",
+      "passed": true,
+      "detail": "points=15"
+    },
+    {
+      "name": "option destroyed in DB",
+      "passed": true,
+      "detail": "options=2"
+    },
+    {
+      "name": "question destroyed in DB",
+      "passed": true,
+      "detail": "qs=0"
+    },
+    {
+      "name": "student logged in",
+      "passed": true,
+      "detail": "url=http://qa-center-194003.localhost:8000/"
+    },
+    {
+      "name": "student quiz page accessible",
+      "passed": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "quiz submit accepted (result page)",
+      "passed": true,
+      "detail": "{\"ok\":true,\"status\":200,\"url\":\"http://qa-center-194003.localhost:8000/quiz-attempts/5\"} -> http://qa-center-194003.localhost:8000/quiz-attempts/5"
+    },
+    {
+      "name": "result content rendered",
+      "passed": true,
+      "detail": "len=200 url=http://qa-center-194003.localhost:8000/quiz-attempts/5"
+    },
+    {
+      "name": "cleanup: QA quizzes removed",
+      "passed": true,
+      "detail": "res=true"
+    }
+  ],
+  "errors": []
+}

@@ -99,7 +99,7 @@
         </table>
 
         <div style="margin-bottom: 15px; font-size: 13px;">
-            <strong>{{ $reshaper->reshape(__('center::sales.received_from')) }}</strong> {{ $payment->sale->student->name }}<br>
+            <strong>{{ $reshaper->reshape(__('center::sales.received_from')) }}</strong> {{ $reshaper->reshape($payment->sale->student?->name ?? __('center::sales.deleted_student')) }}<br>
             <strong>{{ $reshaper->reshape(__('center::sales.paid_amount_label_alt')) }}</strong> {{ number_format($payment->amount, 2) }} {{ $reshaper->reshape(__('center::sales.currency_label', ['currency' => get_currency_symbol()])) }}
         </div>
 

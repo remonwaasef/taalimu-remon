@@ -38,6 +38,13 @@
             @csrf
             
             <div class="space-y-1.5">
+                <label class="text-[11px] font-bold text-slate-500 px-1 font-arabic uppercase tracking-wider">{{ __('Current Password') }}</label>
+                <input type="password" name="current_password" 
+                    class="w-full h-12 input-compact px-4 text-sm font-medium text-slate-900 placeholder:text-slate-400 border rounded-xl"
+                    placeholder="••••••••" required>
+            </div>
+
+            <div class="space-y-1.5">
                 <label class="text-[11px] font-bold text-slate-500 px-1 font-arabic uppercase tracking-wider">{{ __('New Password') }}</label>
                 <input type="password" name="password" 
                     class="w-full h-12 input-compact px-4 text-sm font-medium text-slate-900 placeholder:text-slate-400 border rounded-xl"

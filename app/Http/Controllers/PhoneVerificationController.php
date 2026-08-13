@@ -54,7 +54,7 @@ class PhoneVerificationController extends Controller
         $rateLimitKey = 'phone_otp_'.md5($fullPhone);
 
         // Increase rate limit for local development/testing to prevent locking out developers.
-        // Environment-based only — request IPs must never relax throttling (spoofable via XFF).
+        // Environment-based only Ã¢â‚¬â€ request IPs must never relax throttling (spoofable via XFF).
         $maxAttempts = is_relaxed_throttle_env() ? 100 : 3;
 
         if (RateLimiter::tooManyAttempts($rateLimitKey, $maxAttempts)) {
@@ -78,6 +78,7 @@ class PhoneVerificationController extends Controller
         $otpCode = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
 
         // Store in cache for 10 minutes (keyed by local phone for matching with form)
+        Log::info('QA-OTP put store=' . config('cache.default') . ' env=' . var_export(getenv('CACHE_STORE'), true) . ' dotenv=' . var_export(env('CACHE_STORE'), true) . ' appenv=' . env('APP_ENV'));
         $cacheKey = 'registration_otp_'.md5($phone);
         Cache::put($cacheKey, [
             'code' => $otpCode,

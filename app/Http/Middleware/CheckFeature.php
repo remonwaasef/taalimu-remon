@@ -27,7 +27,7 @@ class CheckFeature
         }
 
         $hasFeature = $tenant->hasFeature($featureCode);
-        $subscription = $tenant->activeSubscription();
+        $subscription = $tenant->activeSubscription;
 
         if (config('app.debug')) {
             \Illuminate\Support\Facades\Log::debug('CheckFeature: Detail Check', [

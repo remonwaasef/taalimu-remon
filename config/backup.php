@@ -164,11 +164,12 @@ return [
 
             /*
              * The disk names on which the backups will be stored.
+             *
+             * S3 is only appended when AWS credentials are configured; otherwise
+             * the missing league/flysystem-aws-s3-v3 adapter (or unconfigured
+             * bucket) would make every backup attempt fail.
              */
-            'disks' => [
-                'local',
-                's3',
-            ],
+            'disks' => env('AWS_ACCESS_KEY_ID') ? ['local', 's3'] : ['local'],
 
             /*
              * Determines whether to allow backups to continue when some targets fail instead of failing completely.

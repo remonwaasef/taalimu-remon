@@ -4,7 +4,7 @@
 
 @section('panel-content')
 @php
-    $sub = $tenant->activeSubscription();
+    $sub = $tenant->activeSubscription;
 @endphp
 
 <div class="container-fluid font-sans">

@@ -4,6 +4,7 @@ return [
     'title' => 'Sales History',
     'new_sale' => 'New Sale (POS)',
     'invoice_number' => 'Invoice #',
+    'deleted_student' => 'Deleted student',
     'student' => 'Student',
     'amount' => 'Amount',
     'paid' => 'Paid',

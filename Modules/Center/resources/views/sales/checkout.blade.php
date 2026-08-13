@@ -23,7 +23,7 @@
                         </div>
                         <div class="d-flex justify-content-between mb-2">
                             <span class="text-muted">{{ __('center::sales.student') }}:</span>
-                            <span class="fw-bold text-dark">{{ $sale->student->name }}</span>
+                            <span class="fw-bold text-dark">{{ $sale->student?->name ?? __('center::sales.deleted_student') }}</span>
                         </div>
                         <div class="d-flex justify-content-between mb-2">
                             <span class="text-muted">{{ __('center::sales.total_invoice') }}:</span>

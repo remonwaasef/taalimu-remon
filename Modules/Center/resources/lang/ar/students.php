@@ -27,6 +27,7 @@ return [
     'inactive' => 'غير نشط',
     'edit' => 'تعديل',
     'delete' => 'حذف',
+    'delete_confirm_title' => 'هل أنت متأكد من حذف الطالب؟',
     'no_students' => 'لا يوجد طلاب مسجلين.',
     'view_details' => 'عرض التفاصيل',
     'details' => 'تفاصيل الطالب',

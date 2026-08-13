@@ -1,0 +1,10 @@
+import { newBrowser, login, fetchAs, BASE } from './qa_helpers.mjs';
+const { browser, page } = await newBrowser();
+await login(page, BASE);
+let payload = new URLSearchParams({ name: 'QA Instructor Ahmed', phone: '01234567890', email: 'qa.instructor.crud3@example.com', specialization: 'رياضيات', status: 'active', commission_rate: '10', commission_type: 'percent' });
+let r = await fetchAs(page, BASE + '/instructors', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: payload.toString() });
+console.log('instructor:', r.status, typeof r.body === 'string' ? r.body.slice(0, 400) : JSON.stringify(r.body).slice(0, 400));
+payload = new URLSearchParams({ name: 'QA Staff User', email: 'qa.staff.user3@example.com', password: 'Passw0rd!xyz', password_confirmation: 'Passw0rd!xyz', role: 'staff' });
+r = await fetchAs(page, BASE + '/users', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: payload.toString() });
+console.log('user:', r.status, typeof r.body === 'string' ? r.body.slice(0, 300) : JSON.stringify(r.body).slice(0, 300));
+await browser.close();

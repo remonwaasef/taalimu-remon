@@ -178,6 +178,7 @@ class StudentLedgerService
         // Attendance Stats
         $attendance = \Modules\Center\Models\Attendance::where('student_id', $student->id)
             ->where('tenant_id', $tenant->id)
+            ->with('course')
             ->orderBy('session_date', 'desc')
             ->get();
 

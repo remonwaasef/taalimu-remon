@@ -1,0 +1,75 @@
+{
+  "checks": [
+    {
+      "name": "instructor create (POST /instructors)",
+      "passed": false,
+      "detail": "status=422"
+    },
+    {
+      "name": "instructor appears in list",
+      "passed": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "classroom create",
+      "passed": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "classrooms list loads",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "expense create",
+      "passed": false,
+      "detail": "status=422"
+    },
+    {
+      "name": "expense appears in list",
+      "passed": false,
+      "detail": "status=200"
+    },
+    {
+      "name": "asset create",
+      "passed": false,
+      "detail": "status=422"
+    },
+    {
+      "name": "inventory list loads",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "center role create",
+      "passed": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "role appears in list",
+      "passed": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "ticket create",
+      "passed": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "ticket appears in list",
+      "passed": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "user create",
+      "passed": false,
+      "detail": "status=422"
+    },
+    {
+      "name": "notifications page loads",
+      "passed": true,
+      "detail": "status=200"
+    }
+  ],
+  "errors": []
+}

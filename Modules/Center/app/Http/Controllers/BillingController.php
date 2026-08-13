@@ -14,7 +14,7 @@ class BillingController extends Controller
     {
         $this->authorize('update', app('tenant'));
         $tenant = app('tenant');
-        $subscription = $tenant->activeSubscription();
+        $subscription = $tenant->currentSubscription;
         $packages = \App\Models\Package::with('features')->get();
 
         return view('center::billing.index', compact('tenant', 'subscription', 'packages'));
@@ -25,7 +25,7 @@ class BillingController extends Controller
      */
     public function create()
     {
-        return view('center::create');
+        return redirect()->route('center.billing.index', ['tenant' => app('tenant')->domain]);
     }
 
     /**

@@ -1,0 +1,40 @@
+{
+  "checks": [
+    {
+      "name": "instructor create",
+      "passed": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "user create with custom role",
+      "passed": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "user appears in list",
+      "passed": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "course create",
+      "passed": false,
+      "detail": "status=422"
+    },
+    {
+      "name": "expense list august",
+      "passed": false,
+      "detail": "status=200"
+    },
+    {
+      "name": "expense search finds QA Expense",
+      "passed": false,
+      "detail": "status=200"
+    },
+    {
+      "name": "roles page loads for delete check",
+      "passed": true,
+      "detail": ""
+    }
+  ],
+  "errors": []
+}

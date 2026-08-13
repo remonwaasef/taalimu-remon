@@ -83,7 +83,7 @@
                         <div>
                             <span class="badge bg-secondary me-2">{{ $question->points }} {{ __('center::questions.points_suffix') }}</span>
                             <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal" data-bs-target="#editQuestionModal-{{ $question->id }}"><i class="fas fa-edit"></i></button>
-                            <form action="{{ route('center.questions.destroy', $question) }}" method="POST" class="d-inline-block" onsubmit="return confirm('{{ __('center::questions.delete_confirm') }}');">
+                            <form action="{{ route('center.quiz.questions.destroy', $question) }}" method="POST" class="d-inline-block" onsubmit="return confirm('{{ __('center::questions.delete_confirm') }}');">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
@@ -143,7 +143,7 @@
                 <!-- Edit Question Modal -->
                 <div class="modal fade" id="editQuestionModal-{{ $question->id }}" tabindex="-1">
                     <div class="modal-dialog">
-                        <form action="{{ route('center.questions.update', $question) }}" method="POST">
+                        <form action="{{ route('center.quiz.questions.update', $question) }}" method="POST">
                             @csrf
                             @method('PUT')
                             <div class="modal-content">
@@ -177,7 +177,7 @@
 <!-- Add Question Modal -->
 <div class="modal fade" id="addQuestionModal" tabindex="-1">
     <div class="modal-dialog">
-        <form action="{{ route('center.questions.store', $quiz) }}" method="POST">
+        <form action="{{ route('center.quizzes.questions.store', $quiz) }}" method="POST">
             @csrf
             <div class="modal-content">
                 <div class="modal-header">

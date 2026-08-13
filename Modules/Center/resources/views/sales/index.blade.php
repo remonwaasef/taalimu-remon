@@ -35,7 +35,7 @@
                                 <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 35px; height: 35px;">
                                     <i class="fas fa-user-graduate small"></i>
                                 </div>
-                                <span class="fw-bold">{{ $sale->student->name }}</span>
+                                <span class="fw-bold">{{ $sale->student?->name ?? __('center::sales.deleted_student') }}</span>
                             </div>
                         </td>
                         <td class="fw-bold text-dark">{{ number_format($sale->total_amount, 2) }} {{ get_currency_symbol() }}</td>

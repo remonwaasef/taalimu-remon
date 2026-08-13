@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'validation_error' => 'Please review the following errors:',
     'back' => 'Back',
     'first_instructor_onboarding' => 'Great job! The first instructor has been added. Now, let\'s create your first training course.',
     'first_course_onboarding' => 'Great job! Your first course has been created. Now, let\'s register the first student to get started.',
@@ -1054,6 +1055,7 @@ return [
     'msg_082' => 'Student data updated successfully.',
     'msg_083' => 'Password reset successfully.',
     'msg_084' => 'Student deleted successfully.',
+    'error_unexpected' => 'An unexpected error occurred while processing. Please try again later.',
     'msg_085' => 'You have reached the maximum number of students allowed in your plan.',
     'msg_086' => 'Import process started in the background. You will receive a notification when complete.',
     'msg_087' => 'This package is not configured for payments.',

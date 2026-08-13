@@ -4,6 +4,7 @@ return [
     'title' => 'سجل المبيعات',
     'new_sale' => 'عملية بيع جديدة (POS)',
     'invoice_number' => 'رقم الفاتورة',
+    'deleted_student' => 'طالب محذوف',
     'student' => 'الطالب',
     'amount' => 'المبلغ',
     'paid' => 'المدفوع',

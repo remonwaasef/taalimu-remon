@@ -26,6 +26,7 @@ return [
     'inactive' => 'Inactive',
     'edit' => 'Edit',
     'delete' => 'Delete',
+    'delete_confirm_title' => 'Are you sure you want to delete this student?',
     'no_students' => 'No students found.',
     'view_details' => 'View Details',
     'student_settings' => 'Student Settings',

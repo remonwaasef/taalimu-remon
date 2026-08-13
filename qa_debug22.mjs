@@ -1,0 +1,12 @@
+import { newBrowser, login, BASE } from './qa_helpers.mjs';
+const { browser, page } = await newBrowser();
+page.setDefaultTimeout(45000);
+await login(page);
+console.log('after login url:', page.url());
+const t0 = Date.now();
+const resp = await page.goto(BASE + '/sales', { waitUntil: 'load' });
+console.log('/sales status:', resp.status(), 'in', Date.now() - t0, 'ms');
+const t1 = Date.now();
+await page.goto(BASE + '/sales/create', { waitUntil: 'load' });
+console.log('/sales/create in', Date.now() - t1, 'ms');
+await browser.close();

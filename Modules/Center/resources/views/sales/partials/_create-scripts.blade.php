@@ -83,7 +83,7 @@
                         data.unpaid_invoices.forEach(inv => {
                             invoicesDiv.innerHTML += `
                                 <div class="d-flex justify-content-between align-items-center mb-2 ms-2 p-2 bg-white rounded-3 border">
-                                    <span class="small">{{ __('center::sales.invoice_id') }}{{ inv.id }} (${inv.remaining.toFixed(2)})</span>
+                                    <span class="small">{{ __('center::sales.invoice_id') }} ${inv.id} (${inv.remaining.toFixed(2)})</span>
                                     <div class="d-flex gap-1">
                                         <button type="button" class="btn btn-xs btn-success py-0 px-2 small rounded-pill" onclick="quickPay(${inv.id}, ${inv.remaining}, ${studentId})">{{ __('center::sales.pay') }}</button>
                                         <a href="/sales/${inv.id}" target="_blank" class="btn btn-xs btn-light py-0 px-2 small rounded-pill border">{{ __('center::sales.view') }}</a>

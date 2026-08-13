@@ -55,8 +55,12 @@ $tenantRoutes = function () {
         Route::post('magic-login/{student}', [AuthController::class, 'magicLogin'])
             ->middleware(['signed', 'throttle:10,1'])
             ->name('center.login.magic.post');
+    });
 
-        // Force Password Change Routes
+    // Force Password Change Routes
+    // NOTE: intentionally OUTSIDE the guest group — users with must_change_password=1
+    // are authenticated; the guest middleware would bounce them back (redirect loop).
+    Route::middleware(['auth', 'force_password_change'])->group(function () {
         Route::get('password/change', [AuthController::class, 'showChangePasswordForm'])->name('center.password.change');
         Route::post('password/change', [AuthController::class, 'changePassword'])->name('center.password.change.submit');
     });
@@ -290,8 +294,8 @@ $tenantRoutes = function () {
             Route::get('quizzes/{quiz}/edit', [QuizController::class, 'edit'])->name('center.quizzes.edit');
             Route::put('quizzes/{quiz}', [QuizController::class, 'update'])->name('center.quizzes.update');
             Route::post('quizzes/{quiz}/questions', [QuizController::class, 'storeQuestion'])->name('center.quizzes.questions.store');
-            Route::put('questions/{question}', [QuizController::class, 'updateQuestion'])->name('center.quiz.questions.update');
-            Route::delete('questions/{question}', [QuizController::class, 'destroyQuestion'])->name('center.quiz.questions.destroy');
+            Route::put('quiz-questions/{question}', [QuizController::class, 'updateQuestion'])->name('center.quiz.questions.update');
+            Route::delete('quiz-questions/{question}', [QuizController::class, 'destroyQuestion'])->name('center.quiz.questions.destroy');
             Route::post('questions/{question}/options', [QuizController::class, 'storeOption'])->name('center.options.store');
             Route::put('options/{option}', [QuizController::class, 'updateOption'])->name('center.options.update');
             Route::delete('options/{option}', [QuizController::class, 'destroyOption'])->name('center.options.destroy');

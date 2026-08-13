@@ -1,0 +1,11 @@
+﻿import { newBrowser } from './qa_helpers.mjs';
+const { browser, page } = await newBrowser();
+await page.goto('http://localhost:8000/admin/login', { waitUntil: 'domcontentloaded', timeout: 30000 });
+await page.waitForTimeout(1500);
+await page.fill('input[name=email]', 'admin@admin.com');
+await page.fill('input[name=password]', 'password');
+await page.click('button[type=submit], form button, form input[type=submit]');
+await page.waitForTimeout(3000);
+console.log('FINAL URL: ' + page.url());
+console.log('HTML: ' + (await page.content()).slice(0, 800));
+await browser.close();

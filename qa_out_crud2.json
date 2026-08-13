@@ -1,0 +1,50 @@
+{
+  "checks": [
+    {
+      "name": "instructor create",
+      "passed": false,
+      "detail": "status=422"
+    },
+    {
+      "name": "expense create",
+      "passed": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "expense appears in list",
+      "passed": false,
+      "detail": "status=200"
+    },
+    {
+      "name": "asset create",
+      "passed": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "asset appears in list",
+      "passed": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "user create",
+      "passed": false,
+      "detail": "status=403"
+    },
+    {
+      "name": "user appears in list",
+      "passed": false,
+      "detail": "status=200"
+    },
+    {
+      "name": "instructor empty form blocked",
+      "passed": true,
+      "detail": "status=422"
+    },
+    {
+      "name": "expense negative amount blocked",
+      "passed": true,
+      "detail": "status=422"
+    }
+  ],
+  "errors": []
+}

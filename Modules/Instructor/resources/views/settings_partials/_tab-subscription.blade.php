@@ -1,6 +1,6 @@
                         <div class="tab-pane fade" id="subscription" role="tabpanel">
                             @php
-                                $subscription = $tenant->activeSubscription();
+                                $subscription = $tenant->currentSubscription;
                                 $package = $subscription ? $subscription->resolved_package : null;
                                 $service = app(\App\Services\SubscriptionService::class);
                             @endphp

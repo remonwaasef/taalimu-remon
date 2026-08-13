@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'validation_error' => 'Veuillez vérifier les erreurs suivantes :',
     'back' => 'Retour',
     'first_instructor_onboarding' => 'Excellent travail ! Le premier instructeur a été ajouté. Maintenant, créons votre premier cours de formation.',
     'first_course_onboarding' => 'Excellent travail ! Votre premier cours a été créé. Maintenant, inscrivons le premier étudiant pour commencer.',
@@ -1054,6 +1055,7 @@ return [
     'msg_082' => 'Données de l\'étudiant mises à jour.',
     'msg_083' => 'Mot de passe réinitialisé.',
     'msg_084' => 'Étudiant supprimé avec succès.',
+    'error_unexpected' => 'An unexpected error occurred while processing. Please try again later.',
     'msg_085' => 'Nombre maximal d\'étudiants atteint pour votre forfait.',
     'msg_086' => 'Processus d\'importation démarré en tâche de fond.',
     'msg_087' => 'Ce forfait n\'accepte pas les paiements.',

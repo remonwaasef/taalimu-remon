@@ -86,7 +86,7 @@ class AppServiceProvider extends ServiceProvider
 
         // Blade directive for Feature Flags
         \Illuminate\Support\Facades\Blade::if('feature', function ($feature) {
-            $tenant = app(\App\Services\TenantService::class)->getTenant();
+            $tenant = current_tenant();
             if (! $tenant) {
                 return false;
             }
@@ -116,7 +116,7 @@ class AppServiceProvider extends ServiceProvider
         } catch (\Throwable $e) {
             config([
                 'cache.default' => 'database',
-                'session.driver' => 'database',
+                'session.driver' => 'file',
                 'queue.default' => 'database',
             ]);
 

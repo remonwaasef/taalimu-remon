@@ -43,7 +43,7 @@ class StudentProfileService
             $user = $student->user;
             $user->update([
                 'name' => $data->name,
-                'email' => $data->email,
+                'email' => $data->email ?: $user->email,
                 'phone' => $data->phone,
             ]);
 

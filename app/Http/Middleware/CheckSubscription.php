@@ -31,7 +31,7 @@ class CheckSubscription
             return $next($request);
         }
 
-        $subscription = $tenant->activeSubscription();
+        $subscription = $tenant->activeSubscription;
 
         if (! $subscription) {
             // Redirect to billing/subscription page

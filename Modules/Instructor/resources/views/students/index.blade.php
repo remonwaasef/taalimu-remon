@@ -110,8 +110,8 @@
                         </td>
 
                         <td class="px-6 py-4 text-end">
-                            <x-ui.button variant="outline" size="sm" icon="fas fa-edit" href="{{ route('instructor.students.edit', $student->id) }}">
-                                تعديل
+                            <x-ui.button variant="outline" size="sm" icon="fas fa-eye" href="{{ route('instructor.students.show', $student->id) }}">
+                                عرض
                             </x-ui.button>
                         </td>
                     </tr>

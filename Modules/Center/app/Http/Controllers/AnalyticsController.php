@@ -139,15 +139,21 @@ class AnalyticsController extends Controller
 
         // 5. Debtors (Students with outstanding payments) - Optimized with DB aggregation
         $debtorStudents = \App\Support\TenantCache::remember('analytics_debtor_students', 300, function () {
-            return Student::select('students.*')
+            return Student::query()
+                ->select('students.*')
                 ->with(['grade.stage'])
-                ->selectRaw('SUM(sales.total_amount - sales.paid_amount) as total_debt')
-                ->join('sales', 'students.id', '=', 'sales.student_id')
-                ->whereRaw('sales.paid_amount < sales.total_amount')
-                ->groupBy('students.id', 'students.name', 'students.email', 'students.phone',
-                    'students.status', 'students.grade_id', 'students.tenant_id',
-                    'students.profile_photo', 'students.created_at', 'students.updated_at')
-                ->orderByDesc('total_debt')
+                ->joinSub(
+                    \App\Models\Sale::query()
+                        ->select('student_id')
+                        ->selectRaw('SUM(total_amount - paid_amount) as total_debt')
+                        ->whereRaw('paid_amount < total_amount')
+                        ->groupBy('student_id'),
+                    'debt',
+                    'debt.student_id',
+                    '=',
+                    'students.id'
+                )
+                ->orderByDesc('debt.total_debt')
                 ->limit(5)
                 ->get();
         });

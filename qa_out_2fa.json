@@ -1,0 +1,20 @@
+{
+  "checks": [
+    {
+      "name": "2fa challenge page reached",
+      "passed": true,
+      "detail": "url=http://localhost:8000/admin/login/2fa"
+    },
+    {
+      "name": "wrong totp rejected",
+      "passed": true,
+      "detail": "url=http://localhost:8000/admin/login/2fa"
+    },
+    {
+      "name": "correct totp accepted",
+      "passed": true,
+      "detail": "url=http://localhost:8000/admin code=175890"
+    }
+  ],
+  "errors": []
+}

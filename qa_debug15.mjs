@@ -1,0 +1,11 @@
+import { newBrowser, login, BASE } from './qa_helpers.mjs';
+const { browser, page } = await newBrowser();
+await login(page);
+await page.goto(BASE + '/students');
+await page.waitForTimeout(1500);
+const row = page.locator('tr', { hasText: 'طالب اختبار QA معدل' }).first();
+const html = await row.innerHTML();
+console.log('has trash:', html.includes('trash'), '| has confirm-delete:', html.includes('data-confirm'), '| has dropdown count:', (html.match(/dropdown/g) || []).length);
+const idx = html.indexOf('ellipsis');
+console.log('ellipsis ctx:', idx > -1 ? html.replace(/\s+/g, ' ').slice(idx, idx + 1500) : 'none');
+await browser.close();

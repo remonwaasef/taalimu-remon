@@ -1,0 +1,70 @@
+{
+  "checks": [
+    {
+      "name": "admin login page",
+      "passed": true,
+      "detail": "url=http://localhost:8000/admin/login"
+    },
+    {
+      "name": "admin login wrong password rejected",
+      "passed": true,
+      "detail": "url=http://localhost:8000/admin/login"
+    },
+    {
+      "name": "admin login success",
+      "passed": true,
+      "detail": "url=http://localhost:8000/admin"
+    },
+    {
+      "name": "admin dashboard",
+      "passed": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "admin tenants list",
+      "passed": true,
+      "detail": "status=200 hasDemo=true"
+    },
+    {
+      "name": "admin tenant show",
+      "passed": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "admin subscriptions list",
+      "passed": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "admin activity logs",
+      "passed": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "admin tickets list",
+      "passed": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "admin users list",
+      "passed": true,
+      "detail": "status=200 hasAdmin=true"
+    },
+    {
+      "name": "admin roles list",
+      "passed": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "admin settings page",
+      "passed": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "admin backups page",
+      "passed": true,
+      "detail": "status=200"
+    }
+  ],
+  "errors": []
+}

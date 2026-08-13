@@ -101,7 +101,7 @@ class TenantService
 
         // Fallback: if no logs exist yet, create an entry from the current active subscription
         if ($logs->isEmpty()) {
-            $currentSub = $tenant->activeSubscription();
+            $currentSub = $tenant->activeSubscription;
             if ($currentSub) {
                 $package = $currentSub->resolved_package;
                 try {

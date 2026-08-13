@@ -51,10 +51,10 @@
                 <!-- Billing To -->
                 <div class="mb-5">
                     <h6 class="text-muted text-uppercase small fw-bold mb-3">{{ __('center::sales.billing_to') }}</h6>
-                    <h5 class="fw-bold text-dark mb-1">{{ $sale->student->name }}</h5>
+                    <h5 class="fw-bold text-dark mb-1">{{ $sale->student?->name ?? __('center::sales.deleted_student') }}</h5>
                     <div class="text-muted small">
-                        <p class="mb-1">{{ $sale->student->phone }}</p>
-                        <p class="mb-0">{{ $sale->student->email }}</p>
+                        <p class="mb-1">{{ $sale->student?->phone }}</p>
+                        <p class="mb-0">{{ $sale->student?->email }}</p>
                     </div>
                 </div>
 
