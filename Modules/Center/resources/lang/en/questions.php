@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 return [
     'title' => 'Question Bank',
@@ -28,6 +28,7 @@ return [
     'existing_categories' => 'Existing Categories',
     'no_categories' => 'No categories found',
     'create_title' => 'Add New Question',
+    'edit_title' => 'Edit Question',
     'back_to_list' => 'Back to List',
     'question_text' => 'Question Text',
     'options' => 'Options',
@@ -45,3 +46,4 @@ return [
     'option_2' => 'Second option...',
     'option_placeholder' => 'Option Placeholder',
 ];
+

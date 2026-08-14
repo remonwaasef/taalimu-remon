@@ -28,6 +28,7 @@ return [
     'existing_categories' => 'التصنيفات الحالية',
     'no_categories' => 'لا يوجد تصنيفات',
     'create_title' => 'إضافة سؤال جديد',
+    'edit_title' => 'تعديل السؤال',
     'back_to_list' => 'العودة لقائمة الأسئلة',
     'question_text' => 'نص السؤال',
     'options' => 'الخيارات',

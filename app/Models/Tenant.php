@@ -144,7 +144,10 @@ class Tenant extends Model
     {
         return $this->hasOne(Subscription::class)
             ->whereIn('status', ['active', 'trialing'])
-            ->where('ends_at', '>', now())
+            ->where(function ($query) {
+                // NULL ends_at means an indefinite subscription (no expiry)
+                $query->whereNull('ends_at')->orWhere('ends_at', '>', now());
+            })
             ->latest();
     }
 

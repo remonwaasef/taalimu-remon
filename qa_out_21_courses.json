@@ -1,0 +1,45 @@
+{
+  "checks": [
+    {
+      "name": "courses.index 200",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "courses.index lists existing courses",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "no 500 on courses.index",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "courses.create page",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "courses.store created (redirected to show/edit)",
+      "passed": true,
+      "detail": "http://demo-center.localhost:8000/login"
+    },
+    {
+      "name": "courses.index shows created course",
+      "passed": false,
+      "detail": ""
+    },
+    {
+      "name": "courses.store rejects empty title",
+      "passed": true,
+      "detail": ""
+    }
+  ],
+  "errors": [
+    {
+      "where": "courses.store",
+      "err": "no course id in redirect url"
+    }
+  ]
+}

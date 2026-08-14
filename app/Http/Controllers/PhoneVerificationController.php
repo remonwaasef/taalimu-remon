@@ -78,7 +78,6 @@ class PhoneVerificationController extends Controller
         $otpCode = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
 
         // Store in cache for 10 minutes (keyed by local phone for matching with form)
-        Log::info('QA-OTP put store=' . config('cache.default') . ' env=' . var_export(getenv('CACHE_STORE'), true) . ' dotenv=' . var_export(env('CACHE_STORE'), true) . ' appenv=' . env('APP_ENV'));
         $cacheKey = 'registration_otp_'.md5($phone);
         Cache::put($cacheKey, [
             'code' => $otpCode,

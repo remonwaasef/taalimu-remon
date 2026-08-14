@@ -29,17 +29,6 @@ class CheckFeature
         $hasFeature = $tenant->hasFeature($featureCode);
         $subscription = $tenant->activeSubscription;
 
-        if (config('app.debug')) {
-            \Illuminate\Support\Facades\Log::debug('CheckFeature: Detail Check', [
-                'url' => $request->fullUrl(),
-                'tenant_id' => $tenant->id ?? 'N/A',
-                'feature_code' => $featureCode,
-                'has_feature' => $hasFeature ? 'yes' : 'no',
-                'has_active_subscription' => $subscription ? 'yes' : 'no',
-                'user_role' => auth()->user()->role ?? 'guest',
-            ]);
-        }
-
         if (! $hasFeature) {
             if ($request->expectsJson()) {
                 return response()->json([
