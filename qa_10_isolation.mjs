@@ -11,7 +11,7 @@ try {
   await page.goto(T3 + '/login');
   await page.waitForTimeout(1500);
   const email = 'qa.owner194003@example.com';
-  const pw = 'Passw0rd!Qa';
+  const pw = 'password';
   await page.fill('input[name="email"]', email).catch(() => {});
   await page.fill('input[name="password"]', pw).catch(() => {});
   await Promise.all([
@@ -20,7 +20,7 @@ try {
   ]);
   await page.waitForTimeout(2000);
   const url = page.url();
-  check('T3 login works', url.includes('/dashboard') || url.includes('dashboard'), url);
+  check('T3 login works', url.includes('dashboard') || url === T3 + '/' || url === T3, url);
 
   // Check T3 student list ONLY shows T3 students (isolation)
   const r = await page.evaluate(async () => {

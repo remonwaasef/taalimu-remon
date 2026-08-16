@@ -241,6 +241,19 @@ class CourseController extends Controller
         return redirect()->route('center.courses.index')->with('success', __('center::messages.msg_029'));
     }
 
+    /**
+     * Toggle course status (Published/Draft).
+     */
+    public function toggleStatus($id)
+    {
+        $course = Course::where('tenant_id', app('tenant')->id)->findOrFail($id);
+        $this->authorize('update', $course);
+
+        $course->update(['status' => $course->status === 'published' ? 'draft' : 'published']);
+
+        return back()->with('success', __('center::messages.msg_029'));
+    }
+
     public function completeLesson(Course $course, $lessonId)
     {
         try {

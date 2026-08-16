@@ -36,14 +36,19 @@ class BookingController extends Controller
             return back()->with('error', __('center::messages.msg_015'));
         }
 
-        // Check Capacity
+        // Check Capacity (null max_students = unlimited)
         $currentBookingsCount = Booking::where('schedule_id', $request->schedule_id)
             ->where('status', 'confirmed')
             ->count();
 
-        if ($currentBookingsCount >= $schedule->max_students) {
+        if ($schedule->max_students !== null && $currentBookingsCount >= $schedule->max_students) {
             return back()->with('error', __('center::messages.msg_016'));
         }
+
+        Booking::where('student_id', $request->student_id)
+            ->where('schedule_id', $request->schedule_id)
+            ->where('status', 'cancelled')
+            ->delete();
 
         Booking::create([
             'tenant_id' => app('tenant')->id,

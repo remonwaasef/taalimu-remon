@@ -77,6 +77,7 @@ return [
     'val_phone_regex' => 'رقم الهاتف يجب أن يحتوي على أرقام فقط.',
     'val_phone_min' => 'رقم الهاتف يجب أن لا يقل عن 10 أرقام.',
     'val_email_email' => 'البريد الإلكتروني غير صحيح.',
+    'val_email_unique' => 'البريد الإلكتروني مستخدم بالفعل.',
     'val_specialization_required' => 'تخصص المدرس مطلوب.',
     'val_specialization_regex' => 'التخصص يجب أن يحتوي على نص صحيح.',
     'val_commission_rate_required' => 'نسبة/مبلغ العمولة مطلوب.',

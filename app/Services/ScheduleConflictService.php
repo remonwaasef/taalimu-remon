@@ -24,7 +24,7 @@ class ScheduleConflictService
         $startTime = $scheduleData['start_time'] ?? null;
         $endTime = $scheduleData['end_time'] ?? null;
 
-        if (! $dayOfWeek || ! $startTime || ! $endTime) {
+        if ($dayOfWeek === null || ! $startTime || ! $endTime) {
             return $conflicts;
         }
 
@@ -64,6 +64,7 @@ class ScheduleConflictService
         $query = Schedule::where('classroom_id', $classroomId)
             ->where('day_of_week', $dayOfWeek)
             ->where('tenant_id', \Modules\Tenancy\Services\TenantResolver::get()->id)
+            ->whereHas('course', fn ($q) => $q->whereNull('deleted_at'))
             ->where(function ($q) use ($startTime, $endTime) {
                 // Check for time overlap
                 $q->where(function ($inner) use ($startTime, $endTime) {
@@ -108,6 +109,7 @@ class ScheduleConflictService
         $query = Schedule::where('instructor_id', $instructorId)
             ->where('day_of_week', $dayOfWeek)
             ->where('tenant_id', \Modules\Tenancy\Services\TenantResolver::get()->id)
+            ->whereHas('course', fn ($q) => $q->whereNull('deleted_at'))
             ->where(function ($q) use ($startTime, $endTime) {
                 $q->where(function ($inner) use ($startTime, $endTime) {
                     $inner->where('start_time', '<', $endTime)
@@ -165,6 +167,7 @@ class ScheduleConflictService
         $bookedSlots = Schedule::where('classroom_id', $classroomId)
             ->where('day_of_week', $dayOfWeek)
             ->where('tenant_id', \Modules\Tenancy\Services\TenantResolver::get()->id)
+            ->whereHas('course', fn ($q) => $q->whereNull('deleted_at'))
             ->orderBy('start_time')
             ->get(['start_time', 'end_time']);
 

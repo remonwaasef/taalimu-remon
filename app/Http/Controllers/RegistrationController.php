@@ -35,6 +35,13 @@ class RegistrationController extends Controller
 
     public function register(Request $request, TelegramService $telegram, \App\Services\GeoIPService $geoIP, \App\Services\TenantRegistrationService $registrationService)
     {
+        // SEC-PAY-4: the mock 'test' gateway activates a real subscription
+        // without charging, so it is only offered where demo payments are
+        // explicitly allowed (local/testing) — never in production.
+        $allowedGateways = \App\Services\PaymentGateways\MockGateway::demoPaymentsAllowed()
+            ? 'paypal,paymob,test'
+            : 'paypal,paymob';
+
         $validated = $request->validate([
             'account_type' => 'required|in:center,instructor',
             'center_name' => 'required|string|max:255',
@@ -55,7 +62,7 @@ class RegistrationController extends Controller
             'currency' => 'nullable|in:EGP,USD,EUR',
             'coupon_code' => 'nullable|string|exists:coupons,code',
             'country_code' => 'nullable|string|max:2',
-            'payment_gateway' => 'required|in:paypal,paymob,test',
+            'payment_gateway' => 'required|in:'.$allowedGateways,
         ]);
 
         // PHONE VERIFICATION GATE: Ensure phone was verified via OTP before account creation

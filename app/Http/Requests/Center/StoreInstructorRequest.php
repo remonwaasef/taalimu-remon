@@ -23,7 +23,7 @@ class StoreInstructorRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'email' => 'nullable|email|max:255',
+            'email' => ['nullable', 'email', 'max:255', \Illuminate\Validation\Rule::unique('instructors', 'email')->where('tenant_id', app('tenant')->id)],
             'phone' => ['required', 'string', 'max:20', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'min:10'],
             'specialization' => ['required', 'string', 'max:100'],
             'status' => 'required|in:active,inactive,on_hold',
@@ -49,6 +49,7 @@ class StoreInstructorRequest extends FormRequest
             'phone.regex' => __('center::instructors.val_phone_regex'),
             'phone.min' => __('center::instructors.val_phone_min'),
             'email.email' => __('center::instructors.val_email_email'),
+            'email.unique' => __('center::instructors.val_email_unique'),
             'specialization.required' => __('center::instructors.val_specialization_required'),
             'specialization.regex' => __('center::instructors.val_specialization_regex'),
             'commission_rate.required' => __('center::instructors.val_commission_rate_required'),

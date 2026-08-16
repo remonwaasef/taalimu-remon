@@ -93,6 +93,9 @@ class PaymentController extends Controller
         $success = filter_var($request->get('success'), FILTER_VALIDATE_BOOLEAN);
         $transactionId = $request->get('id');
         $merchantOrderId = $request->get('merchant_order_id') ?? $request->get('order');
+        // SEC-PAY-1: 'order' هو الوحيد المغطى بـ redirect HMAC؛ الـ merchant_order_id
+        // يبقى مجرد دليل تقديمي لمسار الفواتير ولا يُستخدم لاستعادة سياق الاشتراكات.
+        $paymobOrderId = $request->get('order');
 
         // --- Self-service invoice payment (sale flow): redirect user to the result page ---
         // Accounting is performed by the webhook (PaymobWebhookController), which verifies
@@ -104,7 +107,12 @@ class PaymentController extends Controller
                 ->where('tenant_id', $context['tenant_id'])
                 ->first() : null;
 
-            if ($sale) {
+            // SEC-PAY-3: verify the embedded payment token before showing the
+            // result page so a tampered merchant_order_id cannot surface a
+            // different (or cross-tenant) invoice to the payer.
+            if ($sale && isset($context['payment_token'])
+                && $sale->payment_token
+                && hash_equals((string) $sale->payment_token, (string) $context['payment_token'])) {
                 $status = $success ? 'success' : 'failed';
 
                 return redirect()->route('center.pay.result', ['sale' => $sale, 'status' => $status]);
@@ -119,14 +127,16 @@ class PaymentController extends Controller
         ]);
 
         if ($success && $transactionId) {
-            // 2. Context Restoration (Prioritize DB Source of Truth to prevent Session Fixation)
-            $restored = $this->paymentService->restoreContextFromMerchantOrder($merchantOrderId);
+            // 2. Context Restoration (HMAC-covered paymob order id — never the
+            // unsigned merchant_order_id — to prevent Session Fixation / tampering)
+            $restored = $this->paymentService->restoreContextFromPaymobOrder($paymobOrderId);
             if ($restored) {
                 $tenantId = $restored['tenant_id'];
                 $planSlug = $restored['plan_slug'];
                 $billingCycle = $restored['billing_cycle'];
                 $isChange = $restored['is_change'];
-                $basePrice = $restored['base_price'] ?? session('base_price', 0);
+                // Server-side amount minted for the order is authoritative.
+                $basePrice = $restored['total_amount'] ?? session('base_price', 0);
                 $totalAmount = $restored['total_amount'] ?? session('total_amount', 0);
             } else {
                 // Fallback to session only if DB restore fails, but validate tenant to prevent session tampering
@@ -202,9 +212,10 @@ class PaymentController extends Controller
     {
         $tenantId = session('tenant_id');
         $isChange = session('is_subscription_change', false);
+        $paymobOrderId = $request->get('order');
 
         if (! $tenantId && $merchantOrderId) {
-            $restored = $this->paymentService->restoreContextFromMerchantOrder($merchantOrderId);
+            $restored = $this->paymentService->restoreContextFromPaymobOrder($paymobOrderId);
             if ($restored) {
                 $tenantId = $restored['tenant_id'];
                 $isChange = $restored['is_change'];

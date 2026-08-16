@@ -13,6 +13,7 @@ class UpdateInstructorRequest extends StoreInstructorRequest
     {
         $rules = parent::rules();
         $rules['phone'] = ['nullable', 'string', 'max:20', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'min:10'];
+        $rules['email'] = ['nullable', 'email', 'max:255', \Illuminate\Validation\Rule::unique('instructors', 'email')->ignore($this->route('instructor'))->where('tenant_id', app('tenant')->id)];
 
         return $rules;
     }

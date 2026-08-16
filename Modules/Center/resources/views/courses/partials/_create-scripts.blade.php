@@ -128,7 +128,7 @@
             const warning = document.createElement('div');
             warning.className = 'internal-conflict-warning alert alert-danger py-1 mt-2 small';
             warning.innerHTML = `<i class="fas fa-exclamation-triangle me-1"></i> {{ __('center::schedules.internal_conflict', ['index' => '__INDEX__']) }}`.replace('__INDEX__', otherIndex);
-            item.querySelector('.card-body').appendChild(warning);
+            item.appendChild(warning);
         }
 
         function reindexSchedules() {
@@ -249,7 +249,9 @@
                     indicator.innerHTML = '<i class="fas fa-check-circle me-1"></i> ' + "{{ __('center::schedules.schedule_available') }}";
                     setTimeout(() => { if (indicator.parentNode) indicator.remove(); updateScheduleCountUI(); }, 3000);
                 }
-                scheduleItem.querySelector('.card-body').appendChild(indicator);
+                if (scheduleItem.isConnected) {
+                    scheduleItem.appendChild(indicator);
+                }
             } catch (error) {
                 console.error('Error checking conflict:', error);
             }

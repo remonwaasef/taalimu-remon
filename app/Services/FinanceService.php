@@ -87,7 +87,7 @@ class FinanceService
 
                 if (! empty($enrolledCourseIds)) {
                     $firstEnrolledCourse = $courses->get($enrolledCourseIds[0]);
-                    throw new \Exception('الطالب مسجل بالفعل في: '.($firstEnrolledCourse ? $firstEnrolledCourse->title : ''));
+                    throw new \App\Exceptions\BusinessException('الطالب مسجل بالفعل في: '.($firstEnrolledCourse ? $firstEnrolledCourse->title : ''));
                 }
             }
 

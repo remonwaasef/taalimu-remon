@@ -22,12 +22,9 @@ class AuthController extends Controller
 
         $throttleKey = 'admin_login.'.\Illuminate\Support\Str::lower($request->input('email')).'|'.$request->ip();
 
-        // Increase rate limit for local development/testing to prevent locking out developers
-        $host = $request->getHost();
-        $isLocal = app()->environment('local') ||
-                   in_array($host, ['localhost', '127.0.0.1', '::1']) ||
-                   str_contains($host, '.localhost') ||
-                   str_contains($host, '192.168.');
+        // SEC-AUTH-2: rate-limit relaxation must never depend on the request's
+        // Host header (attacker-controlled) — environment only.
+        $isLocal = app()->environment('local', 'testing');
         $maxAttempts = $isLocal ? 100 : 5;
 
         if (\Illuminate\Support\Facades\RateLimiter::tooManyAttempts($throttleKey, $maxAttempts)) {
@@ -51,27 +48,13 @@ class AuthController extends Controller
             && \Illuminate\Support\Facades\Hash::check($credentials['password'], $user->password)) {
             \Illuminate\Support\Facades\RateLimiter::clear($throttleKey);
 
-            // 2FA challenge: password is valid but we must verify the TOTP
-            // before the session is authenticated.
-            if ($user->google2fa_enabled) {
-                $request->session()->put('admin_2fa_pending', $user->id);
-                $request->session()->regenerate();
-
-                return redirect()->route('admin.login.2fa');
-            }
-
-            Auth::login($user);
+            // 2FA is mandatory for global admin accounts (SEC-AUTH-3). Users
+            // without an enrolled secret are routed through the enrollment
+            // screen on the 2FA page instead of being logged in directly.
+            $request->session()->put('admin_2fa_pending', $user->id);
             $request->session()->regenerate();
-            session(['tenant_id' => $user->tenant_id]);
 
-            $intended = redirect()->getIntendedUrl();
-            if ($intended && str_contains($intended, '/admin')) {
-                return redirect()->intended(route('admin.dashboard'));
-            }
-
-            $request->session()->forget('url.intended');
-
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('admin.login.2fa');
         }
 
         \Illuminate\Support\Facades\RateLimiter::hit($throttleKey);
@@ -91,13 +74,42 @@ class AuthController extends Controller
 
         $user = \App\Models\User::withoutGlobalScope(\App\Scopes\TenantScope::class)->find($pendingId);
 
-        if (! $user || ! $user->google2fa_enabled) {
+        if (! $user || ! in_array($user->role, ['super_admin', 'admin'], true) || $user->tenant_id !== null) {
             $request->session()->forget('admin_2fa_pending');
 
             return redirect()->route('admin.login');
         }
 
-        return view('admin::auth.2fa', ['email' => $user->email]);
+        if ($user->google2fa_enabled) {
+            return view('admin::auth.2fa', [
+                'email' => $user->email,
+                'setup' => false,
+                'secret' => null,
+                'qr' => null,
+            ]);
+        }
+
+        // SEC-AUTH-3 enrollment: mint a secret, keep it in the session until a
+        // valid OTP confirms it (same pattern as the tenant TwoFactorController).
+        $secret = $request->session()->get('admin_2fa_pending_secret');
+
+        if (! $secret) {
+            $secret = \PragmaRX\Google2FALaravel\Facade::generateSecretKey();
+            $request->session()->put('admin_2fa_pending_secret', $secret);
+        }
+
+        $qr = \PragmaRX\Google2FALaravel\Facade::getQRCodeInline(
+            'Taalimu Admin',
+            $user->email,
+            $secret
+        );
+
+        return view('admin::auth.2fa', [
+            'email' => $user->email,
+            'setup' => true,
+            'secret' => $secret,
+            'qr' => $qr,
+        ]);
     }
 
     public function verifyTwoFactor(Request $request)
@@ -114,17 +126,36 @@ class AuthController extends Controller
 
         $user = \App\Models\User::withoutGlobalScope(\App\Scopes\TenantScope::class)->find($pendingId);
 
-        if (! $user || ! $user->google2fa_enabled) {
+        if (! $user || ! in_array($user->role, ['super_admin', 'admin'], true) || $user->tenant_id !== null) {
             $request->session()->forget('admin_2fa_pending');
 
             return redirect()->route('admin.login');
         }
 
-        if (! \PragmaRX\Google2FALaravel\Facade::verifyKey($user->google2fa_secret, $request->one_time_password)) {
+        // Enrollment or challenge — the active secret is either the stored one
+        // (challenge) or the session-held one (first-time setup).
+        $secret = $user->google2fa_enabled
+            ? $user->google2fa_secret
+            : $request->session()->get('admin_2fa_pending_secret');
+
+        if (! $secret) {
+            $request->session()->forget('admin_2fa_pending');
+
+            return redirect()->route('admin.login');
+        }
+
+        if (! \PragmaRX\Google2FALaravel\Facade::verifyKey($secret, $request->one_time_password)) {
             return back()->withErrors(['one_time_password' => __('Invalid OTP code.')])->onlyInput('one_time_password');
         }
 
-        $request->session()->forget('admin_2fa_pending');
+        // First valid OTP confirms the enrollment and persists the secret.
+        if (! $user->google2fa_enabled) {
+            $user->google2fa_secret = $secret;
+            $user->google2fa_enabled = true;
+            $user->save();
+        }
+
+        $request->session()->forget(['admin_2fa_pending', 'admin_2fa_pending_secret']);
         Auth::login($user);
         $request->session()->regenerate();
         session(['tenant_id' => $user->tenant_id]);

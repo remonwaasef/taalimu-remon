@@ -20,22 +20,39 @@
     --color-secondary-hover: #1e293b;    /* Slate 800 */
     --color-secondary-light: #f8fafc;    /* Slate 50 */
 
-    --color-accent: #69B7C8;             /* Soft Blue - لون التمييز والتأكيد */
-    --color-accent-hover: #4F7DF3;       /* Blue - حالة التحويم */
+    --color-accent: var(--color-soft-blue); /* Alias للتوافق - لون التمييز */
     --color-accent-light: #E6F4F3;       /* Taalimu Teal tint */
 
+    --color-blue: #4F7DF3;               /* Blue - لون ثانوي */
+    --color-soft-blue: #69B7C8;          /* Soft Blue - لون ثانوي */
+
     /* Status Colors */
-    --color-success: #22c55e;
-    --color-warning: #f59e0b;
-    --color-danger: #ef4444;
-    --color-info: #3b82f6;
+    --color-success: #22C55E;
+    --color-warning: #F59E0B;
+    --color-danger: #EF4444;
+    --color-info: #3B82F6;
+    --color-focus-ring: #2E8B83;         /* تركيز الحقول والأزرار */
 
     /* Base Layout Colors */
     --color-bg-main: #F6F8FA;
     --color-surface: #FFFFFF;
+    --color-bg-sidebar: #FFFFFF;
+    --color-bg-header: #FFFFFF;
     --color-border: #E7ECEF;
+    --color-divider: #EEF2F6;
     --color-text-main: #1F2937;
-    --color-text-muted: #6B7280;
+    --color-text-secondary: #6B7280;
+    --color-text-muted: #9CA3AF;
+    --color-text-disabled: #D1D5DB;
+    --color-text-inverse: #FFFFFF;
+
+    /* Chart Colors */
+    --chart-primary: #2E8B83;
+    --chart-secondary: #4F7DF3;
+    --chart-neutral: #CBD5E1;
+    --chart-accent: #69B7C8;
+    --chart-danger: #EF4444;
+    --chart-warning: #F59E0B;
 
     /* ----------------------------------------------------------------------
        2. Global Button Tokens (متغيرات الأزرار الموحدة)
@@ -112,17 +129,18 @@
     /* ----------------------------------------------------------------------
        4. Global Input & Form Tokens (متغيرات حقول المدخلات)
        ---------------------------------------------------------------------- */
-    --input-bg: #f8fafc;
+--input-bg: #f8fafc;
     --input-border: #cbd5e1;
     --input-radius: 0.75rem;
     --input-focus-border: var(--color-primary);
     --input-focus-ring: rgba(46, 139, 131, 0.2);
 
     /* ----------------------------------------------------------------------
-       5. Global Badge Tokens (متغيرات الشارات)
-       ---------------------------------------------------------------------- */
+        5. Global Badge & Dialog Tokens (متغيرات الشارات والنوافذ)
+        ---------------------------------------------------------------------- */
     --badge-radius: 9999px;
     --badge-font-weight: 600;
+    --dialog-radius: 1.25rem;            /* 20px rounded-2xl+ للنوافذ */
 }
 
 /* --------------------------------------------------------------------------
@@ -131,9 +149,13 @@
 .dark {
     --color-bg-main: #0F1720;
     --color-surface: #17202B;
+    --color-bg-sidebar: #121A24;
+    --color-bg-header: #17202B;
     --color-border: #2B3644;
+    --color-divider: #313D4C;
     --color-text-main: #F9FAFB;
-    --color-text-muted: #CBD5E1;
+    --color-text-secondary: #CBD5E1;
+    --color-text-muted: #94A3B8;
 
     --btn-outline-border: #313D4C;
     --btn-outline-text: #F9FAFB;

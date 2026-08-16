@@ -13,12 +13,12 @@
     {
       "name": "quiz store creates quiz + redirect to edit",
       "passed": true,
-      "detail": "status=200 url=http://qa-center-194003.localhost:8000/quizzes/34/edit"
+      "detail": "status=200 url=http://qa-center-194003.localhost:8000/quizzes/36/edit"
     },
     {
       "name": "quiz persisted in DB",
       "passed": true,
-      "detail": "id=34 pass=60"
+      "detail": "id=36 pass=60"
     },
     {
       "name": "quiz edit page 200",
@@ -33,12 +33,12 @@
     {
       "name": "question stored (mcq) with 2 default options",
       "passed": true,
-      "detail": "q=32 options=2"
+      "detail": "q=35 options=2"
     },
     {
       "name": "option store persisted",
       "passed": true,
-      "detail": "id=72"
+      "detail": "id=79"
     },
     {
       "name": "option updated in DB",
@@ -78,12 +78,12 @@
     {
       "name": "quiz submit accepted (result page)",
       "passed": true,
-      "detail": "{\"ok\":true,\"status\":200,\"url\":\"http://qa-center-194003.localhost:8000/quiz-attempts/5\"} -> http://qa-center-194003.localhost:8000/quiz-attempts/5"
+      "detail": "{\"ok\":true,\"status\":200,\"url\":\"http://qa-center-194003.localhost:8000/quiz-attempts/7\"} -> http://qa-center-194003.localhost:8000/quiz-attempts/7"
     },
     {
       "name": "result content rendered",
       "passed": true,
-      "detail": "len=200 url=http://qa-center-194003.localhost:8000/quiz-attempts/5"
+      "detail": "len=200 url=http://qa-center-194003.localhost:8000/quiz-attempts/7"
     },
     {
       "name": "cleanup: QA quizzes removed",

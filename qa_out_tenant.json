@@ -1,14 +1,34 @@
 {
   "checks": [
     {
-      "name": "T1 session does not cross into T2 (must prompt login)",
+      "name": "T1 session does not cross into T3 (must prompt login)",
       "passed": true,
-      "detail": "http://ra3y.localhost:8000/login"
+      "detail": "http://qa-center-194003.localhost:8000/login"
     },
     {
-      "name": "T2 student id 1 in T1",
-      "passed": false,
-      "detail": "status=200"
+      "name": "T3 student 24 in T1",
+      "passed": true,
+      "detail": "status=404"
+    },
+    {
+      "name": "T3 student 28 in T1",
+      "passed": true,
+      "detail": "status=404"
+    },
+    {
+      "name": "T3 sale 28 in T1",
+      "passed": true,
+      "detail": "status=404"
+    },
+    {
+      "name": "T3 course 3 in T1",
+      "passed": true,
+      "detail": "status=404"
+    },
+    {
+      "name": "T3 instructor 5 in T1",
+      "passed": true,
+      "detail": "status=404"
     },
     {
       "name": "nonexistent student",
@@ -16,22 +36,7 @@
       "detail": "status=404"
     },
     {
-      "name": "T2 sale id 1 in T1",
-      "passed": false,
-      "detail": "status=200"
-    },
-    {
-      "name": "T2 course id 1 in T1",
-      "passed": false,
-      "detail": "status=500"
-    },
-    {
-      "name": "T2 instructor id 1 in T1",
-      "passed": false,
-      "detail": "status=200"
-    },
-    {
-      "name": "T1 search does not leak T2 students",
+      "name": "T1 search does not leak T3 students",
       "passed": true,
       "detail": "status=200 count=0"
     },
@@ -41,9 +46,9 @@
       "detail": "count=0"
     },
     {
-      "name": "guest cannot reach T2 students (redirects to login)",
+      "name": "guest cannot reach T3 students (redirects to login)",
       "passed": true,
-      "detail": "http://ra3y.localhost:8000/login"
+      "detail": "http://qa-center-194003.localhost:8000/login"
     },
     {
       "name": "T1 student results belong to T1",

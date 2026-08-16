@@ -81,15 +81,26 @@
                 Edu
             </div>
             <h1 class="text-2xl font-bold text-slate-900 mb-2 font-arabic tracking-tight">
-                {{ __('التحقق بخطوتين') }}
+                {{ $setup ?? false ? __('تفعيل التحقق بخطوتين') : __('التحقق بخطوتين') }}
             </h1>
             <p class="text-slate-500 text-sm font-arabic font-light">
-                {{ __('أدخل رمز التحقق من تطبيق المصادقة الخاص بك') }}
+                {{ $setup ?? false ? __('امسح رمز QR بتطبيق المصادقة ثم أدخل رمز التحقق لتفعيل الحماية') : __('أدخل رمز التحقق من تطبيق المصادقة الخاص بك') }}
             </p>
             <p class="text-slate-400 text-xs font-arabic font-light mt-2" dir="ltr">
                 {{ $email }}
             </p>
         </div>
+
+        @if (! empty($setup) && ! empty($qr))
+            <div class="mb-6 flex flex-col items-center gap-3">
+                <div class="bg-white border border-slate-100 rounded-2xl p-4 shadow-sm" dir="ltr">
+                    {!! $qr !!}
+                </div>
+                <p class="text-[11px] font-mono text-slate-500 tracking-widest" dir="ltr">
+                    {{ $secret }}
+                </p>
+            </div>
+        @endif
 
         <!-- Global Error Alert -->
         @if ($errors->any())

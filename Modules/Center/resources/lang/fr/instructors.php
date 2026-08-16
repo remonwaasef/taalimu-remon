@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 return [
     'title' => 'Instructeurs',
@@ -78,6 +78,7 @@ return [
     'val_phone_regex' => 'Le numéro de téléphone ne doit contenir que des chiffres.',
     'val_phone_min' => 'Le numéro de téléphone doit comporter au moins 10 chiffres.',
     'val_email_email' => 'Adresse e-mail invalide.',
+    'val_email_unique' => "Cet e-mail est déjà utilisé.",
     'val_specialization_required' => 'La spécialisation est requise.',
     'val_specialization_regex' => 'La spécialisation doit contenir un texte valide.',
     'val_commission_rate_required' => 'Le taux/montant de la commission est requis.',

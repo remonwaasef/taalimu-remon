@@ -96,6 +96,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'onboarding.completed' => \App\Http\Middleware\EnsureOnboardingCompleted::class,
             'inertia' => \App\Http\Middleware\HandleInertiaRequests::class,
             'instructor.role' => \App\Http\Middleware\EnsureInstructorAccess::class,
+            'center.admin' => \App\Http\Middleware\EnsureCenterAdministrator::class,
             'abilities' => \Laravel\Sanctum\Http\Middleware\CheckAbilities::class,
             'ability' => \Laravel\Sanctum\Http\Middleware\CheckForAnyAbility::class,
         ]);

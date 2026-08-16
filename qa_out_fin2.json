@@ -8,7 +8,7 @@
     {
       "name": "sale create (course items)",
       "passed": true,
-      "detail": "status=200 :: {\"success\":true,\"sale_id\":35}"
+      "detail": "status=200 :: {\"success\":true,\"sale_id\":57}"
     },
     {
       "name": "sales list",

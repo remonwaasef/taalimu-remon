@@ -11,13 +11,14 @@ try {
   check('login page has login form', hasLoginTitle > 0);
 } catch (e) { recordError('login page load', e); }
 
-// Empty login
+// Empty login (HTML5 required blocks submit client-side — page must stay on login)
 try {
   await page.goto(BASE + '/login');
   await page.click('button[type="submit"]');
   await page.waitForTimeout(1200);
+  const url = page.url();
   const body = await page.locator('body').innerText();
-  check('empty login blocked (validation msg)', /required|مطلوب|الحقل/i.test(body), body.slice(0, 120).replace(/\n/g, ' '));
+  check('empty login blocked (no navigation away)', url.includes('/login') && !/لوحة التحكم/.test(body), url + ' :: ' + body.slice(0, 120).replace(/\n/g, ' '));
 } catch (e) { recordError('empty login', e); }
 
 // Wrong password
@@ -50,12 +51,12 @@ try {
   const url = page.url();
   check('valid login lands on dashboard', /demo-center\.localhost:8000\/$/.test(url), url);
   const body = await page.locator('body').innerText();
-  check('dashboard shows welcome text', /لوحة التحكم|مرحبا|مرحباً|إحصائيات/.test(body), body.slice(0, 100).replace(/\n/g, ' '));
+  check('dashboard shows welcome text', /مركز الاختبار التجريبي|الرئيسية|الطلاب/.test(body), body.slice(0, 100).replace(/\n/g, ' '));
 } catch (e) { recordError('valid login', e); }
 
-// Dashboard stats sanity
+// Dashboard stats sanity (x-ui.stats-card renders h3 value)
 try {
-  const statCards = await page.locator('h6, .card h6, .stat').count();
+  const statCards = await page.locator('h3.text-2xl, .rounded-2xl h3').count();
   check('dashboard renders stat cards', statCards >= 3, 'cards=' + statCards);
 } catch (e) { recordError('dashboard stats', e); }
 

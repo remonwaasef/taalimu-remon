@@ -3,109 +3,159 @@ import { newBrowser, login, check, recordError, results, dumpJson, BASE } from '
 const { browser, ctx, page } = await newBrowser();
 const suffix = Date.now().toString().slice(-6);
 const cname = 'QA Course ' + suffix;
+const m = (Number(suffix.slice(0, 2)) % 58) + 1; // unique-ish 23:xx slot per run
+const startT = '23:' + String(m).padStart(2, '0');
+const endT = '23:' + String(m + 1).padStart(2, '0');
 
 try {
   await login(page);
-  if (!page.url().includes('/dashboard') && !page.url().includes('/')) console.log('login landed at: ' + page.url());
-  await page.goto(BASE + '/courses', { waitUntil: 'domcontentloaded' });
-  check('courses.index 200', page.url().endsWith('/courses'));
-  check('courses.index lists existing courses', await page.locator('body').innerText().then(t => t.includes('QA') || t.includes('course') || t.includes('Course') || t.length > 100));
-  const body0 = await page.locator('body').innerText();
-  check('no 500 on courses.index', !body0.includes('Whoops') && !body0.includes('Server Error'));
+  check('login lands on dashboard', page.url().endsWith(':8000/') || page.url().endsWith('/dashboard'), page.url().slice(0, 80));
 
-  // --- CREATE ---
+  // --- CREATE (full flow: schedules link validation) ---
   await page.goto(BASE + '/courses/create', { waitUntil: 'domcontentloaded' });
-  check('courses.create page', await page.locator('input[name="title"], input[name="name"]').count() > 0);
-  const titleSel = await page.locator('input[name="title"]').count() ? 'input[name="title"]' : 'input[name="name"]';
-  await page.fill(titleSel, cname);
-  const desc = await page.locator('textarea[name="description"], textarea[name="short_description"]').first();
-  if (await desc.count()) await desc.fill('QA test course description');
-  const submitBtn = page.locator('form button[type="submit"]').first();
-  await Promise.all([
-    page.waitForNavigation({ waitUntil: 'commit', timeout: 30000 }).catch(() => {}),
-    submitBtn.click(),
-  ]);
+  const f = page.locator('form:has(input[name="price"])');
+  check('create page has form', await f.count() === 1);
+  await f.locator('input[name="title"]').fill(cname);
+  await f.locator('input[name="price"]').fill('1500');
+  await f.locator('input[name="sessions_count"]').fill('1');
+  await f.locator('textarea[name="description"]').fill('QA creation flow');
   await page.waitForTimeout(1500);
-  const afterCreate = page.url();
-  check('courses.store created (redirected to show/edit)', !afterCreate.endsWith('/courses/create'), afterCreate.slice(0, 90));
 
-  const courseIdMatch = afterCreate.match(/\/(\d+)\b/);
-  const courseId = courseIdMatch ? courseIdMatch[1] : null;
-  if (!courseId) { recordError('courses.store', 'no course id in redirect url'); }
+  // --- VALIDATION: button stays disabled without schedules ---
+  const disabledNoSched = await f.locator('button[type="submit"]').isDisabled();
+  check('submit disabled until schedules complete (JS validation)', disabledNoSched === true);
 
-  // --- LIST has new course ---
+  const items = await f.locator('.schedule-item').count();
+  check('schedule item auto-added for sessions_count=1', items === 1, String(items));
+  if (items > 0) {
+    await f.locator('.schedule-item').first().locator('select[name*="day_of_week"]').selectOption({ index: 0 });
+    const clsOptions = await f.locator('.schedule-item').first().locator('select[name*="classroom_id"] option').count();
+    if (clsOptions > 1) await f.locator('.schedule-item').first().locator('select[name*="classroom_id"]').selectOption({ index: 1 });
+    await f.locator('.schedule-item').first().locator('input[name*="start_time"]').fill(startT);
+    await f.locator('.schedule-item').first().locator('input[name*="end_time"]').fill(endT);
+    await page.waitForTimeout(2500);
+  }
+  const btnState = await f.locator('button[type="submit"]').evaluate(b => ({ disabled: b.disabled }));
+  check('submit enabled after complete schedules', btnState.disabled === false, JSON.stringify(btnState));
+
+  const navPromise = page.waitForNavigation({ waitUntil: 'commit', timeout: 30000 }).catch(() => {});
+  await f.locator('button[type="submit"]').click();
+  await navPromise;
+  await page.waitForTimeout(1500);
+  check('courses.store created (redirect to index)', page.url().endsWith('/courses'), page.url().slice(0, 90));
+
+  // --- LIST shows created course + find its row-scoped id ---
   await page.goto(BASE + '/courses', { waitUntil: 'domcontentloaded' });
+  await page.waitForTimeout(1000);
   const listTxt = await page.locator('body').innerText();
   check('courses.index shows created course', listTxt.includes(cname));
 
-  // --- SHOW ---
+  let courseId = null;
+  const row = page.locator('tr', { hasText: cname }).first();
+  if (await row.count()) {
+    const link = row.locator('a[href*="/courses/"]').first();
+    const href = await link.getAttribute('href').catch(() => null);
+    const m2 = href && href.match(/\/courses\/(\d+)/);
+    if (m2) courseId = m2[1];
+  }
+  check('course id found in its own row', !!courseId, 'id=' + courseId);
+
+  // --- SHOW + TOGGLE-STATUS (route previously 500: BUG-020) ---
   if (courseId) {
     await page.goto(BASE + '/courses/' + courseId, { waitUntil: 'domcontentloaded' });
-    check('courses.show 200', page.url().endsWith('/courses/' + courseId));
     const showTxt = await page.locator('body').innerText();
-    check('courses.show renders course', showTxt.includes(cname));
+    check('courses.show renders course title', showTxt.includes(cname), 'url=' + page.url().slice(0, 60));
 
-    // --- CURRICULUM (sections) ---
-    await page.goto(BASE + '/courses/' + courseId + '/curriculum', { waitUntil: 'domcontentloaded' });
-    check('curriculum page', !(await page.locator('body').innerText()).includes('Server Error'));
-    const hasSectionForm = await page.locator('input[name="title"], input[name="name"], input[name="section_title"], input[name="section_name"]').count();
-    check('curriculum has add-section control', hasSectionForm > 0);
-
-    // --- toggle-status ---
-    const before = await page.locator('body').innerText();
-    const statusUrl = BASE + '/courses/' + courseId + '/toggle-status';
-    const res = await (async () => {
+    const postToggle = () => page.evaluate(async (courseId) => {
       try {
-        const r = await page.evaluate(async (u) => {
-          const c = document.cookie.split(';').map(x => x.trim().split('=')).reduce((o, [k, v]) => (o[k] = decodeURIComponent(v), o), {});
-          const r = await fetch(u, { method: 'POST', headers: { 'Accept': 'application/json', 'X-XSRF-TOKEN': c['XSRF-TOKEN'] } });
-          return r.status;
-        }, statusUrl);
-        return r;
-      } catch (e) { return 'ERR:' + e.message; }
-    })();
-    check('courses.toggle-status POST', res === 200 || res === 302 || res === 419, String(res));
-  }
+        const csrf = document.cookie.split(';').map(x => x.trim().split('=')).reduce((o, [k, v]) => (o[k] = decodeURIComponent(v), o), {});
+        const r = await fetch('/courses/' + courseId + '/toggle-status', { method: 'POST', headers: { 'X-XSRF-TOKEN': csrf['XSRF-TOKEN'], 'Accept': 'application/json' } });
+        return { status: r.status, body: String(r.status) };
+      } catch (e) { return { status: 0, body: String(e).slice(0, 120) }; }
+    }, courseId);
 
-  // --- EDIT ---
-  if (courseId) {
+    const t1 = await postToggle();
+    check('courses.toggle-status accepts POST (200/302)', t1.status === 200 || t1.status === 302, JSON.stringify(t1).slice(0, 100));
+
+    await page.goto(BASE + '/courses', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(1000);
+    const rowAfter = page.locator('tr', { hasText: cname }).first();
+    const badgeAfter = await rowAfter.locator('span.badge').first().innerText().catch(() => '');
+    const t2 = await postToggle();
+    await page.goto(BASE + '/courses', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(1000);
+    const rowBack = page.locator('tr', { hasText: cname }).first();
+    const badgeBack = await rowBack.locator('span.badge').first().innerText().catch(() => '');
+    check('toggle flips status badge & second toggle restores',
+      badgeAfter.length > 0 && badgeAfter !== badgeBack,
+      '1st=' + badgeAfter + ' 2nd=' + badgeBack);
+
+    // --- CURRICULUM: add section ---
+    await page.goto(BASE + '/courses/' + courseId + '/curriculum', { waitUntil: 'domcontentloaded' });
+    const curTxt = await page.locator('body').innerText();
+    check('curriculum page loads', !curTxt.includes('Server Error') && !curTxt.includes('Whoops'));
+    const secForm = page.locator('form[action*="' + courseId + '/sections"]').first();
+    if (await secForm.count()) {
+      const secTitle = secForm.locator('input[name="title"]').first();
+      if (await secTitle.count()) {
+        await secTitle.fill('QA Section ' + suffix);
+        const secNav = page.waitForNavigation({ waitUntil: 'commit', timeout: 20000 }).catch(() => {});
+        await secForm.locator('button[type="submit"]').click();
+        await secNav;
+        await page.waitForTimeout(1200);
+        await page.reload({ waitUntil: 'domcontentloaded' });
+        await page.waitForTimeout(1000);
+        const secInputs = await page.evaluate(() =>
+          [...document.querySelectorAll('.section-item input[name="title"]')].map(i => i.value));
+        check('section created and shown', secInputs.includes('QA Section ' + suffix), JSON.stringify(secInputs));
+      }
+    }
+
+    // --- EDIT ---
     await page.goto(BASE + '/courses/' + courseId + '/edit', { waitUntil: 'domcontentloaded' });
-    check('courses.edit 200', !(await page.locator('body').innerText()).includes('Server Error'));
+    const editF = page.locator('form:has(input[name="price"])');
+    check('courses.edit loads form', await editF.count() === 1);
+    if (await editF.count()) {
+      await editF.locator('input[name="title"]').fill(cname + ' EDITED');
+      const editNav = page.waitForNavigation({ waitUntil: 'commit', timeout: 20000 }).catch(() => {});
+      await editF.locator('button[type="submit"]').click();
+      await editNav;
+      await page.waitForTimeout(1500);
+      const listTxt2 = await page.locator('body').innerText();
+      check('courses.update persists', listTxt2.includes(cname + ' EDITED'));
+    }
+  } else {
+    check('course id found', false, 'could not find created course');
   }
 
-  // --- VALIDATION: create with empty title ---
-  await page.goto(BASE + '/courses/create', { waitUntil: 'domcontentloaded' });
-  const emptySubmit = page.locator('form button[type="submit"]').first();
-  await Promise.all([
-    page.waitForNavigation({ waitUntil: 'commit', timeout: 15000 }).catch(() => {}),
-    emptySubmit.click(),
-  ]);
-  await page.waitForTimeout(1200);
-  const vtxt = await page.locator('body').innerText();
-  check('courses.store rejects empty title', !vtxt.includes('Server Error'));
-
-  // --- DESTROY (cleanup) ---
+  // --- DESTROY (cleanup via index dropdown) + real absence check ---
   if (courseId) {
-    await page.goto(BASE + '/courses/' + courseId, { waitUntil: 'domcontentloaded' });
-    const del = page.locator('form[method="POST"] button[type="submit"], button[name="_method"]').first();
-    const delCount = await del.count();
-    if (delCount) {
-      await Promise.all([
-        page.waitForNavigation({ waitUntil: 'commit', timeout: 20000 }).catch(() => {}),
-        del.click(),
-      ]);
-      await page.waitForTimeout(1200);
-      check('courses.destroy executed', !page.url().includes('/courses/' + courseId));
+    await page.goto(BASE + '/courses', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(1200);
+    const drop = page.locator('form#delete-course-form-' + courseId).first();
+    if (await drop.count()) {
+      const delRes = await page.evaluate(async (formId) => {
+        const f = document.getElementById(formId);
+        const csrf = f.querySelector('input[name="_token"]').value;
+        const action = f.getAttribute('action');
+        const r = await fetch(action, { method: 'POST', headers: { 'X-CSRF-TOKEN': csrf, 'Accept': 'application/json' }, body: new URLSearchParams({ _method: 'DELETE' }) });
+        return r.status;
+      }, 'delete-course-form-' + courseId);
+      await page.waitForTimeout(2000);
+      await page.goto(BASE + '/courses', { waitUntil: 'domcontentloaded' });
+      await page.waitForTimeout(1000);
+      const listAfter = await page.locator('body').innerText();
+      check('courses.destroy removes course (absent from list)', delRes === 200 && !listAfter.includes(cname),
+        'delete http=' + delRes);
     } else {
-      check('courses.destroy button present', false, 'no delete button on show page');
+      check('destroy form in index dropdown', false, 'delete form not found');
     }
   }
 } catch (e) {
   recordError('qa21_courses', e);
 }
 
-console.log('\n--- CONSOLE ERRORS ---');
-console.log((page._consoleErrors || []).slice(0, 8).join('\n') || 'none');
-
+console.log('\n--- CONSOLE ERRORS (first 5) ---');
+console.log((page._consoleErrors || []).slice(0, 5).join('\n') || 'none');
 await dumpJson('21_courses');
 await browser.close();

@@ -1,0 +1,70 @@
+{
+  "checks": [
+    {
+      "name": "classrooms.index loads",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "classrooms.create has form",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "classrooms.store redirects to index",
+      "passed": true,
+      "detail": "http://demo-center.localhost:8000/classrooms"
+    },
+    {
+      "name": "classrooms.index shows created classroom",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "classroom id found in row",
+      "passed": true,
+      "detail": "id=19"
+    },
+    {
+      "name": "classrooms.show renders",
+      "passed": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "classrooms.destroy removes from list",
+      "passed": true,
+      "detail": "http=200"
+    },
+    {
+      "name": "inventory.index loads",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "inventory.create has form",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "inventory.store redirects",
+      "passed": true,
+      "detail": "http://demo-center.localhost:8000/inventory"
+    },
+    {
+      "name": "inventory.index shows created asset",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "asset id found in row",
+      "passed": true,
+      "detail": "id=9"
+    },
+    {
+      "name": "inventory.destroy removes from list",
+      "passed": true,
+      "detail": "http=200"
+    }
+  ],
+  "errors": []
+}

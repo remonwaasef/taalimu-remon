@@ -20,7 +20,9 @@ class ScheduleController extends Controller
         $this->authorize('viewAny', Schedule::class);
         $user = auth()->user();
 
-        $query = Schedule::with(['course', 'classroom', 'instructor', 'bookings'])->latest();
+        $query = Schedule::with(['course', 'classroom', 'instructor', 'bookings'])
+            ->whereHas('course', fn ($q) => $q->whereNull('deleted_at'))
+            ->latest();
 
         if ($user->hasRole('instructor') && ! $user->hasRole('center_admin')) {
             $query->where('instructor_id', $user->instructor->id ?? 0);

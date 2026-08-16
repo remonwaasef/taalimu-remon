@@ -1,14 +1,14 @@
 {
   "checks": [
     {
-      "name": "students page for sale",
+      "name": "found student for sale",
       "passed": true,
-      "detail": ""
+      "detail": "id=10"
     },
     {
       "name": "sale create",
-      "passed": false,
-      "detail": "status=422"
+      "passed": true,
+      "detail": "status=200 {\"success\":true,\"sale_id\":49}"
     },
     {
       "name": "sales list",
@@ -22,8 +22,8 @@
     },
     {
       "name": "receipt endpoint responds",
-      "passed": false,
-      "detail": "status=404"
+      "passed": true,
+      "detail": "status=200"
     },
     {
       "name": "statement page",

@@ -20,7 +20,7 @@
                                 <tbody>
                                     @forelse($bookings as $booking)
                                         <tr>
-                                            <td class="px-4 fw-bold small text-dark">{{ $booking->schedule->course->title }}</td>
+                                            <td class="px-4 fw-bold small text-dark">{{ $booking->schedule->course?->title ?? '—' }}</td>
                                             <td>
                                                 <div class="small fw-bold">{{ __('center::schedules.' . $booking->schedule->day_of_week) }}</div>
                                                 <small class="text-muted extra-small">{{ $booking->schedule->start_time }} - {{ $booking->schedule->end_time }}</small>

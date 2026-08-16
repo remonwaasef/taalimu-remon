@@ -11,14 +11,14 @@
       "detail": ""
     },
     {
-      "name": "empty login blocked (validation msg)",
-      "passed": false,
-      "detail": "﻿ Taalimu الميزات الأسعار الأسئلة الشائعة تسجيل الدخول AR ابدأ التجربة المجانية � مركز الاختبار التجريبي  مرحباً بعودتك "
+      "name": "empty login blocked (no navigation away)",
+      "passed": true,
+      "detail": "http://demo-center.localhost:8000/login :: ﻿ Taalimu QA الميزات الأسعار الأسئلة الشائعة  تسجيل الدخول AR ابدأ التجربة المجانية AR � مركز الاختبار التجريبي  مرحباً "
     },
     {
       "name": "wrong password rejected",
       "passed": true,
-      "detail": "http://demo-center.localhost:8000/login :: ﻿ Taalimu الميزات الأسعار الأسئلة الشائعة تسجيل الدخول AR ابدأ التجربة المجانية � مركز الاختبار التجريبي  مرحباً بعودتك "
+      "detail": "http://demo-center.localhost:8000/login :: ﻿ Taalimu QA الميزات الأسعار الأسئلة الشائعة  تسجيل الدخول AR ابدأ التجربة المجانية AR � مركز الاختبار التجريبي  مرحباً "
     },
     {
       "name": "nonexistent user rejected",
@@ -32,13 +32,13 @@
     },
     {
       "name": "dashboard shows welcome text",
-      "passed": false,
-      "detail": "T مركز الاختبار التجريبي الرئيسية الهيكل الأكاديمي والصفوف الطلاب متابعة الحضور المدفوعات والفواتير "
+      "passed": true,
+      "detail": "T مركز الاختبار التجريبي  الرئيسية  الهيكل الأكاديمي والصفوف   الطلاب  متابعة الحضور  المدفوعات والف"
     },
     {
       "name": "dashboard renders stat cards",
       "passed": true,
-      "detail": "cards=5"
+      "detail": "cards=6"
     },
     {
       "name": "logout redirects to login and protects dashboard",
@@ -66,9 +66,29 @@
       "detail": "http://demo-center.localhost:8000/login"
     },
     {
+      "name": "unauthenticated /settings redirects to login",
+      "passed": true,
+      "detail": "http://demo-center.localhost:8000/login"
+    },
+    {
+      "name": "unauthenticated /analytics redirects to login",
+      "passed": true,
+      "detail": "http://demo-center.localhost:8000/login"
+    },
+    {
+      "name": "unauthenticated /billing redirects to login",
+      "passed": true,
+      "detail": "http://demo-center.localhost:8000/login"
+    },
+    {
+      "name": "unauthenticated /users redirects to login",
+      "passed": true,
+      "detail": "http://demo-center.localhost:8000/login"
+    },
+    {
       "name": "register page loads",
       "passed": true,
-      "detail": "﻿ Taalimu الميزات الأسعار الأسئلة الشائعة تسجيل الدخول AR ابدأ التجربة المجانية الخطوة ١ من ٢ البيان"
+      "detail": "﻿ Taalimu QA الميزات الأسعار الأسئلة الشائعة  تسجيل الدخول AR ابدأ التجربة المجانية AR الخطوة ١ من ٢"
     },
     {
       "name": "forgot password page loads",
@@ -78,13 +98,8 @@
     {
       "name": "2FA setup page loads",
       "passed": true,
-      "detail": "T مركز الاختبار التجريبي الرئيسية الهيكل الأكاديمي والصفوف الطلاب متابعة الحضور المدفوعات والفواتير "
+      "detail": "T مركز الاختبار التجريبي  الرئيسية  الهيكل الأكاديمي والصفوف   الطلاب  متابعة الحضور  المدفوعات والف"
     }
   ],
-  "errors": [
-    {
-      "where": "protected routes",
-      "err": "TimeoutError: page.goto: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://demo-center.localhost:8000/settings\", waiting until \"commit\"\u001b[22m\n"
-    }
-  ]
+  "errors": []
 }

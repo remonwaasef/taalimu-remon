@@ -13,7 +13,7 @@ class CurriculumController extends Controller
     public function edit(\App\Models\Course $course)
     {
         $this->authorize('update', $course);
-        $course->load(['sections.lessons', 'resources']);
+        $course->load(['sections.lessons.quiz', 'sections.lessons.assignment', 'resources']);
 
         return view('center::curriculum.edit', compact('course'));
     }

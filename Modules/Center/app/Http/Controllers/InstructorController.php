@@ -221,6 +221,19 @@ class InstructorController extends Controller
     }
 
     /**
+     * Toggle instructor status (Active/Inactive).
+     */
+    public function toggleStatus($id)
+    {
+        $instructor = Instructor::where('tenant_id', app('tenant')->id)->findOrFail($id);
+        $this->authorize('update', $instructor);
+
+        $instructor->update(['status' => $instructor->status === 'active' ? 'inactive' : 'active']);
+
+        return back()->with('success', __('center::messages.msg_050'));
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy($id)

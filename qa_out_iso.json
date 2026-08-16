@@ -2,7 +2,7 @@
   "checks": [
     {
       "name": "T3 login works",
-      "passed": false,
+      "passed": true,
       "detail": "http://qa-center-194003.localhost:8000/"
     },
     {
@@ -18,7 +18,7 @@
     {
       "name": "T1 user blocked from T3 domain",
       "passed": true,
-      "detail": "http://qa-center-194003.localhost:8000/login :: ﻿ | Taalimu | الميزات | الأسعار | الأسئلة الشائعة | تسجيل الدخول | AR | ابدأ التجربة المجانية | Q | QA Center 194003 | مرحباً بعودتك | البريد الإلكتروني أو رقم الهاتف  | كل"
+      "detail": "http://qa-center-194003.localhost:8000/login :: ﻿ | Taalimu QA | الميزات الأسعار الأسئلة الشائعة  | تسجيل الدخول | AR | ابدأ التجربة المجانية | AR | Q | QA Center 194003 | مرحباً بعودتك | البريد الإلكتروني أو رقم اله"
     }
   ],
   "errors": []

@@ -1,21 +1,8 @@
-import { newBrowser, fetchAs, check, getResults, dumpJson, recordError } from './qa_helpers.mjs';
+import { newBrowser, fetchAs, check, getResults, dumpJson, recordError, adminLogin } from './qa_helpers.mjs';
 const { browser, page } = await newBrowser();
 const A = (p) => 'http://localhost:8000/admin' + p;
 
-async function adminLogin() {
-  await page.goto(A('/login'), { waitUntil: 'domcontentloaded', timeout: 30000 });
-  await page.waitForTimeout(1500);
-  await page.evaluate(async () => {
-    const tk = document.querySelector('meta[name=csrf-token]')?.content;
-    await fetch('/admin/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-CSRF-TOKEN': tk, 'Accept': 'text/html' },
-      body: new URLSearchParams({ email: 'admin@admin.com', password: 'password', _token: tk }).toString(),
-    });
-  });
-  await page.waitForTimeout(1000);
-}
-await adminLogin();
+await adminLogin(page);
 
 // 1. Create tenant
 let newTenantId = null;

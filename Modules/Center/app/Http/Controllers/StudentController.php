@@ -227,6 +227,19 @@ class StudentController extends Controller
     }
 
     /**
+     * Toggle student status (Active/Frozen).
+     */
+    public function toggleStatus($id)
+    {
+        $student = $this->findStudentOrFail($id);
+        $this->authorize('update', $student);
+
+        $student->update(['status' => $student->status === 'active' ? 'frozen' : 'active']);
+
+        return back()->with('success', __('center::messages.msg_082'));
+    }
+
+    /**
      * Send debt reminder via WhatsApp.
      */
     public function remindDebt($id, \App\Services\WhatsAppService $whatsappService)

@@ -170,6 +170,8 @@ class SaleController extends Controller
             $sale = $this->financeService->createSale($request->validated());
 
             return response()->json(['success' => true, 'sale_id' => $sale->id]);
+        } catch (\App\Exceptions\BusinessException $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
         } catch (\Exception $e) {
             \Log::error('Sale creation failed: '.$e->getMessage());
 

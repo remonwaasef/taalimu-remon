@@ -16,7 +16,7 @@
                                 <option value="">{{ __('center::students.profile.bookings.choose_schedule') }}</option>
                                 @foreach($availableSchedules as $sch)
                                     <option value="{{ $sch->id }}">
-                                        {{ $sch->course->title }} | {{ __('center::schedules.' . $sch->day_of_week) }} ({{ $sch->start_time }} - {{ $sch->end_time }})
+                                        {{ $sch->course?->title ?? '—' }} | {{ __('center::schedules.' . $sch->day_of_week) }} ({{ $sch->start_time }} - {{ $sch->end_time }})
                                     </option>
                                 @endforeach
                             </select>

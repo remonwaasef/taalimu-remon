@@ -124,32 +124,35 @@ class PaymentProcessingService
     }
 
     /**
-     * استعادة سياق الدفع من merchant_order_id (لـ Paymob عندما ينتهي الـ session).
-     * PAY-2: القراءة من خريطة online_checkouts المربوطة برقم أمر Paymob الموقّع
-     * (وليس من النص غير الموقّع نفسه).
+     * استعادة سياق الدفع من رقم أمر Paymob المغطى بـ HMAC (لـ Paymob عندما ينتهي الـ session).
+     * SEC-PAY-1: الـ merchant_order_id غير موقّع في redirect HMAC (انظر
+     * PaymobGateway::verifyRedirectHmac) ويمكن للمهاجم تغييره، لذلك يجب أن تكون
+     * الاستعادة من خريطة online_checkouts المفتاحية بـ paymob_order_id — نفس
+     * المصدر الموثوق الذي يعتمده الـ webhook.
      */
-    public function restoreContextFromMerchantOrder(string $merchantOrderId): ?array
+    public function restoreContextFromPaymobOrder(?string $paymobOrderId): ?array
     {
-        if (! str_starts_with($merchantOrderId, 'tx_')) {
+        if (! $paymobOrderId) {
             return null;
         }
 
-        $checkout = \App\Models\OnlineCheckout::where('merchant_order_id', $merchantOrderId)
+        $checkout = \App\Models\OnlineCheckout::where('paymob_order_id', $paymobOrderId)
             ->first();
 
         if (! $checkout) {
-            Log::warning("Payment context NOT restored (no checkout row) for merchant_order_id: {$merchantOrderId}");
+            Log::warning("Payment context NOT restored (no checkout row) for paymob order id: {$paymobOrderId}");
 
             return null;
         }
 
-        Log::info("Payment context restored from verified checkout row for merchant_order_id: {$merchantOrderId}");
+        Log::info("Payment context restored from verified checkout row for paymob order id: {$paymobOrderId}");
 
         return [
             'tenant_id' => $checkout->tenant_id,
             'plan_slug' => $checkout->package_slug,
             'billing_cycle' => $checkout->billing_cycle,
             'is_change' => (bool) $checkout->is_change,
+            'total_amount' => $checkout->amount_cents / 100,
         ];
     }
 }

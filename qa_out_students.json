@@ -3,7 +3,7 @@
     {
       "name": "students list loads",
       "passed": true,
-      "detail": "time=6665ms"
+      "detail": "time=2980ms"
     },
     {
       "name": "students list has rows",
@@ -13,7 +13,7 @@
     {
       "name": "settings academic tab loads",
       "passed": true,
-      "detail": "time=4938ms"
+      "detail": "time=4185ms"
     },
     {
       "name": "academic template applied",
@@ -78,7 +78,7 @@
     {
       "name": "search API returns created student",
       "passed": true,
-      "detail": "id=23"
+      "detail": "id=51"
     },
     {
       "name": "student show page loads",

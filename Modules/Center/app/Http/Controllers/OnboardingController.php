@@ -11,11 +11,26 @@ class OnboardingController extends Controller
     public function __construct(protected OnboardingService $onboarding) {}
 
     /**
+     * SEC-AUTH-1 (defense in depth): onboarding mutates tenant-wide records,
+     * so only tenant administrators may run it — regardless of route wiring.
+     */
+    protected function authorizeCenterAdmin(): void
+    {
+        $user = auth()->user();
+
+        if (! $user || ! in_array($user->role, ['center_admin', 'center_owner'], true)) {
+            abort(403, 'Unauthorized.');
+        }
+    }
+
+    /**
      * One-time fix: Create pending invoices for students who have enrollments but no sales.
      * Protected by auth middleware. Run once then remove the route.
      */
     public function fixMissingInvoices()
     {
+        $this->authorizeCenterAdmin();
+
         $tenant = auth()->user()->tenant;
         if (! $tenant) {
             abort(403);
@@ -32,6 +47,8 @@ class OnboardingController extends Controller
 
     public function show()
     {
+        $this->authorizeCenterAdmin();
+
         $tenant = auth()->user()->tenant;
         $status = $tenant->onboarding_status;
 
@@ -47,6 +64,8 @@ class OnboardingController extends Controller
 
     public function updateLocale(Request $request)
     {
+        $this->authorizeCenterAdmin();
+
         $request->validate([
             'locale' => 'required|in:ar,en,fr',
         ]);
@@ -63,6 +82,8 @@ class OnboardingController extends Controller
 
     public function submit(Request $request)
     {
+        $this->authorizeCenterAdmin();
+
         $tenant = auth()->user()->tenant;
         $step = $request->input('step');
 

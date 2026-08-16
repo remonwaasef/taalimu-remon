@@ -8,63 +8,66 @@
 
 /* ===== Taalimu Design System CSS Variables ===== */
 :root {
-    --border: 210 14% 92%;
+    --border: 203 20% 92%;              /* #E7ECEF */
     --input: 210 14% 92%;
-    --ring: 174 50% 36%;
-    --background: 210 20% 97%;
-    --foreground: 220 13% 18%;
-    --primary: 174 50% 36%;
+    --ring: 174 50% 36%;                /* #2E8B83 */
+    --background: 210 29% 97%;          /* #F6F8FA */
+    --foreground: 210 28% 17%;          /* #1F2937 */
+    --primary: 174 50% 36%;             /* #2E8B83 */
     --primary-foreground: 0 0% 100%;
     --secondary: 210 20% 96%;
-    --secondary-foreground: 220 13% 18%;
+    --secondary-foreground: 210 28% 17%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
     --muted: 210 20% 96%;
-    --muted-foreground: 215 16% 47%;
+    --muted-foreground: 220 10% 46%;    /* #6B7280 */
     --accent: 210 20% 96%;
-    --accent-foreground: 220 13% 18%;
+    --accent-foreground: 210 28% 17%;
     --popover: 0 0% 100%;
-    --popover-foreground: 220 13% 18%;
+    --popover-foreground: 210 28% 17%;
     --card: 0 0% 100%;
-    --card-foreground: 220 13% 18%;
+    --card-foreground: 210 28% 17%;
     --radius: 0.75rem;
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 220 13% 18%;
+    --divider: 210 31% 95%;             /* #EEF2F6 */
+    --sidebar-background: 0 0% 100%;    /* #FFFFFF */
+    --sidebar-foreground: 210 28% 17%;
     --sidebar-primary: 174 50% 36%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 210 20% 96%;
-    --sidebar-accent-foreground: 220 13% 18%;
-    --sidebar-border: 210 14% 92%;
+    --sidebar-accent-foreground: 210 28% 17%;
+    --sidebar-border: 203 20% 92%;
     --sidebar-ring: 174 50% 36%;
 }
 
 .dark {
-    --border: 213 22% 22%;
-    --input: 213 22% 22%;
+    --border: 214 17% 22%;              /* #2B3644 */
+    --input: 214 17% 22%;
     --ring: 174 50% 36%;
-    --background: 213 30% 9%;
+    --background: 212 36% 9%;           /* #0F1720 */
     --foreground: 210 20% 98%;
     --primary: 174 50% 36%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 213 22% 22%;
+    --secondary: 214 17% 22%;
     --secondary-foreground: 210 20% 98%;
     --destructive: 0 63% 31%;
     --destructive-foreground: 0 0% 98%;
-    --muted: 213 22% 22%;
-    --muted-foreground: 214 20% 69%;
-    --accent: 213 22% 22%;
+    --muted: 214 17% 22%;
+    --muted-foreground: 213 27% 84%;    /* #CBD5E1 */
+    --accent: 214 17% 22%;
     --accent-foreground: 210 20% 98%;
     --popover: 213 30% 9%;
     --popover-foreground: 210 20% 98%;
-    --card: 212 25% 16%;
+    --card: 210 29% 16%;                /* #1D2935 */
     --card-foreground: 210 20% 98%;
-    --sidebar-background: 213 30% 9%;
+    --radius: 0.75rem;
+    --divider: 213 21% 25%;             /* #313D4C */
+    --sidebar-background: 213 33% 11%;  /* #121A24 */
     --sidebar-foreground: 210 20% 98%;
     --sidebar-primary: 174 50% 36%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 213 22% 22%;
+    --sidebar-accent: 214 17% 22%;
     --sidebar-accent-foreground: 210 20% 98%;
-    --sidebar-border: 213 22% 22%;
+    --sidebar-border: 214 17% 22%;
     --sidebar-ring: 174 50% 36%;
 }
 

@@ -1,7 +1,39 @@
 import { newBrowser, fetchAs, check, getResults, dumpJson, recordError } from './qa_helpers.mjs';
+import { createHmac } from 'node:crypto';
 const { browser, page } = await newBrowser();
 const ADMIN_BASE = 'http://localhost:8000';
 const A = (p) => ADMIN_BASE + '/admin' + p;
+
+function totp(secretB32, timestamp = Date.now()) {
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+  let bits = '';
+  for (const ch of secretB32) {
+    const idx = alphabet.indexOf(ch);
+    if (idx < 0) continue;
+    bits += idx.toString(2).padStart(5, '0');
+  }
+  bits = bits.slice(0, Math.floor(bits.length / 8) * 8);
+  const key = Buffer.from(bits.match(/.{8}/g).map(b => parseInt(b, 2)));
+  const counter = Math.floor(timestamp / 30000);
+  const buf = Buffer.alloc(8);
+  buf.writeBigUInt64BE(BigInt(counter));
+  const hmac = createHmac('sha1', key).update(buf).digest();
+  const offset = hmac[hmac.length - 1] & 0x0f;
+  const bin = ((hmac[offset] & 0x7f) << 24) | ((hmac[offset + 1] & 0xff) << 16) | ((hmac[offset + 2] & 0xff) << 8) | (hmac[offset + 3] & 0xff);
+  return String(bin % 1000000).padStart(6, '0');
+}
+
+async function submitCode(code) {
+  return page.evaluate(async (otp) => {
+    const tk = document.querySelector('meta[name=csrf-token]')?.content;
+    const res = await fetch('/admin/login/2fa', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-CSRF-TOKEN': tk, 'Accept': 'text/html' },
+      body: new URLSearchParams({ one_time_password: otp, _token: tk }).toString(),
+    });
+    return { status: res.status, url: res.url };
+  }, code);
+}
 
 async function adminLogin() {
   await page.goto(A('/login'), { waitUntil: 'domcontentloaded', timeout: 30000 });
@@ -15,6 +47,11 @@ async function adminLogin() {
     });
     return { status: res.status, url: res.url };
   });
+  if (r.url.includes('admin/login/2fa')) {
+    await page.goto(A('/login/2fa'), { waitUntil: 'domcontentloaded', timeout: 30000 });
+    await page.waitForTimeout(1000);
+    return submitCode(totp('JBSWY3DPEHPK3PXP'));
+  }
   return r;
 }
 

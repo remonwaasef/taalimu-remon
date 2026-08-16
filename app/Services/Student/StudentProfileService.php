@@ -177,6 +177,7 @@ class StudentProfileService
             'sales' => $student->sales()->latest()->limit(100)->get(),
             'bookings' => $student->bookings()->with(['schedule.course', 'schedule.classroom'])->latest()->limit(50)->get(),
             'availableSchedules' => \App\Models\Schedule::where('tenant_id', $tenantId)
+                ->whereHas('course', fn ($q) => $q->whereNull('deleted_at'))
                 ->with(['course', 'classroom', 'instructor'])
                 ->get(),
 

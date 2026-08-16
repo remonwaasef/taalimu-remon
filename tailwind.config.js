@@ -35,6 +35,7 @@ export default {
                     300: '#7FC7C0',
                     400: '#4DB1A7',
                     primary: '#2E8B83',
+                    500: '#2E8B83',
                     600: '#25746D',
                     700: '#1E5E58',
                     800: '#174843',
@@ -42,6 +43,15 @@ export default {
                     bg: '#F6F8FA',
                     border: '#E7ECEF',
                     card: '#FFFFFF',
+                },
+                divider: "hsl(var(--divider))",
+                "text-muted": "#9CA3AF",
+                "text-disabled": "#D1D5DB",
+                blue: {
+                    DEFAULT: '#4F7DF3',
+                },
+                "soft-blue": {
+                    DEFAULT: '#69B7C8',
                 },
                 border: "hsl(var(--border))",
                 input: "hsl(var(--input))",

@@ -3,7 +3,7 @@
     {
       "name": "sales index loads",
       "passed": true,
-      "detail": "time=3275ms"
+      "detail": "time=3432ms"
     },
     {
       "name": "sales index has table",
@@ -28,12 +28,12 @@
     {
       "name": "sale created via API",
       "passed": true,
-      "detail": "saleId=27 student=10 course=1 status=200"
+      "detail": "saleId=60 student=10 course=1 status=200"
     },
     {
       "name": "sale show page displays total",
       "passed": true,
-      "detail": "T مركز الاختبار التجريبي الرئيسية الهيكل الأكاديمي والصفوف الطلاب متابعة الحضور المدفوعات والفواتير التقارير الإعدادات خروج Search or press Ctrl+K... ⌘K AR ما رقم الفاتورة #27 طباعة الفاتورة مركز الاخ"
+      "detail": "T مركز الاختبار التجريبي  الرئيسية  الهيكل الأكاديمي والصفوف   الطلاب  متابعة الحضور  المدفوعات والفواتير  التقارير   الإعدادات   خروج  Search or press Ctrl+K... Search... ⌘K    AR ما رقم الفاتورة #60"
     },
     {
       "name": "sale show page displays paid 0",
@@ -53,7 +53,7 @@
     {
       "name": "show page reflects paid 200 / remaining",
       "passed": true,
-      "detail": "T مركز الاختبار التجريبي الرئيسية الهيكل الأكاديمي والصفوف الطلاب متابعة الحضور المدفوعات والفواتير التقارير الإعدادات خروج Search or press Ctrl+K... ⌘K AR ما رقم الفاتورة #27 طباعة الفاتورة مركز الاختبار التجريبي  تفاصيل الفاتورة تاريخ الفاتورة: 202"
+      "detail": "T مركز الاختبار التجريبي  الرئيسية  الهيكل الأكاديمي والصفوف   الطلاب  متابعة الحضور  المدفوعات والفواتير  التقارير   الإعدادات   خروج  Search or press Ctrl+K... Search... ⌘K    AR ما رقم الفاتورة #60 طباعة الفاتورة مركز الاختبار التجريبي  تفاصيل الف"
     },
     {
       "name": "payment row visible in sale",
@@ -63,12 +63,12 @@
     {
       "name": "student summary API returns ledger",
       "passed": true,
-      "detail": "status=200 {\"success\":true,\"student\":{\"name\":\"طالب تجريبي 10\",\"phone\":\"01200000010\",\"status\":\"active\",\"grade\":\"الصف الثالث الثانوي\",\"id\":10},\"courses\":"
+      "detail": "status=200 {\"success\":true,\"student\":{\"name\":\"طالب اختبار QA معدل\",\"phone\":\"01786709034\",\"status\":\"active\",\"grade\":\"المرحلة الابتدائية - الصف الأول الا"
     },
     {
       "name": "receipt PDF downloads",
       "passed": true,
-      "detail": "receipt-2.pdf"
+      "detail": "receipt-24.pdf"
     },
     {
       "name": "refund 100 accepted",
@@ -83,7 +83,7 @@
     {
       "name": "checkout either gates or redirects gracefully (no 500)",
       "passed": true,
-      "detail": "http://demo-center.localhost:8000/sales/27/checkout"
+      "detail": "http://demo-center.localhost:8000/sales/60"
     },
     {
       "name": "overdue page loads",
@@ -93,7 +93,7 @@
     {
       "name": "statement PDF downloads",
       "passed": true,
-      "detail": "statement-10.pdf"
+      "detail": "statement-44.pdf"
     }
   ],
   "errors": []

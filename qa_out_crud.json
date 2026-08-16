@@ -1,72 +1,37 @@
 {
   "checks": [
     {
-      "name": "instructor create (POST /instructors)",
-      "passed": false,
-      "detail": "status=422"
-    },
-    {
-      "name": "instructor appears in list",
+      "name": "instructor create",
       "passed": true,
       "detail": "status=200"
     },
     {
-      "name": "classroom create",
+      "name": "user create with custom role",
       "passed": true,
       "detail": "status=200"
     },
     {
-      "name": "classrooms list loads",
+      "name": "user appears in list",
       "passed": true,
-      "detail": ""
+      "detail": "status=200"
+    },
+    {
+      "name": "course create",
+      "passed": true,
+      "detail": "status=200"
     },
     {
       "name": "expense create",
-      "passed": false,
-      "detail": "status=422"
+      "passed": true,
+      "detail": "status=200"
     },
     {
       "name": "expense appears in list",
-      "passed": false,
-      "detail": "status=200"
-    },
-    {
-      "name": "asset create",
-      "passed": false,
-      "detail": "status=422"
-    },
-    {
-      "name": "inventory list loads",
-      "passed": true,
-      "detail": ""
-    },
-    {
-      "name": "center role create",
       "passed": true,
       "detail": "status=200"
     },
     {
-      "name": "role appears in list",
-      "passed": true,
-      "detail": "status=200"
-    },
-    {
-      "name": "ticket create",
-      "passed": true,
-      "detail": "status=200"
-    },
-    {
-      "name": "ticket appears in list",
-      "passed": true,
-      "detail": "status=200"
-    },
-    {
-      "name": "user create",
-      "passed": false,
-      "detail": "status=422"
-    },
-    {
-      "name": "notifications page loads",
+      "name": "expense search finds QA expense",
       "passed": true,
       "detail": "status=200"
     }

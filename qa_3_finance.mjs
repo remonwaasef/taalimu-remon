@@ -14,6 +14,7 @@ async function getFirstStudent() {
 let saleId = null;
 let paymentId = null;
 let salePrice = 0;
+let saleStudentId = null;
 
 // ============ SALES INDEX + CREATE PAGE ============
 try {
@@ -79,6 +80,7 @@ try {
   });
   salePrice = sale.price;
   saleId = created.body?.sale_id || null;
+  saleStudentId = sale.student.id;
   check('sale created via API', !!saleId, 'saleId=' + saleId + ' student=' + sale.student.id + ' course=' + sale.courseId + ' status=' + created.status);
 } catch (e) { recordError('sale create', e); }
 
@@ -143,7 +145,7 @@ if (saleId) {
       body: 'amount=100&refund_method=cash&reason=QA%20test%20refund',
     });
     check('refund 100 accepted', [200, 302].includes(r.status), 'status=' + r.status + ' ' + JSON.stringify(r.body).slice(0, 100));
-    const v = await fetchAs(page, BASE + '/sales/student-summary/' + (await getFirstStudent())?.id);
+    const v = await fetchAs(page, BASE + '/sales/student-summary/' + saleStudentId);
     const text = JSON.stringify(v.body || '');
     check('ledger reflects refund', /refund|استرداد/i.test(text), text.slice(0, 140));
   } catch (e) { recordError('refund', e); }

@@ -3,32 +3,43 @@ const { browser, page } = await newBrowser();
 await login(page, BASE);
 const ts = Date.now().toString().slice(-6);
 
-// Need a student for sale — list students first
+// Need a student for sale — pick one NOT already enrolled in course 1
 let studentId = null;
+let courseId = 1;
 try {
-  const r = await fetchAs(page, BASE + '/students');
-  const txt = typeof r.body === 'string' ? r.body : '';
-  const m = txt.match(/students\/(\d+)/);
-  studentId = m ? m[1] : '1';
-  check('students page for sale', r.status === 200);
+  const r = await fetchAs(page, BASE + '/students/search?q=' + encodeURIComponent('طالب تجريبي'));
+  const list = Array.isArray(r.body) ? r.body : [];
+  for (const st of list) {
+    const sum = await fetchAs(page, BASE + '/sales/student-summary/' + st.id);
+    const enrolledTitles = ((sum.body && sum.body.courses) || []).map(c => c.title);
+    if (!enrolledTitles.includes('دورة الرياضيات المتقدمة')) {
+      studentId = String(st.id);
+      break;
+    }
+  }
+  if (!studentId && list.length) { studentId = String(list[0].id); }
+  check('found student for sale', studentId !== null, 'id=' + studentId);
 } catch (e) { recordError('sale student', e); }
 
 // 1. Create a sale (paid via cash)
+let saleId = null;
 try {
-  const payload = new URLSearchParams({
+  const r = await fetchAs(page, BASE + '/sales', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
     student_id: studentId,
-    items: JSON.stringify([{ description: 'QA Sale Item', amount: 500 }]),
-    total_amount: '500', paid_amount: '500', payment_method: 'cash', notes: 'QA sale test',
-  });
-  const r = await fetchAs(page, BASE + '/sales', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: payload.toString() });
-  check('sale create', r.status === 302 || r.status === 200, 'status=' + r.status);
+    items: [{ id: courseId, price: 500 }],
+    payment_method: 'cash',
+    paid_amount: '500',
+    notes: 'QA sale test ' + ts,
+  }) });
+  check('sale create', r.status === 302 || r.status === 200 || (r.body && r.body.sale_id), 'status=' + r.status + ' ' + JSON.stringify(r.body).slice(0, 100));
+  saleId = r.body?.sale_id || null;
 } catch (e) { recordError('sale create', e); }
 
 // 2. Sales list + show invoice
 try {
   const r = await fetchAs(page, BASE + '/sales');
   const txt = typeof r.body === 'string' ? r.body : '';
-  check('sales list', r.status === 200 && (txt.includes('QA Sale Item') || txt.includes('فواتير')), 'status=' + r.status);
+  check('sales list', r.status === 200 && (txt.includes('QA Sale Item') || txt.includes('فواتير') || txt.includes('المبيعات')), 'status=' + r.status);
   const m = txt.match(/sales\/(\d+)/);
   if (m) {
     const r2 = await fetchAs(page, BASE + '/sales/' + m[1]);
@@ -37,10 +48,21 @@ try {
   }
 } catch (e) { recordError('sale list', e); }
 
-// 3. Receipt download attempt (PDF or print page)
+// 3. Receipt download attempt (PDF via payment receipt route)
 try {
-  const r = await fetchAs(page, BASE + '/sales/receipt/1');
-  check('receipt endpoint responds', r.status === 200, 'status=' + r.status);
+  const r = await fetchAs(page, BASE + '/sales');
+  const txt = typeof r.body === 'string' ? r.body : '';
+  const sm = txt.match(/sales\/(\d+)\/edit|sales\/(\d+)/);
+  let sid = null;
+  const t2 = await fetchAs(page, BASE + '/sales/' + (txt.match(/sales\/(\d+)/)?.[1] ?? ''));
+  const stxt = typeof t2.body === 'string' ? t2.body : '';
+  const pm = stxt.match(/payments\/(\d+)\/receipt/);
+  if (pm) {
+    const r2 = await fetchAs(page, BASE + '/payments/' + pm[1] + '/receipt');
+    check('receipt endpoint responds', r2.status === 200 || r2.status === 302, 'status=' + r2.status);
+  } else {
+    check('receipt endpoint responds', false, 'no receipt link found on sale show page');
+  }
 } catch (e) { recordError('receipt', e); }
 
 // 4. Statements

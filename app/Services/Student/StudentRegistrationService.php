@@ -185,7 +185,8 @@ class StudentRegistrationService
         $tenantId = \Modules\Tenancy\Services\TenantResolver::get()->id;
         $prefix = 'S-'.($tenantId % 1000);
 
-        $lastStudent = Student::where('tenant_id', $tenantId)
+        $lastStudent = Student::withTrashed()
+            ->where('tenant_id', $tenantId)
             ->where('code', 'like', $prefix.'%')
             ->latest('id')
             ->first();
@@ -198,7 +199,7 @@ class StudentRegistrationService
 
         $code = "{$prefix}-{$counter}";
 
-        while (Student::where('tenant_id', $tenantId)->where('code', $code)->exists()) {
+        while (Student::withTrashed()->where('tenant_id', $tenantId)->where('code', $code)->exists()) {
             $counter++;
             $code = "{$prefix}-{$counter}";
         }

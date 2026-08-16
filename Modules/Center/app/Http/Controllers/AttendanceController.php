@@ -31,7 +31,8 @@ class AttendanceController extends Controller
 
         $query = Schedule::with(['course', 'classroom', 'instructor'])
             ->where('day_of_week', $dayOfWeek)
-            ->whereNotNull('course_id');
+            ->whereNotNull('course_id')
+            ->whereHas('course', fn ($q) => $q->whereNull('deleted_at'));
 
         // Filter by instructor if they are not center_admin
         if ($user->hasRole('instructor') && ! $user->hasRole('center_admin')) {
