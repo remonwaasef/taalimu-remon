@@ -42,7 +42,7 @@
             />
         </div>
 
-        <div class="max-h-80 overflow-y-auto p-2 space-y-1">
+        <div class="max-h-80 overflow-y-auto p-2 space-y-1 command-list">
             <div class="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">التنقل السريع</div>
 
             @if (app()->bound('tenant'))

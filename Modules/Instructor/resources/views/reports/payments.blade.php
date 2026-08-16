@@ -103,11 +103,11 @@
                             </td>
                             <td class="px-4">
                                 @if($student->financial_status === 'paid')
-                                    <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">{{ __('instructor::reports.paid') }}</span>
+                                    <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 status-change">{{ __('instructor::reports.paid') }}</span>
                                 @elseif($student->financial_status === 'partial')
-                                    <span class="badge bg-warning bg-opacity-10 text-warning rounded-pill px-3">{{ __('instructor::reports.partial') }}</span>
+                                    <span class="badge bg-warning bg-opacity-10 text-warning rounded-pill px-3 status-change">{{ __('instructor::reports.partial') }}</span>
                                 @else
-                                    <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3">{{ __('instructor::reports.unpaid') }}</span>
+                                    <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3 status-change">{{ __('instructor::reports.unpaid') }}</span>
                                 @endif
                             </td>
                         </tr>

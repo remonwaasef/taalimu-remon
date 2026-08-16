@@ -1,6 +1,6 @@
-@extends('layouts.app-next')
+﻿@extends('layouts.app-next')
 
-@section('title', __('admin::admin.dashboard.title') ?? 'لوحة القيادة')
+@section('title', __('admin::admin.dashboard.title') ?? 'Ù„ÙˆØ­Ø© Ø§Ù„Ù‚ÙŠØ§Ø¯Ø©')
 
 @section('sidebar')
     @include('admin::partials._sidebar-next', ['active' => 'dashboard'])
@@ -19,9 +19,9 @@
     </x-ui.page-header>
 
     <!-- Top Key Metrics Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8 motion-stagger">
         <x-ui.stats-card
-            title="{{ __('admin::admin.dashboard.stats.total_centers') ?: 'إجمالي المراكز' }}"
+            title="{{ __('admin::admin.dashboard.stats.total_centers') ?: 'Ø¥Ø¬Ù…Ø§Ù„ÙŠ Ø§Ù„Ù…Ø±Ø§ÙƒØ²' }}"
             value="{{ number_format($totalTenants) }}"
             change="+8%"
             changeType="positive"
@@ -30,7 +30,7 @@
         />
 
         <x-ui.stats-card
-            title="{{ __('admin::admin.dashboard.stats.active_centers') ?: 'المراكز النشطة' }}"
+            title="{{ __('admin::admin.dashboard.stats.active_centers') ?: 'Ø§Ù„Ù…Ø±Ø§ÙƒØ² Ø§Ù„Ù†Ø´Ø·Ø©' }}"
             value="{{ number_format($activeTenants) }}"
             change="Active"
             changeType="positive"
@@ -39,7 +39,7 @@
         />
 
         <x-ui.stats-card
-            title="{{ __('admin::admin.dashboard.stats.expiring_soon') ?: 'اشتراكات تنتهي قريباً' }}"
+            title="{{ __('admin::admin.dashboard.stats.expiring_soon') ?: 'Ø§Ø´ØªØ±Ø§ÙƒØ§Øª ØªÙ†ØªÙ‡ÙŠ Ù‚Ø±ÙŠØ¨Ø§Ù‹' }}"
             value="{{ number_format($expiringSoon) }}"
             change="Action Needed"
             changeType="negative"
@@ -48,7 +48,7 @@
         />
 
         <x-ui.stats-card
-            title="{{ __('admin::admin.dashboard.stats.total_students') ?: 'إجمالي الطلاب' }}"
+            title="{{ __('admin::admin.dashboard.stats.total_students') ?: 'Ø¥Ø¬Ù…Ø§Ù„ÙŠ Ø§Ù„Ø·Ù„Ø§Ø¨' }}"
             value="{{ number_format($totalStudents) }}"
             change="+18%"
             changeType="positive"
@@ -58,9 +58,9 @@
     </div>
 
     <!-- Revenue & Support Stats Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8 motion-stagger">
         <x-ui.stats-card
-            title="{{ __('admin::admin.dashboard.stats.total_revenue') ?: 'إجمالي الإيرادات' }}"
+            title="{{ __('admin::admin.dashboard.stats.total_revenue') ?: 'Ø¥Ø¬Ù…Ø§Ù„ÙŠ Ø§Ù„Ø¥ÙŠØ±Ø§Ø¯Ø§Øª' }}"
             value="{{ number_format($totalRevenue, 2) }} EGP"
             change="+24%"
             changeType="positive"
@@ -69,7 +69,7 @@
         />
 
         <x-ui.stats-card
-            title="{{ __('admin::admin.dashboard.stats.this_month_revenue') ?: 'إيرادات هذا الشهر' }}"
+            title="{{ __('admin::admin.dashboard.stats.this_month_revenue') ?: 'Ø¥ÙŠØ±Ø§Ø¯Ø§Øª Ù‡Ø°Ø§ Ø§Ù„Ø´Ù‡Ø±' }}"
             value="{{ number_format($thisMonthRevenue, 2) }} EGP"
             change="+12%"
             changeType="positive"
@@ -78,7 +78,7 @@
         />
 
         <x-ui.stats-card
-            title="{{ __('admin::admin.dashboard.stats.open_tickets') ?: 'تذاكر مفتوحة' }}"
+            title="{{ __('admin::admin.dashboard.stats.open_tickets') ?: 'ØªØ°Ø§ÙƒØ± Ù…ÙØªÙˆØ­Ø©' }}"
             value="{{ number_format($openTickets) }}"
             change="Open"
             changeType="negative"
@@ -87,7 +87,7 @@
         />
 
         <x-ui.stats-card
-            title="{{ __('admin::admin.dashboard.stats.total_tickets') ?: 'إجمالي التذاكر' }}"
+            title="{{ __('admin::admin.dashboard.stats.total_tickets') ?: 'Ø¥Ø¬Ù…Ø§Ù„ÙŠ Ø§Ù„ØªØ°Ø§ÙƒØ±' }}"
             value="{{ number_format($totalTickets) }}"
             change="Total"
             changeType="neutral"

@@ -330,12 +330,37 @@
         }, 15000);
     });
 
+/* ------------------------------------------------------------------
+        9. Taalimu.notify — Global Notification Pulse
+        ------------------------------------------------------------------
+        Plays the notification-bell swing + glow, pops the unread badge,
+        and optionally shows a toast. Dispatch-based so any backend can
+        trigger it without touching the navbars:
+          Taalimu.notify('تمت إضافة طالب جديد');
+        Listens: window 'new-notification' event.
+        ------------------------------------------------------------------ */
+    window.Taalimu = window.Taalimu || {};
+    window.Taalimu.notify = function (message, type) {
+        type = type || 'success';
+        if (message && typeof window.TaalimuToast !== 'undefined' && window.TaalimuToast[type]) {
+            window.TaalimuToast[type](message);
+        }
+        window.dispatchEvent(new CustomEvent('new-notification'));
+    };
+
+    window.addEventListener('new-notification', function () {
+        var bells = document.querySelectorAll('[data-bell-swing]');
+        bells.forEach(function (bell) {
+            bell.click(); // triggers the Alpine ping() handler
+        });
+    });
+
     /* ------------------------------------------------------------------
-       8. Auto-dismiss Flash Alerts
-       ------------------------------------------------------------------
-       Automatically hides .flash-messages-container alerts after 6 seconds
-       with a smooth fade-out animation.
-       ------------------------------------------------------------------ */
+        10. Auto-dismiss Flash Alerts
+        ------------------------------------------------------------------
+        Automatically hides .flash-messages-container alerts after 6 seconds
+        with a smooth fade-out animation.
+        ------------------------------------------------------------------ */
     document.addEventListener('DOMContentLoaded', function () {
         var flashAlerts = document.querySelectorAll('.flash-messages-container .alert');
         flashAlerts.forEach(function (alert) {

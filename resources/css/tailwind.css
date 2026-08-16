@@ -1,5 +1,6 @@
 @import './design-tokens.css';
 @import './global-components.css';
+@import './motion.css';
 @import './dark-mode-global.css';
 
 @tailwind base;

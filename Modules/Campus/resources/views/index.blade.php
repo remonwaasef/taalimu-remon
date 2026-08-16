@@ -1,4 +1,4 @@
-@extends('layouts.app-next')
+﻿@extends('layouts.app-next')
 
 @section('title', 'Student Campus')
 
@@ -42,7 +42,7 @@
 
 @section('content')
     <x-ui.page-header
-        title="Welcome back, {{ explode(' ', auth()->user()->name)[0] }}! 🚀"
+        title="Welcome back, {{ explode(' ', auth()->user()->name)[0] }}! ðŸš€"
         subtitle="Continue your learning journey and achieve your academic goals today."
     >
         @if(isset($nextLesson) && $nextLesson)
@@ -55,7 +55,7 @@
     </x-ui.page-header>
 
     <!-- Student Key Metrics Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8">
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8 motion-stagger">
         <x-ui.stats-card
             title="Earned Points"
             value="{{ number_format($points ?? 0) }}"
@@ -126,7 +126,7 @@
     </div>
 
     <!-- Enrolled Courses Cards Grid -->
-    <x-ui.card title="My Registered Courses 📚" subtitle="Active courses enrolled in your center" noPadding="true" class="mb-8">
+    <x-ui.card title="My Registered Courses ðŸ“š" subtitle="Active courses enrolled in your center" noPadding="true" class="mb-8">
         @if(count($enrollments) > 0)
             <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
                 @foreach($enrollments as $enrollment)

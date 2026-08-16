@@ -5,14 +5,53 @@
     'changeType' => 'positive', // positive, negative, neutral
     'changeLabel' => 'vs last month',
     'icon' => 'fas fa-chart-line',
-    'iconColor' => 'text-brand-primary bg-brand-50 dark:bg-brand-900/30'
+    'iconColor' => 'text-brand-primary bg-brand-50 dark:bg-brand-900/30',
+    'animate' => true
 ])
+
+@php
+    $numeric = null;
+    if ($animate && preg_match('/[\d,.]+(\.\d+)?/', $value, $m)) {
+        $clean = str_replace(',', '', $m[0]);
+        if (is_numeric($clean)) {
+            $numeric = (float) $clean;
+        }
+    }
+@endphp
 
 <div {{ $attributes->merge(['class' => 'bg-white dark:bg-slate-900 border border-brand-border dark:border-slate-800 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-200 relative overflow-hidden font-inter']) }}>
     <div class="flex items-start justify-between gap-4">
         <div>
             <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{{ $title }}</p>
-            <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-slate-100 mt-2 tracking-tight">{{ $value }}</h3>
+            <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-slate-100 mt-2 tracking-tight">
+                <span
+                    x-data='{
+                        end: @js($numeric),
+                        raw: @js($value),
+                        display: @js($value),
+                        init() {
+                            if (this.end === null || this.end === 0) return;
+                            if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+                            const prefix = this.raw.match(/^\D*/)[0];
+                            const suffix = this.raw.match(/\D*$/)[0];
+                            const commaSeparated = this.raw.includes(",");
+                            const start = performance.now();
+                            const duration = 550;
+                            const tick = (now) => {
+                                const p = Math.min((now - start) / duration, 1);
+                                const eased = 1 - Math.pow(1 - p, 3);
+                                const current = Math.round(this.end * eased);
+                                const formatted = commaSeparated ? current.toLocaleString("en-US") : String(current);
+                                this.display = prefix + formatted + suffix;
+                                if (p < 1) requestAnimationFrame(tick);
+                                else this.display = this.raw;
+                            };
+                            requestAnimationFrame(tick);
+                        }
+                    }'
+                    x-text="display"
+                >{{ $value }}</span>
+            </h3>
         </div>
 
         @if($icon)

@@ -148,6 +148,54 @@ Whitespace is part of the design. Avoid colorful interfaces.
 
 ---
 
+## Motion System
+
+Reference: `resources/css/motion.css` + tokens in `resources/css/design-tokens.css`.
+
+### Speed Tokens
+
+| Token | Value | Use |
+|---|---|---|
+| `--motion-instant` | 75ms | button press, micro feedback |
+| `--motion-fast` | 125ms | hover, icon changes |
+| `--motion-standard` | 200ms | dropdowns, tooltips, popovers |
+| `--motion-medium` | 300ms | modals, page entrance, cards, sidebar |
+| `--motion-slow` | 500ms | notifications, success states |
+
+### Easing Tokens
+
+| Token | Value | Use |
+|---|---|---|
+| `--ease-out` | `cubic-bezier(0.16,1,0.3,1)` | entrances |
+| `--ease-in` | `cubic-bezier(0.4,0,1,1)` | exits |
+| `--ease-in-out` | `cubic-bezier(0.4,0,0.2,1)` | reversible interactions |
+| `--ease-spring` | `cubic-bezier(0.34,1.3,0.64,1)` | physical effects (bell) |
+
+### Reusable Classes
+
+| Class | Purpose |
+|---|---|
+| `.motion-reveal` / `.motion-reveal-sm` | entrance (8px / 5px rise) |
+| `.motion-stagger` | children cascade 40ms (max 8) |
+| `.motion-page` | full-page-load transition |
+| `.bell-swing` / `.bell-active` / `.badge-pop` | notification bell + badge |
+| `.check-pop` | success icon settle |
+| `.flash-row` | table row change highlight |
+| `.status-change` | badge color cross-fade |
+| `.field-error-enter` | validation message entrance |
+| `.command-list > *` | palette item cascade |
+| `.alert-enter` | flash alert entrance |
+
+### Rules
+
+- Animate only `transform` + `opacity` — never width/height/margin.
+- Every animation must communicate state, feedback or hierarchy.
+- Never animate hundreds of table rows — only changed rows.
+- `prefers-reduced-motion: reduce` is fully supported (motion removed, states stay instant).
+- Trigger pattern: `window.Taalimu.notify(message, type)` plays bell + toast + badge.
+
+---
+
 ## Implementation Files
 
 | File | Purpose |
@@ -160,4 +208,4 @@ Whitespace is part of the design. Avoid colorful interfaces.
 
 ---
 
-*Last updated: 2026-08-05*
+*Last updated: 2026-08-16*

@@ -28,7 +28,7 @@
     <!-- Backdrop -->
     <div
         x-show="show"
-        x-transition:enter="ease-out duration-300"
+        x-transition:enter="ease-out duration-250"
         x-transition:enter-start="opacity-0"
         x-transition:enter-end="opacity-100"
         x-transition:leave="ease-in duration-200"
@@ -42,10 +42,10 @@
     <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
         <div
             x-show="show"
-            x-transition:enter="ease-out duration-300"
+            x-transition:enter="ease-out duration-250"
             x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-            x-transition:leave="ease-in duration-200"
+            x-transition:leave="ease-in duration-150"
             x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
             x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             class="relative transform overflow-hidden rounded-2xl bg-white dark:bg-slate-900 text-start shadow-xl transition-all w-full {{ $modalSize }} border border-brand-border dark:border-slate-800 my-8"

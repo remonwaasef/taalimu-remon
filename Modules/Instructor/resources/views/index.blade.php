@@ -1,4 +1,4 @@
-@extends('layouts.app-next')
+﻿@extends('layouts.app-next')
 
 @section('title', __('instructor::dashboard.title') ?? 'Instructor Dashboard')
 
@@ -8,7 +8,7 @@
 
 @section('content')
     <x-ui.page-header
-        title="Good afternoon, {{ auth()->user()->name ?? 'Remon' }}! 👋"
+        title="Good afternoon, {{ auth()->user()->name ?? 'Remon' }}! ðŸ‘‹"
         subtitle="Here's what's happening with your school today."
     >
         <x-slot name="actions">
@@ -45,7 +45,7 @@
     @endif
 
     <!-- Top Key Metrics Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8 motion-stagger">
         <x-ui.stats-card
             title="{{ __('instructor::dashboard.total_students') }}"
             value="{{ number_format($totalStudents) }}"

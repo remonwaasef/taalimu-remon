@@ -55,7 +55,7 @@
 
     @stack('styles')
 </head>
-<body class="h-full bg-brand-bg dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-inter antialiased selection:bg-brand-primary selection:text-white transition-colors duration-200" x-data="{ sidebarOpen: false }">
+<body class="h-full bg-brand-bg dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-inter antialiased selection:bg-brand-primary selection:text-white transition-colors duration-200" x-data="{ sidebarOpen: false, collapsed: false }" x-effect="document.body.style.overflow = sidebarOpen ? 'hidden' : ''">
 
     <!-- Mobile Sidebar Overlay -->
     <div
@@ -69,15 +69,31 @@
         @click="sidebarOpen = false"
         class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 lg:hidden"
         style="display: none;"
+        aria-hidden="true"
     ></div>
 
     <div class="min-h-screen flex">
         <!-- Sidebar Navigation (hidden on mobile, overlay on toggle) -->
         <div
-            class="fixed inset-y-0 start-0 z-50 lg:relative lg:z-auto transition-transform duration-300 lg:translate-x-0"
-            :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full rtl:translate-x-full lg:translate-x-0 rtl:lg:translate-x-0'"
+            x-show="sidebarOpen"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="-translate-x-full rtl:translate-x-full"
+            x-transition:enter-end="translate-x-0 rtl:translate-x-0"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="translate-x-0 rtl:translate-x-0"
+            x-transition:leave-end="-translate-x-full rtl:translate-x-full"
+            x-cloak
+            class="fixed inset-y-0 start-0 z-50 lg:hidden w-64"
+            x-on:keydown.escape.window="sidebarOpen = false"
         >
             @yield('sidebar')
+        </div>
+
+        <!-- Desktop Sidebar -->
+        <div class="hidden lg:block shrink-0">
+            <div class="sidebar-shell" :class="collapsed && 'collapsed'">
+                @yield('sidebar')
+            </div>
         </div>
 
         <!-- Main Workspace -->
@@ -87,6 +103,9 @@
                 <!-- Mobile Menu Button -->
                 <button
                     @click="sidebarOpen = !sidebarOpen"
+                    aria-label="{{ __('Toggle navigation') }}"
+                    aria-expanded="false"
+                    :aria-expanded="sidebarOpen ? 'true' : 'false'"
                     class="lg:hidden w-9 h-9 rounded-xl border border-brand-border dark:border-slate-800 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors flex items-center justify-center"
                 >
                     <i class="fas fa-bars text-sm"></i>
@@ -94,6 +113,16 @@
 
                 <!-- Left Section: Command Palette Trigger & Search -->
                 <div class="flex items-center gap-4 flex-1">
+                    <!-- Desktop Sidebar Collapse Toggle -->
+                    <button
+                        @click="collapsed = !collapsed"
+                        aria-label="{{ __('Toggle sidebar') }}"
+                        :aria-expanded="collapsed ? 'false' : 'true'"
+                        class="hidden lg:inline-flex w-9 h-9 rounded-xl border border-brand-border dark:border-slate-800 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors items-center justify-center shrink-0"
+                    >
+                        <i class="fas fa-bars text-sm transition-transform duration-300" :class="collapsed && 'rotate-180'"></i>
+                    </button>
+
                     <button
                         type="button"
                         @click="$dispatch('open-command-palette')"
@@ -148,28 +177,102 @@
                         </x-slot>
                     </x-ui.dropdown>
 
-                    <!-- Notification Bell -->
-                    <x-ui.dropdown align="right" width="64">
-                        <x-slot name="trigger">
-                            <button type="button" class="w-9 h-9 rounded-xl border border-brand-border dark:border-slate-800 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors flex items-center justify-center relative">
-                                <i class="fas fa-bell text-xs"></i>
-                                <span class="absolute top-1.5 end-1.5 w-2 h-2 bg-brand-primary rounded-full ring-2 ring-white dark:ring-slate-900"></span>
-                            </button>
-                        </x-slot>
+<!-- Notification Bell -->
+                    @php
+                        $bellUser = auth()->user();
+                        $unreadCount = $bellUser ? (int) $bellUser->unreadNotifications()->count() : 0;
+                        $recentNotifications = $bellUser ? $bellUser->notifications()->take(5)->get() : collect();
+                        $bellIndexRoute = app()->bound('tenant') && $bellUser && Route::has('center.notifications.index')
+                            ? tenant_route('center.notifications.index', [])
+                            : null;
+                    @endphp
+                    <div
+                        class="relative"
+                        x-data="{
+                            swinging: false,
+                            unread: @js($unreadCount),
+                            ping() {
+                                this.swinging = false;
+                                this.$nextTick(() => { this.swinging = true; });
+                            },
+                            stopSwing() { this.swinging = false; }
+                        }"
+                        @new-notification.window="unread = unread + 1; ping()"
+                        x-init="if (unread > 0 && !sessionStorage.getItem('bell_intro')) { sessionStorage.setItem('bell_intro', '1'); ping(); }"
+                    >
+                        <x-ui.dropdown align="right" width="80">
+                            <x-slot name="trigger">
+                                <button
+                                    type="button"
+                                    data-bell-swing
+                                    @click="stopSwing()"
+                                    aria-label="{{ __('Notifications') }} ({{ $unreadCount }})"
+                                    aria-haspopup="true"
+                                    :aria-expanded="open ? 'true' : 'false'"
+                                    class="w-9 h-9 rounded-xl border border-brand-border dark:border-slate-800 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors flex items-center justify-center relative"
+                                    :class="swinging && 'bell-active'"
+                                >
+                                    <i class="fas fa-bell text-xs" :class="swinging && 'bell-swing'" @animationend="swinging = false"></i>
+                                    <span
+                                        x-show="unread > 0"
+                                        x-cloak
+                                        class="absolute -top-1 -end-1 min-w-[18px] h-[18px] px-1 rounded-full bg-brand-primary text-white text-[10px] font-bold flex items-center justify-center ring-2 ring-white dark:ring-slate-900"
+                                        :class="swinging && 'badge-pop'"
+                                    ><span x-text="unread"></span></span>
+                                </button>
+                            </x-slot>
 
-                        <x-slot name="content">
-                            <div class="px-4 py-2.5 border-b border-brand-border dark:border-slate-800 flex items-center justify-between">
-                                <span class="font-bold text-xs text-slate-900 dark:text-slate-100">Notifications</span>
-                                <span class="text-[10px] text-brand-primary font-semibold">New</span>
-                            </div>
-                            <div class="divide-y divide-brand-border dark:divide-slate-800 max-h-64 overflow-y-auto">
-                                <div class="p-3 text-center text-xs text-slate-400">
-                                    <i class="fas fa-bell-slash text-lg mb-1 block"></i>
-                                    No new notifications
+                            <x-slot name="content">
+                                <div class="px-4 py-2.5 border-b border-brand-border dark:border-slate-800 flex items-center justify-between">
+                                    <span class="font-bold text-xs text-slate-900 dark:text-slate-100">{{ __('Notifications') }}</span>
+                                    @if($unreadCount > 0)
+                                        @if($bellUser && Route::has('center.notifications.readAll'))
+                                            <form method="POST" action="{{ app()->bound('tenant') ? tenant_route('center.notifications.readAll') : route('center.notifications.readAll') }}">
+                                                @csrf
+                                                <button type="submit" class="text-[10px] text-brand-primary font-semibold hover:underline">
+                                                    <i class="fas fa-check-double me-1"></i>{{ __('Mark all as read') }}
+                                                </button>
+                                            </form>
+                                        @endif
+                                    @endif
                                 </div>
-                            </div>
-                        </x-slot>
-                    </x-ui.dropdown>
+                                <div class="divide-y divide-brand-border dark:divide-slate-800 max-h-80 overflow-y-auto">
+                                    @forelse($recentNotifications as $notification)
+                                        <a
+                                            @if($bellUser && Route::has('center.notifications.read'))
+                                                href="{{ app()->bound('tenant') ? tenant_route('center.notifications.read', $notification->id) : route('center.notifications.read', $notification->id) }}"
+                                            @else href="#" @endif
+                                            class="flex items-start gap-3 p-3 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors {{ $notification->read_at ? '' : 'bg-brand-50/60 dark:bg-brand-900/20' }}"
+                                        >
+                                            <div class="w-8 h-8 rounded-xl bg-brand-50 dark:bg-brand-900/30 text-brand-primary flex items-center justify-center shrink-0">
+                                                <i class="{{ $notification->data['icon'] ?? 'fas fa-bell' }} text-xs"></i>
+                                            </div>
+                                            <div class="min-w-0 flex-1">
+                                                <p class="text-xs font-bold text-slate-800 dark:text-slate-200 truncate">{{ Str::limit($notification->data['title'] ?? '', 60) }}</p>
+                                                <p class="text-[11px] text-slate-400 mt-0.5 truncate">{{ Str::limit($notification->data['message'] ?? '', 80) }}</p>
+                                                <span class="text-[9px] text-slate-400 mt-1 block">{{ $notification->created_at->diffForHumans() }}</span>
+                                            </div>
+                                            @if(!$notification->read_at)
+                                                <span class="w-2 h-2 rounded-full bg-brand-primary mt-1.5 shrink-0"></span>
+                                            @endif
+                                        </a>
+                                    @empty
+                                        <div class="p-6 text-center text-xs text-slate-400">
+                                            <i class="fas fa-bell-slash text-lg mb-1 block"></i>
+                                            {{ __('No new notifications') }}
+                                        </div>
+                                    @endforelse
+                                </div>
+                                @if($bellIndexRoute)
+                                    <div class="px-4 py-2 border-t border-brand-border dark:border-slate-800">
+                                        <a href="{{ $bellIndexRoute }}" class="block text-center text-[10px] font-semibold text-brand-primary hover:underline">
+                                            {{ __('View all notifications') }}
+                                        </a>
+                                    </div>
+                                @endif
+                            </x-slot>
+                        </x-ui.dropdown>
+                    </div>
 
                     <!-- User Profile Dropdown -->
                     <x-ui.dropdown align="right" width="56">
@@ -213,12 +316,13 @@
             </header>
 
             <!-- Main Page Content -->
-            <main class="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
+            <main class="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto motion-page">
                 <!-- Flash Messages -->
                 <x-flash-messages />
-
-                {{ $slot ?? '' }}
-                @yield('content')
+                <div class="motion-page" style="animation-delay: 60ms">
+                    {{ $slot ?? '' }}
+                    @yield('content')
+                </div>
             </main>
         </div>
     </div>

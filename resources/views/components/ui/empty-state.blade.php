@@ -4,7 +4,7 @@
     'icon' => 'fas fa-inbox'
 ])
 
-<div {{ $attributes->merge(['class' => 'text-center py-12 px-6 rounded-2xl border border-dashed border-brand-border dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 my-4 font-inter']) }}>
+<div {{ $attributes->merge(['class' => 'text-center py-12 px-6 rounded-2xl border border-dashed border-brand-border dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 my-4 font-inter motion-reveal-sm']) }}>
     <div class="w-16 h-16 rounded-2xl bg-brand-50 dark:bg-brand-900/30 text-brand-primary dark:text-brand-300 flex items-center justify-center text-2xl mx-auto mb-4 border border-brand-100 dark:border-brand-800/40 shadow-sm">
         <i class="{{ $icon }}"></i>
     </div>

@@ -10,16 +10,16 @@
 >
     <!-- Brand Header -->
     <div>
-        <div class="h-16 px-6 flex items-center justify-between border-b border-brand-border dark:border-slate-800">
+        <div class="h-16 px-6 flex items-center justify-between border-b border-brand-border dark:border-slate-800 sidebar-header">
             <a href="/" class="flex items-center gap-3 group">
                 @if($logo)
                     <img src="{{ $logo }}" alt="Logo" class="h-8 w-auto">
                 @else
-                    <div class="w-8 h-8 rounded-xl bg-brand-primary text-white font-black flex items-center justify-center text-sm shadow-md shadow-brand-primary/20">
+                    <div class="w-8 h-8 rounded-xl bg-brand-primary text-white font-black flex items-center justify-center text-sm shadow-md shadow-brand-primary/20 shrink-0">
                         T
                     </div>
                 @endif
-                <span class="font-extrabold text-base text-slate-900 dark:text-slate-100 tracking-tight font-inter">
+                <span class="font-extrabold text-base text-slate-900 dark:text-slate-100 tracking-tight font-inter brand-word">
                     {{ $brandName }}
                 </span>
             </a>

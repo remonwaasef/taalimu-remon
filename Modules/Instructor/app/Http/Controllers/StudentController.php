@@ -105,7 +105,8 @@ class StudentController extends Controller
             }
 
             return redirect()->route('instructor.students.list')
-                ->with('success', __('instructor::messages.student_added', ['name' => $student->name]));
+                ->with('success', __('instructor::messages.student_added', ['name' => $student->name]))
+                ->with('highlight_student', $student->id);
         } catch (\Exception $e) {
             Log::error('Manual student registration failed: '.$e->getMessage());
 

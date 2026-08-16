@@ -1,0 +1,320 @@
+/* ==========================================================================
+   TAALIMU PREMIUM MOTION SYSTEM
+   --------------------------------------------------------------------------
+   A single, reusable motion language for the whole platform.
+   - Durations & easings are defined as tokens in design-tokens.css
+   - All utilities here animate ONLY transform + opacity (GPU-friendly)
+   - Every animation must communicate state, feedback or hierarchy.
+   - prefers-reduced-motion support is enforced at the bottom.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Entrance — Standard reveal (cards, sections, dashboard widgets)
+   opacity 0→1 + translateY(8px)→0 — always ease-out, 300ms
+   -------------------------------------------------------------------------- */
+@keyframes ta-motion-reveal {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.motion-reveal {
+    animation: ta-motion-reveal var(--motion-medium) var(--ease-out) both;
+}
+
+/* Subtle entrance for small elements (page headers, empty states) */
+@keyframes ta-motion-reveal-sm {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.motion-reveal-sm {
+    animation: ta-motion-reveal-sm var(--motion-standard) var(--ease-out) both;
+}
+
+/* --------------------------------------------------------------------------
+   2. Staggered grid entrance (dashboard KPI cards)
+   Children animate in with a gentle 40ms cascade. Max 8 children.
+   -------------------------------------------------------------------------- */
+.motion-stagger > * {
+    animation: ta-motion-reveal var(--motion-medium) var(--ease-out) both;
+}
+
+.motion-stagger > *:nth-child(2)  { animation-delay: 40ms; }
+.motion-stagger > *:nth-child(3)  { animation-delay: 80ms; }
+.motion-stagger > *:nth-child(4)  { animation-delay: 120ms; }
+.motion-stagger > *:nth-child(5)  { animation-delay: 160ms; }
+.motion-stagger > *:nth-child(6)  { animation-delay: 200ms; }
+.motion-stagger > *:nth-child(7)  { animation-delay: 240ms; }
+.motion-stagger > *:nth-child(8)  { animation-delay: 280ms; }
+
+/* --------------------------------------------------------------------------
+   3. Page transition — subtle fade + 5px rise on full page loads
+   Never longer than 300ms — navigation must never feel slower.
+   -------------------------------------------------------------------------- */
+@keyframes ta-motion-page {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.motion-page {
+    animation: ta-motion-page var(--motion-medium) var(--ease-out) both;
+}
+
+/* --------------------------------------------------------------------------
+   4. Notification Bell — pendulum swing (physical, self-stopping)
+   Spec curve: 0→12°→-10°→8°→-6°→4°→-2°→0. One shot, ~1s, ease-in-out.
+   -------------------------------------------------------------------------- */
+@keyframes ta-bell-swing {
+    0%   { transform: rotate(0deg); }
+    10%  { transform: rotate(12deg); }
+    20%  { transform: rotate(-10deg); }
+    30%  { transform: rotate(8deg); }
+    40%  { transform: rotate(-6deg); }
+    55%  { transform: rotate(4deg); }
+    70%  { transform: rotate(-2deg); }
+    100% { transform: rotate(0deg); }
+}
+
+.bell-swing {
+    display: inline-block;
+    transform-origin: top center;
+    animation: ta-bell-swing var(--motion-slow) var(--ease-in-out) both;
+}
+
+/* Subtle glow ring while the bell is active */
+.bell-active {
+    border-color: var(--color-primary) !important;
+    box-shadow: 0 0 0 3px rgba(46, 139, 131, 0.18);
+}
+
+.bell-active i {
+    color: var(--color-primary) !important;
+}
+
+/* Unread badge pop — spring-like onset */
+@keyframes ta-badge-pop {
+    0%   { transform: scale(0); }
+    60%  { transform: scale(1.3); }
+    100% { transform: scale(1); }
+}
+
+.badge-pop {
+    animation: ta-badge-pop 450ms var(--ease-spring) both;
+}
+
+/* --------------------------------------------------------------------------
+   5. Success check pop — settle at scale(1), under 600ms total
+   -------------------------------------------------------------------------- */
+@keyframes ta-check-pop {
+    0%   { transform: scale(0.8); }
+    55%  { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.check-pop {
+    animation: ta-check-pop 500ms var(--ease-out) both;
+}
+
+/* --------------------------------------------------------------------------
+   6. Table row highlight — brief tint after create/update
+   Communicates "this row changed" without re-animating the whole table.
+   -------------------------------------------------------------------------- */
+@keyframes ta-row-highlight {
+    0%   { background-color: rgba(46, 139, 131, 0.14); }
+    100% { background-color: transparent; }
+}
+
+.flash-row {
+    animation: ta-row-highlight 1.6s var(--ease-out) both;
+}
+
+/* Status badge change — smooth color cross-fade, not a jump */
+.status-change {
+    transition: background-color var(--motion-standard) var(--ease-in-out),
+                color var(--motion-standard) var(--ease-in-out),
+                box-shadow var(--motion-standard) var(--ease-in-out);
+}
+
+/* --------------------------------------------------------------------------
+   7. Error message entrance — small fade+slide, never aggressive shake
+   -------------------------------------------------------------------------- */
+@keyframes ta-error-slide {
+    from {
+        opacity: 0;
+        transform: translateY(-3px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.field-error-enter {
+    animation: ta-error-slide var(--motion-standard) var(--ease-out) both;
+}
+
+/* --------------------------------------------------------------------------
+   8. Command palette item cascade (max 10 items, 20ms steps)
+   -------------------------------------------------------------------------- */
+.command-list > * {
+    animation: ta-motion-reveal-sm 220ms var(--ease-out) both;
+}
+
+.command-list > *:nth-child(2)  { animation-delay: 20ms; }
+.command-list > *:nth-child(3)  { animation-delay: 40ms; }
+.command-list > *:nth-child(4)  { animation-delay: 60ms; }
+.command-list > *:nth-child(5)  { animation-delay: 80ms; }
+.command-list > *:nth-child(6)  { animation-delay: 100ms; }
+.command-list > *:nth-child(7)  { animation-delay: 120ms; }
+.command-list > *:nth-child(8)  { animation-delay: 140ms; }
+.command-list > *:nth-child(9)  { animation-delay: 160ms; }
+.command-list > *:nth-child(10) { animation-delay: 180ms; }
+
+/* --------------------------------------------------------------------------
+   9. Flash alert entrance (page-level success/error feedback)
+   One beat, then settled — communicates result, never distracts.
+   -------------------------------------------------------------------------- */
+@keyframes ta-alert-enter {
+    from {
+        opacity: 0;
+        transform: translateY(-8px) scale(0.99);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.alert-enter {
+    animation: ta-alert-enter var(--motion-medium) var(--ease-out) both;
+}
+
+/* --------------------------------------------------------------------------
+   10. Focus ring pulse for keyboard users (visible focus, calm)
+   -------------------------------------------------------------------------- */
+.focus-ring-pulse:focus-visible {
+    animation: ta-focus-pop 300ms var(--ease-out);
+}
+
+@keyframes ta-focus-pop {
+    from { box-shadow: 0 0 0 0 rgba(46, 139, 131, 0.35); }
+    to   { box-shadow: 0 0 0 4px rgba(46, 139, 131, 0); }
+}
+
+/* --------------------------------------------------------------------------
+   10. Sidebar collapse (desktop) — width-only, labels fade out
+   Width animation is used deliberately: it is THE strong-reason case.
+   -------------------------------------------------------------------------- */
+@media (min-width: 1024px) {
+    .sidebar-shell {
+        width: 16rem;
+        transition: width var(--motion-medium) var(--ease-in-out);
+        overflow: hidden;
+    }
+
+    .sidebar-shell.collapsed {
+        width: 5rem;
+    }
+
+    /* Nav link labels fade + collapse into the icon */
+    .sidebar-shell.collapsed nav a span,
+    .sidebar-shell.collapsed aside .p-4 span {
+        max-width: 0;
+        opacity: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        transition: opacity var(--motion-fast) var(--ease-out),
+                    max-width var(--motion-medium) var(--ease-in-out);
+    }
+
+    /* Hide group headings and collapsible sub-menus (they follow links) */
+    .sidebar-shell.collapsed nav a + div {
+        opacity: 0;
+        max-height: 0;
+        overflow: hidden;
+        padding: 0 !important;
+        margin: 0 !important;
+        transition: opacity var(--motion-fast) var(--ease-out),
+                    max-height var(--motion-medium) var(--ease-in-out);
+    }
+
+    /* Brand wordmark fades out, logo block stays centered */
+    .sidebar-shell.collapsed .brand-word {
+        max-width: 0;
+        opacity: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        transition: opacity var(--motion-fast) var(--ease-out),
+                    max-width var(--motion-medium) var(--ease-in-out);
+    }
+
+    .sidebar-shell.collapsed .sidebar-header {
+        justify-content: center;
+        padding-inline: 0.5rem;
+    }
+
+    /* Center nav items when collapsed */
+    .sidebar-shell.collapsed nav a {
+        justify-content: center;
+        padding-inline: 0 !important;
+    }
+
+    .sidebar-shell.collapsed nav a i {
+        margin-inline: 0;
+    }
+
+    /* Keep open accordion sub-menus accessible when re-expanded */
+    .sidebar-shell nav a + div {
+        transition: opacity var(--motion-fast) var(--ease-out),
+                    max-height var(--motion-medium) var(--ease-in-out);
+    }
+}
+
+/* ==========================================================================
+   REDUCED MOTION — respect user preference
+   All decorative movement is removed; essential state changes stay instant.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+    .motion-reveal,
+    .motion-reveal-sm,
+    .motion-page,
+    .bell-swing,
+    .badge-pop,
+    .check-pop,
+    .flash-row,
+    .field-error-enter,
+    .alert-enter,
+    .command-list > *,
+    .motion-stagger > * {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
