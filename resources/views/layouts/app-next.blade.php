@@ -240,7 +240,7 @@
                                     @forelse($recentNotifications as $notification)
                                         <a
                                             @if($bellUser && Route::has('center.notifications.read'))
-                                                href="{{ app()->bound('tenant') ? tenant_route('center.notifications.read', $notification->id) : route('center.notifications.read', $notification->id) }}"
+                                                href="{{ app()->bound('tenant') ? tenant_route('center.notifications.read', [$notification->id]) : route('center.notifications.read', [$notification->id]) }}"
                                             @else href="#" @endif
                                             class="flex items-start gap-3 p-3 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors {{ $notification->read_at ? '' : 'bg-brand-50/60 dark:bg-brand-900/20' }}"
                                         >
