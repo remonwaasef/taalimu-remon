@@ -1,4 +1,4 @@
-@extends('center::layouts.app-next')
+﻿@extends('center::layouts.app-next')
 
 @section('page-title', __('center::sales.title'))
 @section('page-subtitle', __('center::sales.subtitle') ?? 'قائمة الفواتير والتحصيل المالي للطلاب')
@@ -13,7 +13,7 @@
 
 <div class="card border-0 shadow-sm rounded-4">
     <div class="card-body p-0">
-        <div class="table-responsive">
+        <div class="table-responsive" data-mobile-cards>
             <table class="table align-middle mb-0">
                 <thead class="bg-light">
                     <tr>

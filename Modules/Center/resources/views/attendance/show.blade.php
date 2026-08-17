@@ -39,7 +39,7 @@
                     </div>
                 </div>
                 <div class="card-body p-4">
-                    <div class="table-responsive">
+                    <div class="table-responsive" data-mobile-cards>
                         <table class="table align-middle">
                             <thead class="bg-light">
                                 <tr>

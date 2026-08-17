@@ -77,7 +77,7 @@
                     <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-clipboard-list me-2" style="color: #10b981;"></i>{{ __('center::quizzes.current_quizzes_list') }}</h5>
                 </div>
                 <div class="card-body p-4 pt-0">
-                    <div class="table-responsive">
+                    <div class="table-responsive" data-mobile-cards>
                         <table class="table align-middle mb-0">
                             <thead>
                                 <tr>

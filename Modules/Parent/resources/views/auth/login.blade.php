@@ -1,4 +1,4 @@
-@extends('layouts.landing-new')
+﻿@extends('layouts.landing-new')
 
 @section('content')
 @include('partials.login-dark-theme')
@@ -67,7 +67,7 @@
     }
 </style>
 
-<div class="login-page-wrap min-h-screen bg-slate-50/50 flex justify-center items-center p-4 lg:p-8"
+<div class="login-page-wrap min-h-screen min-h-dvh bg-slate-50/50 flex justify-center items-center p-4 lg:p-8"
      dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
 
     <div class="login-card w-full max-w-md bg-white rounded-[40px] shadow-2xl shadow-slate-200/60 p-8 lg:p-10 border border-slate-100 animate-fade-in-up">
@@ -118,13 +118,13 @@
             <div class="space-y-1.5">
                 <div class="flex justify-between items-center px-1">
                     <label class="text-[11px] font-bold text-slate-500 font-arabic uppercase tracking-wider">{{ __('كلمة المرور') }}</label>
-                    <button type="button" @click="showPassword = !showPassword" class="text-[9px] font-black text-violet-500 hover:text-violet-600 transition-colors uppercase tracking-widest">
+                    <button type="button" @click="showPassword = !showPassword" class="text-[11px] font-black text-violet-500 hover:text-violet-600 transition-colors uppercase tracking-widest">
                         <span x-text="showPassword ? 'إخفاء' : 'إظهار'"></span>
                     </button>
                 </div>
                 <input :type="showPassword ? 'text' : 'password'" name="password"
                     class="w-full h-12 input-compact px-4 text-sm font-medium text-slate-900 placeholder:text-slate-400"
-                    placeholder="••••••••" required>
+                    placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required>
             </div>
 
             <div class="pt-4">

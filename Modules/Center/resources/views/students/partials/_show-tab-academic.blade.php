@@ -28,7 +28,7 @@
                         <!-- Assignments -->
                         <div>
                             <h6 class="fw-bold text-dark border-start border-4 border-primary ps-3 mb-4">{{ __('center::students.profile.academic.assignments') }}</h6>
-                            <div class="table-responsive">
+                            <div class="table-responsive" data-mobile-cards>
                                 <table class="table align-middle">
                                     <thead>
                                         <tr class="text-muted small">

@@ -48,7 +48,7 @@
             @if($child['sales']->isEmpty())
                 <x-ui.empty-state title="لا توجد فواتير" description="لا توجد رسوم مسجلة على {{ $student->name }}." icon="fas fa-receipt" />
             @else
-                <div class="overflow-x-auto">
+                <div class="overflow-x-auto" data-mobile-cards>
                     <table class="w-full text-xs text-right">
                         <thead>
                             <tr class="text-[11px] text-slate-400 border-b border-brand-border dark:border-slate-800">
@@ -82,7 +82,7 @@
                                             <a href="{{ \Modules\Center\Http\Controllers\OnlinePaymentController::payLink($sale) }}"
                                                target="_blank"
                                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-[11px] font-bold hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-colors">
-                                                <i class="fas fa-credit-card text-[10px]"></i>
+                                                <i class="fas fa-credit-card text-[11px]"></i>
                                                 ادفع الآن
                                             </a>
                                         @else

@@ -432,7 +432,7 @@
                                                 <input class="form-check-input" type="checkbox" name="packages[{{ $package->id }}][is_default]" id="def_{{ $package->id }}" {{ $package->is_default ? 'checked' : '' }}>
                                                 <label class="form-check-label small fw-bold" for="def_{{ $package->id }}">{{ __('admin.is_default') }}</label>
                                             </div>
-                                            <button type="button" class="btn btn-link text-danger btn-sm p-0 text-decoration-none" onclick="if(confirm('{{ __('admin.delete_package_confirm') }}')) document.getElementById('delete-package-{{ $package->id }}').submit()">
+                                            <button type="button" class="btn btn-link text-danger btn-sm p-0 text-decoration-none" data-confirm-delete data-form="delete-package-{{ $package->id }}">
                                                 <i class="bi bi-trash"></i> {{ __('admin.delete_package') }}
                                             </button>
                                         </div>

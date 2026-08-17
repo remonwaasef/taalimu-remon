@@ -13,7 +13,7 @@
         @if($attendances->isEmpty())
             <x-ui.empty-state title="لا توجد سجلات حضور بعد" description="ستظهر سجلات الحضور هنا بمجرد بدء الحصص." icon="fas fa-clipboard-list" />
         @else
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto" data-mobile-cards>
                 <table class="w-full text-xs text-right">
                     <thead>
                         <tr class="text-[11px] text-slate-400 border-b border-brand-border dark:border-slate-800">

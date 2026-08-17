@@ -218,7 +218,7 @@
                     <div class="tab-content" id="studentTabsContent">
                         <!-- Attendance Panel -->
                         <div class="tab-pane fade show active" id="attendance-panel" role="tabpanel">
-                            <div class="table-responsive">
+                            <div class="table-responsive" data-mobile-cards>
                                 <table class="table table-hover align-middle mb-0 text-center">
                                     <thead class="bg-light">
                                         <tr>
@@ -258,7 +258,7 @@
 
                         <!-- Payments Panel -->
                         <div class="tab-pane fade" id="payments-panel" role="tabpanel">
-                            <div class="table-responsive">
+                            <div class="table-responsive" data-mobile-cards>
                                 <table class="table table-hover align-middle mb-0 text-center">
                                     <thead class="bg-light">
                                         <tr>

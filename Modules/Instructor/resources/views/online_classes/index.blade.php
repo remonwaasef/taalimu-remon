@@ -1,4 +1,4 @@
-@extends('layouts.app-next')
+﻿@extends('layouts.app-next')
 
 @section('title', __('instructor::dashboard.online_classes'))
 
@@ -26,7 +26,7 @@
 
     <div class="card border-0 shadow-sm rounded-4">
         <div class="card-body p-0">
-            <div class="table-responsive" style="min-height: 300px;">
+            <div class="table-responsive" data-mobile-cards style="min-height: 300px;">
                 <table class="table table-hover align-middle mb-0 text-center" id="lessonsTable">
                     <thead class="bg-light">
                         <tr>
@@ -86,7 +86,7 @@
                                             <form action="{{ route('instructor.online_classes.destroy', $lesson->id) }}" method="POST" id="deleteForm_{{ $lesson->id }}">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="button" class="dropdown-item text-danger" onclick="if(confirm('{{ __('instructor::online_classes.confirm_delete') }}')) document.getElementById('deleteForm_{{ $lesson->id }}').submit();">
+                                                <button type="button" class="dropdown-item text-danger" data-confirm-delete data-form="deleteForm_{{ $lesson->id }}">
                                                     <i class="fas fa-trash me-2"></i> {{ __('instructor::online_classes.delete') }}
                                                 </button>
                                             </form>

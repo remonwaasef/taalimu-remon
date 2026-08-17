@@ -71,7 +71,7 @@
         <div class="card-header bg-white border-0 py-3">
             <h5 class="fw-bold mb-0">{{ __('center::courses.students_list') }}</h5>
         </div>
-        <div class="table-responsive">
+        <div class="table-responsive" data-mobile-cards>
             <table class="table table-hover align-middle mb-0">
                 <thead class="bg-light">
                     <tr>

@@ -136,7 +136,7 @@
                     <h6 class="m-0 fw-bold text-primary">{{ __('center::analytics.revenue_growth') }}</h6>
                 </div>
                 <div class="card-body">
-                    <div class="chart-area" style="height: 320px;">
+                    <div class="chart-area" style="height: clamp(240px, 30vw, 320px);">
                         <canvas id="revenueChart"></canvas>
                     </div>
                 </div>
@@ -150,7 +150,7 @@
                     <h6 class="m-0 fw-bold text-primary">{{ __('center::analytics.daily_attendance_ratio') }}</h6>
                 </div>
                 <div class="card-body">
-                    <div class="chart-pie pt-2 pb-2" style="height: 250px;">
+                    <div class="chart-pie pt-2 pb-2" style="height: clamp(220px, 28vw, 250px);">
                         <canvas id="attendanceChart"></canvas>
                     </div>
                     <div class="mt-3 text-center small d-flex justify-content-center gap-3">
@@ -172,7 +172,7 @@
                     <h6 class="m-0 fw-bold text-primary">{{ __('center::analytics.popular_courses') }}</h6>
                 </div>
                 <div class="card-body">
-                    <div class="chart-bar" style="height: 300px;">
+                    <div class="chart-bar" style="height: clamp(240px, 28vw, 300px);">
                         <canvas id="popularCoursesChart"></canvas>
                     </div>
                 </div>
@@ -186,7 +186,7 @@
                     <h6 class="m-0 fw-bold text-primary">{{ __('center::analytics.student_growth_chart') }}</h6>
                 </div>
                 <div class="card-body">
-                    <div class="chart-bar" style="height: 300px;">
+                    <div class="chart-bar" style="height: clamp(240px, 28vw, 300px);">
                         <canvas id="studentGrowthChart"></canvas>
                     </div>
                 </div>
@@ -200,7 +200,7 @@
             <h6 class="m-0 fw-bold text-primary">{{ __('center::analytics.recent_sales') }}</h6>
         </div>
         <div class="card-body p-0">
-            <div class="table-responsive">
+            <div class="table-responsive" data-mobile-cards>
                 <table class="table align-middle mb-0 table-hover">
                     <thead class="bg-light">
                         <tr>

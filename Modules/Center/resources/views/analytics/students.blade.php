@@ -89,7 +89,7 @@
                     <h6 class="m-0 fw-bold text-primary">{{ __('center::analytics.student_growth') }}</h6>
                 </div>
                 <div class="card-body">
-                    <div class="chart-area" style="height: 320px;">
+                    <div class="chart-area" style="height: clamp(240px, 30vw, 320px);">
                         <canvas id="studentGrowthChart"></canvas>
                     </div>
                 </div>
@@ -103,7 +103,7 @@
                     <h6 class="m-0 fw-bold text-primary">{{ __('center::analytics.grade_distribution') }}</h6>
                 </div>
                 <div class="card-body">
-                    <div class="chart-pie pt-2 pb-2" style="height: 250px;">
+                    <div class="chart-pie pt-2 pb-2" style="height: clamp(220px, 28vw, 250px);">
                         <canvas id="gradeDistributionChart"></canvas>
                     </div>
                     <div class="mt-4 text-center small text-muted">{{ __('center::analytics.grade_distribution_hint') }}</div>
@@ -122,7 +122,7 @@
                         <i class="fas fa-crown me-2"></i>{{ __('center::analytics.top_spenders') }}</h6>
                 </div>
                 <div class="card-body p-0">
-                    <div class="table-responsive">
+                    <div class="table-responsive" data-mobile-cards>
                         <table class="table align-middle mb-0 table-hover">
                             <thead class="bg-light">
                                 <tr>
@@ -168,7 +168,7 @@
                         <i class="fas fa-exclamation-triangle me-2"></i>{{ __('center::analytics.debtors') }}</h6>
                 </div>
                 <div class="card-body p-0">
-                    <div class="table-responsive">
+                    <div class="table-responsive" data-mobile-cards>
                         <table class="table align-middle mb-0 table-hover">
                             <thead class="bg-light">
                                 <tr>

@@ -17,7 +17,7 @@
                 </a>
             </div>
             <div class="card-body p-0">
-                <div class="table-responsive">
+                <div class="table-responsive" data-mobile-cards>
                     <table class="table table-hover align-middle mb-0">
                         <thead class="bg-light">
                             <tr>
@@ -57,10 +57,10 @@
                                         </a>
                                         
                                         @if($role->name !== 'super_admin' && $role->users->count() == 0)
-                                        <form action="{{ route('admin.roles.destroy', $role->id) }}" method="POST" class="d-inline" onsubmit="return confirm('{{ __('admin.delete_confirm') }}')">
+                                        <form action="{{ route('admin.roles.destroy', $role->id) }}" method="POST" class="d-inline" id="deleteRowForm_1">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-light btn-sm rounded-pill px-3 border hover-shadow text-danger" title="حذف">
+                                            <button type="button" data-confirm-delete data-form="deleteRowForm_1" class="btn btn-light btn-sm rounded-pill px-3 border hover-shadow text-danger" title="حذف">
                                                 <i class="fas fa-trash me-1"></i> حذف
                                             </button>
                                         </form>

@@ -73,11 +73,11 @@
                                 </div>
                             </div>
                             <div class="flex items-center justify-between">
-                                <span class="text-[10px] font-black uppercase tracking-widest transition-colors duration-300"
+                                <span class="text-[11px] font-black uppercase tracking-widest transition-colors duration-300"
                                       :class="currentStepIndex >= index ? 'text-emerald-600' : 'text-slate-300'"
                                       x-text="stepObj.label">
                                 </span>
-                                <span class="text-[10px] font-bold text-slate-400" x-text="'0' + (index + 1)"></span>
+                                <span class="text-[11px] font-bold text-slate-400" x-text="'0' + (index + 1)"></span>
                             </div>
                         </div>
                     </template>
@@ -143,7 +143,7 @@
                         <form @submit.prevent="submitStep('step_1')" class="space-y-8">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_1.currency_label') }}</label>
+                                    <label class="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_1.currency_label') }}</label>
                                     <select x-model="formData.step_1.currency" class="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all hover:bg-white focus:bg-white focus:shadow-lg focus:shadow-emerald-500/5 appearance-none cursor-pointer">
                                         <option value="EGP">{{ __('onboarding.currencies.egp') }}</option>
                                         <option value="SAR">{{ __('onboarding.currencies.sar') }}</option>
@@ -154,7 +154,7 @@
                                 </div>
 
                                 <div>
-                                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_1.education_system_label') }}</label>
+                                    <label class="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_1.education_system_label') }}</label>
                                     <select x-model="formData.step_1.education_system" class="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all hover:bg-white focus:bg-white focus:shadow-lg focus:shadow-emerald-500/5 appearance-none cursor-pointer">
                                         @foreach(__('onboarding.education_systems') as $key => $name)
                                             <option value="{{ $key }}">{{ $name }}</option>
@@ -206,34 +206,34 @@
                                         <div class="space-y-4">
                                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                                 <div>
-                                                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-1">{{ __('onboarding.step_2.name_label') }}</label>
+                                                    <label class="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-2 px-1">{{ __('onboarding.step_2.name_label') }}</label>
                                                     <input type="text" x-model="instructor.instructor_name" placeholder="{{ __('onboarding.step_2.name_placeholder') }}" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-12 px-5 text-sm font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5" required>
                                                 </div>
                                                 <div>
-                                                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-1">{{ __('onboarding.step_2.email_label') }}</label>
+                                                    <label class="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-2 px-1">{{ __('onboarding.step_2.email_label') }}</label>
                                                     <input type="email" x-model="instructor.instructor_email" placeholder="{{ __('onboarding.step_2.email_placeholder') }}" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-12 px-5 text-sm font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5">
                                                 </div>
                                             </div>
                                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                                 <div>
-                                                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-1">{{ __('onboarding.step_2.specialization_label') }}</label>
+                                                    <label class="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-2 px-1">{{ __('onboarding.step_2.specialization_label') }}</label>
                                                     <input type="text" x-model="instructor.instructor_specialization" placeholder="{{ __('onboarding.step_2.specialization_placeholder') }}" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-12 px-5 text-sm font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5">
                                                 </div>
                                                 <div>
-                                                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-1">{{ __('onboarding.step_2.phone_label') }}</label>
+                                                    <label class="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-2 px-1">{{ __('onboarding.step_2.phone_label') }}</label>
                                                     <input type="tel" x-model="instructor.instructor_phone" @input="instructor.instructor_phone = $event.target.value.replace(/[^0-9\+\-\(\)\s]/g, '')" dir="ltr" placeholder="01xxxxxxxxx" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-12 px-5 text-sm font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5" required>
                                                 </div>
                                             </div>
                                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                                                 <div>
-                                                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-1">نوع العمولة</label>
+                                                    <label class="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-2 px-1">نوع العمولة</label>
                                                     <select x-model="instructor.commission_type" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-12 px-5 text-sm font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5 appearance-none cursor-pointer" required>
                                                         <option value="percentage">نسبة مئوية (%)</option>
                                                         <option value="fixed">مبلغ ثابت</option>
                                                     </select>
                                                 </div>
                                                 <div>
-                                                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-1">قيمة العمولة</label>
+                                                    <label class="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-2 px-1">قيمة العمولة</label>
                                                     <input type="number" step="0.01" min="0" x-model="instructor.commission_rate" placeholder="0.00" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-12 px-5 text-sm font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5" required>
                                                 </div>
                                             </div>
@@ -250,10 +250,10 @@
 
                             <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-6">
                                 <div class="flex items-center gap-8">
-                                    <button type="button" @click="prevStep()" class="text-slate-400 hover:text-slate-900 font-bold uppercase tracking-widest text-[10px] transition-all flex items-center gap-2 group">
+                                    <button type="button" @click="prevStep()" class="text-slate-400 hover:text-slate-900 font-bold uppercase tracking-widest text-[11px] transition-all flex items-center gap-2 group">
                                         <i class="fa-solid fa-arrow-left rtl:rotate-180 group-hover:-translate-x-1 transition-transform"></i> {{ __('onboarding.btn_back') }}
                                     </button>
-                                    <button type="button" @click="submitStep('step_2', true)" class="text-slate-300 hover:text-slate-900 font-bold uppercase tracking-widest text-[10px] transition-all">
+                                    <button type="button" @click="submitStep('step_2', true)" class="text-slate-300 hover:text-slate-900 font-bold uppercase tracking-widest text-[11px] transition-all">
                                         {{ __('onboarding.step_2.btn_skip') }}
                                     </button>
                                 </div>
@@ -299,7 +299,7 @@
 
                                         <div class="space-y-6">
                                             <div x-show="formData.step_2.instructors.length > 0">
-                                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">اختر المدرس</label>
+                                                <label class="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">اختر المدرس</label>
                                                 <select x-model="course.instructor_index" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5 appearance-none cursor-pointer">
                                                     <template x-for="(instructor, index) in formData.step_2.instructors" :key="index">
                                                         <option :value="index" x-text="instructor.instructor_name || 'مدرس ' + (index + 1)"></option>
@@ -308,11 +308,11 @@
                                             </div>
                                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                                 <div>
-                                                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_3.name_label') }}</label>
+                                                    <label class="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_3.name_label') }}</label>
                                                     <input type="text" x-model="course.course_name" placeholder="{{ __('onboarding.step_3.name_placeholder') }}" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5" required>
                                                 </div>
                                                 <div>
-                                                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_3.price_label') }}</label>
+                                                    <label class="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_3.price_label') }}</label>
                                                     <div class="relative">
                                                         <input type="number" x-model="course.price" placeholder="0.00" min="0" step="0.01" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5" required>
                                                         <div class="absolute inset-y-0 ltr:right-6 rtl:left-6 flex items-center pointer-events-none text-slate-400 font-bold text-xs">
@@ -324,10 +324,10 @@
 
                                             <div class="p-6 bg-white rounded-2xl border border-slate-100 space-y-4">
                                                 <div class="flex items-center justify-between mb-2">
-                                                    <h3 class="font-black text-slate-900 text-[10px] uppercase tracking-widest flex items-center gap-2">
+                                                    <h3 class="font-black text-slate-900 text-[11px] uppercase tracking-widest flex items-center gap-2">
                                                         <i class="fa-solid fa-calendar-days text-brand-primary"></i> {{ __('onboarding.step_3.schedule_section') }}
                                                     </h3>
-                                                    <button type="button" @click="course.schedules.push({day: '0', time: '16:00', time_end: '18:00'})" class="text-[10px] font-black uppercase text-brand-primary hover:underline transition-all">
+                                                    <button type="button" @click="course.schedules.push({day: '0', time: '16:00', time_end: '18:00'})" class="text-[11px] font-black uppercase text-brand-primary hover:underline transition-all">
                                                         + {{ __('onboarding.step_3.btn_add_schedule') }}
                                                     </button>
                                                 </div>
@@ -368,10 +368,10 @@
 
                             <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-6">
                                 <div class="flex items-center gap-8">
-                                    <button type="button" @click="prevStep()" class="text-slate-400 hover:text-slate-900 font-bold uppercase tracking-widest text-[10px] transition-all flex items-center gap-2 group">
+                                    <button type="button" @click="prevStep()" class="text-slate-400 hover:text-slate-900 font-bold uppercase tracking-widest text-[11px] transition-all flex items-center gap-2 group">
                                         <i class="fa-solid fa-arrow-left rtl:rotate-180 group-hover:-translate-x-1 transition-transform"></i> {{ __('onboarding.btn_back') }}
                                     </button>
-                                    <button type="button" @click="submitStep('step_3', true)" class="text-slate-300 hover:text-slate-900 font-bold uppercase tracking-widest text-[10px] transition-all">
+                                    <button type="button" @click="submitStep('step_3', true)" class="text-slate-300 hover:text-slate-900 font-bold uppercase tracking-widest text-[11px] transition-all">
                                         {{ __('onboarding.step_3.btn_skip') }}
                                     </button>
                                 </div>
@@ -416,39 +416,39 @@
                                         </div>
 
                                         <div class="mb-6">
-                                            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_4.name_label') }}</label>
+                                            <label class="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_4.name_label') }}</label>
                                             <input type="text" x-model="student.student_name" placeholder="{{ __('onboarding.step_4.name_placeholder') }}" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5" required>
                                         </div>
 
                                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
                                             <div>
-                                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">البريد الإلكتروني للطلاب (اختياري)</label>
+                                                <label class="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">البريد الإلكتروني للطلاب (اختياري)</label>
                                                 <input type="email" x-model="student.student_email" placeholder="example@email.com" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5">
                                             </div>
                                             <div>
-                                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_4.phone_label') }}</label>
+                                                <label class="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_4.phone_label') }}</label>
                                                 <input type="text" x-model="student.student_phone" @input="student.student_phone = $event.target.value.replace(/[^0-9\+\-\(\)\s]/g, '')" dir="ltr" placeholder="01xxxxxxxxx" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5" required>
                                             </div>
                                         </div>
 
                                         <div class="mb-6">
-                                            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">اسم ولي الأمر (اختياري)</label>
+                                            <label class="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">اسم ولي الأمر (اختياري)</label>
                                             <input type="text" x-model="student.parent_name" placeholder="مثال: محمد أحمد" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5">
                                         </div>
 
                                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
                                             <div>
-                                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">البريد الإلكتروني لولي الأمر (اختياري)</label>
+                                                <label class="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">البريد الإلكتروني لولي الأمر (اختياري)</label>
                                                 <input type="email" x-model="student.parent_email" placeholder="parent@email.com" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5">
                                             </div>
                                             <div>
-                                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">رقم هاتف ولي الأمر (اختياري)</label>
+                                                <label class="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">رقم هاتف ولي الأمر (اختياري)</label>
                                                 <input type="text" x-model="student.parent_phone" @input="student.parent_phone = $event.target.value.replace(/[^0-9\+\-\(\)\s]/g, '')" dir="ltr" placeholder="01xxxxxxxxx" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5">
                                             </div>
                                         </div>
 
                                         <div class="mb-6">
-                                            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_4.grade_label') }}</label>
+                                            <label class="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_4.grade_label') }}</label>
                                             <select x-model="student.grade_id" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5 appearance-none cursor-pointer">
                                                 <option value="">{{ __('onboarding.step_4.grade_label') }}...</option>
                                                 @foreach($stages as $stage)
@@ -485,10 +485,10 @@
 
                             <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-6">
                                 <div class="flex items-center gap-8">
-                                    <button type="button" @click="prevStep()" class="text-slate-400 hover:text-slate-900 font-bold uppercase tracking-widest text-[10px] transition-all flex items-center gap-2 group">
+                                    <button type="button" @click="prevStep()" class="text-slate-400 hover:text-slate-900 font-bold uppercase tracking-widest text-[11px] transition-all flex items-center gap-2 group">
                                         <i class="fa-solid fa-arrow-left rtl:rotate-180 group-hover:-translate-x-1 transition-transform"></i> {{ __('onboarding.btn_back') }}
                                     </button>
-                                    <button type="button" @click="submitStep('step_4', true)" class="text-slate-300 hover:text-slate-900 font-bold uppercase tracking-widest text-[10px] transition-all">
+                                    <button type="button" @click="submitStep('step_4', true)" class="text-slate-300 hover:text-slate-900 font-bold uppercase tracking-widest text-[11px] transition-all">
                                         {{ __('onboarding.step_4.btn_skip') }}
                                     </button>
                                 </div>
@@ -512,12 +512,12 @@
                 <div class="flex items-center gap-1 p-1 bg-white shadow-sm border border-slate-100 rounded-2xl">
                     <button @click="updateLanguage('ar')" 
                             :class="formData.step_1.locale === 'ar' ? 'bg-slate-900 text-white shadow-md' : 'text-slate-400 hover:bg-slate-50'" 
-                            class="px-4 py-2 rounded-xl text-[10px] font-black transition-all flex items-center gap-2">
+                            class="px-4 py-2 rounded-xl text-[11px] font-black transition-all flex items-center gap-2">
                         <span class="text-sm">🇸🇦</span> العربية
                     </button>
                 </div>
 
-                <p class="inline-flex items-center gap-3 px-6 py-2 rounded-full text-slate-300 text-[10px] font-black uppercase tracking-widest">
+                <p class="inline-flex items-center gap-3 px-6 py-2 rounded-full text-slate-300 text-[11px] font-black uppercase tracking-widest">
                     <i class="fa-solid fa-shield-halved text-emerald-500 text-sm"></i> {{ __('onboarding.security_note') }}
                 </p>
             </div>

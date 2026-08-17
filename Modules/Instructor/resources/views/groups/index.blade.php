@@ -1,4 +1,4 @@
-@extends('layouts.app-next')
+﻿@extends('layouts.app-next')
 
 @section('title', __('instructor::groups.title') ?? 'المجموعات الدراسية')
 

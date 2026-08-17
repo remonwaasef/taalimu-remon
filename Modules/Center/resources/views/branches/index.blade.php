@@ -13,7 +13,7 @@
                 </a>
             </div>
             <div class="card-body p-0">
-                <div class="table-responsive">
+                <div class="table-responsive" data-mobile-cards>
                     <table class="table table-hover align-middle mb-0">
                         <thead class="bg-light">
                             <tr>
@@ -46,10 +46,10 @@
                                         <a href="{{ route('center.branches.edit', ['branch' => $branch->id, 'tenant' => $tenant->domain]) }}" class="btn btn-sm btn-light text-primary me-2">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <form action="{{ route('center.branches.destroy', ['branch' => $branch->id, 'tenant' => $tenant->domain]) }}" method="POST" class="d-inline" onsubmit="return confirm('{{ __('center::branches.are_you_sure') }}')">
+                                        <form action="{{ route('center.branches.destroy', ['branch' => $branch->id, 'tenant' => $tenant->domain]) }}" method="POST" class="d-inline" id="deleteRowForm_1">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-light text-danger">
+                                            <button type="button" data-confirm-delete data-form="deleteRowForm_1" class="btn btn-sm btn-light text-danger">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </form>

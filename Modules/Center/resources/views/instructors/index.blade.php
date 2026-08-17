@@ -39,7 +39,7 @@
             </div>
 
             <!-- Instructors Table -->
-            <div class="table-responsive pb-5">
+            <div class="table-responsive pb-5" data-mobile-cards>
                 <table class="table align-middle">
                     <thead class="bg-light">
                         <tr>

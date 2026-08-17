@@ -1,4 +1,4 @@
-@extends('admin::layouts.app-next')
+﻿@extends('admin::layouts.app-next')
 
 @section('title', __('admin.tickets.title'))
 
@@ -10,7 +10,7 @@
 
     <div class="card shadow mb-4">
         <div class="card-body">
-            <div class="table-responsive">
+            <div class="table-responsive" data-mobile-cards>
                 <table class="table table-bordered" width="100%" cellspacing="0">
                     <thead>
                         <tr>

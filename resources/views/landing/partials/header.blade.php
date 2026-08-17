@@ -6,6 +6,8 @@
         isMenuOpen: false
     }"
     @scroll.window="scrolled = window.pageYOffset > 20"
+    @keydown.escape.window="isMenuOpen = false"
+    x-effect="document.body.style.overflow = isMenuOpen ? 'hidden' : ''"
 >
     <div class="container mx-auto px-4 lg:px-12">
         <div class="flex items-center justify-between gap-4">
@@ -71,7 +73,7 @@
                     </div>
                 </div>
 
-                <button @click="isMenuOpen = !isMenuOpen" style="width:2.5rem; height:2.5rem; display:flex; align-items:center; justify-content:center; color:#0f172a; border-radius:0.5rem;">
+                <button @click="isMenuOpen = !isMenuOpen" :aria-expanded="isMenuOpen ? 'true' : 'false'" aria-controls="mobileMenu" aria-label="{{ __('Menu') }}" style="width:2.5rem; height:2.5rem; display:flex; align-items:center; justify-content:center; color:#0f172a; border-radius:0.5rem;">
                     <i class="fas" :class="isMenuOpen ? 'fa-times' : 'fa-bars'"></i>
                 </button>
             </div>
@@ -80,11 +82,12 @@
 
     <!-- Mobile Menu -->
     <div
+        id="mobileMenu"
         x-show="isMenuOpen" style="display: none;" x-cloak
         x-transition:enter="transition ease-out duration-200"
         x-transition:enter-start="opacity-0 -translate-y-4"
         x-transition:enter-end="opacity-100 translate-y-0"
-        class="lg:hidden absolute top-full left-0 right-0 bg-white border-b border-slate-200 shadow-xl py-6 px-4 z-40"
+        class="lg:hidden absolute top-full left-0 right-0 bg-white border-b border-slate-200 shadow-xl py-6 px-4 z-40 max-h-[80vh] overflow-y-auto"
     >
         <nav class="flex flex-col gap-4">
             @foreach(['features', 'pricing', 'faq'] as $nav)

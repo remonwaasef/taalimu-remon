@@ -15,7 +15,7 @@
                 <i class="fas fa-search text-xs"></i>
                 <span class="truncate">Search or press Ctrl+K...</span>
             </span>
-            <kbd class="hidden sm:inline-flex items-center gap-0.5 px-2 py-0.5 text-[10px] font-mono font-medium text-slate-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md shadow-xs">
+            <kbd class="hidden sm:inline-flex items-center gap-0.5 px-2 py-0.5 text-[11px] font-mono font-medium text-slate-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md shadow-xs">
                 ⌘K
             </kbd>
         </button>
@@ -98,7 +98,7 @@
                         <span
                             x-show="unread > 0"
                             x-cloak
-                            class="absolute -top-1 -end-1 min-w-[18px] h-[18px] px-1 rounded-full bg-brand-primary text-white text-[10px] font-bold flex items-center justify-center ring-2 ring-white dark:ring-slate-900"
+                            class="absolute -top-1 -end-1 min-w-[18px] h-[18px] px-1 rounded-full bg-brand-primary text-white text-[11px] font-bold flex items-center justify-center ring-2 ring-white dark:ring-slate-900"
                             :class="swinging && 'badge-pop'"
                         ><span x-text="unread"></span></span>
                     </button>
@@ -110,7 +110,7 @@
                         @if($unreadCount > 0 && $bellUser && Route::has('center.notifications.readAll'))
                             <form method="POST" action="{{ tenant_route('center.notifications.readAll', []) }}">
                                 @csrf
-                                <button type="submit" class="text-[10px] text-brand-primary font-semibold hover:underline">
+                                <button type="submit" class="text-[11px] text-brand-primary font-semibold hover:underline">
                                     <i class="fas fa-check-double me-1"></i>{{ __('Mark all as read') }}
                                 </button>
                             </form>
@@ -130,7 +130,7 @@
                                 <div class="min-w-0 flex-1">
                                     <p class="text-xs font-bold text-slate-800 dark:text-slate-200 truncate">{{ Str::limit($notification->data['title'] ?? '', 60) }}</p>
                                     <p class="text-[11px] text-slate-400 mt-0.5 truncate">{{ Str::limit($notification->data['message'] ?? '', 80) }}</p>
-                                    <span class="text-[9px] text-slate-400 mt-1 block">{{ $notification->created_at->diffForHumans() }}</span>
+                                    <span class="text-[11px] text-slate-400 mt-1 block">{{ $notification->created_at->diffForHumans() }}</span>
                                 </div>
                                 @if(!$notification->read_at)
                                     <span class="w-2 h-2 rounded-full bg-brand-primary mt-1.5 shrink-0"></span>
@@ -145,7 +145,7 @@
                     </div>
                     @if($bellIndexRoute)
                         <div class="px-4 py-2 border-t border-brand-border dark:border-slate-800">
-                            <a href="{{ $bellIndexRoute }}" class="block text-center text-[10px] font-semibold text-brand-primary hover:underline">
+                            <a href="{{ $bellIndexRoute }}" class="block text-center text-[11px] font-semibold text-brand-primary hover:underline">
                                 {{ __('View all notifications') }}
                             </a>
                         </div>
@@ -153,20 +153,6 @@
                 </x-slot>
             </x-ui.dropdown>
         </div>
-                <div class="divide-y divide-brand-border dark:divide-slate-800 max-h-64 overflow-y-auto">
-                    <div class="p-3 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                        <p class="text-xs font-bold text-slate-800 dark:text-slate-200">New Student Registered</p>
-                        <p class="text-[11px] text-slate-400 mt-0.5">Ahmed Hassan joined Grade 10 Group A.</p>
-                        <span class="text-[9px] text-slate-400 mt-1 block">5m ago</span>
-                    </div>
-                    <div class="p-3 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                        <p class="text-xs font-bold text-slate-800 dark:text-slate-200">Monthly Billing Invoice</p>
-                        <p class="text-[11px] text-slate-400 mt-0.5">Subscription invoice generated successfully.</p>
-                        <span class="text-[9px] text-slate-400 mt-1 block">1h ago</span>
-                    </div>
-                </div>
-            </x-slot>
-        </x-ui.dropdown>
 
         <!-- User Profile Dropdown -->
         <x-ui.dropdown align="right" width="56">

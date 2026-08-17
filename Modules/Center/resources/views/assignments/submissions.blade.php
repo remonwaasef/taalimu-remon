@@ -13,7 +13,7 @@
 
     <div class="card">
         <div class="card-body">
-            <div class="table-responsive">
+            <div class="table-responsive" data-mobile-cards>
                 <table class="table table-hover">
                     <thead>
                         <tr>

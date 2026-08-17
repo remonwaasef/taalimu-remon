@@ -119,7 +119,7 @@
                                         <i class="fas fa-plus me-1"></i>{{ __('center::messages.blade_0239') }}</a>
                                 </div>
                             @else
-                                <div class="table-responsive">
+                                <div class="table-responsive" data-mobile-cards>
                                     <table class="table align-middle">
                                         <thead class="bg-light">
                                             <tr>
@@ -190,7 +190,7 @@
                                         <i class="fas fa-plus me-1"></i>{{ __('center::messages.blade_0246') }}</a>
                                 </div>
                             @else
-                                <div class="table-responsive">
+                                <div class="table-responsive" data-mobile-cards>
                                     <table class="table align-middle">
                                         <thead class="bg-light">
                                             <tr>

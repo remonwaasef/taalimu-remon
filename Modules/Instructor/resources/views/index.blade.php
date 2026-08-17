@@ -102,7 +102,7 @@
                             <div class="flex items-center gap-3">
                                 <div class="text-center px-2.5 py-1 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
                                     <span class="block text-xs font-bold text-brand-primary">{{ $sched->start_time ? \Carbon\Carbon::parse($sched->start_time)->format('H:i') : '--:--' }}</span>
-                                    <span class="block text-[10px] text-slate-400">{{ $sched->end_time ? \Carbon\Carbon::parse($sched->end_time)->format('H:i') : '--:--' }}</span>
+                                    <span class="block text-[11px] text-slate-400">{{ $sched->end_time ? \Carbon\Carbon::parse($sched->end_time)->format('H:i') : '--:--' }}</span>
                                 </div>
                                 <div>
                                     <h4 class="text-sm font-bold text-slate-800 dark:text-slate-200">{{ $sched->course->title ?? 'Session' }}</h4>

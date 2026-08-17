@@ -166,18 +166,19 @@
                 <div style="
                     display: flex;
                     align-items: center;
-                    gap: 2rem;
+                    flex-wrap: wrap;
+                    gap: 1.5rem 1rem;
                 ">
                     <div>
                         <div style="font-size: 1.5rem; font-weight: 900; color: #2E8B83;">{{ __('landing.hero.pillar1_title') }}</div>
                         <div style="font-size: 0.75rem; color: #64748b; font-weight: 600;">{{ __('landing.hero.pillar1_sub') }}</div>
                     </div>
-                    <div style="width: 1px; height: 2rem; background: #cbd5e1;"></div>
+                    <div class="pillar-divider" style="width: 1px; height: 2rem; background: #cbd5e1;"></div>
                     <div>
                         <div style="font-size: 1.5rem; font-weight: 900; color: #0f172a;">{{ __('landing.hero.pillar2_title') }}</div>
                         <div style="font-size: 0.75rem; color: #64748b; font-weight: 600;">{{ __('landing.hero.pillar2_sub') }}</div>
                     </div>
-                    <div style="width: 1px; height: 2rem; background: #cbd5e1;"></div>
+                    <div class="pillar-divider" style="width: 1px; height: 2rem; background: #cbd5e1;"></div>
                     <div>
                         <div style="font-size: 1.5rem; font-weight: 900; color: #2E8B83;">{{ __('landing.hero.pillar3_title') }}</div>
                         <div style="font-size: 0.75rem; color: #64748b; font-weight: 600;">{{ __('landing.hero.pillar3_sub') }}</div>

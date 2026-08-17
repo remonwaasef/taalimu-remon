@@ -66,7 +66,7 @@
                                                     <li><a class="dropdown-item" href="{{ route('center.attendance.qr', $schedule->id) }}"><i class="fas fa-qrcode me-2"></i> {{ __('center::schedules.qr_code') }}</a></li>
                                                     <li><hr class="dropdown-divider"></li>
                                                     <li>
-                                                        <form action="{{ route('center.schedules.destroy', $schedule) }}" method="POST" onsubmit="return confirm('{{ __('center::schedules.confirm_delete') }}')">
+                                                        <form action="{{ route('center.schedules.destroy', $schedule) }}" method="POST" id="deleteRowForm_1">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button class="dropdown-item text-danger"><i class="fas fa-trash me-2"></i> {{ __('center::schedules.delete') }}</button>

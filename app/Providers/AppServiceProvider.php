@@ -32,7 +32,7 @@ class AppServiceProvider extends ServiceProvider
 
         \Illuminate\Support\Facades\Gate::policy(\App\Models\AssignmentSubmission::class, \App\Policies\AssignmentSubmissionPolicy::class);
         \Illuminate\Support\Facades\Gate::policy(\App\Models\Assignment::class, \App\Policies\AssignmentPolicy::class);
-        \Illuminate\Pagination\Paginator::useBootstrapFive();
+        \Illuminate\Pagination\Paginator::defaultView('components.ui.pagination');
         \Laravel\Cashier\Cashier::useCustomerModel(\App\Models\Tenant::class);
         \Laravel\Cashier\Cashier::useSubscriptionModel(\App\Models\Subscription::class);
 

@@ -8,7 +8,7 @@
                             </div>
                         </div>
 
-                        <div class="table-responsive">
+                        <div class="table-responsive" data-mobile-cards>
                             <table class="table align-middle">
                                 <thead>
                                     <tr class="text-muted small">

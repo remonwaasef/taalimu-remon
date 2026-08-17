@@ -1,4 +1,4 @@
-@extends('layouts.app-next')
+﻿@extends('layouts.app-next')
 
 @section('title', __('instructor::schedules.title'))
 
@@ -80,7 +80,7 @@
                                                     <li><a class="dropdown-item" href="{{ route('instructor.schedules.edit', $schedule) }}"><i class="fas fa-edit me-2"></i> {{ __('instructor::sidebar.edit') }}</a></li>
                                                     <li><hr class="dropdown-divider"></li>
                                                     <li>
-                                                        <form action="{{ route('instructor.schedules.destroy', $schedule) }}" method="POST" onsubmit="return confirm('{{ __('instructor::messages.confirm_delete') ?? 'Are you sure?' }}')">
+                                                        <form action="{{ route('instructor.schedules.destroy', $schedule) }}" method="POST" id="deleteRowForm_1">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button class="dropdown-item text-danger"><i class="fas fa-trash me-2"></i> {{ __('instructor::sidebar.delete') }}</button>

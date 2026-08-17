@@ -7,7 +7,7 @@
                                 <i class="fas fa-plus me-2"></i>{{ __('center::students.profile.bookings.add_booking') }}</button>
                         </div>
 
-                        <div class="table-responsive">
+                        <div class="table-responsive" data-mobile-cards>
                             <table class="table align-middle">
                                 <thead class="bg-light">
                                     <tr>

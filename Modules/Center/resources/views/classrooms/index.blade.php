@@ -13,7 +13,7 @@
     <div class="card border-0 shadow-sm rounded-4">
         <div class="card-body p-4">
             <!-- Classrooms Table -->
-            <div class="table-responsive" style="min-height: 350px; overflow-x: auto;">
+            <div class="table-responsive" data-mobile-cards style="min-height: 350px; overflow-x: auto;">
                 <table class="table align-middle">
                     <thead class="bg-light">
                         <tr>
@@ -81,7 +81,7 @@
                                             <li><a class="dropdown-item" href="{{ route('center.classrooms.edit', $classroom) }}"><i class="fas fa-edit me-2 text-warning"></i> {{ __('center::classrooms.edit') }}</a></li>
                                             <li><hr class="dropdown-divider"></li>
                                             <li>
-                                                <form action="{{ route('center.classrooms.destroy', $classroom) }}" method="POST" onsubmit="return confirm('{{ __('center::classrooms.confirm_delete') }}')">
+                                                <form action="{{ route('center.classrooms.destroy', $classroom) }}" method="POST" id="deleteRowForm_1">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button class="dropdown-item text-danger">{{ __('center::classrooms.delete') }}</button>

@@ -1,4 +1,4 @@
-@extends('admin::layouts.app-next')
+﻿@extends('admin::layouts.app-next')
 
 @section('page-title', __('admin::admin.tenants.title'))
 
@@ -123,7 +123,7 @@
             </form>
         </div>
         <div class="card-body p-0 mt-3">
-            <div class="table-responsive">
+            <div class="table-responsive" data-mobile-cards>
                 <table class="table table-hover align-middle mb-0">
                     <thead>
                         <tr>

@@ -38,7 +38,7 @@
                     <i class="fas fa-university w-4 text-center"></i>
                     <span>{{ __('center::sidebar.classes_structure') ?? 'Classes & Structure' }}</span>
                 </span>
-                <i class="fas fa-chevron-right text-[10px] transition-transform" :class="{ 'rotate-90': open }"></i>
+                <i class="fas fa-chevron-right text-[11px] transition-transform" :class="{ 'rotate-90': open }"></i>
             </button>
             <div x-show="open" class="mt-1 space-y-1 ms-4">
                 @if($canClassrooms)
@@ -113,7 +113,7 @@
                     <i class="fas fa-chart-bar w-4 text-center"></i>
                     <span>{{ __('center::sidebar.reports') ?? 'Reports & Expenses' }}</span>
                 </span>
-                <i class="fas fa-chevron-right text-[10px] transition-transform" :class="{ 'rotate-90': open }"></i>
+                <i class="fas fa-chevron-right text-[11px] transition-transform" :class="{ 'rotate-90': open }"></i>
             </button>
             <div x-show="open" class="mt-1 space-y-1 ms-4">
                 @can('view expenses')
@@ -159,7 +159,7 @@
                     <i class="fas fa-cogs w-4 text-center"></i>
                     <span>{{ __('center::sidebar.settings') }}</span>
                 </span>
-                <i class="fas fa-chevron-right text-[10px] transition-transform" :class="{ 'rotate-90': open }"></i>
+                <i class="fas fa-chevron-right text-[11px] transition-transform" :class="{ 'rotate-90': open }"></i>
             </button>
             <div x-show="open" class="mt-1 space-y-1 ms-4">
                 @can('manage billing')
@@ -173,7 +173,7 @@
                         $daysLeft = $subEndsAt ? max(0, now()->diffInDays($subEndsAt, false)) : null;
                     @endphp
                     @if($daysLeft !== null && $daysLeft <= 7)
-                        <span class="bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full ms-auto">{{ $daysLeft }}d</span>
+                        <span class="bg-red-500 text-white text-[11px] px-1.5 py-0.5 rounded-full ms-auto">{{ $daysLeft }}d</span>
                     @endif
                 </a>
                 @endcan

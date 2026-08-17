@@ -269,9 +269,9 @@
                                 </div>
                             </form>
                             
-                            <form action="{{ route('center.settings.reset-email-templates', ['tenant' => $tenant->domain ?? 'center']) }}" method="POST" class="d-inline-block mt-3" onsubmit="return confirm('{{ __('center::settings.email_templates.confirm_reset') }}');">
+                            <form action="{{ route('center.settings.reset-email-templates', ['tenant' => $tenant->domain ?? 'center']) }}" method="POST" class="d-inline-block mt-3" id="deleteRowForm_1">
                                 @csrf
-                                <button type="submit" class="btn btn-light text-danger rounded-pill px-4 fw-bold shadow-sm border">
+                                <button type="button" data-confirm-delete data-form="deleteRowForm_1" class="btn btn-light text-danger rounded-pill px-4 fw-bold shadow-sm border">
                                     <i class="fas fa-undo me-2"></i> {{ __('center::settings.email_templates.reset') }}
                                 </button>
                                                         </form>

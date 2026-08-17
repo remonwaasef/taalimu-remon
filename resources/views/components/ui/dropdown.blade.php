@@ -15,6 +15,9 @@
         '48' => 'w-48',
         '56' => 'w-56',
         '64' => 'w-64',
+        '72' => 'w-72',
+        '80' => 'w-80',
+        '96' => 'w-96',
         'auto' => 'w-auto min-w-[12rem]',
         default => 'w-48',
     };
@@ -33,7 +36,7 @@
         x-transition:leave="transition ease-in duration-100"
         x-transition:leave-start="transform opacity-100 scale-100"
         x-transition:leave-end="transform opacity-0 scale-95"
-        class="absolute z-50 mt-2 {{ $widthClasses }} rounded-2xl shadow-xl bg-white dark:bg-slate-900 border border-brand-border dark:border-slate-800 py-1.5 focus:outline-none {{ $alignmentClasses }}"
+        class="absolute z-50 mt-2 {{ $widthClasses }} max-w-[calc(100vw-2rem)] rounded-2xl shadow-xl bg-white dark:bg-slate-900 border border-brand-border dark:border-slate-800 py-1.5 focus:outline-none {{ $alignmentClasses }}"
         style="display: none;"
         @click="open = false"
     >

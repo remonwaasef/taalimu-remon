@@ -1,4 +1,4 @@
-@extends('center::layouts.app-next')
+﻿@extends('center::layouts.app-next')
 
 @section('page-title', __('center::questions.title'))
 @section('page-subtitle', __('center::questions.subtitle'))
@@ -19,7 +19,7 @@
         <div class="col-12">
             <div class="card border-0 shadow-sm rounded-4">
                 <div class="card-body p-0">
-                    <div class="table-responsive">
+                    <div class="table-responsive" data-mobile-cards>
                         <table class="table align-middle mb-0">
                             <thead class="bg-light">
                                 <tr>
@@ -69,9 +69,9 @@
                                             <a href="{{ route('center.questions.edit', $question) }}" class="btn btn-light btn-sm rounded-circle" title="{{ __('center::questions.edit') }}">
                                                 <i class="fas fa-edit text-primary"></i>
                                             </a>
-                                            <form action="{{ route('center.questions.destroy', $question) }}" method="POST" onsubmit="return confirm('{{ __('center::questions.delete_confirm') }}')">
+                                            <form action="{{ route('center.questions.destroy', $question) }}" method="POST" id="deleteQuestionForm_{{ $question->id }}">
                                                 @csrf @method('DELETE')
-                                                <button class="btn btn-light btn-sm rounded-circle" title="{{ __('center::questions.delete') }}">
+                                                <button type="button" class="btn btn-light btn-sm rounded-circle" title="{{ __('center::questions.delete') }}" data-confirm-delete data-form="deleteQuestionForm_{{ $question->id }}" data-title="{{ __('center::questions.delete_confirm') }}" data-confirm="{{ __('center::questions.delete') }}">
                                                     <i class="fas fa-trash text-danger"></i>
                                                 </button>
                                             </form>

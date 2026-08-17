@@ -1,4 +1,4 @@
-@extends('layouts.app-next')
+﻿@extends('layouts.app-next')
 
 @section('title', __('instructor::attendance.title'))
 
@@ -16,7 +16,7 @@
                     <h5 class="fw-bold mb-0"><i class="bi bi-clock-history me-2" style="color: var(--primary-color);"></i>{{ __('instructor::attendance.today_sessions', ['date' => now()->format('Y-m-d')]) }}</h5>
                 </div>
                 <div class="card-body p-4">
-                    <div class="table-responsive">
+                    <div class="table-responsive" data-mobile-cards>
                         <table class="table align-middle">
                             <thead class="bg-light">
                                 <tr>

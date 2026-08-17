@@ -1,4 +1,4 @@
-@props([
+﻿@props([
     'id',
     'title' => null,
     'size' => 'md'
@@ -21,9 +21,13 @@
     x-on:open-modal.window="if ($event.detail === '{{ $id }}') show = true"
     x-on:close-modal.window="if ($event.detail === '{{ $id }}') show = false"
     x-on:keydown.escape.window="show = false"
+    x-effect="document.body.style.overflow = show ? 'hidden' : ''"
     x-show="show"
     x-cloak
     class="fixed inset-0 z-50 overflow-y-auto"
+    role="dialog"
+    aria-modal="true"
+    aria-label="{{ $title ?? 'Modal' }}"
 >
     <!-- Backdrop -->
     <div
@@ -58,7 +62,7 @@
                         <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 font-inter">{{ $title }}</h3>
                     @endif
                     
-                    <button @click="show = false" type="button" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                    <button @click="show = false" type="button" aria-label="Close" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
                         <i class="fas fa-times text-base"></i>
                     </button>
                 </div>

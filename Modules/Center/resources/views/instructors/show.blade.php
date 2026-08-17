@@ -140,7 +140,7 @@
                     </div>
                 </div>
                 <div class="card-body p-0">
-                    <div class="table-responsive">
+                    <div class="table-responsive" data-mobile-cards>
                         <table class="table align-middle mb-0 table-hover">
                             <thead class="bg-light">
                                 <tr>

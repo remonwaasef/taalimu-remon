@@ -9,6 +9,7 @@ export default {
         './resources/views/**/*.blade.php',
         './resources/js/**/*.vue',
         './resources/js/**/*.js',
+        './resources/js/**/*.jsx',
         './Modules/**/resources/views/**/*.blade.php',
         './Modules/**/resources/views/**/*.php',
         './Modules/**/resources/assets/**/*.{js,ts,vue,scss,css}',
@@ -16,9 +17,17 @@ export default {
     theme: {
         container: {
             center: true,
-            padding: "2rem",
+            padding: {
+                DEFAULT: '1rem',
+                sm: '1.5rem',
+                lg: '2rem',
+            },
             screens: {
-                "2xl": "1280px",
+                sm: '640px',
+                md: '768px',
+                lg: '1024px',
+                xl: '1280px',
+                '2xl': '1440px',
             },
         },
         extend: {

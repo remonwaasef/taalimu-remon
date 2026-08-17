@@ -65,11 +65,11 @@
         <div class="mt-4 pt-3 border-t border-brand-border/60 dark:border-slate-800/80 flex items-center gap-2 text-xs font-medium">
             @if($changeType === 'positive')
                 <span class="inline-flex items-center text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-full">
-                    <i class="fas fa-arrow-up text-[10px] me-1"></i>{{ $change }}
+                    <i class="fas fa-arrow-up text-[11px] me-1"></i>{{ $change }}
                 </span>
             @elseif($changeType === 'negative')
                 <span class="inline-flex items-center text-red-600 dark:text-red-400 font-bold bg-red-50 dark:bg-red-950/40 px-2 py-0.5 rounded-full">
-                    <i class="fas fa-arrow-down text-[10px] me-1"></i>{{ $change }}
+                    <i class="fas fa-arrow-down text-[11px] me-1"></i>{{ $change }}
                 </span>
             @else
                 <span class="inline-flex items-center text-slate-600 dark:text-slate-400 font-bold bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full">

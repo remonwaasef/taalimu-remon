@@ -1,4 +1,4 @@
-@extends('layouts.landing-new')
+﻿@extends('layouts.landing-new')
 
 @section('content')
 <!-- Import Google Fonts -->
@@ -19,7 +19,7 @@
 </style>
 @include('auth.partials._register-scripts')
 
-<div class="min-h-[85vh] bg-slate-50/50 flex justify-center p-4 lg:p-8 mesh-gradient-soft noise-overlay register-page-offset" 
+<div class="min-h-[85vh] min-h-[85dvh] bg-slate-50/50 flex justify-center p-4 lg:p-8 mesh-gradient-soft noise-overlay register-page-offset" 
      x-data="registrationForm({
         selectedPlan: {{ Js::from(old('plan', request('plan', $packages->firstWhere('is_default', true)?->slug ?? $packages->first()?->slug ?? ''))) }},
         billingCycle: {{ Js::from(old('billing_cycle', request('cycle', 'monthly'))) }},
@@ -40,18 +40,18 @@
         
         <div class="bg-white p-5 lg:p-6">
 
-            {{-- ═══════════════════════════════════════════════════════ --}}
+            {{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
             {{-- STEP 1: Fast & Intuitive Onboarding                   --}}
-            {{-- ═══════════════════════════════════════════════════════ --}}
+            {{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
             <div x-show="currentStep === 1" x-cloak>
                 
                 <!-- Progress: Step 1 of 2 -->
                 <div class="mb-4">
                     <div class="flex justify-between mb-1 px-0.5">
-                        <span class="text-[10px] font-black uppercase tracking-[0.15em] text-brand-secondary">
+                        <span class="text-[11px] font-black uppercase tracking-[0.15em] text-brand-secondary">
                             {{ app()->isLocale('ar') ? 'الخطوة ١ من ٢' : 'Step 1 of 2' }}
                         </span>
-                        <span class="text-[10px] font-bold text-slate-300 uppercase tracking-[0.15em]">
+                        <span class="text-[11px] font-bold text-slate-300 uppercase tracking-[0.15em]">
                             {{ app()->isLocale('ar') ? 'البيانات الشخصية' : 'Personal Details' }}
                         </span>
                     </div>
@@ -77,7 +77,7 @@
                 <!-- Account Type Selector (First Interaction Step) -->
 @include('auth.partials._register-account-type')
 
-                <!-- ① Google Fast Registration (Right After Account Type Selection) -->
+                <!-- â‘  Google Fast Registration (Right After Account Type Selection) -->
                 <div class="mb-4">
                     <a :href="'{{ route('auth.google') }}?plan=' + selectedPlan + '&cycle=' + billingCycle + '&account_type=' + (accountType || 'center')" 
                        class="w-full flex items-center justify-center gap-3 py-2.5 px-6 border-2 border-slate-200 rounded-xl text-sm font-black text-slate-800 bg-white hover:bg-slate-50 hover:border-brand-secondary/40 hover:shadow-md transition-all group">
@@ -94,7 +94,7 @@
                 <!-- Divider -->
                 <div class="relative my-4 px-6">
                     <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-100"></div></div>
-                    <div class="relative flex justify-center text-[10px] uppercase">
+                    <div class="relative flex justify-center text-[11px] uppercase">
                         <span class="bg-white px-4 text-slate-400 font-bold tracking-[0.15em]">
                             {{ app()->isLocale('ar') ? 'أو ادخل البيانات التالية' : 'OR FILL DETAILS BELOW' }}
                         </span>
@@ -114,7 +114,7 @@
                             <div class="flex items-start gap-2">
                                 <i class="bi bi-exclamation-triangle-fill text-red-500 text-sm mt-0.5"></i>
                                 <ul class="text-[11px] text-red-700 font-arabic space-y-0.5">
-                                    @foreach ($errors->all() as $error) <li>• {{ $error }}</li> @endforeach
+                                    @foreach ($errors->all() as $error) <li>â€¢ {{ $error }}</li> @endforeach
                                 </ul>
                             </div>
                         </div>
@@ -152,12 +152,11 @@
                                 {{ app()->isLocale('ar') ? 'رابط منصتك الإلكترونية' : 'Platform URL' }}
                             </label>
                             <div class="relative flex items-center w-full" dir="ltr">
-                                <div class="absolute left-0 inset-y-0 flex items-center px-3 pointer-events-none text-brand-secondary font-bold text-[11px] bg-brand-secondary/5 border-r border-brand-secondary/10 rounded-l-xl z-10">https://</div>
+                                <div class="absolute left-0 inset-y-0 hidden sm:flex items-center px-3 pointer-events-none text-brand-secondary font-bold text-[11px] bg-brand-secondary/5 border-r border-brand-secondary/10 rounded-l-xl z-10">https://</div>
                                 <input type="text" name="subdomain" x-model="subdomain"
                                     @input="manuallyEditedSubdomain = true; subdomain = cleanSlug(subdomain);"
                                     @input.debounce.500ms="checkSubdomain()"
-                                    style="padding-left: 70px !important; padding-right: 110px !important;"
-                                    class="w-full h-9 bg-slate-50/80 border border-slate-200 rounded-xl text-sm font-bold font-sans focus:outline-none focus:bg-white focus:ring-2 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all"
+                                    class="w-full h-9 pl-[60px] pr-[92px] sm:pl-[70px] sm:pr-[110px] bg-slate-50/80 border border-slate-200 rounded-xl text-sm font-bold font-sans focus:outline-none focus:bg-white focus:ring-2 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all"
                                     placeholder="center-name" :required="currentStep === 1">
                                 <div class="absolute right-0 inset-y-0 flex items-center pr-3 pointer-events-none text-slate-400 font-bold text-[11px] gap-2 z-10">
                                     <span>.taalimu.com</span>
@@ -169,20 +168,20 @@
                                 </div>
                             </div>
                             <p x-show="subdomainMessage" :class="subdomainStatus === 'valid' ? 'text-emerald-600' : 'text-red-500'" 
-                               class="text-[10px] font-bold px-1 mt-0.5" x-text="subdomainMessage"></p>
+                               class="text-[11px] font-bold px-1 mt-0.5" x-text="subdomainMessage"></p>
                         </div>
                     </div>
 
                     <!-- Continue Button -->
                     <button type="button" @click="nextStep()"
                         class="w-full h-11 rounded-xl flex items-center justify-center gap-2 group bg-gradient-to-r from-emerald-600 to-teal-500 text-white shadow-lg shadow-emerald-600/20 hover:from-emerald-700 hover:to-teal-600 hover:-translate-y-0.5 active:scale-[0.98] transition-all mb-3">
-                        <span class="text-sm font-black font-arabic">{{ app()->isLocale('ar') ? 'التالي — البيانات الشخصية' : 'Next — Personal Details' }}</span>
+                        <span class="text-sm font-black font-arabic">{{ app()->isLocale('ar') ? 'التالي â€” البيانات الشخصية' : 'Next â€” Personal Details' }}</span>
                         <i class="bi bi-arrow-left text-base rtl:rotate-0 ltr:rotate-180 group-hover:-translate-x-1 rtl:group-hover:-translate-x-1 transition-transform"></i>
                     </button>
 
                     <!-- Trust Signals -->
                     <template x-if="currentPlan.trial_days > 0">
-                        <div class="flex items-center justify-center gap-3 text-[10px] text-slate-400 font-bold mb-2">
+                        <div class="flex items-center justify-center gap-3 text-[11px] text-slate-400 font-bold mb-2">
                             <span class="flex items-center gap-1">
                                 <i class="bi bi-shield-check text-emerald-500"></i>
                                 <span x-text="currentPlan.trial_days"></span> {{ app()->isLocale('ar') ? 'يوم تجربة مجانية' : 'days free trial' }}
@@ -197,7 +196,7 @@
 
                     <!-- Footer Terms -->
                     <div class="mt-2 text-center pb-1">
-                        <p class="text-[10px] text-slate-400 font-arabic">
+                        <p class="text-[11px] text-slate-400 font-arabic">
                             {{ __('auth.register.terms_prefix') }}
                             <a href="{{ route('terms') }}" class="text-slate-600 font-black hover:underline">{{ __('auth.register.terms_of_service') }}</a> 
                             {{ __('auth.register.and') }} 
@@ -210,16 +209,16 @@
                 </form>
             </div>
 
-            {{-- ═══════════════════════════════════════════════════════ --}}
+            {{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
             {{-- STEP 2 HEADER                                         --}}
-            {{-- ═══════════════════════════════════════════════════════ --}}
+            {{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
             <div x-show="currentStep === 2" x-cloak>
                 <div class="mb-4">
                     <div class="flex justify-between mb-1 px-0.5">
-                        <span class="text-[10px] font-bold text-emerald-500 uppercase tracking-[0.15em]">
-                            {{ app()->isLocale('ar') ? 'بيانات المركز' : 'Center Info' }} ✓
+                        <span class="text-[11px] font-bold text-emerald-500 uppercase tracking-[0.15em]">
+                            {{ app()->isLocale('ar') ? 'بيانات المركز' : 'Center Info' }} âœ“
                         </span>
-                        <span class="text-[10px] font-black uppercase tracking-[0.15em] text-brand-secondary">
+                        <span class="text-[11px] font-black uppercase tracking-[0.15em] text-brand-secondary">
                             {{ app()->isLocale('ar') ? 'الخطوة ٢ من ٢' : 'Step 2 of 2' }}
                         </span>
                     </div>

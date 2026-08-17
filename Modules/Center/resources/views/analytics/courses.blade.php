@@ -15,7 +15,7 @@
             <h6 class="m-0 font-weight-bold text-primary">{{ __('center::messages.blade_0019') }}</h6>
         </div>
         <div class="card-body">
-            <div class="table-responsive">
+            <div class="table-responsive" data-mobile-cards>
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>

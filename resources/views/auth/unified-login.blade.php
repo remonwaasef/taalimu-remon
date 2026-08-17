@@ -1,8 +1,8 @@
-@extends('layouts.landing-new')
+﻿@extends('layouts.landing-new')
 
 @section('content')
 @include('partials.login-dark-theme')
-<div class="login-page-wrap min-h-[80vh] flex items-center justify-center py-10 lg:py-16 px-4 sm:px-6 lg:px-8 bg-slate-50/50 mesh-gradient-soft noise-overlay">
+<div class="login-page-wrap min-h-[80vh] min-h-[80dvh] flex items-center justify-center py-10 lg:py-16 px-4 sm:px-6 lg:px-8 bg-slate-50/50 mesh-gradient-soft noise-overlay">
     <div class="max-w-md w-full space-y-6 animate-fade-in-up">
         <div class="login-card bg-white border border-slate-100/50 rounded-[1.5rem] shadow-2xl shadow-blue-900/5 p-6 lg:p-8 backdrop-blur-xl relative overflow-hidden">
             <!-- Decorative glow -->
@@ -59,7 +59,7 @@
                                id="password" 
                                name="password" 
                                class="block w-full ps-10 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 focus:ring-4 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all @error('password') border-red-500 @enderror" 
-                               placeholder="••••••••"
+                               placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                                required>
                     </div>
                     @error('password')

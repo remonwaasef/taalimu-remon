@@ -1,4 +1,4 @@
-@extends('layouts.landing-new')
+﻿@extends('layouts.landing-new')
 
 @section('content')
 <div class="min-h-screen flex items-center justify-center relative overflow-hidden bg-slate-50/50 py-6 px-4 pt-16">
@@ -53,7 +53,7 @@
 
             <!-- Access URL -->
             <div class="space-y-2">
-                <label class="flex items-center gap-2 text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] px-1">
+                <label class="flex items-center gap-2 text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] px-1">
                     {{ __('auth.registration.your_center_url') }}
                 </label>
                 <div class="flex flex-col sm:flex-row items-center gap-2 p-1 bg-white/60 backdrop-blur-md rounded-[1.2rem] border border-slate-200/80 shadow-inner group-focus-within:border-brand-primary/30 transition-all">
@@ -78,7 +78,7 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div class="bg-white/40 backdrop-blur-sm p-4 rounded-xl border border-white/60 shadow-sm transition-all group">
-                    <label class="flex items-center gap-2 text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">
+                    <label class="flex items-center gap-2 text-[11px] font-black text-slate-400 uppercase tracking-widest mb-1.5">
                         <i class="fas fa-envelope opacity-70"></i>
                         {{ __('auth.registration.email') }}
                     </label>
@@ -87,11 +87,11 @@
                     </div>
                 </div>
                 <div class="bg-white/40 backdrop-blur-sm p-4 rounded-xl border border-white/60 shadow-sm transition-all group">
-                    <label class="flex items-center gap-2 text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">
+                    <label class="flex items-center gap-2 text-[11px] font-black text-slate-400 uppercase tracking-widest mb-1.5">
                         <i class="fas fa-key opacity-70"></i>
                         {{ __('auth.registration.password') }}
                     </label>
-                    <div class="text-slate-500 font-semibold text-[10px] leading-relaxed">
+                    <div class="text-slate-500 font-semibold text-[11px] leading-relaxed">
                         {{ __('auth.registration.password_hint') }}
                     </div>
                 </div>

@@ -1,4 +1,4 @@
-@extends('layouts.landing-new')
+﻿@extends('layouts.landing-new')
 
 @section('content')
 <!-- Import Cairo & Outfit Fonts -->
@@ -316,7 +316,7 @@ window.addEventListener('pageshow', (event) => {
 });
 </script>
 
-<div class="min-h-screen bg-slate-50/50 flex justify-center p-4 lg:p-8 mesh-gradient-soft noise-overlay register-page-offset" 
+<div class="min-h-dvh bg-slate-50/50 flex justify-center p-4 lg:p-8 mesh-gradient-soft noise-overlay register-page-offset" 
      x-data="googleRegistration({
         selectedPlan: {{ Js::from($selectedPlanSlug) }},
         selectedCycle: {{ Js::from($selectedCycle) }},
@@ -342,7 +342,7 @@ window.addEventListener('pageshow', (event) => {
                             </div>
                             <div class="flex-1 min-w-0">
                                 <p class="font-black text-slate-900 text-xs truncate uppercase tracking-tight">{{ session('google_user.name', 'User') }}</p>
-                                <p class="text-slate-500 text-[10px] truncate font-medium opacity-80">{{ session('google_user.email') }}</p>
+                                <p class="text-slate-500 text-[11px] truncate font-medium opacity-80">{{ session('google_user.email') }}</p>
                             </div>
                         </div>
                     </div>
@@ -361,8 +361,8 @@ window.addEventListener('pageshow', (event) => {
                         <div class="flex items-center justify-between">
                             <div class="flex flex-col">
                                 <div class="flex items-center gap-2 mb-1">
-                                    <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">{{ __('auth.register.selected_plan') }}</span>
-                                    <button type="button" @click="showPlanModal = true" class="text-[9px] font-black text-brand-secondary underline hover:opacity-70 transition-opacity uppercase tracking-widest">
+                                    <span class="text-[11px] font-black text-slate-400 uppercase tracking-widest">{{ __('auth.register.selected_plan') }}</span>
+                                    <button type="button" @click="showPlanModal = true" class="text-[11px] font-black text-brand-secondary underline hover:opacity-70 transition-opacity uppercase tracking-widest">
                                         {{ app()->getLocale() == 'ar' ? 'تغيير' : 'Change' }}
                                     </button>
                                 </div>
@@ -381,7 +381,7 @@ window.addEventListener('pageshow', (event) => {
                             </button>
                             <div x-show="openFeatures" x-transition.opacity.duration.300ms class="space-y-2 pt-2 border-t border-slate-50">
                                 <template x-for="feature in (currentPlan.features || [])" :key="feature">
-                                    <div class="flex items-center gap-2 text-[10px] font-bold text-slate-600 font-arabic">
+                                    <div class="flex items-center gap-2 text-[11px] font-bold text-slate-600 font-arabic">
                                         <i class="bi bi-check2 text-emerald-500"></i>
                                         <span x-text="feature"></span>
                                     </div>
@@ -397,7 +397,7 @@ window.addEventListener('pageshow', (event) => {
                                     <template x-if="currentPlan.trial_days > 0 && couponStatus !== 'valid'">
                                         <div class="flex items-center justify-end mb-2 animate-fade-in">
                                             <span class="text-[11px] font-black bg-emerald-50 text-emerald-600 px-3 py-1 rounded-lg border border-emerald-100 uppercase tracking-wider inline-flex items-center gap-1.5 shadow-sm">
-                                                <i class="bi bi-gift-fill text-[10px]"></i>
+                                                <i class="bi bi-gift-fill text-[11px]"></i>
                                                 <span x-text="currentPlan.trial_days"></span> {{ app()->isLocale('ar') ? 'أيام مجانية' : 'Days Free' }}
                                             </span>
                                         </div>
@@ -408,7 +408,7 @@ window.addEventListener('pageshow', (event) => {
                                                 <span x-text="((couponStatus === 'valid' ? currentPriceData.price_raw : currentPriceData.old_price_raw) || 0).toLocaleString()"></span>
                                                 <span x-text="currentPriceData.currency"></span>
                                             </span>
-                                            <span class="text-[10px] font-black bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-md">
+                                            <span class="text-[11px] font-black bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-md">
                                                 <template x-if="couponStatus === 'valid'">
                                                     <span>- <span x-text="couponDiscountAmount.toLocaleString()"></span></span>
                                                 </template>
@@ -422,23 +422,23 @@ window.addEventListener('pageshow', (event) => {
                                         <span class="text-3xl font-black tracking-tighter" x-text="currentPlan.trial_days > 0 ? '0' : finalPrice.toLocaleString()"></span>
                                         <span class="text-sm font-bold opacity-60" x-text="currentPlan.trial_days > 0 ? ({{ app()->isLocale('ar') ? '\'مجاناً\'' : '\'FREE\'' }}) : currentPriceData.currency"></span>
                                     </div>
-                                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest" x-text="'/ ' + (billingCycle === 'yearly' ? '{{ app()->getLocale() == 'ar' ? 'سنة' : 'year' }}' : (billingCycle === 'term' ? '{{ app()->getLocale() == 'ar' ? 'ترم' : 'term' }}' : '{{ app()->getLocale() == 'ar' ? 'شهر' : 'month' }}'))"></span>
+                                    <span class="text-[11px] font-black text-slate-400 uppercase tracking-widest" x-text="'/ ' + (billingCycle === 'yearly' ? '{{ app()->getLocale() == 'ar' ? 'سنة' : 'year' }}' : (billingCycle === 'term' ? '{{ app()->getLocale() == 'ar' ? 'ترم' : 'term' }}' : '{{ app()->getLocale() == 'ar' ? 'شهر' : 'month' }}'))"></span>
                                 </div>
                             </div>
                             
                             <div class="flex p-1 bg-slate-100 rounded-xl items-center">
                                 <button type="button" @click="billingCycle = 'monthly'" 
-                                        class="flex-1 py-1.5 text-[10px] font-black rounded-lg transition-all"
+                                        class="flex-1 py-2 min-h-[40px] text-[11px] font-black rounded-lg transition-all"
                                         :class="billingCycle === 'monthly' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:bg-slate-50'">
                                     {{ app()->getLocale() == 'ar' ? 'شهري' : 'Month' }}
                                 </button>
                                 <button type="button" @click="billingCycle = 'term'" 
-                                        class="flex-1 py-1.5 text-[10px] font-black rounded-lg transition-all"
+                                        class="flex-1 py-2 min-h-[40px] text-[11px] font-black rounded-lg transition-all"
                                         :class="billingCycle === 'term' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:bg-slate-50'">
                                     {{ app()->getLocale() == 'ar' ? 'ترم' : 'Term' }}
                                 </button>
                                 <button type="button" @click="billingCycle = 'yearly'" 
-                                        class="flex-1 py-1.5 text-[10px] font-black rounded-lg transition-all"
+                                        class="flex-1 py-2 min-h-[40px] text-[11px] font-black rounded-lg transition-all"
                                         :class="billingCycle === 'yearly' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:bg-slate-50'">
                                     {{ app()->getLocale() == 'ar' ? 'سنوي' : 'Yearly' }}
                                 </button>
@@ -447,7 +447,7 @@ window.addEventListener('pageshow', (event) => {
                     </div>
                 </div>
 
-                <div class="hidden lg:flex items-center gap-3 text-slate-400 text-[10px] font-bold opacity-40 px-6">
+                <div class="hidden lg:flex items-center gap-3 text-slate-400 text-[11px] font-bold opacity-40 px-6">
                     <i class="bi bi-shield-check text-emerald-500 text-sm"></i>
                     <span>{{ app()->getLocale() == 'ar' ? 'جميع البيانات مشفرة وآمنة تماماً' : 'All data is encrypted and secure' }}</span>
                 </div>
@@ -464,7 +464,7 @@ window.addEventListener('pageshow', (event) => {
                             <div>
                                 <h3 class="text-xs font-black text-red-900 font-arabic mb-1">{{ __('auth.register.registration_error') }}</h3>
                                 <ul class="text-[11px] text-red-700 font-arabic opacity-90">
-                                    @foreach ($errors->all() as $error) <li>• {{ $error }}</li> @endforeach
+                                    @foreach ($errors->all() as $error) <li>â€¢ {{ $error }}</li> @endforeach
                                 </ul>
                             </div>
                         </div>
@@ -496,13 +496,13 @@ window.addEventListener('pageshow', (event) => {
                     <div class="space-y-1">
                         <label class="text-[12px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">{{ app()->isLocale('ar') ? 'رابط المنصة' : 'Platform Link' }}</label>
                         <div class="relative flex items-center w-full group" dir="ltr">
-                            <div class="absolute left-0 inset-y-0 flex items-center px-3 pointer-events-none text-brand-secondary font-black text-[10px] bg-brand-secondary/5 border-r border-brand-secondary/10 rounded-l-xl">https://</div>
+                            <div class="absolute left-0 inset-y-0 hidden sm:flex items-center px-3 pointer-events-none text-brand-secondary font-black text-[11px] bg-brand-secondary/5 border-r border-brand-secondary/10 rounded-l-xl">https://</div>
                             <input type="text" name="subdomain" x-model="subdomain"
                                 @input="manuallyEditedSubdomain = true; subdomain = cleanSlug(subdomain);"
                                 @input.debounce.500ms="checkSubdomain()"
-                                class="w-full h-11 pl-[70px] pr-[110px] bg-slate-50/50 border-2 border-slate-100 rounded-xl text-base font-bold font-sans focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner"
+                                class="w-full h-11 pl-[60px] pr-[92px] sm:pl-[70px] sm:pr-[110px] bg-slate-50/50 border-2 border-slate-100 rounded-xl text-base font-bold font-sans focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner"
                                 placeholder="center-name" required>
-                            <div class="absolute right-0 inset-y-0 flex items-center pr-3 pointer-events-none text-slate-400 font-bold text-[10px] gap-2">
+                            <div class="absolute right-0 inset-y-0 flex items-center pr-3 pointer-events-none text-slate-400 font-bold text-[11px] gap-2">
                                 <span>.taalimu.com</span>
                                 <div class="flex items-center justify-center w-4 h-4">
                                     <template x-if="subdomainStatus === 'loading'"><div class="w-3 h-3 border-2 border-brand-secondary border-t-transparent rounded-full animate-spin"></div></template>
@@ -512,12 +512,12 @@ window.addEventListener('pageshow', (event) => {
                             </div>
                         </div>
                         <p x-show="subdomainMessage" :class="subdomainStatus === 'valid' ? 'text-emerald-600' : 'text-red-500'" 
-                           class="text-[10px] font-bold px-2 mt-0.5 animate-fade-in" x-text="subdomainMessage"></p>
+                           class="text-[11px] font-bold px-2 mt-0.5 animate-fade-in" x-text="subdomainMessage"></p>
                     </div>
 
                     {{-- Phone Field with OTP Verification --}}
                     <div class="space-y-1.5">
-                        <label class="text-[12px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">{{ __('auth.register.phone') }} <span class="text-[9px] font-normal text-slate-300">({{ app()->getLocale() == 'ar' ? 'اختياري' : 'Optional' }})</span></label>
+                        <label class="text-[12px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">{{ __('auth.register.phone') }} <span class="text-[11px] font-normal text-slate-300">({{ app()->getLocale() == 'ar' ? 'اختياري' : 'Optional' }})</span></label>
                         
                         {{-- Country Code + Phone Input + Send OTP Button --}}
                         <div class="relative flex gap-2">
@@ -529,7 +529,7 @@ window.addEventListener('pageshow', (event) => {
                                     @include('partials.country-codes')
                                 </select>
                                 <div class="absolute inset-y-0 right-1 flex items-center pointer-events-none">
-                                    <i class="bi bi-chevron-down text-[9px] text-slate-400"></i>
+                                    <i class="bi bi-chevron-down text-[11px] text-slate-400"></i>
                                 </div>
                             </div>
                             {{-- Phone Input --}}
@@ -561,13 +561,13 @@ window.addEventListener('pageshow', (event) => {
                                     </div>
                                 </div>
                                 <button type="button" @click="validateCoupon()" :disabled="isApplyingCoupon || !couponCode"
-                                        class="h-11 px-6 rounded-xl bg-slate-900 text-white font-black text-[10px] uppercase tracking-widest hover:bg-brand-secondary transition-all disabled:opacity-50 flex items-center justify-center min-w-[80px]">
+                                        class="h-11 px-6 rounded-xl bg-slate-900 text-white font-black text-[11px] uppercase tracking-widest hover:bg-brand-secondary transition-all disabled:opacity-50 flex items-center justify-center min-w-[80px]">
                                     <template x-if="isApplyingCoupon"><div class="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></div></template>
                                     <span x-show="!isApplyingCoupon">{{ app()->isLocale('ar') ? 'تطبيق' : 'Apply' }}</span>
                                 </button>
                             </div>
                             <p x-show="couponMessage" :class="couponStatus === 'valid' ? 'text-emerald-600' : 'text-red-500'" 
-                               class="text-[10px] font-black px-2 animate-fade-in" x-text="couponMessage"></p>
+                               class="text-[11px] font-black px-2 animate-fade-in" x-text="couponMessage"></p>
                         </div>
                     </div>
 
@@ -611,7 +611,7 @@ window.addEventListener('pageshow', (event) => {
                     </div>
 
                     <div class="mt-6 text-center">
-                        <p class="text-[10px] text-slate-400 font-arabic leading-relaxed">
+                        <p class="text-[11px] text-slate-400 font-arabic leading-relaxed">
                             {{ __('auth.register.terms_prefix') }}
                             <a href="{{ route('terms') }}" class="text-slate-900 font-black hover:underline underline-offset-4">{{ __('auth.register.terms_of_service') }}</a> 
                             {{ __('auth.register.and') }} 
@@ -635,53 +635,53 @@ window.addEventListener('pageshow', (event) => {
          x-cloak>
         <div @click.away="showPlanModal = false" 
              class="bg-white rounded-[2.5rem] w-full max-w-lg shadow-2xl overflow-hidden animate-scale-in">
-            <div class="p-8 border-b border-slate-100 bg-slate-50/50">
+            <div class="p-5 sm:p-8 border-b border-slate-100 bg-slate-50/50">
                 <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
                     <h3 class="text-xl font-black text-slate-900 font-arabic">{{ app()->getLocale() == 'ar' ? 'اختر الباقة المناسبة' : 'Select Plan' }}</h3>
                     
                     <!-- Billing Country Selector -->
                     <div class="flex items-center gap-2 bg-slate-100/50 p-1.5 rounded-2xl border border-slate-200">
-                        <span class="text-[10px] font-black text-slate-500 uppercase tracking-wider px-2 whitespace-nowrap"><i class="bi bi-globe-americas me-1"></i> {{ app()->getLocale() == 'ar' ? 'دولة الفوترة' : 'Billing Region' }}</span>
+                        <span class="text-[11px] font-black text-slate-500 uppercase tracking-wider px-2 whitespace-nowrap"><i class="bi bi-globe-americas me-1"></i> {{ app()->getLocale() == 'ar' ? 'دولة الفوترة' : 'Billing Region' }}</span>
                         <div class="relative" dir="ltr">
                             <select x-model="selectedCurrency" class="h-8 pl-3 pr-8 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-secondary/20 focus:border-brand-secondary appearance-none cursor-pointer shadow-sm min-w-[120px]">
-                                <option value="EGP">🇪🇬 Egypt (EGP)</option>
-                                <option value="SAR">🇸🇦 Saudi Arabia (SAR)</option>
-                                <option value="AED">🇦🇪 UAE (AED)</option>
-                                <option value="EUR">🇪🇺 Europe (EUR)</option>
-                                <option value="USD">🇺🇸 Global (USD)</option>
+                                <option value="EGP">ðŸ‡ªðŸ‡¬ Egypt (EGP)</option>
+                                <option value="SAR">ðŸ‡¸ðŸ‡¦ Saudi Arabia (SAR)</option>
+                                <option value="AED">ðŸ‡¦ðŸ‡ª UAE (AED)</option>
+                                <option value="EUR">ðŸ‡ªðŸ‡º Europe (EUR)</option>
+                                <option value="USD">ðŸ‡ºðŸ‡¸ Global (USD)</option>
                             </select>
                             <div class="absolute inset-y-0 right-2 flex items-center pointer-events-none">
-                                <i class="bi bi-chevron-down text-[10px] text-slate-400"></i>
+                                <i class="bi bi-chevron-down text-[11px] text-slate-400"></i>
                             </div>
                         </div>
                     </div>
                     
-                    <button type="button" @click="showPlanModal = false" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-slate-200 transition-colors">
+                    <button type="button" @click="showPlanModal = false" aria-label="{{ app()->getLocale() == 'ar' ? 'إغلاق' : 'Close' }}" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-slate-200 transition-colors">
                         <i class="bi bi-x-lg"></i>
                     </button>
                 </div>
                 <!-- Billing Toggle in Modal -->
                 <div class="flex justify-center">
-                    <div class="inline-flex bg-slate-200/50 p-1.5 rounded-2xl border border-slate-200" dir="ltr">
+                    <div class="inline-flex flex-wrap justify-center bg-slate-200/50 p-1.5 rounded-2xl border border-slate-200 gap-1" dir="ltr">
                         <button type="button" @click="billingCycle = 'monthly'" 
-                                class="px-5 py-2 rounded-xl text-[13px] font-black transition-all font-sans uppercase tracking-wide"
+                                class="px-4 sm:px-5 py-2 min-h-[40px] rounded-xl text-[13px] font-black transition-all font-sans uppercase tracking-wide"
                                 :class="billingCycle === 'monthly' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'">
                             {{ app()->getLocale() == 'ar' ? 'شهري' : 'Month' }}
                         </button>
                         <button type="button" @click="billingCycle = 'term'" 
-                                class="px-5 py-2 rounded-xl text-[13px] font-black transition-all font-sans uppercase tracking-wide"
+                                class="px-4 sm:px-5 py-2 min-h-[40px] rounded-xl text-[13px] font-black transition-all font-sans uppercase tracking-wide"
                                 :class="billingCycle === 'term' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'">
                             {{ app()->getLocale() == 'ar' ? 'ترم' : 'Term' }}
                         </button>
                         <button type="button" @click="billingCycle = 'yearly'" 
-                                class="px-5 py-2 rounded-xl text-[13px] font-black transition-all font-sans uppercase tracking-wide"
+                                class="px-4 sm:px-5 py-2 min-h-[40px] rounded-xl text-[13px] font-black transition-all font-sans uppercase tracking-wide"
                                 :class="billingCycle === 'yearly' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'">
                             {{ app()->getLocale() == 'ar' ? 'سنوي' : 'Yearly' }}
                         </button>
                     </div>
                 </div>
             </div>
-            <div class="p-8 space-y-4 max-h-[60vh] overflow-y-auto custom-scrollbar">
+            <div class="p-5 sm:p-8 space-y-4 max-h-[60vh] overflow-y-auto custom-scrollbar">
                 <template x-for="pkg in packages" :key="pkg.slug">
                     <label class="relative block cursor-pointer group">
                         <input type="radio" name="plan_selector" :value="pkg.slug" x-model="selectedPlan" @change="showPlanModal = false" class="peer sr-only">

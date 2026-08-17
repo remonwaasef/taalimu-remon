@@ -47,7 +47,7 @@
             @if($children->isEmpty())
                 <x-ui.empty-state title="لا يوجد أبناء مرتبطون" description="تواصل مع إدارة المركز لربط أبنائك بحسابك." icon="fas fa-users-slash" />
             @else
-                <div class="overflow-x-auto">
+                <div class="overflow-x-auto" data-mobile-cards>
                     <table class="w-full text-xs text-right">
                         <thead>
                             <tr class="text-[11px] text-slate-400 border-b border-brand-border dark:border-slate-800">
@@ -62,7 +62,7 @@
                                 <tr class="border-b border-brand-border/50 dark:border-slate-800/50 last:border-0">
                                     <td class="py-3 px-3 font-semibold text-slate-700 dark:text-slate-200 flex items-center gap-2">
                                         <div class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500">
-                                            <i class="fas fa-user-graduate text-[10px]"></i>
+                                            <i class="fas fa-user-graduate text-[11px]"></i>
                                         </div>
                                         {{ $student->name }}
                                     </td>

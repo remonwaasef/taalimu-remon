@@ -1,4 +1,4 @@
-@extends('admin::layouts.app-next')
+﻿@extends('admin::layouts.app-next')
 
 @section('title', 'إدارة النسخ الاحتياطي')
 
@@ -36,7 +36,7 @@
             <h5 class="fw-bold mb-0">الأرشيف الحالي</h5>
         </div>
         <div class="card-body p-0">
-            <div class="table-responsive">
+            <div class="table-responsive" data-mobile-cards>
                 <table class="table table-hover align-middle mb-0">
                     <thead class="bg-light">
                         <tr>
@@ -70,10 +70,10 @@
                                     <a href="{{ route('admin.backups.download', ['file' => $backup['file_name']]) }}" class="btn btn-light btn-sm rounded-pill px-3 me-2 border">
                                         <i class="fas fa-download me-1 text-primary"></i> تحميل
                                     </a>
-                                    <form action="{{ route('admin.backups.delete', $backup['file_name']) }}" method="POST" onsubmit="return confirm('هل أنت متأكد من حذف هذه النسخة الاحتياطية؟')">
+                                    <form action="{{ route('admin.backups.delete', $backup['file_name']) }}" method="POST" id="deleteRowForm_1">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-light btn-sm rounded-pill px-3 border text-danger">
+                                        <button type="button" data-confirm-delete data-form="deleteRowForm_1" class="btn btn-light btn-sm rounded-pill px-3 border text-danger">
                                             <i class="fas fa-trash-alt"></i>
                                         </button>
                                     </form>

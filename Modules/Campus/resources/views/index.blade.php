@@ -10,7 +10,7 @@
                 <span>My Campus</span>
             </a>
 
-            <div class="pt-4 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Learning</div>
+            <div class="pt-4 pb-1 px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider">Learning</div>
 
             <a href="{{ route('campus.courses.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
                 <i class="fas fa-book-open w-4 text-center"></i>
@@ -96,7 +96,7 @@
                     <i class="fas fa-book-open"></i>
                 </div>
                 <span class="text-xs font-bold text-slate-800 dark:text-slate-200 leading-tight">My Courses</span>
-                <span class="text-[10px] text-slate-400 mt-0.5">Explore Library</span>
+                <span class="text-[11px] text-slate-400 mt-0.5">Explore Library</span>
             </a>
 
             <a href="{{ route('campus.schedule') }}" class="p-4 rounded-2xl border border-brand-border dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all text-center flex flex-col items-center justify-center group shadow-sm">
@@ -104,7 +104,7 @@
                     <i class="fas fa-calendar-alt"></i>
                 </div>
                 <span class="text-xs font-bold text-slate-800 dark:text-slate-200 leading-tight">Class Schedule</span>
-                <span class="text-[10px] text-slate-400 mt-0.5">Lesson Timings</span>
+                <span class="text-[11px] text-slate-400 mt-0.5">Lesson Timings</span>
             </a>
 
             <a href="{{ route('campus.attendance') }}" class="p-4 rounded-2xl border border-brand-border dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all text-center flex flex-col items-center justify-center group shadow-sm">
@@ -112,7 +112,7 @@
                     <i class="fas fa-user-check"></i>
                 </div>
                 <span class="text-xs font-bold text-slate-800 dark:text-slate-200 leading-tight">Attendance Record</span>
-                <span class="text-[10px] text-slate-400 mt-0.5">Detailed Logs</span>
+                <span class="text-[11px] text-slate-400 mt-0.5">Detailed Logs</span>
             </a>
 
             <a href="{{ route('campus.finances') }}" class="p-4 rounded-2xl border border-brand-border dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all text-center flex flex-col items-center justify-center group shadow-sm">
@@ -120,7 +120,7 @@
                     <i class="fas fa-wallet"></i>
                 </div>
                 <span class="text-xs font-bold text-slate-800 dark:text-slate-200 leading-tight">Finances & Fees</span>
-                <span class="text-[10px] text-slate-400 mt-0.5">Manage Tuition</span>
+                <span class="text-[11px] text-slate-400 mt-0.5">Manage Tuition</span>
             </a>
         </div>
     </div>

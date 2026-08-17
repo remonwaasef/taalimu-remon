@@ -110,8 +110,8 @@
                 @endif
             </form>
         </div>
-        <div class="card-body p-0" style="overflow: visible !important;">
-            <div class="table-responsive" style="overflow: visible !important;">
+        <div class="card-body p-0">
+            <div class="table-responsive" data-mobile-cards>
                 <table class="table table-hover align-middle mb-0">
                     <thead class="bg-light">
                         <tr class="text-secondary small text-uppercase">
@@ -215,8 +215,8 @@
                                     </span>
                                 </td>
                                 <td class="text-end pe-4" style="position: relative; pointer-events: auto;">
-                                    <div class="dropdown">
-                                        <button class="btn btn-light btn-sm rounded-circle shadow-none border dropdown-toggle-custom" type="button" onclick="toggleCustomDropdown(event, this)">
+                                    <div class="dropdown" data-bs-boundary="viewport">
+                                        <button class="btn btn-light btn-sm rounded-circle shadow-none border dropdown-toggle-custom" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             <i class="bi bi-three-dots-vertical"></i>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-4 p-2">
@@ -225,10 +225,10 @@
                                             <li><a class="dropdown-item rounded-3 mb-1" href="{{ route('admin.tenants.impersonate', $subscription->tenant_id) }}"><i class="bi bi-box-arrow-in-right me-2"></i> {{ __('admin::admin.tenants.actions.impersonate') }}</a></li>
                                             <li><hr class="dropdown-divider"></li>
                                             <li>
-                                                <form action="{{ route('admin.subscriptions.destroy', $subscription->id) }}" method="POST" onsubmit="return confirm('{{ __('admin::admin.subscriptions.actions.delete_confirm') }}')">
+                                                <form action="{{ route('admin.subscriptions.destroy', $subscription->id) }}" method="POST" id="deleteRowForm_1">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="dropdown-item rounded-3 text-danger">
+                                                    <button type="button" data-confirm-delete data-form="deleteRowForm_1" class="dropdown-item rounded-3 text-danger">
                                                         <i class="bi bi-trash me-2"></i> {{ __('admin::admin.subscriptions.actions.delete') }}
                                                     </button>
                                                 </form>
@@ -263,24 +263,14 @@
     </div>
 @push('scripts')
 <style>
-    /* Ensure dropdowns are always on top and visible */
-    .dropdown-menu {
-        z-index: 99999 !important;
-        display: none; /* Default hidden */
-        position: absolute;
-        inset: auto 0 auto auto;
-        margin: 0;
-        transform: translate(0, 10px);
-    }
-    .dropdown-menu.show {
-        display: block !important; /* Force show */
-    }
-    .table-responsive {
-        overflow: visible !important;
-    }
     /* Hide the default Bootstrap caret */
     .dropdown-toggle-custom::after {
         display: none !important;
+    }
+    @media (max-width: 767.98px) {
+        .table-responsive .dropdown-menu {
+            max-width: calc(100vw - 2rem);
+        }
     }
 </style>
 @endpush

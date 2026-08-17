@@ -10,7 +10,7 @@
                 <span>My Campus</span>
             </a>
 
-            <div class="pt-4 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Learning</div>
+            <div class="pt-4 pb-1 px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider">Learning</div>
 
             <a href="{{ route('campus.courses.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
                 <i class="fas fa-book-open w-4 text-center"></i>
@@ -54,7 +54,7 @@
                 <div class="card-header bg-white border-0 p-4">
                     <h5 class="fw-bold mb-0">بيانات الحضور الحديثة</h5>
                 </div>
-                <div class="table-responsive">
+                <div class="table-responsive" data-mobile-cards>
                     <table class="table table-hover align-middle mb-0">
                         <thead class="bg-light">
                             <tr>

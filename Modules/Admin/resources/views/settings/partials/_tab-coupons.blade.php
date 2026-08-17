@@ -11,7 +11,7 @@
                         </div>
 
                         <!-- Coupons Table -->
-                        <div class="table-responsive">
+                        <div class="table-responsive" data-mobile-cards>
                             <table class="table table-hover align-middle">
                                 <thead class="table-light">
                                     <tr>
@@ -68,7 +68,7 @@
                                                 <button type="button" class="btn btn-outline-primary rounded-start-pill" data-bs-toggle="modal" data-bs-target="#editCouponModal{{ $coupon->id }}">
                                                     <i class="bi bi-pencil"></i>
                                                 </button>
-                                                <button type="button" class="btn btn-outline-danger rounded-end-pill" onclick="if(confirm('{{ __('admin.delete_confirm') }}')) document.getElementById('deleteCoupon{{ $coupon->id }}').submit()">
+                                                <button type="button" class="btn btn-outline-danger rounded-end-pill" data-confirm-delete data-form="deleteCoupon{{ $coupon->id }}">
                                                     <i class="bi bi-trash"></i>
                                                 </button>
                                             </div>

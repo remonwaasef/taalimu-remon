@@ -1,4 +1,4 @@
-@extends('layouts.app-next')
+﻿@extends('layouts.app-next')
 
 @section('title', __('instructor::attendance.details') ?? 'Attendance Details')
 
@@ -57,7 +57,7 @@
                     </div>
                 </div>
                 <div class="card-body p-4">
-                    <div class="table-responsive">
+                    <div class="table-responsive" data-mobile-cards>
                         <table class="table table-hover align-middle">
                             <thead class="bg-light">
                                 <tr>

@@ -1,4 +1,4 @@
-@extends('center::layouts.app-next')
+﻿@extends('center::layouts.app-next')
 
 @section('page-title', __('center::online_classes.live_classes'))
 @section('page-subtitle', __('center::online_classes.subtitle'))
@@ -106,7 +106,7 @@
     <!-- Classes Table -->
     <div class="card border-0 shadow-sm rounded-4">
         <div class="card-body p-0">
-            <div class="table-responsive">
+            <div class="table-responsive" data-mobile-cards>
                 <table class="table table-hover align-middle mb-0 text-center text-nowrap">
                     <thead class="bg-light">
                         <tr>
@@ -162,7 +162,7 @@
                                             <form action="{{ route('center.online_classes.destroy', $lesson->id) }}" method="POST" id="deleteForm_{{ $lesson->id }}">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="button" class="dropdown-item text-danger" onclick="if(confirm('{{ __('center::online_classes.delete_confirm') }}')) document.getElementById('deleteForm_{{ $lesson->id }}').submit();">
+                                                <button type="button" class="dropdown-item text-danger" data-confirm-delete data-form="deleteForm_{{ $lesson->id }}" data-title="{{ __('center::online_classes.delete_confirm') }}" data-confirm="{{ __('center::online_classes.delete_and_cancel') }}">
                                                     <i class="fas fa-trash me-2"></i> {{ __('center::online_classes.delete_and_cancel') }}
                                                 </button>
                                             </form>

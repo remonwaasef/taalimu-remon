@@ -1,7 +1,8 @@
 ﻿<div id="gdprCookieBanner" class="cookie-banner-container" style="
     position: fixed;
     bottom: 1.5rem;
-    left: 1.5rem;
+    inset-inline-start: 1.5rem;
+    inset-inline-end: 1.5rem;
     max-width: 460px;
     background: #0f172a;
     color: #ffffff;
@@ -22,14 +23,15 @@
         نستخدم ملفات تعريف الارتباط (Cookies) لتحسين تجربتك على منصتنا وتخصيص المحتوى. بالنقر على "قبول الكل"، فإنك توافق على استخدامنا لملفات تعريف الارتباط وفقاً لـ
         <a href="{{ url('/privacy') }}" style="color: #34d399; text-decoration: underline; font-weight: 700;">سياسة الخصوصية</a>.
     </div>
-    <div class="cookie-buttons" style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+    <div class="cookie-buttons" style="display: flex; gap: 0.75rem; justify-content: flex-end; flex-wrap: wrap;">
         <button id="declineCookies" style="
             padding: 0.5rem 1rem;
+            min-height: 2.5rem;
             border-radius: 0.5rem;
             background: rgba(255,255,255,0.1);
             border: 1px solid rgba(255,255,255,0.2);
             color: #e2e8f0;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             font-weight: 600;
             cursor: pointer;
             transition: background 0.2s;
@@ -37,11 +39,12 @@
         
         <button id="acceptCookies" style="
             padding: 0.5rem 1.25rem;
+            min-height: 2.5rem;
             border-radius: 0.5rem;
             background: #2E8B83;
             border: none;
             color: #ffffff;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             font-weight: 700;
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(46,139,131,0.3);

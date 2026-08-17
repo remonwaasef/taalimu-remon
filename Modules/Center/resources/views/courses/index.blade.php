@@ -23,7 +23,7 @@
             </div>
 
             <!-- Courses Table -->
-            <div class="table-responsive pb-5" style="min-height: 350px; overflow-x: auto;">
+            <div class="table-responsive pb-5" data-mobile-cards style="min-height: 350px; overflow-x: auto;">
                 <table class="table align-middle">
                     <thead class="bg-light">
                         <tr>

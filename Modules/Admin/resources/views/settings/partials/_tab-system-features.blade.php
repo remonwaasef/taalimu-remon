@@ -103,7 +103,7 @@
                                                         <ul class="dropdown-menu dropdown-menu-end border-0 shadow rounded-3 text-end">
                                                             <li><a class="dropdown-item py-2" href="#" data-bs-toggle="modal" data-bs-target="#editFeatureModal{{ $feature->id }}"><i class="bi bi-pencil me-2 text-primary"></i> تعديل</a></li>
                                                             <li><hr class="dropdown-divider"></li>
-                                                            <li><a class="dropdown-item py-2 text-danger" href="#" onclick="if(confirm('هل أنت متأكد من حذف هذه الميزة؟')) document.getElementById('delete-feature-{{ $feature->id }}').submit()"><i class="bi bi-trash me-2"></i> حذف</a></li>
+                                                            <li><a class="dropdown-item py-2 text-danger" href="#" data-confirm-delete data-form="delete-feature-{{ $feature->id }}"><i class="bi bi-trash me-2"></i> حذف</a></li>
                                                         </ul>
                                                     </div>
                                                 </div>

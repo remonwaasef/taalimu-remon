@@ -424,3 +424,82 @@ html[dir="rtl"] .sidebar-base .sub-nav .nav-link {
     100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
 }
 
+
+/* ------------------------------------------------------------------
+   Responsive Card-Mode Tables (opt-in via [data-mobile-cards])
+   On small screens each row becomes a stacked card with the header
+   text as a label beside every cell. Labels are injected by
+   taalimu-global.js (section 11).
+   ------------------------------------------------------------------ */
+@media (max-width: 767.98px) {
+    [data-mobile-cards] thead {
+        display: none;
+    }
+    [data-mobile-cards] tbody {
+        display: block;
+    }
+    [data-mobile-cards] tbody tr {
+        display: block;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 1rem;
+        padding: 0.625rem 1rem;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
+        margin-bottom: 0.75rem;
+    }
+    [data-mobile-cards] tbody tr:hover {
+        background: #ffffff;
+    }
+    [data-mobile-cards] td {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        border: 0 !important;
+        padding: 0.5rem 0;
+        text-align: start;
+        min-width: 0;
+        white-space: normal !important;
+    }
+    [data-mobile-cards] td::before {
+        content: attr(data-label);
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        color: #64748b;
+        flex-shrink: 0;
+        max-width: 45%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    [data-mobile-cards] td.td-actions {
+        justify-content: flex-end;
+    }
+    [data-mobile-cards] td.td-actions::before {
+        content: none;
+    }
+    [data-mobile-cards] td.td-full {
+        display: block;
+        text-align: center;
+    }
+    html.dark [data-mobile-cards] tbody tr {
+        background: #0f172a;
+        border-color: #1e293b;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    }
+    html.dark [data-mobile-cards] td::before {
+        color: #94a3b8;
+    }
+    [data-mobile-cards] .dropdown-menu {
+        max-width: calc(100vw - 3rem);
+    }
+}
+
+/* Mobile pagination: collapse to prev / current / next on small screens */
+@media (max-width: 479.98px) {
+    .pagination li.page-item:not(.active):not(.page-prev):not(.page-next) {
+        display: none;
+    }
+}

@@ -6,7 +6,7 @@
                                 :class="accountType === 'center' 
                                     ? 'bg-white text-brand-secondary shadow-sm border border-brand-secondary/15' 
                                     : 'text-slate-400 hover:text-slate-600'">
-                            <i class="fas fa-university text-[10px]"></i>
+                            <i class="fas fa-university text-[11px]"></i>
                             {{ app()->isLocale('ar') ? 'مركز تعليمي' : 'Center' }}
                         </button>
                         <button type="button" @click="accountType = 'instructor'"
@@ -14,7 +14,7 @@
                                 :class="accountType === 'instructor' 
                                     ? 'bg-white text-brand-secondary shadow-sm border border-brand-secondary/15' 
                                     : 'text-slate-400 hover:text-slate-600'">
-                            <i class="fas fa-chalkboard-teacher text-[10px]"></i>
+                            <i class="fas fa-chalkboard-teacher text-[11px]"></i>
                             {{ app()->isLocale('ar') ? 'مدرس مستقل' : 'Tutor' }}
                         </button>
                     </div>

@@ -20,7 +20,7 @@
                     <div class="alert alert-danger">{{ session('error') }}</div>
                 @endif
 
-                <div class="table-responsive">
+                <div class="table-responsive" data-mobile-cards>
                     <table class="table table-hover align-middle">
                         <thead class="table-light">
                             <tr>
@@ -63,10 +63,10 @@
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         @if(auth()->id() !== $user->id)
-                                        <form action="{{ route('center.users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('{{ __('center::users.delete_confirm') }}');">
+                                        <form action="{{ route('center.users.destroy', $user->id) }}" method="POST" id="deleteRowForm_1">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            <button type="button" data-confirm-delete data-form="deleteRowForm_1" class="btn btn-sm btn-outline-danger">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </form>

@@ -68,7 +68,7 @@
     }
 </style>
 
-<div class="login-page-wrap min-h-screen bg-slate-50/50 flex justify-center items-center p-4 lg:p-8" 
+<div class="login-page-wrap min-h-screen min-h-dvh bg-slate-50/50 flex justify-center items-center p-4 lg:p-8" 
      dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
     
     <div class="login-card w-full max-w-md bg-white rounded-[40px] shadow-2xl shadow-slate-200/60 p-8 lg:p-10 border border-slate-100 animate-fade-in-up">
@@ -119,7 +119,7 @@
             <div class="space-y-1.5">
                 <div class="flex justify-between items-center px-1">
                     <label class="text-[11px] font-bold text-slate-500 font-arabic uppercase tracking-wider">{{ __('auth.login.password') }}</label>
-                    <button type="button" @click="showPassword = !showPassword" class="text-[9px] font-black transition-colors uppercase tracking-widest text-emerald-600 hover:text-emerald-500">
+                    <button type="button" @click="showPassword = !showPassword" class="text-[11px] font-black transition-colors uppercase tracking-widest text-emerald-600 hover:text-emerald-500">
                         <span x-text="showPassword ? ({{ app()->getLocale() == 'ar' ? '\'إخفاء\'' : '\'HIDE\'' }}) : ({{ app()->getLocale() == 'ar' ? '\'إظهار\'' : '\'SHOW\'' }})"></span>
                     </button>
                 </div>

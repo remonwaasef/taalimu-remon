@@ -39,7 +39,7 @@
                             </div>
                         </div>
 
-                        <div class="table-responsive mb-0">
+                        <div class="table-responsive mb-0" data-mobile-cards>
                             <table class="table table-hover align-middle border-top mb-0">
                                 <thead>
                                     <tr class="text-muted small">
@@ -74,7 +74,7 @@
 
                         <!-- Payments History Section -->
                         <div class="mt-0 pt-0">
-                            <div class="table-responsive">
+                            <div class="table-responsive" data-mobile-cards>
                                 <table class="table table-hover table-sm align-middle">
                                     <thead class="bg-light">
                                         <tr class="text-muted small">

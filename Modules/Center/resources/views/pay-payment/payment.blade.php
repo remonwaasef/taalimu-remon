@@ -69,7 +69,7 @@
                         <i class="fas fa-lock text-xs"></i>
                         ادفع الآن بشكل آمن
                     </button>
-                    <p class="text-center text-[10px] text-slate-400 font-semibold mt-3 flex items-center justify-center gap-1.5">
+                    <p class="text-center text-[11px] text-slate-400 font-semibold mt-3 flex items-center justify-center gap-1.5">
                         <i class="fas fa-shield-halved"></i> دفع مشفر وآمن · بطاقات · محافظ موبايل (فودافون كاش، STC Pay)
                     </p>
                 </form>

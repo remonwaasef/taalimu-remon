@@ -14,7 +14,7 @@
             <span>{{ __('instructor::sidebar.dashboard') }}</span>
         </a>
 
-        <div class="pt-4 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{ __('instructor::sidebar.teaching') }}</div>
+        <div class="pt-4 pb-1 px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('instructor::sidebar.teaching') }}</div>
 
         <a href="{{ route('instructor.students.list') }}"
            class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors
@@ -58,7 +58,7 @@
             <span>{{ __('instructor::sidebar.reports') ?? 'Reports' }}</span>
         </a>
 
-        <div class="pt-4 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{ __('instructor::sidebar.account') }}</div>
+        <div class="pt-4 pb-1 px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('instructor::sidebar.account') }}</div>
 
         <a href="{{ route('instructor.billing') }}"
            class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors

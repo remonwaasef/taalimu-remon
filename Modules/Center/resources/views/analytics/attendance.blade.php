@@ -18,7 +18,7 @@
                     <h6 class="m-0 font-weight-bold text-primary">{{ __('center::analytics.attendance_summary') }}</h6>
                 </div>
                 <div class="card-body">
-                    <div class="chart-pie pt-4 pb-2">
+                    <div class="chart-pie pt-4 pb-2" style="height: clamp(240px, 30vw, 320px);">
                         <canvas id="attendanceChart"></canvas>
                     </div>
                     <div class="mt-4 text-center small">
@@ -37,7 +37,7 @@
             <h6 class="m-0 font-weight-bold text-primary">{{ __('center::analytics.recent_attendance_log') }}</h6>
         </div>
         <div class="card-body">
-            <div class="table-responsive">
+            <div class="table-responsive" data-mobile-cards>
                 <table class="table table-bordered" width="100%" cellspacing="0">
                     <thead>
                         <tr>

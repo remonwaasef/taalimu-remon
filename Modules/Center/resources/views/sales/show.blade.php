@@ -59,7 +59,7 @@
                 </div>
 
                 <!-- Items Table -->
-                <div class="table-responsive mb-5">
+                <div class="table-responsive mb-5" data-mobile-cards>
                     <table class="table align-middle">
                         <thead class="bg-light">
                             <tr>
@@ -125,7 +125,7 @@
             <div class="card-header bg-white border-0 py-3">
                 <h5 class="fw-bold mb-0 text-primary"><i class="fas fa-history me-2"></i> {{ __('center::sales.ledger') }}</h5>
             </div>
-            <div class="table-responsive">
+            <div class="table-responsive" data-mobile-cards>
                 <table class="table align-middle mb-0">
                     <thead class="bg-light">
                         <tr>

@@ -1,4 +1,4 @@
-                <!-- STEP 2: Personal Details & Summary -->
+﻿                <!-- STEP 2: Personal Details & Summary -->
                 <div x-show="currentStep === 2" x-cloak style="display: none;" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" class="space-y-4">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-8 items-start">
                         <!-- Left Column: Form -->
@@ -22,7 +22,7 @@
                                                 @include('partials.country-codes')
                                             </select>
                                             <div class="absolute inset-y-0 right-1 flex items-center pointer-events-none">
-                                                <i class="bi bi-chevron-down text-[9px] text-slate-400"></i>
+                                                <i class="bi bi-chevron-down text-[11px] text-slate-400"></i>
                                             </div>
                                         </div>
                                         {{-- Phone Input --}}
@@ -34,7 +34,7 @@
                                                 placeholder="10xxxxxxx" :required="currentStep === 2" dir="ltr">
                                             {{-- Verified Badge --}}
                                             <div x-show="phoneVerified" class="absolute inset-y-0 end-0 pe-3 flex items-center">
-                                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-black">
+                                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[11px] font-black">
                                                     <i class="bi bi-check-circle-fill"></i>
                                                     {{ app()->isLocale('ar') ? 'تم التحقق' : 'Verified' }}
                                                 </span>
@@ -69,7 +69,7 @@
                                                 <input type="text" x-model="otpCode" maxlength="6" inputmode="numeric" pattern="[0-9]*"
                                                     @input="otpCode = otpCode.replace(/[^0-9]/g, ''); if(otpCode.length === 6) verifyPhoneOtp()"
                                                     class="w-full h-11 px-4 bg-amber-50/50 border-2 border-amber-200 rounded-2xl text-center text-xl font-black tracking-[0.5em] focus:outline-none focus:ring-4 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all"
-                                                    placeholder="● ● ● ● ● ●">
+                                                    placeholder="â— â— â— â— â— â—">
                                             </div>
                                             <button type="button" @click="verifyPhoneOtp()" 
                                                     :disabled="isVerifyingOtp || otpCode.length !== 6"
@@ -82,7 +82,7 @@
                                                 </template>
                                             </button>
                                         </div>
-                                        <p class="text-[10px] font-bold font-arabic text-amber-600 flex items-center gap-1 px-1">
+                                        <p class="text-[11px] font-bold font-arabic text-amber-600 flex items-center gap-1 px-1">
                                             <i class="bi bi-whatsapp text-emerald-500"></i>
                                             {{ app()->isLocale('ar') ? 'تم إرسال كود التحقق عبر واتساب والبريد الإلكتروني' : 'Verification code sent via WhatsApp and Email' }}
                                         </p>
@@ -102,29 +102,29 @@
                             <div class="space-y-1">
                                 <div class="flex justify-between items-center px-1">
                                     <label class="text-[12px] font-black text-slate-400 font-arabic uppercase tracking-wide">{{ __('auth.register.password') }}</label>
-                                    <button type="button" @click="showPassword = !showPassword" class="text-[10px] font-black text-brand-secondary uppercase tracking-widest hover:opacity-70 transition-opacity">
+                                    <button type="button" @click="showPassword = !showPassword" class="text-[11px] font-black text-brand-secondary uppercase tracking-widest hover:opacity-70 transition-opacity">
                                         <span x-text="showPassword ? '{{ __('auth.register.hide') }}' : '{{ __('auth.register.show') }}'"></span>
                                     </button>
                                 </div>
                                 <div class="space-y-3">
-                                    <input :type="showPassword ? 'text' : 'password'" name="password" x-model="password" class="w-full h-11 px-5 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner" placeholder="••••••••" :required="currentStep === 2">
+                                    <input :type="showPassword ? 'text' : 'password'" name="password" x-model="password" class="w-full h-11 px-5 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" :required="currentStep === 2">
                                     
                                     <!-- Password Live Criteria Indicators -->
                                     <div x-show="password.length > 0" x-collapse x-cloak class="px-1 py-1">
                                         <div class="flex flex-wrap gap-x-3 gap-y-1.5">
-                                            <div class="flex items-center gap-1 text-[10px] font-black font-arabic transition-all duration-300" :class="passwordCriteria.length ? 'text-emerald-500' : 'text-slate-400'">
+                                            <div class="flex items-center gap-1 text-[11px] font-black font-arabic transition-all duration-300" :class="passwordCriteria.length ? 'text-emerald-500' : 'text-slate-400'">
                                                 <i class="bi" :class="passwordCriteria.length ? 'bi-check-circle-fill' : 'bi-circle'"></i> {{ app()->isLocale('ar') ? '٨ أحرف على الأقل' : '8+ Characters' }}
                                             </div>
-                                            <div class="flex items-center gap-1 text-[10px] font-black font-arabic transition-all duration-300" :class="passwordCriteria.upper ? 'text-emerald-500' : 'text-slate-400'">
+                                            <div class="flex items-center gap-1 text-[11px] font-black font-arabic transition-all duration-300" :class="passwordCriteria.upper ? 'text-emerald-500' : 'text-slate-400'">
                                                 <i class="bi" :class="passwordCriteria.upper ? 'bi-check-circle-fill' : 'bi-circle'"></i> {{ app()->isLocale('ar') ? 'حرف كبير' : 'Uppercase' }}
                                             </div>
-                                            <div class="flex items-center gap-1 text-[10px] font-black font-arabic transition-all duration-300" :class="passwordCriteria.lower ? 'text-emerald-500' : 'text-slate-400'">
+                                            <div class="flex items-center gap-1 text-[11px] font-black font-arabic transition-all duration-300" :class="passwordCriteria.lower ? 'text-emerald-500' : 'text-slate-400'">
                                                 <i class="bi" :class="passwordCriteria.lower ? 'bi-check-circle-fill' : 'bi-circle'"></i> {{ app()->isLocale('ar') ? 'حرف صغير' : 'Lowercase' }}
                                             </div>
-                                            <div class="flex items-center gap-1 text-[10px] font-black font-arabic transition-all duration-300" :class="passwordCriteria.number ? 'text-emerald-500' : 'text-slate-400'">
+                                            <div class="flex items-center gap-1 text-[11px] font-black font-arabic transition-all duration-300" :class="passwordCriteria.number ? 'text-emerald-500' : 'text-slate-400'">
                                                 <i class="bi" :class="passwordCriteria.number ? 'bi-check-circle-fill' : 'bi-circle'"></i> {{ app()->isLocale('ar') ? 'رقم' : 'Number' }}
                                             </div>
-                                            <div class="flex items-center gap-1 text-[10px] font-black font-arabic transition-all duration-300" :class="passwordCriteria.symbol ? 'text-emerald-500' : 'text-slate-400'">
+                                            <div class="flex items-center gap-1 text-[11px] font-black font-arabic transition-all duration-300" :class="passwordCriteria.symbol ? 'text-emerald-500' : 'text-slate-400'">
                                                 <i class="bi" :class="passwordCriteria.symbol ? 'bi-check-circle-fill' : 'bi-circle'"></i> {{ app()->isLocale('ar') ? 'رمز (!@#$)' : 'Symbol (!@#$)' }}
                                             </div>
                                         </div>
@@ -142,8 +142,8 @@
                                 <div class="flex items-center justify-between mb-3">
                                     <div class="flex flex-col">
                                         <div class="flex items-center gap-2 mb-1">
-                                            <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">{{ __('auth.register.selected_plan') }}</span>
-                                            <button type="button" @click="showPlanModal = true" class="text-[9px] font-black text-brand-secondary underline underline-offset-2 hover:opacity-70 transition-opacity uppercase tracking-widest">
+                                            <span class="text-[11px] font-black text-slate-400 uppercase tracking-widest">{{ __('auth.register.selected_plan') }}</span>
+                                            <button type="button" @click="showPlanModal = true" class="text-[11px] font-black text-brand-secondary underline underline-offset-2 hover:opacity-70 transition-opacity uppercase tracking-widest">
                                                 {{ app()->getLocale() == 'ar' ? 'تغيير' : 'Change' }}
                                             </button>
                                         </div>
@@ -160,7 +160,7 @@
                                             </div>
                                         </template>
                                         <template x-if="couponStatus === 'valid' && currentPlan.trial_days === 0">
-                                            <div class="text-[10px] font-black text-emerald-600 mb-1 animate-fade-in">-<span x-text="couponDiscountAmount.toLocaleString()"></span> <span x-text="currentPriceData.currency"></span></div>
+                                            <div class="text-[11px] font-black text-emerald-600 mb-1 animate-fade-in">-<span x-text="couponDiscountAmount.toLocaleString()"></span> <span x-text="currentPriceData.currency"></span></div>
                                         </template>
                                         <div class="flex items-baseline gap-1 justify-end" :class="currentPlan.trial_days > 0 ? 'text-emerald-500' : 'text-brand-secondary'">
                                             <span class="text-2xl font-black tracking-tighter" x-text="currentPlan.trial_days > 0 ? '0' : finalPrice.toLocaleString()"></span>
@@ -177,7 +177,7 @@
                                     </button>
                                     <div x-show="openFeatures" x-transition.opacity.duration.300ms class="space-y-2 pt-2 border-t border-slate-50">
                                         <template x-for="feature in (currentPlan.features || [])" :key="feature">
-                                            <div class="flex items-center gap-2 text-[10px] font-bold text-slate-600 font-arabic">
+                                            <div class="flex items-center gap-2 text-[11px] font-bold text-slate-600 font-arabic">
                                                 <i class="bi bi-check2 text-emerald-500"></i>
                                                 <span x-text="feature"></span>
                                             </div>
@@ -188,17 +188,17 @@
                                 <!-- Billing Cycle Switcher (More compact) -->
                                 <div class="flex p-1 bg-slate-200/50 rounded-xl mb-3 items-center">
                                     <button type="button" @click="billingCycle = 'monthly'" 
-                                            class="flex-1 py-1.5 text-[10px] font-black rounded-lg transition-all"
+                                            class="flex-1 py-2 min-h-[40px] text-[11px] font-black rounded-lg transition-all"
                                             :class="billingCycle === 'monthly' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:bg-slate-50'">
                                         {{ app()->getLocale() == 'ar' ? 'شهري' : 'Monthly' }}
                                     </button>
                                     <button type="button" @click="billingCycle = 'term'" 
-                                            class="flex-1 py-1.5 text-[10px] font-black rounded-lg transition-all"
+                                            class="flex-1 py-2 min-h-[40px] text-[11px] font-black rounded-lg transition-all"
                                             :class="billingCycle === 'term' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:bg-slate-50'">
                                         {{ app()->getLocale() == 'ar' ? 'ترم' : 'Term' }}
                                     </button>
                                     <button type="button" @click="billingCycle = 'yearly'" 
-                                            class="flex-1 py-1.5 text-[10px] font-black rounded-lg transition-all"
+                                            class="flex-1 py-2 min-h-[40px] text-[11px] font-black rounded-lg transition-all"
                                             :class="billingCycle === 'yearly' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:bg-slate-50'">
                                         {{ app()->getLocale() == 'ar' ? 'سنوي' : 'Yearly' }}
                                     </button>
@@ -207,7 +207,7 @@
                                 <!-- Coupon (Compact inline) -->
                                 <div class="pt-0 border-t border-slate-100 mb-3 pt-2">
                                     <button type="button" x-show="!showCouponInput && couponStatus !== 'valid'" @click="showCouponInput = true" 
-                                            class="text-[10px] font-black text-brand-secondary hover:underline flex items-center gap-1 font-arabic">
+                                            class="text-[11px] font-black text-brand-secondary hover:underline flex items-center gap-1 font-arabic">
                                         <i class="bi bi-tag-fill"></i> {{ __('auth.register.have_coupon') ?? 'هل لديك كود خصم؟' }}
                                     </button>
                                     <div x-show="showCouponInput || couponStatus === 'valid'" x-cloak class="space-y-1.5">
@@ -215,7 +215,7 @@
                                             <div class="relative flex-1">
                                                 <input type="text" name="coupon_code" x-model="couponCode" @keyup.enter="validateCoupon()"
                                                     placeholder="{{ __('admin.coupon_code') }}"
-                                                    class="w-full h-9 px-3 bg-white border-2 border-slate-100 rounded-lg text-[10px] font-black uppercase focus:outline-none focus:border-brand-secondary transition-all"
+                                                    class="w-full h-9 px-3 bg-white border-2 border-slate-100 rounded-lg text-[11px] font-black uppercase focus:outline-none focus:border-brand-secondary transition-all"
                                                     :class="couponStatus === 'valid' ? 'border-emerald-200 bg-emerald-50' : (couponStatus === 'invalid' ? 'border-red-200 bg-red-50' : '')">
                                                 <div class="absolute right-2 top-1/2 -translate-y-1/2">
                                                     <template x-if="couponStatus === 'valid'"><i class="bi bi-patch-check-fill text-emerald-500 text-xs"></i></template>
@@ -223,23 +223,23 @@
                                                 </div>
                                             </div>
                                             <button type="button" @click="validateCoupon()" :disabled="isApplyingCoupon || !couponCode"
-                                                    class="h-9 px-3 rounded-lg bg-slate-900 text-white font-black text-[9px] uppercase tracking-widest hover:bg-brand-secondary transition-all disabled:opacity-50 flex items-center justify-center min-w-[60px]">
+                                                    class="h-9 px-3 rounded-lg bg-slate-900 text-white font-black text-[11px] uppercase tracking-widest hover:bg-brand-secondary transition-all disabled:opacity-50 flex items-center justify-center min-w-[60px]">
                                                 <template x-if="isApplyingCoupon"><div class="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></div></template>
                                                 <span x-show="!isApplyingCoupon">{{ app()->isLocale('ar') ? 'تطبيق' : 'Apply' }}</span>
                                             </button>
                                         </div>
                                         <p x-show="couponMessage" :class="couponStatus === 'valid' ? 'text-emerald-600' : 'text-red-500'" 
-                                           class="text-[9px] font-black px-1 animate-fade-in" x-text="couponMessage"></p>
+                                           class="text-[11px] font-black px-1 animate-fade-in" x-text="couponMessage"></p>
                                     </div>
                                 </div>
 
                                 <!-- Trust Info (Compact) -->
                                 <div class="flex items-center justify-between gap-2 opacity-60">
-                                    <div class="flex items-center gap-1 text-slate-500 text-[9px] font-bold font-arabic">
+                                    <div class="flex items-center gap-1 text-slate-500 text-[11px] font-bold font-arabic">
                                         <i class="bi bi-shield-check text-emerald-500"></i>
                                         <span>{{ app()->getLocale() == 'ar' ? 'دفع آمن' : 'Secure' }}</span>
                                     </div>
-                                    <div class="flex items-center gap-1 text-slate-500 text-[9px] font-bold font-arabic">
+                                    <div class="flex items-center gap-1 text-slate-500 text-[11px] font-bold font-arabic">
                                         <i class="bi bi-arrow-repeat text-brand-secondary"></i>
                                         <span>{{ app()->getLocale() == 'ar' ? 'إلغاء مرن' : 'Flexible' }}</span>
                                     </div>
@@ -257,7 +257,7 @@
                                         <input type="radio" name="payment_gateway" value="paymob" :checked="selectedCurrency === 'EGP'" class="peer sr-only">
                                         <div class="flex items-center gap-2 p-2 rounded-xl border-2 border-slate-100 bg-slate-50/30 peer-checked:border-brand-secondary peer-checked:bg-white transition-all">
                                             <i class="bi bi-credit-card-2-back text-sm text-slate-400 peer-checked:text-brand-secondary"></i>
-                                            <span class="text-[10px] font-black text-slate-600 peer-checked:text-slate-900">Paymob</span>
+                                            <span class="text-[11px] font-black text-slate-600 peer-checked:text-slate-900">Paymob</span>
                                         </div>
                                     </label>
                                     <!-- PayPal (USD/EUR only) -->
@@ -265,7 +265,7 @@
                                         <input type="radio" name="payment_gateway" value="paypal" :checked="selectedCurrency !== 'EGP'" class="peer sr-only">
                                         <div class="flex items-center gap-2 p-2 rounded-xl border-2 border-slate-100 bg-slate-50/30 peer-checked:border-brand-secondary peer-checked:bg-white transition-all">
                                             <i class="bi bi-paypal text-sm text-slate-400 peer-checked:text-brand-secondary"></i>
-                                            <span class="text-[10px] font-black text-slate-600 peer-checked:text-slate-900">PayPal</span>
+                                            <span class="text-[11px] font-black text-slate-600 peer-checked:text-slate-900">PayPal</span>
                                         </div>
                                     </label>
                                 </div>

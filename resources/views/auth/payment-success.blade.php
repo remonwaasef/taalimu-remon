@@ -1,7 +1,7 @@
-@extends('layouts.landing-new')
+﻿@extends('layouts.landing-new')
 
 @section('content')
-<div class="min-h-screen flex items-center justify-center bg-gray-50">
+<div class="min-h-dvh flex items-center justify-center bg-gray-50">
     <div class="max-w-md w-full bg-white p-8 rounded-lg shadow-lg text-center">
         <div class="mb-6">
             <svg class="w-16 h-16 text-green-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">

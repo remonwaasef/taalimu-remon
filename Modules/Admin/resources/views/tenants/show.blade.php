@@ -185,7 +185,7 @@
                             <a href="{{ route('admin.activity-logs.index', ['tenant_id' => $tenant->id]) }}" class="small text-primary text-decoration-none fw-bold">عرض الكل</a>
                         </div>
                         <div class="card-body p-0">
-                            <div class="table-responsive">
+                            <div class="table-responsive" data-mobile-cards>
                                 <table class="table table-hover align-middle mb-0">
                                     <tbody>
                                         @forelse($activities as $activity)
@@ -339,7 +339,7 @@
                             <h6 class="fw-bold mb-0">سجل المدفوعات والاشتراكات</h6>
                         </div>
                         <div class="card-body p-0">
-                            <div class="table-responsive">
+                            <div class="table-responsive" data-mobile-cards>
                                 <table class="table table-hover align-middle mb-0">
                                     <thead class="bg-light">
                                         <tr>
@@ -386,7 +386,7 @@
                             <h6 class="fw-bold mb-0">قائمة المدرسين والموظفين</h6>
                         </div>
                         <div class="card-body p-0">
-                            <div class="table-responsive">
+                            <div class="table-responsive" data-mobile-cards>
                                 <table class="table table-hover align-middle mb-0">
                                     <thead class="bg-light">
                                         <tr>

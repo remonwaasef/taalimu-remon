@@ -373,4 +373,39 @@
         });
     });
 
+    /* ------------------------------------------------------------------
+        11. Responsive Card-Mode Tables
+        ------------------------------------------------------------------
+        For any wrapper carrying [data-mobile-cards], copy the header
+        labels onto each cell (data-label) so CSS can render rows as
+        stacked cards on small screens. Cells without a header (actions,
+        checkboxes) and colspan cells (empty states) get dedicated classes.
+        ------------------------------------------------------------------ */
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('[data-mobile-cards] table').forEach(function (table) {
+            var headerCells = table.querySelectorAll('thead th');
+            if (!headerCells.length) return;
+
+            var labels = Array.prototype.map.call(headerCells, function (th) {
+                var hide = th.classList.contains('d-none') || th.classList.contains('hidden');
+                return hide ? '' : (th.textContent || '').trim().replace(/[:\u200f\u200e]+$/g, '');
+            });
+
+            table.querySelectorAll('tbody tr').forEach(function (row) {
+                row.querySelectorAll('td').forEach(function (td, index) {
+                    if (td.hasAttribute('colspan')) {
+                        td.classList.add('td-full');
+                        return;
+                    }
+                    var label = labels[index] || '';
+                    if (label) {
+                        td.setAttribute('data-label', label);
+                    } else {
+                        td.classList.add('td-actions');
+                    }
+                });
+            });
+        });
+    });
+
 })();

@@ -1,23 +1,23 @@
-@extends('layouts.landing-new')
+﻿@extends('layouts.landing-new')
 
 @section('content')
-<div class="min-h-screen flex items-center justify-center bg-slate-50/50 mesh-gradient-soft noise-overlay p-4">
+<div class="min-h-dvh flex items-center justify-center bg-slate-50/50 mesh-gradient-soft noise-overlay p-4">
     <div class="max-w-md w-full bg-white p-8 rounded-2xl shadow-2xl">
         <!-- Demo Badge -->
         <div class="mb-6 text-center space-y-2">
             <span class="inline-block bg-yellow-100 text-yellow-800 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wide">
-                🧪 {{ __('Demo Mode') }}
+                ðŸ§ª {{ __('Demo Mode') }}
             </span>
             
             @if(session('error_flash'))
-            <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-4 text-right">
+            <div class="bg-red-50 border-s-4 border-red-400 p-4 mb-4 text-right">
                 <div class="flex">
                     <div class="flex-shrink-0">
                         <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
                         </svg>
                     </div>
-                    <div class="mr-3">
+                    <div class="ms-3">
                         <p class="text-sm text-red-700">
                             {{ session('error_flash') }}
                         </p>
@@ -27,7 +27,7 @@
             @endif
 
             @if(!env('STRIPE_KEY') && !env('STRIPE_DEMO_MODE'))
-            <p class="text-[10px] text-red-500 font-medium">
+            <p class="text-[11px] text-red-500 font-medium">
                 {{ __('Running in fallback mode because Stripe keys are missing') }}
             </p>
             @endif
@@ -62,7 +62,7 @@
                     <span class="text-sm text-gray-600">السعر الأصلي:</span>
                     <span class="font-semibold text-gray-900">
                         {{ number_format($basePrice, 0) }} {{ \App\Models\SiteSetting::get('currency_symbol', 'جنيه') }}
-                        <span class="text-[10px] text-gray-400">/ {{ $billingCycle === 'yearly' ? 'سنوياً' : 'شهرياً' }}</span>
+                        <span class="text-[11px] text-gray-400">/ {{ $billingCycle === 'yearly' ? 'سنوياً' : 'شهرياً' }}</span>
                     </span>
                 </div>
                 
@@ -79,7 +79,7 @@
                         <span class="text-2xl font-black text-brand-primary">
                             {{ number_format($totalAmount, 0) }} {{ \App\Models\SiteSetting::get('currency_symbol', 'جنيه') }}
                         </span>
-                        <span class="text-[10px] font-bold text-brand-primary/60">خطة {{ $billingCycle === 'yearly' ? 'سنوية' : 'شهرية' }}</span>
+                        <span class="text-[11px] font-bold text-brand-primary/60">خطة {{ $billingCycle === 'yearly' ? 'سنوية' : 'شهرية' }}</span>
                     </div>
                 </div>
             </div>
@@ -104,7 +104,7 @@
         <div class="space-y-3">
             <form action="{{ route('payment.demo.success') }}" method="GET">
                 <button type="submit" class="w-full bg-gradient-to-r from-green-600 to-green-700 text-white px-6 py-4 rounded-xl font-bold text-lg hover:from-green-700 hover:to-green-800 transition-all transform hover:scale-[1.02] shadow-lg hover:shadow-xl">
-                    ✓ محاكاة دفع ناجح
+                    âœ“ محاكاة دفع ناجح
                 </button>
             </form>
 

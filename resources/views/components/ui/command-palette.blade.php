@@ -43,7 +43,7 @@
         </div>
 
         <div class="max-h-80 overflow-y-auto p-2 space-y-1 command-list">
-            <div class="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">التنقل السريع</div>
+            <div class="px-3 py-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider">التنقل السريع</div>
 
             @if (app()->bound('tenant'))
                 <a href="{{ tenant_route('instructor.dashboard') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-primary transition-colors">
@@ -66,7 +66,7 @@
                     <span>جدول المواعيد والحصص</span>
                 </a>
 
-                <div class="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider pt-3">إجراءات سريعة</div>
+                <div class="px-3 py-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider pt-3">إجراءات سريعة</div>
 
                 <a href="{{ tenant_route('instructor.students.create') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-primary transition-colors">
                     <i class="fas fa-user-plus w-4 text-center text-emerald-500"></i>
@@ -83,7 +83,7 @@
                     <span>الانتقال للوحة التحكم</span>
                 </a>
 
-                <div class="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider pt-3">إجراءات سريعة</div>
+                <div class="px-3 py-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider pt-3">إجراءات سريعة</div>
 
                 <a href="{{ route('admin.tenants.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-primary transition-colors">
                     <i class="fas fa-building w-4 text-center text-brand-primary"></i>
@@ -92,7 +92,7 @@
             @endif
         </div>
 
-        <div class="px-4 py-2 bg-slate-50 dark:bg-slate-800/50 border-t border-brand-border dark:border-slate-800 text-[10px] text-slate-400 flex items-center justify-between">
+        <div class="px-4 py-2 bg-slate-50 dark:bg-slate-800/50 border-t border-brand-border dark:border-slate-800 text-[11px] text-slate-400 flex items-center justify-between">
             <span>اختصار البحث</span>
             <span class="font-mono font-medium">اضغط ESC للإغلاق</span>
         </div>

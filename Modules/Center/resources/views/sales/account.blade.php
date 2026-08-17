@@ -58,7 +58,7 @@
         </div>
 
         <div class="stats-card p-0 overflow-hidden shadow-sm border-0" id="billingTableContainer">
-            <div class="table-responsive">
+            <div class="table-responsive" data-mobile-cards>
                 <table class="table table-hover align-middle mb-0" id="billingTable">
                     <thead class="bg-light">
                         <tr>

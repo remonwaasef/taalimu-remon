@@ -1,4 +1,4 @@
-@extends('center::layouts.app-next')
+﻿@extends('center::layouts.app-next')
 @section('page-title', __('center::students.title'))
 
 @section('page-actions')
@@ -91,7 +91,7 @@
                             $studentForQr = session('student_email')
                                 ? \App\Models\Student::where('email', session('student_email'))->where('tenant_id', app('tenant')->id)->first()
                                 : null;
-                            // Temporary signed magic-login link — expires after 15 minutes
+                            // Temporary signed magic-login link â€” expires after 15 minutes
                             // so a leaked QR cannot be reused indefinitely. Generated as a
                             // QR locally in the browser; never sent to a third-party service.
                             $qrUrl = $studentForQr
@@ -275,7 +275,7 @@
             </div>
 
             <!-- Students Table -->
-            <div class="table-responsive" style="min-height: 350px;">
+            <div class="table-responsive" data-mobile-cards style="min-height: 350px;">
                 <table class="table align-middle custom-table">
                     <thead>
                         <tr>
@@ -549,10 +549,6 @@
         .sub-grades-container { padding: 10px 0; border-top: 1px dashed #dee2e6; }
         .animate__animated { --animate-duration: 0.5s; }
         
-        /* Modal Fix for z-index issues */
-        .modal { z-index: 1060 !important; }
-        .modal-backdrop { z-index: 1050 !important; }
-
         /* Select2 Premium Emerald Styling */
         .select2-container--default .select2-selection--single {
             border-radius: 50px !important;

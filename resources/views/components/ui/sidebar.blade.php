@@ -6,7 +6,7 @@
 
 <aside
     x-data="{ open: false }"
-    class="w-64 bg-white dark:bg-slate-900 border-e border-brand-border dark:border-slate-800 flex flex-col justify-between h-screen sticky top-0 z-30 font-inter transition-all duration-300 shrink-0"
+    class="w-64 bg-white dark:bg-slate-900 border-e border-brand-border dark:border-slate-800 flex flex-col justify-between h-screen h-dvh sticky top-0 z-30 font-inter transition-all duration-300 shrink-0"
 >
     <!-- Brand Header -->
     <div>
@@ -26,7 +26,7 @@
         </div>
 
         <!-- Navigation Menu Links -->
-        <nav class="p-4 space-y-1.5 overflow-y-auto max-h-[calc(100vh-8rem)]">
+        <nav class="p-4 space-y-1.5 overflow-y-auto max-h-[calc(100vh-8rem)] max-h-[calc(100dvh-8rem)]">
             {{ $slot }}
         </nav>
     </div>

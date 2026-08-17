@@ -1,7 +1,7 @@
-@extends('layouts.landing-new')
+﻿@extends('layouts.landing-new')
 
 @section('content')
-<div class="min-h-screen flex items-center justify-center py-20 px-4 sm:px-6 lg:px-8 bg-slate-50/50 mesh-gradient-soft noise-overlay">
+<div class="min-h-dvh flex items-center justify-center py-20 px-4 sm:px-6 lg:px-8 bg-slate-50/50 mesh-gradient-soft noise-overlay">
     <div class="max-w-xl mx-auto w-full animate-fade-in-up">
         <div class="bg-white border border-slate-100/50 rounded-[2.5rem] shadow-2xl shadow-blue-900/5 overflow-hidden backdrop-blur-xl relative">
             <!-- Decorative glow -->
@@ -17,7 +17,7 @@
                     <div class="p-8 bg-slate-50/50 rounded-3xl border border-slate-100/50 relative z-10 shadow-sm">
                         <div class="flex items-center mb-6">
                             <div class="bg-brand-primary/10 text-brand-primary rounded-full flex items-center justify-center w-12 h-12 me-4">
-                                <span class="text-2xl">🏢</span>
+                                <span class="text-2xl">ðŸ¢</span>
                             </div>
                             <div>
                                 <h5 class="font-bold text-foreground mb-1">دخول المراكز والطلاب</h5>
@@ -45,7 +45,7 @@
                         <div class="p-8 bg-slate-50/50 rounded-3xl border border-slate-100/50 group-hover:border-yellow-500/50 group-hover:bg-white group-hover:shadow-lg group-hover:shadow-yellow-500/5 transition-all">
                             <div class="flex items-center">
                                 <div class="bg-yellow-500/10 text-yellow-600 rounded-2xl flex items-center justify-center w-14 h-14 me-4 shadow-inner">
-                                    <span class="text-2xl">🛡️</span>
+                                    <span class="text-2xl">ðŸ›¡ï¸</span>
                                 </div>
                                 <div class="flex-1">
                                     <h5 class="font-bold text-slate-800 mb-1 font-arabic">{{ __('auth.login.admin_login') }}</h5>

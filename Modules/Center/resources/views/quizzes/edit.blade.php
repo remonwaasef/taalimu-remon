@@ -83,10 +83,10 @@
                         <div>
                             <span class="badge bg-secondary me-2">{{ $question->points }} {{ __('center::questions.points_suffix') }}</span>
                             <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal" data-bs-target="#editQuestionModal-{{ $question->id }}"><i class="fas fa-edit"></i></button>
-                            <form action="{{ route('center.quiz.questions.destroy', $question) }}" method="POST" class="d-inline-block" onsubmit="return confirm('{{ __('center::questions.delete_confirm') }}');">
+                            <form action="{{ route('center.quiz.questions.destroy', $question) }}" method="POST" class="d-inline-block" id="deleteRowForm_1">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+                                <button type="button" data-confirm-delete data-form="deleteRowForm_1" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
                             </form>
                         </div>
                     </div>
@@ -118,10 +118,10 @@
                                     </div>
                                     
                                     @if($question->type == 'mcq')
-                                        <form action="{{ route('center.options.destroy', $option) }}" method="POST" class="ms-2" onsubmit="return confirm('{{ __('center::quizzes.delete_option_confirm') }}');">
+                                        <form action="{{ route('center.options.destroy', $option) }}" method="POST" class="ms-2" id="deleteRowForm_2">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fas fa-times"></i></button>
+                                            <button type="button" data-confirm-delete data-form="deleteRowForm_2" class="btn btn-sm btn-outline-danger"><i class="fas fa-times"></i></button>
                                         </form>
                                     @endif
                                 </li>

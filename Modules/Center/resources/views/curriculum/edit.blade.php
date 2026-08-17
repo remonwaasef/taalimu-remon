@@ -93,10 +93,10 @@
                         </form>
                     </div>
                     <div>
-                        <form action="{{ route('center.sections.destroy', $section) }}" method="POST" class="d-inline-block" onsubmit="return confirm('Delete this section and all its lessons?');">
+                        <form action="{{ route('center.sections.destroy', $section) }}" method="POST" class="d-inline-block" id="deleteRowForm_1">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                            <button type="button" data-confirm-delete data-form="deleteRowForm_1" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
                         </form>
                     </div>
                 </div>
@@ -115,10 +115,10 @@
                                 </div>
                                 <div>
                                     <button type="button" class="btn btn-sm btn-outline-secondary me-1" data-bs-toggle="modal" data-bs-target="#editLessonModal-{{ $lesson->id }}"><i class="fas fa-edit"></i></button>
-                                    <form action="{{ route('center.lessons.destroy', $lesson) }}" method="POST" class="d-inline-block" onsubmit="return confirm('Delete this lesson?');">
+                                    <form action="{{ route('center.lessons.destroy', $lesson) }}" method="POST" class="d-inline-block" id="deleteRowForm_2">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+                                        <button type="button" data-confirm-delete data-form="deleteRowForm_2" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
                                     </form>
                                 </div>
 

@@ -12,7 +12,7 @@
             <span>{{ __('admin::admin.sidebar.dashboard') }}</span>
         </a>
 
-        <div class="pt-4 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{ __('admin::admin.sidebar.management') ?? 'Management' }}</div>
+        <div class="pt-4 pb-1 px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('admin::admin.sidebar.management') ?? 'Management' }}</div>
 
         <a href="{{ route('admin.tenants.index') }}"
            class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors
@@ -42,7 +42,7 @@
             <span>{{ __('admin::admin.sidebar.support') }}</span>
         </a>
 
-        <div class="pt-4 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{ __('admin::admin.sidebar.monitoring') ?? 'Monitoring' }}</div>
+        <div class="pt-4 pb-1 px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('admin::admin.sidebar.monitoring') ?? 'Monitoring' }}</div>
 
         <a href="{{ route('admin.activity-logs.index') }}"
            class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors
@@ -65,7 +65,7 @@
             <span>{{ __('admin::admin.sidebar.backups') ?? 'Backups' }}</span>
         </a>
 
-        <div class="pt-4 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{ __('admin::admin.sidebar.administration') ?? 'Administration' }}</div>
+        <div class="pt-4 pb-1 px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('admin::admin.sidebar.administration') ?? 'Administration' }}</div>
 
         <a href="{{ route('admin.roles.index') }}"
            class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors

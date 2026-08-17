@@ -1,4 +1,4 @@
-@extends('admin::layouts.app-next')
+﻿@extends('admin::layouts.app-next')
 
 @section('title', 'مستخدمو الإدارة')
 @section('page-title', 'مستخدمو الإدارة')
@@ -10,7 +10,7 @@
     <div class="col-12">
         <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
             <div>
-                <h4 class="fw-bold mb-1">👥 فريق الإدارة المركزية</h4>
+                <h4 class="fw-bold mb-1">ðŸ‘¥ فريق الإدارة المركزية</h4>
                 <p class="text-muted mb-0 small">إدارة مستخدمي لوحة التحكم الرئيسية وصلاحياتهم</p>
             </div>
             <a href="{{ route('admin.users.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
@@ -25,7 +25,7 @@
             <div class="card-body p-3">
                 <form method="GET" class="row g-2 align-items-end">
                     <div class="col-md-6">
-                        <input type="text" name="search" class="form-control rounded-pill" placeholder="🔍 ابحث بالاسم أو البريد..." value="{{ request('search') }}">
+                        <input type="text" name="search" class="form-control rounded-pill" placeholder="ðŸ” ابحث بالاسم أو البريد..." value="{{ request('search') }}">
                     </div>
                     <div class="col-md-4">
                         <select name="role" class="form-select rounded-pill">
@@ -49,7 +49,7 @@
     <div class="col-12">
         <div class="card border-0 shadow-sm rounded-4">
             <div class="card-body p-0">
-                <div class="table-responsive">
+                <div class="table-responsive" data-mobile-cards>
                     <table class="table table-hover align-middle mb-0">
                         <thead class="bg-light">
                             <tr>
@@ -107,7 +107,7 @@
                                         </a>
                                         @if($user->id !== auth()->id() && $user->role !== 'super_admin' || (\App\Models\User::whereNull('tenant_id')->where('role','super_admin')->count() > 1))
                                         <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="d-inline"
-                                              onsubmit="return confirm('هل أنت متأكد من حذف هذا المستخدم؟')">
+                                              id="deleteRowForm_1">
                                             @csrf
                                             @method('DELETE')
                                             <button class="btn btn-light btn-sm rounded-pill px-3 border text-danger"

@@ -35,7 +35,7 @@
                                             <i class="fas fa-door-open me-1"></i>{{ $schedule->classroom?->name ?? '—' }}
                                         </p>
                                     </div>
-                                    <span class="shrink-0 text-[10px] text-slate-400 font-semibold">{{ $schedule->duration_minutes ?? '' }}</span>
+                                    <span class="shrink-0 text-[11px] text-slate-400 font-semibold">{{ $schedule->duration_minutes ?? '' }}</span>
                                 </div>
                             @endforeach
                         </div>

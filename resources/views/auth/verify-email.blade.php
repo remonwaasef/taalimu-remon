@@ -1,7 +1,7 @@
-@extends('layouts.landing-new')
+﻿@extends('layouts.landing-new')
 
 @section('content')
-<div class="min-h-screen bg-slate-50/50 flex justify-center items-center p-4 lg:p-8 mesh-gradient-soft noise-overlay">
+<div class="min-h-dvh bg-slate-50/50 flex justify-center items-center p-4 lg:p-8 mesh-gradient-soft noise-overlay">
     <div class="w-full max-w-md bg-white rounded-[32px] shadow-xl shadow-slate-200/60 overflow-hidden border border-slate-100 p-8 text-center">
         <div class="mb-6 flex justify-center">
             <div class="w-16 h-16 bg-brand-secondary/10 rounded-full flex items-center justify-center">

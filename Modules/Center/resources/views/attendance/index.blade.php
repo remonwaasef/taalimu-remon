@@ -1,4 +1,4 @@
-@extends('center::layouts.app-next')
+﻿@extends('center::layouts.app-next')
 
 @section('page-title', __('center::attendance.management'))
 @section('page-subtitle', __('center::attendance.subtitle'))
@@ -13,7 +13,7 @@
                     <h5 class="fw-bold mb-0"><i class="bi bi-clock-history me-2 text-primary"></i>{{ __('center::attendance.today_sessions') }} ({{ now()->format('Y-m-d') }})</h5>
                 </div>
                 <div class="card-body p-4">
-                    <div class="table-responsive">
+                    <div class="table-responsive" data-mobile-cards>
                         <table class="table align-middle">
                             <thead class="bg-light">
                                 <tr>

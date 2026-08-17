@@ -25,7 +25,7 @@
                 @endif
             </div>
             <div class="card-body p-0">
-                <div class="table-responsive">
+                <div class="table-responsive" data-mobile-cards>
                     <table class="table align-middle mb-0">
                         <thead class="bg-white">
                             <tr class="text-muted" style="font-size: 0.85rem;">
@@ -78,7 +78,7 @@
                                                 <li><a class="dropdown-item" href="{{ route('center.assets.edit', $asset) }}"><i class="fas fa-edit me-2 text-warning"></i> {{ __('center::assets.edit') }}</a></li>
                                                 <li><hr class="dropdown-divider"></li>
                                                 <li>
-                                                    <form action="{{ route('center.assets.destroy', $asset) }}" method="POST" onsubmit="return confirm('{{ __('center::assets.confirm_delete') }}')">
+                                                    <form action="{{ route('center.assets.destroy', $asset) }}" method="POST" id="deleteRowForm_1">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button class="dropdown-item text-danger">{{ __('center::messages.blade_0108') }}</button>

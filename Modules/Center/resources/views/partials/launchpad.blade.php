@@ -33,9 +33,9 @@
                     @endphp
 
                     @if($hasDemoData)
-                        <form action="{{ route('center.demo.reset', ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}" method="POST" id="demoDataResetForm" onsubmit="return confirm('{{ __('center::launchpad.confirm_reset') }}');">
+                        <form action="{{ route('center.demo.reset', ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}" method="POST" id="deleteRowForm_1">
                             @csrf
-                            <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3 py-1 border-dotted" 
+                            <button type="button" data-confirm-delete data-form="deleteRowForm_1" class="btn btn-sm btn-outline-danger rounded-pill px-3 py-1 border-dotted" 
                                     style="border-style: dashed !important; font-size: 0.7rem;"
                                     data-bs-toggle="tooltip" 
                                     title="{{ __('center::dashboard.launchpad.reset_demo_desc') }}">
