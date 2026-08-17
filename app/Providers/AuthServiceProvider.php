@@ -76,17 +76,29 @@ class AuthServiceProvider extends ServiceProvider
             // accounts (tenant_id null); a tenant user holding a custom role named
             // 'admin' must never inherit full-panel powers.
             $roleColumn = strtolower($user->role ?? '');
+
+            // SEC-08: tenants must only be administered from within their own
+            // tenant context; tenant-scoped super_admins/center admins get no
+            // bypass while a different tenant's context is active.
+            $tenantContext = app()->bound('tenant') ? app('tenant') : null;
+            $inOwnTenantContext = $tenantContext === null
+                || (string) $tenantContext->id === (string) $user->tenant_id;
+
             if ($roleColumn === 'super_admin') {
-                return true;
+                return $inOwnTenantContext ? true : null;
             }
 
             if ($user->tenant_id === null && $roleColumn === 'admin') {
                 return true;
             }
 
+            // SEC-08: center_admin/center_owner bypass only within their own
+            // tenant context (or as a global account). Without this check a
+            // center admin from tenant A would still pass every Gate::before
+            // while operating inside tenant B's session/domain.
             if (in_array($roleColumn, ['center_admin', 'center_owner']) ||
                 $user->hasAnyRole(['center_admin', 'Center Owner', 'center_owner'])) {
-                return true;
+                return $inOwnTenantContext ? true : null;
             }
 
             if ($user->tenant_id === null && (

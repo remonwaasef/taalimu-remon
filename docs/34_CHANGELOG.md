@@ -10,6 +10,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Security Hardening (2026-08-17 audit round)**: 
+  - Password reset tokens are now scoped per tenant (`password_reset_tokens.tenant_id`, migration `2026_08_17_000001`); `ForgotPasswordController`/`ResetPasswordController` resolve the owning tenant and never list reset links for foreign accounts.
+  - `Gate::before` now restricts `super_admin` / `center_admin` / `center_owner` role bypasses to the user's own tenant context (or a global account) — a center admin from tenant A can no longer pass every authorization path inside tenant B.
+  - Removed the mock `SaleController::checkoutSuccess` endpoint + checkout view that marked invoices fully paid without any gateway verification; real accounting is webhook-driven (Paymob HMAC).
+  - `FinanceService::addPayment` rejects payments exceeding the remaining balance (`ValidationException`); `PayoutService` commission queries use `lockForUpdate()` inside the transaction to prevent double settling.
+  - `SendWhatsAppNotification` / `SendTelegramNotification` now retry transient provider failures with backoff (tries=3) and alert ops when the channel stays down; sync mode (tests) degrades softly.
+  - `composer`-style backup config: backup notification email & archive password now come from env (`BACKUP_NOTIFICATION_EMAIL`, `BACKUP_ARCHIVE_PASSWORD`); `verify_backup` enabled; `backup:monitor` scheduled at 02:00.
+  - Most-active queue channels wired into workers: `docker-compose.yml` worker and the KVM supervisor stanza consume `high,whatsapp,notifications,gamification,default`.
+  - DB port no longer published to the host in `docker-compose.yml` (mariadb is internal-only).
+
+### Added
 - **Premium Motion System**: New `resources/css/motion.css` defines the unified motion language — speed tokens (instant 75ms → slow 500ms) and easing tokens (`--ease-out/-in/-in-out/-spring`) in `design-tokens.css`, plus reusable classes: `.motion-reveal(-sm)`, `.motion-stagger` (40ms cascade, max 8), `.motion-page`, `.bell-swing` (spec pendulum curve), `.bell-active`, `.badge-pop`, `.check-pop`, `.flash-row`, `.status-change`, `.field-error-enter`, `.command-list > *`, `.alert-enter`. Full `prefers-reduced-motion: reduce` support zeroing all decorative animation while keeping state transitions. CSS-only, transform/opacity only — zero new dependencies, zero JS cost to page loads.
 - **Notification Bell Upgrade**: Bell (in `layouts/app-next.blade.php` and `components/ui/navbar.blade.php`) now swings physically on `new-notification` (self-stopping via `animationend`), glows subtle teal while active, pops the unread badge, and stops on click. New `window.Taalimu.notify(message, type)` helper drives bell + toast + badge from any backend code.
 - **Dashboard Entrance & Count-Up**: KPI grids on Admin/Instructor/Parent/Campus/Center dashboards + students page now use `.motion-stagger`; `x-ui.stats-card` gains a count-up animation (550ms ease-out cubic, preserves formatting/separators, skips non-numeric values, respects reduced-motion, always settles on the exact final number).

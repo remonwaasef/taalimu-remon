@@ -33,11 +33,14 @@ class PayoutService
 
             // 2. Mark Commissions as Paid
             // We find earned commissions for this instructor and mark them as paid
-            // until the payout amount is covered (greedy settlement)
+            // until the payout amount is covered (greedy settlement).
+            // SEC-09: lockForUpdate inside the transaction prevents two
+            // concurrent payouts from settling the same commission twice.
             $remainingToSettle = $amount;
             $commissions = Commission::where('instructor_id', $instructor->id)
                 ->where('status', 'earned')
                 ->orderBy('created_at', 'asc')
+                ->lockForUpdate()
                 ->get();
 
             foreach ($commissions as $commission) {

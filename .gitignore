@@ -59,6 +59,15 @@ killer_features_plan.txt
 /test-results
 /Homepage*.pdf
 
+# QA / scratch artifacts (may contain credentials — never track)
+qa_out_*
+qa_run*.log
+qa_*.png
+qa_*.webm
+scratch_*
+response.txt
+*.webm
+
 # Archived Code (not tracked)
 /app/Console/Commands/_archived
 /database/seeders/_archived

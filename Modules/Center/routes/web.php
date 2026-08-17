@@ -355,7 +355,6 @@ $tenantRoutes = function () {
                 Route::post('sales/mark-paid', [SaleController::class, 'markPaid'])->name('center.sales.mark-paid');
                 Route::post('sales/{sale}/refund', [SaleController::class, 'refund'])->name('center.sales.refund');
                 Route::get('sales/{sale}/checkout', [SaleController::class, 'checkout'])->name('center.sales.checkout');
-                Route::get('sales/{sale}/checkout/success', [SaleController::class, 'checkoutSuccess'])->name('center.sales.checkout.success');
                 Route::get('payments/{payment}/receipt', [SaleController::class, 'downloadReceipt'])->name('center.payments.receipt');
                 Route::resource('sales', SaleController::class)->names('center.sales');
             });

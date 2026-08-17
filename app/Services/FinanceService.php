@@ -241,6 +241,18 @@ class FinanceService
             // Lock the row to prevent a lost update when two payments post concurrently.
             $sale = Sale::lockForUpdate()->findOrFail($sale->id);
 
+            // PAY-4: refuse payments larger than the remaining balance — this
+            // keeps paid_amount <= total_amount on every invoice.
+            if ($amount <= 0) {
+                throw new \InvalidArgumentException('PAYMENT_AMOUNT_MUST_BE_POSITIVE');
+            }
+
+            if ($amount > $sale->total_amount - $sale->paid_amount) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'amount' => 'مبلغ الدفعة أكبر من المتبقي على الفاتورة.',
+                ]);
+            }
+
             $newPaidAmount = $sale->paid_amount + $amount;
             $status = $this->determineStatus($sale->total_amount, $newPaidAmount);
 

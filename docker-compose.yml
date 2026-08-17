@@ -37,7 +37,7 @@ services:
     container_name: laravel_worker
     restart: unless-stopped
     working_dir: /var/www/html
-    command: php artisan queue:work --tries=3 --backoff=10 --max-time=3600
+    command: php artisan queue:work --queue=high,whatsapp,notifications,gamification,default --tries=3 --backoff=10 --max-time=3600
     volumes:
       - ./:/var/www/html
     networks:
@@ -86,8 +86,6 @@ services:
       - db_data:/var/lib/mysql
     networks:
       - laravel_network
-    ports:
-      - "3306:3306"
 
 networks:
   laravel_network:

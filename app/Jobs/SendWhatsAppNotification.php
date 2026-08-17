@@ -21,6 +21,13 @@ class SendWhatsAppNotification implements ShouldQueue
 
     public $course;
 
+    // SEC-10: transient channel failures are retried with backoff; the job is
+    // only marked failed after consecutive attempts, and failed() then alerts
+    // the ops chat so a dead WhatsApp channel is noticed quickly.
+    public $tries = 3;
+
+    public $backoff = [10, 60, 300];
+
     /**
      * Create a new job instance.
      */
@@ -39,6 +46,35 @@ class SendWhatsAppNotification implements ShouldQueue
         // Set tenant context for the job to enable global scopes
         app()->instance('tenant', $this->tenant);
 
-        $whatsAppService->sendAttendanceNotification($this->tenant, $this->student, $this->course);
+        $sent = $whatsAppService->sendAttendanceNotification($this->tenant, $this->student, $this->course);
+
+        if (! $sent) {
+            if ($this->attempts() >= $this->tries) {
+                $this->alertChannelDown();
+            }
+
+            // In sync mode (tests, local dev) a thrown exception would bubble
+            // into the caller; fail softly there — the channel is already logged.
+            if (config('queue.default') === 'sync') {
+                return;
+            }
+
+            // Give the provider a chance to recover and release back to the queue.
+            throw new \RuntimeException('WhatsApp channel unavailable');
+        }
+    }
+
+    /**
+     * Notify ops (via Telegram fallback) that the WhatsApp channel is down.
+     */
+    protected function alertChannelDown(): void
+    {
+        try {
+            app(\App\Services\TelegramService::class)
+                ->sendAdminNotificationDirectly('⚠️ فشل إرسال إشعار WhatsApp للطالب #'.$this->student->id
+                    .' في المركز #'.$this->tenant->id.' بعد ثلاث محاولات.');
+        } catch (\Throwable $e) {
+            // Never let the alerting itself break the pipeline.
+        }
     }
 }

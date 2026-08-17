@@ -468,7 +468,7 @@ nano /etc/supervisor/conf.d/edu-worker.conf
 ```ini
 [program:edu-worker]
 process_name=%(program_name)s_%(process_num)02d
-command=php /home/taalimu/htdocs/taalimu.com/artisan queue:work redis --sleep=3 --tries=3 --max-time=3600
+command=php /home/taalimu/htdocs/taalimu.com/artisan queue:work redis --queue=high,whatsapp,notifications,gamification,default --sleep=3 --tries=3 --max-time=3600
 autostart=true
 autorestart=true
 stopasgroup=true

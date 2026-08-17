@@ -1,7 +1,7 @@
 import { chromium } from '@playwright/test';
 
-export const BASE = 'http://demo-center.localhost:8000';
-export const ADMIN = { email: 'admin@demo.com', password: 'password' };
+export const BASE = process.env.QA_BASE ?? 'http://demo-center.localhost:8000';
+export const ADMIN = { email: process.env.QA_ADMIN_EMAIL ?? 'admin@demo.com', password: process.env.QA_ADMIN_PASSWORD ?? 'password' };
 
 export const results = { checks: [], errors: [] };
 export const getResults = () => results;
@@ -88,7 +88,7 @@ export async function adminLogin(page) {
     const res = await fetch('/admin/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-CSRF-TOKEN': tk, 'Accept': 'text/html' },
-      body: new URLSearchParams({ email: 'admin@admin.com', password: 'password', _token: tk }).toString(),
+      body: new URLSearchParams({ email: process.env.QA_ADMIN_EMAIL ?? 'admin@admin.com', password: process.env.QA_ADMIN_PASSWORD ?? 'password', _token: tk }).toString(),
     });
     return { url: res.url, status: res.status };
   });
@@ -98,7 +98,7 @@ export async function adminLogin(page) {
     await page.waitForTimeout(1000);
     await page.evaluate(async () => {
       const tk = document.querySelector('meta[name=csrf-token]')?.content;
-      const secret = 'JBSWY3DPEHPK3PXP';
+      const secret = process.env.QA_2FA_SECRET ?? 'JBSWY3DPEHPK3PXP';
       const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
       let bits = '';
       for (const ch of secret) {

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Subscription;
+use App\Models\SubscriptionLog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class PayPalWebhookController extends Controller
@@ -83,25 +85,80 @@ class PayPalWebhookController extends Controller
 
     protected function handleSaleCompleted($payload)
     {
-        // For processing renewals
+        // Renewal payments. Idempotent: each sale is recorded once in
+        // subscription_logs (operation_type=renewal, transaction_id=sale id),
+        // so PayPal webhook retries cannot extend ends_at multiple times.
         $paypalId = $payload['resource']['billing_agreement_id'] ?? null;
-        if ($paypalId) {
-            $subscription = Subscription::where('paypal_id', $paypalId)->first();
-            if ($subscription) {
-                // Update ends_at based on payment period
-                // Simplification for now
-                $daysToAdd = 30;
-                if ($subscription->billing_cycle === 'term') {
-                    $termDuration = (int) \App\Models\SiteSetting::get('term_duration_days', 150);
-                    $daysToAdd = $termDuration;
-                } elseif ($subscription->billing_cycle === 'yearly') {
-                    $daysToAdd = 365;
-                }
+        $saleId = $payload['resource']['id'] ?? null;
 
-                $subscription->update([
-                    'ends_at' => now()->addDays($daysToAdd),
-                ]);
-            }
+        if (! $paypalId || ! $saleId) {
+            return;
         }
+
+        $subscription = Subscription::where('paypal_id', $paypalId)->first();
+        if (! $subscription) {
+            Log::warning('PayPal renewal: no subscription for agreement', ['billing_agreement_id' => $paypalId]);
+
+            return;
+        }
+
+        DB::transaction(function () use ($subscription, $saleId) {
+            $sub = Subscription::query()->whereKey($subscription->id)->lockForUpdate()->first();
+            if (! $sub) {
+                return;
+            }
+
+            $alreadyProcessed = SubscriptionLog::query()
+                ->where('tenant_id', $sub->tenant_id)
+                ->where('gateway', 'paypal')
+                ->where('operation_type', 'renewal')
+                ->where('transaction_id', $saleId)
+                ->exists();
+
+            if ($alreadyProcessed) {
+                Log::info('PayPal renewal skipped (already processed)', ['sale_id' => $saleId]);
+
+                return;
+            }
+
+            $daysToAdd = 30;
+            if ($sub->billing_cycle === 'term') {
+                $daysToAdd = (int) \App\Models\SiteSetting::get('term_duration_days', 150);
+            } elseif ($sub->billing_cycle === 'yearly') {
+                $daysToAdd = 365;
+            }
+
+            $renewalCount = SubscriptionLog::query()
+                ->where('tenant_id', $sub->tenant_id)
+                ->where('gateway', 'paypal')
+                ->where('operation_type', 'renewal')
+                ->count();
+
+            if ($sub->ends_at && $sub->ends_at->isFuture() && $renewalCount === 0) {
+                // First sale payment corresponds to the period already credited
+                // by the redirect callback — record it, do not extend twice.
+                $startsAt = $sub->ends_at->copy();
+                $endsAt = $sub->ends_at->copy();
+            } else {
+                // True renewal (or the very first period when no redirect
+                // callback ever credited it): extend from the current end.
+                $startsAt = $sub->ends_at && $sub->ends_at->isFuture() ? $sub->ends_at->copy() : now();
+                $endsAt = $startsAt->copy()->addDays($daysToAdd);
+                $sub->update(['ends_at' => $endsAt]);
+            }
+
+            SubscriptionLog::logOperation(
+                $sub->tenant_id,
+                'renewal',
+                $sub->stripe_price,
+                $sub->type_label,
+                $sub->billing_cycle,
+                'paypal',
+                (float) ($payload['resource']['amount']['total'] ?? 0),
+                $saleId,
+                $startsAt,
+                $endsAt
+            );
+        });
     }
 }

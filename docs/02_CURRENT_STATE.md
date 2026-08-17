@@ -51,6 +51,6 @@
 ---
 
 # Upcoming Milestones & Next Tasks
-- [x] Implement custom role permission UI for center accountants and receptionists (sub-role preset templates + tenant-scoped permission matrix + cache invalidation).
+- [x] Security hardening round done 2026-08-17: tenant-scoped password reset tokens, tenant-context `Gate::before` bypasses, mock checkout removed (webhook-only accounting), payment overpay/cap locks, notification job retries + channel-down alerts.
 - [ ] Deploy Redis instance for cache and session management.
 - [ ] Add Meilisearch container and configure Laravel Scout.

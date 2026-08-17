@@ -346,34 +346,4 @@ class SaleController extends Controller
                 ->with('error', 'تعذر إنشاء رابط الدفع حالياً، يرجى المحاولة لاحقاً.');
         }
     }
-
-    /**
-     * Handle successful mock online payment.
-     */
-    public function checkoutSuccess(Request $request, $id)
-    {
-        $tenant = $this->tenant;
-        $sale = Sale::where('tenant_id', $tenant->id)->findOrFail($id);
-        $this->authorize('update', $sale);
-
-        if ($sale->status === 'paid') {
-            return redirect()->route('center.sales.show', $sale->id)->with('success', 'الفاتورة مدفوعة بالفعل.');
-        }
-
-        try {
-            // Amount to pay (Remaining)
-            $amountToPay = $sale->total_amount - $sale->paid_amount;
-
-            // Add payment via FinanceService
-            $this->financeService->addPayment($sale, $amountToPay, 'online', 'دفعة إلكترونية مسددة عبر بوابة الدفع');
-
-            return redirect()->route('center.sales.show', $sale->id)
-                ->with('success', __('center::messages.online_payment_success') ?? 'تم الدفع الإلكتروني بنجاح!');
-        } catch (\Exception $e) {
-            \Log::error('checkoutSuccess failed: '.$e->getMessage());
-
-            return redirect()->route('center.sales.show', $sale->id)
-                ->with('error', __('center::messages.error_unexpected') ?? 'حدث خطأ أثناء معالجة الدفع الإلكتروني.');
-        }
-    }
 }

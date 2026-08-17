@@ -42,6 +42,9 @@ Schedule::command('onboarding:send-emails')->dailyAt('10:00')->withoutOverlappin
 Schedule::command('backup:clean')->dailyAt('01:00')->withoutOverlapping();
 Schedule::command('backup:run')->dailyAt('01:30')->withoutOverlapping();
 
+// Backup health checks — alert when the newest backup is older than 1 day
+Schedule::command('backup:monitor')->dailyAt('02:00')->withoutOverlapping();
+
 // Database size monitoring (weekly, triggers scaling decisions per docs/37_DATABASE_SCALING.md)
 Schedule::command('db:monitor-sizes')->weeklyOn(0, '07:00')->withoutOverlapping();
 

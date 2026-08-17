@@ -15,6 +15,11 @@ class SendTelegramNotification implements ShouldQueue
 
     public $message;
 
+    // SEC-10: retry transient Telegram outages before failing.
+    public $tries = 3;
+
+    public $backoff = [10, 60, 300];
+
     /**
      * Create a new job instance.
      */
@@ -28,6 +33,18 @@ class SendTelegramNotification implements ShouldQueue
      */
     public function handle(TelegramService $telegramService): void
     {
-        $telegramService->sendAdminNotificationDirectly($this->message);
+        $sent = $telegramService->sendAdminNotificationDirectly($this->message);
+
+        if (! $sent && $this->attempts() < $this->tries) {
+            // Provider unreachable (network, 5xx): release with backoff instead
+            // of burning the attempt.
+            throw new \RuntimeException('Telegram channel unavailable');
+        }
+
+        if (! $sent) {
+            \Illuminate\Support\Facades\Log::critical(
+                'Telegram channel down after '.$this->tries.' attempts — message not delivered.'
+            );
+        }
     }
 }

@@ -4,10 +4,12 @@ namespace App\Services;
 
 use App\Models\Package;
 use App\Models\SiteSetting;
+use App\Models\Subscription;
 use App\Models\SubscriptionLog;
 use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -33,6 +35,11 @@ class PaymentProcessingService
 
     /**
      * إنشاء أو تحديث اشتراك للمستأجر بعد نجاح الدفع.
+     *
+     * Idempotent: إذا كانت نفس معاملة البوابة مطبقة مسبقاً (SubscriptionLog
+     * بنفس gateway+transaction_id) تُتجاهل العملية بالكامل. قفل الصف
+     * (lockForUpdate) يمنع تنفيذين متوازيين من تمديد الاشتراك مرتين،
+     * و ends_at يُمدَّد من نهاية الاشتراك الحالي وليس من الآن().
      */
     public function activateSubscription(
         Tenant $tenant,
@@ -44,45 +51,79 @@ class PaymentProcessingService
         float $totalAmount,
         array $extraData = []
     ): void {
-        $days = $this->calculateSubscriptionDays($billingCycle, $package);
-        $existingSub = $tenant->subscriptions()->where('name', 'default')->first();
-        $operationType = $existingSub ? 'upgrade' : 'subscription';
+        DB::transaction(function () use ($tenant, $gateway, $transactionId, $package, $billingCycle, $basePrice, $totalAmount, $extraData) {
+            $days = $this->calculateSubscriptionDays($billingCycle, $package);
 
-        $subscriptionData = [
-            'gateway' => $gateway,
-            'stripe_id' => "sub_{$gateway}_".($transactionId ?: Str::random(10)),
-            'stripe_status' => 'active',
-            'stripe_price' => "price_{$gateway}_".($package->slug ?? 'unknown'),
-            'quantity' => 1,
-            'billing_cycle' => $billingCycle,
-            'base_price' => $basePrice,
-            'total_amount' => $totalAmount,
-            'discount_amount' => $extraData['discount_amount'] ?? 0,
-            'status' => 'active',
-            'ends_at' => now()->addDays($days),
-        ];
+            // PAY-4: Replay guard — the same gateway transaction must not be
+            // applied twice (webhook retries, redirect refreshes, double callbacks).
+            if ($transactionId !== '') {
+                $alreadyApplied = SubscriptionLog::query()
+                    ->where('tenant_id', $tenant->id)
+                    ->where('gateway', $gateway)
+                    ->where('transaction_id', $transactionId)
+                    ->exists();
 
-        // إضافة حقول خاصة بالبوابة (مثل paypal_id, paypal_status)
-        $subscriptionData = array_merge($subscriptionData, $extraData);
+                if ($alreadyApplied) {
+                    Log::info('activateSubscription skipped: transaction already applied', [
+                        'tenant_id' => $tenant->id,
+                        'gateway' => $gateway,
+                        'transaction_id' => $transactionId,
+                    ]);
 
-        $tenant->subscriptions()->updateOrCreate(
-            ['name' => 'default'],
-            $subscriptionData
-        );
+                    return;
+                }
+            }
 
-        // تسجيل العملية في السجل
-        SubscriptionLog::logOperation(
-            $tenant->id,
-            $operationType,
-            $package->slug ?? 'unknown',
-            $package->name ?? __('services.custom_plan'),
-            $billingCycle,
-            $gateway,
-            $totalAmount,
-            $transactionId,
-            now(),
-            now()->addDays($days)
-        );
+            $existingSub = Subscription::query()
+                ->where('tenant_id', $tenant->id)
+                ->where('name', 'default')
+                ->lockForUpdate()
+                ->first();
+
+            $operationType = $existingSub ? 'upgrade' : 'subscription';
+
+            // Extend from the current period end (never reset to now()).
+            $startsAt = ($existingSub && $existingSub->ends_at && $existingSub->ends_at->isFuture())
+                ? $existingSub->ends_at->copy()
+                : now();
+            $endsAt = $startsAt->copy()->addDays($days);
+
+            $subscriptionData = [
+                'gateway' => $gateway,
+                'stripe_id' => "sub_{$gateway}_".($transactionId ?: Str::random(10)),
+                'stripe_status' => 'active',
+                'stripe_price' => "price_{$gateway}_".($package->slug ?? 'unknown'),
+                'quantity' => 1,
+                'billing_cycle' => $billingCycle,
+                'base_price' => $basePrice,
+                'total_amount' => $totalAmount,
+                'discount_amount' => $extraData['discount_amount'] ?? 0,
+                'status' => 'active',
+                'ends_at' => $endsAt,
+            ];
+
+            // إضافة حقول خاصة بالبوابة (مثل paypal_id, paypal_status)
+            $subscriptionData = array_merge($subscriptionData, $extraData);
+
+            $tenant->subscriptions()->updateOrCreate(
+                ['name' => 'default'],
+                $subscriptionData
+            );
+
+            // تسجيل العملية في السجل
+            SubscriptionLog::logOperation(
+                $tenant->id,
+                $operationType,
+                $package->slug ?? 'unknown',
+                $package->name ?? __('services.custom_plan'),
+                $billingCycle,
+                $gateway,
+                $totalAmount,
+                $transactionId,
+                $startsAt,
+                $endsAt
+            );
+        });
     }
 
     /**
