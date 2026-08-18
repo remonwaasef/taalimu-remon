@@ -132,6 +132,26 @@ class AdminAuthTest extends TestCase
         $this->assertGuest();
     }
 
+    public function test_admin_with_2fa_enabled_but_bypass_logs_in_directly()
+    {
+        $secret = $this->google2fa->generateSecretKey();
+        $admin = $this->globalAdmin([
+            'google2fa_bypass' => true,
+        ]);
+        $admin->forceFill([
+            'google2fa_secret' => $secret,
+            'google2fa_enabled' => true,
+        ])->save();
+
+        $response = $this->post(route('admin.login.submit'), [
+            'email' => $admin->email,
+            'password' => 'password',
+        ]);
+
+        $response->assertRedirect(route('admin.dashboard'));
+        $this->assertAuthenticatedAs($admin);
+    }
+
     public function test_admin_with_2fa_enabled_can_verify_and_reach_dashboard()
     {
         $secret = $this->google2fa->generateSecretKey();

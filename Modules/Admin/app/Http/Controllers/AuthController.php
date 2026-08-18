@@ -50,10 +50,11 @@ class AuthController extends Controller
 
             // SEC-AUTH-3 (relaxed): 2FA is optional for global admin accounts.
             // Accounts with an enrolled secret are challenged on the
-            // verification page; accounts without one go straight to the
-            // dashboard. Enrollment on the 2FA page remains available for
-            // in-flight sessions and future re-enabling.
-            if ($user->google2fa_enabled) {
+            // verification page; accounts without one (or flagged with
+            // google2fa_bypass) go straight to the dashboard. Enrollment on
+            // the 2FA page remains available for in-flight sessions and
+            // future re-enabling.
+            if ($user->google2fa_enabled && ! (bool) $user->google2fa_bypass) {
                 $request->session()->put('admin_2fa_pending', $user->id);
                 $request->session()->regenerate();
 

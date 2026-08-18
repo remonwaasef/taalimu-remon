@@ -93,6 +93,7 @@ class User extends Authenticatable
         'must_change_password',
         'locale',
         'google_id',
+        'google2fa_bypass',
     ];
 
     /**
