@@ -26,9 +26,9 @@
             <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-slate-100 mt-2 tracking-tight">
                 <span
                     x-data='{
-                        end: @js($numeric),
-                        raw: @js($value),
-                        display: @js($value),
+                        end: @json($numeric),
+                        raw: @json($value),
+                        display: @json($value),
                         init() {
                             if (this.end === null || this.end === 0) return;
                             if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
