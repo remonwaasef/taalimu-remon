@@ -48,13 +48,23 @@ class AuthController extends Controller
             && \Illuminate\Support\Facades\Hash::check($credentials['password'], $user->password)) {
             \Illuminate\Support\Facades\RateLimiter::clear($throttleKey);
 
-            // 2FA is mandatory for global admin accounts (SEC-AUTH-3). Users
-            // without an enrolled secret are routed through the enrollment
-            // screen on the 2FA page instead of being logged in directly.
-            $request->session()->put('admin_2fa_pending', $user->id);
-            $request->session()->regenerate();
+            // SEC-AUTH-3 (relaxed): 2FA is optional for global admin accounts.
+            // Accounts with an enrolled secret are challenged on the
+            // verification page; accounts without one go straight to the
+            // dashboard. Enrollment on the 2FA page remains available for
+            // in-flight sessions and future re-enabling.
+            if ($user->google2fa_enabled) {
+                $request->session()->put('admin_2fa_pending', $user->id);
+                $request->session()->regenerate();
 
-            return redirect()->route('admin.login.2fa');
+                return redirect()->route('admin.login.2fa');
+            }
+
+            Auth::login($user);
+            $request->session()->regenerate();
+            session(['tenant_id' => $user->tenant_id]);
+
+            return redirect()->route('admin.dashboard');
         }
 
         \Illuminate\Support\Facades\RateLimiter::hit($throttleKey);
