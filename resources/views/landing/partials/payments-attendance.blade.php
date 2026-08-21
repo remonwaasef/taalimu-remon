@@ -1,10 +1,18 @@
 {{-- Payments & Collections Section --}}
 <section id="payments" class="section-alt" style="padding: 6rem 0; background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
-    <div class="container mx-auto px-4 lg:px-12">
-        <div class="grid lg:grid-cols-12 gap-12 items-center max-w-6xl mx-auto">
+    <div class="container mx-auto px-4 lg:px-12" style="max-width: 1240px; margin: 0 auto;">
+        <div style="
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 3rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        ">
             
             {{-- Text Column --}}
-            <div class="lg:col-span-6" data-animate>
+            <div style="flex: 1 1 480px; min-width: 300px;" data-animate>
                 <div class="section-badge" style="margin-bottom: 1.25rem; display: inline-flex; background: #E6F4F3; border: 1px solid #B2DDD9; padding: 0.375rem 1rem; border-radius: 9999px;">
                     <span style="color: #25746D !important; font-weight: 700; font-size: 0.825rem;">{{ __('landing.payments_section.badge') }}</span>
                 </div>
@@ -15,7 +23,7 @@
                     {{ __('landing.payments_section.subtitle') }}
                 </p>
 
-                <div class="grid sm:grid-cols-2 gap-4">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
                     @foreach(__('landing.payments_section.points') as $point)
                     <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 0.875rem; padding: 1.25rem;">
                         <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
@@ -29,7 +37,7 @@
             </div>
 
             {{-- Visual / Stat Breakdown Card --}}
-            <div class="lg:col-span-6" data-animate>
+            <div style="flex: 1 1 450px; min-width: 300px;" data-animate>
                 <div style="
                     background: #ffffff;
                     border: 1px solid #cbd5e1;
@@ -100,25 +108,33 @@
 
 {{-- Smart Attendance Section --}}
 <section id="attendance" class="section-light" style="padding: 6rem 0; background: #ffffff; border-bottom: 1px solid #e2e8f0;">
-    <div class="container mx-auto px-4 lg:px-12">
-        <div class="grid lg:grid-cols-12 gap-12 items-center max-w-6xl mx-auto">
+    <div class="container mx-auto px-4 lg:px-12" style="max-width: 1240px; margin: 0 auto;">
+        <div style="
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 3rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        ">
             
             {{-- Attendance Visual / QR Card --}}
-            <div class="lg:col-span-6 order-2 lg:order-1" data-animate>
+            <div style="flex: 1 1 450px; min-width: 300px;" data-animate>
                 <div style="
                     background: #ffffff;
                     border: 1px solid #cbd5e1;
                     border-radius: 1.25rem;
-                    padding: 2rem;
+                    padding: 2.25rem 2rem;
                     box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.1);
                     text-align: center;
                 ">
                     <div style="display: inline-block; padding: 1.5rem; background: #f8fafc; border-radius: 1rem; border: 2px dashed #cbd5e1; margin-bottom: 1.25rem;">
-                        <i class="fas fa-qrcode" style="font-size: 6rem; color: #2E8B83;"></i>
+                        <i class="fas fa-qrcode" style="font-size: 5.5rem; color: #2E8B83;"></i>
                     </div>
-                    <h3 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin-bottom: 0.25rem;">بطاقة الطالب الذكية</h3>
-                    <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.25rem;">مسح سريع في 1 ثانية بكاميرا الهاتف أو ماسح الباركود</p>
-                    <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border-radius: 9999px; background: #dcfce7; color: #15803d; font-size: 0.8rem; font-weight: 700;">
+                    <h3 style="font-size: 1.2rem; font-weight: 800; color: #0f172a; margin-bottom: 0.25rem;">بطاقة الطالب الذكية</h3>
+                    <p style="font-size: 0.875rem; color: #64748b; margin-bottom: 1.25rem;">مسح سريع في 1 ثانية بكاميرا الهاتف أو قارئ الباركود</p>
+                    <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border-radius: 9999px; background: #dcfce7; color: #15803d; font-size: 0.825rem; font-weight: 700;">
                         <i class="fas fa-check"></i>
                         <span>تم تسجيل الحضور وإرسال إشعار فوري لولي الأمر</span>
                     </div>
@@ -126,7 +142,7 @@
             </div>
 
             {{-- Text Column --}}
-            <div class="lg:col-span-6 order-1 lg:order-2" data-animate>
+            <div style="flex: 1 1 480px; min-width: 300px;" data-animate>
                 <div class="section-badge" style="margin-bottom: 1.25rem; display: inline-flex; background: #eff6ff; border: 1px solid #bfdbfe; padding: 0.375rem 1rem; border-radius: 9999px;">
                     <span style="color: #1d4ed8 !important; font-weight: 700; font-size: 0.825rem;">{{ __('landing.attendance_section.badge') }}</span>
                 </div>
@@ -137,7 +153,7 @@
                     {{ __('landing.attendance_section.subtitle') }}
                 </p>
 
-                <div class="grid sm:grid-cols-2 gap-4">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
                     @foreach(__('landing.attendance_section.points') as $point)
                     <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.875rem; padding: 1.25rem;">
                         <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">

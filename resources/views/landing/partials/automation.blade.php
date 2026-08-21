@@ -14,7 +14,7 @@
         </div>
 
         {{-- 3-Step Timeline Grid --}}
-        <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto relative" data-stagger>
+        <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto relative" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;" data-stagger>
             @foreach([
                 ['step' => 'step1', 'icon' => 'fa-user-plus', 'color' => '#2E8B83'],
                 ['step' => 'step2', 'icon' => 'fa-file-import', 'color' => '#2563eb'],

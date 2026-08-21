@@ -91,7 +91,7 @@
         </div>
 
         {{-- Pricing Cards --}}
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto items-stretch" data-stagger>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto items-stretch" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; align-items: stretch;" data-stagger>
             @foreach($packages as $index => $package)
                 @php
                     $isFeatured = $package->is_featured;

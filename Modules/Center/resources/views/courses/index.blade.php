@@ -179,96 +179,132 @@
 
 
     @push('modals')
-    <!-- Unified Enroll Student Modal -->
-    <div class="modal fade" id="unifiedEnrollModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content rounded-5 border-0 shadow-lg">
-                <div class="modal-header border-0 pb-0 pt-4 px-4 bg-light bg-opacity-50">
-                    <h5 class="modal-title fw-bold fs-4">{{ __('center::courses.enroll_student') }}: <span id="dynamicCourseTitle" class="text-primary"></span></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    <!-- Unified Enroll Student Modal (Alpine.js) -->
+    <div
+        x-data="{ show: false, activeTab: 0 }"
+        x-on:open-modal.window="if ($event.detail === 'unifiedEnrollModal') { show = true; activeTab = 0 }"
+        x-on:close-modal.window="if ($event.detail === 'unifiedEnrollModal') show = false"
+        x-on:keydown.escape.window="show = false"
+        x-effect="document.body.style.overflow = show ? 'hidden' : ''"
+        x-show="show"
+        x-cloak
+        class="fixed inset-0 z-50 overflow-y-auto"
+        role="dialog"
+        aria-modal="true"
+        aria-label="{{ __('center::courses.enroll_student') }}"
+    >
+        <div
+            x-show="show"
+            x-transition:enter="ease-out duration-250"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="ease-in duration-200"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            @click="show = false"
+            class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"
+        ></div>
+        <div class="flex min-h-full items-center justify-center p-4">
+            <div
+                x-show="show"
+                x-transition:enter="ease-out duration-250"
+                x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                x-transition:leave="ease-in duration-150"
+                x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                class="relative transform overflow-hidden rounded-3xl bg-white dark:bg-slate-900 text-start shadow-xl transition-all w-full max-w-2xl border border-brand-border dark:border-slate-800 my-8"
+            >
+                <div class="px-6 pt-5 pb-4 bg-slate-50 dark:bg-slate-800/50 flex items-center justify-between gap-4">
+                    <h3 class="font-bold text-lg text-slate-900 dark:text-slate-100">{{ __('center::courses.enroll_student') }}: <span id="dynamicCourseTitle" class="text-brand-primary"></span></h3>
+                    <button @click="show = false" type="button" aria-label="Close" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors shrink-0">
+                        <i class="fas fa-times text-base"></i>
+                    </button>
                 </div>
-                <div class="modal-body p-4 bg-light bg-opacity-50 border-bottom">
-                    <!-- Custom Tabs -->
-                    <ul class="nav nav-pills bg-white p-1 rounded-pill shadow-sm" id="enrollTabs" role="tablist">
-                        <li class="nav-item flex-fill" role="presentation">
-                            <button class="nav-link active rounded-pill w-100 fw-bold" id="existing-tab" data-bs-toggle="pill" data-bs-target="#existing-panel" type="button" role="tab">
-                                <i class="fas fa-search me-2"></i>{{ __('center::courses.existing_student') }}</button>
-                        </li>
-                        <li class="nav-item flex-fill" role="presentation">
-                            <button class="nav-link rounded-pill w-100 fw-bold" id="quick-tab" data-bs-toggle="pill" data-bs-target="#quick-panel" type="button" role="tab">
-                                <i class="fas fa-user-plus me-2"></i>{{ __('center::courses.quick_new_student') }}</button>
-                        </li>
-                    </ul>
-                </div>
-                <div class="modal-body p-4 pt-3">
-                    <div class="tab-content" id="enrollTabsContent">
-                        <!-- Panel 1: Existing Student -->
-                        <div class="tab-pane fade show active" id="existing-panel" role="tabpanel">
-                            <form id="existingStudentForm" action="" method="POST" class="p-2">
-                                @csrf
-                                <div class="mb-4">
-                                    <label class="form-label fw-bold text-dark mb-2">{{ __('center::courses.select_student_from_list') }}</label>
-                                    <select name="student_id" class="form-select border-2" id="unifiedStudentSelect" placeholder="{{ __('center::courses.search_student_placeholder') }}">
-                                        <option value="">{{ __('center::courses.select_student_from_list') }}</option>
-                                    </select>
-                                    <div class="form-text mt-2"><i class="fas fa-info-circle me-1"></i>{{ __('center::courses.search_student_hint') }}</div>
-                                </div>
-                                <div class="d-grid gap-2 mt-4">
-                                    <button type="submit" class="btn btn-primary rounded-pill py-3 fw-bold fs-5 shadow-sm">{{ __('center::courses.complete_enrollment') }}<i class="fas fa-check-circle ms-2"></i>
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
 
-                        <!-- Panel 2: Quick New Student -->
-                        <div class="tab-pane fade" id="quick-panel" role="tabpanel">
-                            <form id="quickNewStudentForm" action="" method="POST" class="p-2">
-                                @csrf
-                                <div class="row g-3">
-                                    <div class="col-md-12">
-                                        <div class="form-floating mb-3">
-                                            <input type="text" name="name" class="form-control border-2 rounded-4 bg-light" id="qName" placeholder="{{ __('center::courses.full_name') }}" required>
-                                            <label for="qName">{{ __('center::courses.full_name') }}</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-floating mb-3">
-                                            <input type="tel" name="phone" class="form-control border-2 rounded-4 bg-light" id="qPhone" placeholder="{{ __('center::courses.phone') }}" required>
-                                            <label for="qPhone">{{ __('center::courses.phone') }}</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-floating mb-3">
-                                            <input type="tel" name="parent_phone" class="form-control border-2 rounded-4 bg-light" id="qParentPhone" placeholder="{{ __('center::courses.parent_phone') }}">
-                                            <label for="qParentPhone">{{ __('center::courses.parent_phone') }}</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="form-floating mb-2">
-                                            <select name="grade_id" class="form-select border-2 rounded-4 bg-light" id="qGrade" required>
-                                                <option value="">{{ __('center::courses.select_grade') }}</option>
-                                                @foreach($stages as $stage)
-                                                    <optgroup label="📂 {{ $stage->name }}">
-                                                        @foreach($stage->grades as $grade)
-                                                            <option value="{{ $grade->id }}">{{ $grade->name }}</option>
-                                                        @endforeach
-                                                    </optgroup>
-                                                @endforeach
-                                            </select>
-                                            <label for="qGrade">{{ __('center::courses.grade_level') }}</label>
-                                        </div>
+                <!-- Tabs -->
+                <div class="px-6 py-4 bg-slate-50 dark:bg-slate-800/50 border-b border-brand-border dark:border-slate-800">
+                    <div class="grid grid-cols-2 gap-1 bg-white dark:bg-slate-900 p-1 rounded-full shadow-sm" role="tablist">
+                        <button id="existing-tab" type="button" role="tab" @click="activeTab = 0"
+                            :class="activeTab === 0 ? 'bg-brand-primary text-white shadow' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'"
+                            class="rounded-full w-full font-semibold py-2.5 text-sm transition-all">
+                            <i class="fas fa-search me-2"></i>{{ __('center::courses.existing_student') }}
+                        </button>
+                        <button id="quick-tab" type="button" role="tab" @click="activeTab = 1"
+                            :class="activeTab === 1 ? 'bg-brand-primary text-white shadow' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'"
+                            class="rounded-full w-full font-semibold py-2.5 text-sm transition-all">
+                            <i class="fas fa-user-plus me-2"></i>{{ __('center::courses.quick_new_student') }}
+                        </button>
+                    </div>
+                </div>
+
+                <div class="p-6">
+                    <!-- Panel 1: Existing Student -->
+                    <div id="existing-panel" role="tabpanel" x-show="activeTab === 0" class="{{ 'block' }}">
+                        <form id="existingStudentForm" action="" method="POST" class="p-2">
+                            @csrf
+                            <div class="mb-4">
+                                <label class="form-label fw-bold text-dark mb-2">{{ __('center::courses.select_student_from_list') }}</label>
+                                <select name="student_id" class="form-select border-2" id="unifiedStudentSelect" placeholder="{{ __('center::courses.search_student_placeholder') }}">
+                                    <option value="">{{ __('center::courses.select_student_from_list') }}</option>
+                                </select>
+                                <div class="form-text mt-2"><i class="fas fa-info-circle me-1"></i>{{ __('center::courses.search_student_hint') }}</div>
+                            </div>
+                            <div class="d-grid gap-2 mt-4">
+                                <button type="submit" class="btn btn-primary rounded-pill py-3 fw-bold fs-5 shadow-sm">{{ __('center::courses.complete_enrollment') }}<i class="fas fa-check-circle ms-2"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Panel 2: Quick New Student -->
+                    <div id="quick-panel" role="tabpanel" x-show="activeTab === 1" x-cloak class="hidden">
+                        <form id="quickNewStudentForm" action="" method="POST" class="p-2">
+                            @csrf
+                            <div class="row g-3">
+                                <div class="col-md-12">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" name="name" class="form-control border-2 rounded-4 bg-light" id="qName" placeholder="{{ __('center::courses.full_name') }}" required>
+                                        <label for="qName">{{ __('center::courses.full_name') }}</label>
                                     </div>
                                 </div>
-                                <div class="alert flex-row d-flex align-items-center bg-info bg-opacity-10 text-info border-0 rounded-4 py-3 small my-3">
-                                    <i class="fas fa-magic fa-lg me-3 ms-1"></i>
-                                    <div>{{ __('center::courses.quick_enroll_hint') }}</div>
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input type="tel" name="phone" class="form-control border-2 rounded-4 bg-light" id="qPhone" placeholder="{{ __('center::courses.phone') }}" required>
+                                        <label for="qPhone">{{ __('center::courses.phone') }}</label>
+                                    </div>
                                 </div>
-                                <div class="d-grid gap-2 mt-2">
-                                    <button type="submit" id="quickEnrollSubmitBtn" class="btn btn-success rounded-pill py-3 fw-bold fs-5 shadow-sm">{{ __('center::courses.create_subscription_and_confirm') }}<i class="fas fa-bolt ms-2"></i>
-                                    </button>
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input type="tel" name="parent_phone" class="form-control border-2 rounded-4 bg-light" id="qParentPhone" placeholder="{{ __('center::courses.parent_phone') }}">
+                                        <label for="qParentPhone">{{ __('center::courses.parent_phone') }}</label>
+                                    </div>
                                 </div>
-                            </form>
-                        </div>
+                                <div class="col-md-12">
+                                    <div class="form-floating mb-2">
+                                        <select name="grade_id" class="form-select border-2 rounded-4 bg-light" id="qGrade" required>
+                                            <option value="">{{ __('center::courses.select_grade') }}</option>
+                                            @foreach($stages as $stage)
+                                                <optgroup label="📂 {{ $stage->name }}">
+                                                    @foreach($stage->grades as $grade)
+                                                        <option value="{{ $grade->id }}">{{ $grade->name }}</option>
+                                                    @endforeach
+                                                </optgroup>
+                                            @endforeach
+                                        </select>
+                                        <label for="qGrade">{{ __('center::courses.grade_level') }}</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="alert flex-row d-flex align-items-center bg-info bg-opacity-10 text-info border-0 rounded-4 py-3 small my-3">
+                                <i class="fas fa-magic fa-lg me-3 ms-1"></i>
+                                <div>{{ __('center::courses.quick_enroll_hint') }}</div>
+                            </div>
+                            <div class="d-grid gap-2 mt-2">
+                                <button type="submit" id="quickEnrollSubmitBtn" class="btn btn-success rounded-pill py-3 fw-bold fs-5 shadow-sm">{{ __('center::courses.create_subscription_and_confirm') }}<i class="fas fa-bolt ms-2"></i>
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -291,7 +327,6 @@
         <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
         <script>
             let unifiedTomSelect = null;
-            let enrollModal = null;
             
             document.addEventListener('DOMContentLoaded', function() {
                 // Initialize TomSelect only once
@@ -372,17 +407,8 @@
                 document.getElementById('qParentPhone').value = '';
                 document.getElementById('qGrade').value = '';
                 
-                // Ensure Existing Tab is shown by default
-                const tabEl = document.getElementById('existing-tab');
-                if (tabEl) {
-                    const tab = bootstrap.Tab.getOrCreateInstance(tabEl);
-                    tab.show();
-                }
-                
-                // Show modal using instance to avoid multiple backdrops
-                const modalEl = document.getElementById('unifiedEnrollModal');
-                enrollModal = bootstrap.Modal.getOrCreateInstance(modalEl);
-                enrollModal.show();
+                // Show modal (Alpine resets to the Existing tab on open)
+                window.dispatchEvent(new CustomEvent('open-modal', { detail: 'unifiedEnrollModal' }));
             }
         </script>
     @endpush

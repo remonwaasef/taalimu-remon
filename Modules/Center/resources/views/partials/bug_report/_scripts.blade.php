@@ -16,12 +16,9 @@ function captureScreenshot() {
     // Hide the FAB and modal before capturing
     const fab = document.getElementById('bugReportFab');
     const modal = document.getElementById('bugReportModal');
-    const backdrops = document.querySelectorAll('.modal-backdrop');
     
     fab.style.display = 'none';
-    modal.style.display = 'none';
-    backdrops.forEach(b => b.style.display = 'none');
-    document.body.classList.remove('modal-open');
+    modal.style.visibility = 'hidden';
 
     // Wait a frame for DOM to update, then capture
     requestAnimationFrame(() => {
@@ -48,17 +45,7 @@ function captureScreenshot() {
             .finally(function() {
                 // Restore modal visibility
                 fab.style.display = '';
-                modal.style.display = '';
-                backdrops.forEach(b => b.style.display = '');
-                document.body.classList.add('modal-open');
-                
-                // Re-show the modal
-                if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
-                    const bsModal = bootstrap.Modal.getInstance(modal);
-                    if (!bsModal) {
-                        new bootstrap.Modal(modal).show();
-                    }
-                }
+                showBugReportModal();
             });
         }, 100);
     });
@@ -195,16 +182,15 @@ function openBugReportModal() {
     }, 150);
 }
 
-function showModalWithScreenshot(dataUrl) {
+function showBugReportModal() {
     const modalEl = document.getElementById('bugReportModal');
-    if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
-        const modal = new bootstrap.Modal(modalEl);
-        modal.show();
-    } else {
-        modalEl.classList.add('show');
-        modalEl.style.display = 'block';
-        document.body.classList.add('modal-open');
-    }
+    modalEl.classList.add('show');
+    modalEl.style.visibility = '';
+    document.body.classList.add('modal-open');
+}
+
+function showModalWithScreenshot(dataUrl) {
+    showBugReportModal();
 
     if (dataUrl) {
         setScreenshot(dataUrl);
@@ -215,14 +201,13 @@ function showModalWithScreenshot(dataUrl) {
 
 function closeBugReportModal() {
     const modalEl = document.getElementById('bugReportModal');
-    if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
-        const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
-        modal.hide();
-    } else {
-        modalEl.classList.remove('show');
-        modalEl.style.display = 'none';
-        document.body.classList.remove('modal-open');
-    }
+    modalEl.classList.remove('show');
+    document.body.classList.remove('modal-open');
+
+    // Reset modal state (was previously handled via hidden.bs.modal)
+    document.getElementById('bugReportFormBody').classList.remove('d-none');
+    document.getElementById('bugReportSuccessBody').classList.add('d-none');
+    document.getElementById('bugPageUrl').value = window.location.href;
 }
 
 // ========== Event Listeners ==========
@@ -239,7 +224,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('bugBrowserInfo').value = JSON.stringify(browserInfo);
     document.getElementById('bugPageUrl').value = window.location.href;
 
-    // Handle paste (Ctrl+V) inside the modal
+    // Reset page URL whenever the modal opens (state reset happens on close)
     document.getElementById('bugReportModal').addEventListener('paste', function(e) {
         const items = e.clipboardData?.items;
         if (!items) return;
@@ -354,11 +339,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Reset modal state when closed
-    document.getElementById('bugReportModal').addEventListener('hidden.bs.modal', function() {
-        document.getElementById('bugReportFormBody').classList.remove('d-none');
-        document.getElementById('bugReportSuccessBody').classList.add('d-none');
-        document.getElementById('bugPageUrl').value = window.location.href;
+    // Refresh page URL on open
+    document.getElementById('bugReportModal').addEventListener('transitionend', function() {
+        if (this.classList.contains('show')) {
+            document.getElementById('bugPageUrl').value = window.location.href;
+        }
     });
 });
 </script>

@@ -53,6 +53,47 @@
         opacity: 1;
     }
 
+    /* Modal Base (Bootstrap-free) */
+    #bugReportModal {
+        position: fixed;
+        inset: 0;
+        z-index: 9995;
+        display: none;
+        overflow-y: auto;
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(2px);
+        padding: 1rem;
+    }
+
+    #bugReportModal.show { display: block; }
+
+    #bugReportModal .modal-dialog {
+        max-width: 500px;
+        margin: 3rem auto;
+    }
+
+    #bugReportModal .modal-content {
+        background: white;
+        color: #1e293b;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Scoped visibility helper (Bootstrap-free) */
+    #bugReportModal .d-none { display: none !important; }
+
+    #bugReportModal .btn-close {
+        background: transparent;
+        border: none;
+        color: white;
+        font-size: 20px;
+        line-height: 1;
+        cursor: pointer;
+        opacity: 0.9;
+        padding: 0;
+    }
+
+    #bugReportModal .btn-close:hover { opacity: 1; }
+
     /* Modal Overrides for Bug Report */
     #bugReportModal .modal-content {
         border: none;
@@ -65,10 +106,6 @@
         color: white;
         border: none;
         padding: 20px 24px;
-    }
-
-    #bugReportModal .modal-header .btn-close {
-        filter: brightness(0) invert(1);
     }
 
     #bugReportModal .modal-body {

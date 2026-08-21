@@ -22,7 +22,7 @@
                 <h5 class="modal-title fw-bold">
                     <i class="fas fa-bug me-2"></i>{{ __('center::bug_report.report_bug') }}
                 </h5>
-                <button type="button" class="btn-close" onclick="closeBugReportModal()" aria-label="Close"></button>
+                <button type="button" class="btn-close" onclick="closeBugReportModal()" aria-label="Close">&times;</button>
             </div>
 
             {{-- Form Body --}}

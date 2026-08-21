@@ -1,7 +1,7 @@
 {{-- Killer Feature Section — WhatsApp Automation Mockup --}}
 <section id="whatsapp" class="section-light" style="padding: 6.5rem 0; background: #ffffff; border-bottom: 1px solid #e2e8f0;"
          x-data="{ activeCase: 'attendance' }">
-    <div class="container mx-auto px-4 lg:px-12">
+    <div class="container mx-auto px-4 lg:px-12" style="max-width: 1240px; margin: 0 auto;">
         
         {{-- Section Header --}}
         <div class="text-center mb-16" data-animate>
@@ -19,24 +19,40 @@
             </p>
         </div>
 
-        {{-- WhatsApp Interactive Showcase --}}
-        <div class="grid lg:grid-cols-12 gap-8 max-w-6xl mx-auto items-center" data-stagger>
+        {{-- WhatsApp Layout Container (Flexbox 2-Columns) --}}
+        <div style="
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 3rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        " data-stagger>
             
-            {{-- Left Column: Interactive Scenario Selectors (6 Cases) --}}
-            <div class="lg:col-span-6 flex flex-col gap-3">
+            {{-- Column 1: Interactive Scenario Selectors (6 Cases) --}}
+            <div style="
+                flex: 1 1 480px;
+                min-width: 300px;
+                display: flex;
+                flex-direction: column;
+                gap: 0.75rem;
+            ">
                 @foreach(__('landing.whatsapp_killer.cases') as $key => $case)
                 <button 
                     @click="activeCase = '{{ $key }}'"
                     type="button"
                     class="text-{{ app()->getLocale() == 'ar' ? 'right' : 'left' }}"
                     style="
-                        padding: 1.25rem 1.5rem;
+                        width: 100%;
+                        padding: 1.125rem 1.35rem;
                         border-radius: 1rem;
-                        transition: all 0.25s ease;
+                        transition: all 0.2s ease;
                         display: flex;
                         align-items: flex-start;
                         gap: 1rem;
                         border: 1px solid;
+                        cursor: pointer;
                     "
                     :style="activeCase === '{{ $key }}' ? 'background: #f0fdf4; border-color: #2E8B83; box-shadow: 0 4px 15px rgba(46,139,131,0.12);' : 'background: #ffffff; border-color: #e2e8f0;'"
                 >
@@ -63,7 +79,7 @@
                     
                     <div style="flex: 1;">
                         <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; margin-bottom: 0.25rem;">
-                            <span style="font-size: 1rem; font-weight: 800; color: #0f172a;">{{ $case['title'] }}</span>
+                            <span style="font-size: 0.95rem; font-weight: 800; color: #0f172a;">{{ $case['title'] }}</span>
                             <span style="font-size: 0.7rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 9999px; background: #e2e8f0; color: #475569;"
                                   :style="activeCase === '{{ $key }}' ? 'background: #dcfce7; color: #15803d;' : ''">
                                 {{ $case['tag'] }}
@@ -77,8 +93,13 @@
                 @endforeach
             </div>
 
-            {{-- Right Column: Realistic WhatsApp Phone Mockup --}}
-            <div class="lg:col-span-6 flex justify-center">
+            {{-- Column 2: Realistic WhatsApp Phone Mockup --}}
+            <div style="
+                flex: 1 1 380px;
+                min-width: 280px;
+                display: flex;
+                justify-content: center;
+            ">
                 <div style="
                     width: 100%;
                     max-width: 380px;

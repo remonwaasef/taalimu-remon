@@ -14,7 +14,7 @@
         </div>
 
         {{-- 6 Real Daily Pain Cards --}}
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto mb-16" data-stagger>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto mb-16" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;" data-stagger>
             @foreach(__('landing.pain_points.items') as $index => $item)
             <div style="
                 background: #ffffff;

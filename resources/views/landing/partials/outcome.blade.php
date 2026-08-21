@@ -14,7 +14,7 @@
         </div>
 
         {{-- Comparison Grid --}}
-        <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto" data-stagger>
+        <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;" data-stagger>
             
             {{-- Before Card --}}
             <div style="

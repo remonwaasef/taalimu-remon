@@ -1,5 +1,10 @@
 @push('styles')
 <style>
+    /* Vanilla tabs/collapse visibility (Bootstrap-free) */
+    .tab-content > .tab-pane { display: none; }
+    .tab-content > .tab-pane.active { display: block; }
+    .collapse:not(.show) { display: none; }
+
     .bg-info-soft { background-color: rgba(23, 162, 184, 0.1) !important; border-color: rgba(23, 162, 184, 0.2) !important; }
     .bg-danger-soft { background-color: rgba(220, 53, 69, 0.1) !important; border-color: rgba(220, 53, 69, 0.2) !important; }
     .active-reminder-info { background-color: rgba(0, 180, 216, 0.15) !important; border-color: #00b4d8 !important; }
@@ -182,6 +187,45 @@
 
 @push('scripts')
 <script>
+// ─── Lightweight Tabs / Pills / Collapse behavior (Bootstrap-free) ───
+document.addEventListener('click', function(e) {
+    const tabTrigger = e.target.closest('[data-bs-toggle="tab"], [data-bs-toggle="pill"]');
+    if (tabTrigger) {
+        e.preventDefault();
+        const pane = tabTrigger.dataset.bsTarget ? document.querySelector(tabTrigger.dataset.bsTarget) : null;
+
+        const nav = tabTrigger.closest('[role="tablist"]');
+        if (nav) {
+            nav.querySelectorAll('[data-bs-toggle="tab"], [data-bs-toggle="pill"]').forEach(function(b) {
+                b.classList.remove('active');
+                b.setAttribute('aria-selected', 'false');
+            });
+        }
+        tabTrigger.classList.add('active');
+        tabTrigger.setAttribute('aria-selected', 'true');
+
+        if (pane) {
+            const content = pane.closest('.tab-content');
+            if (content) {
+                content.querySelectorAll(':scope > .tab-pane').forEach(function(p) { p.classList.remove('active', 'show'); });
+            }
+            pane.classList.add('active', 'show');
+        }
+        return;
+    }
+
+    const collapseTrigger = e.target.closest('[data-bs-toggle="collapse"]');
+    if (collapseTrigger) {
+        e.preventDefault();
+        const target = collapseTrigger.dataset.bsTarget ? document.querySelector(collapseTrigger.dataset.bsTarget) : null;
+        if (!target) return;
+        const willShow = !target.classList.contains('show');
+        target.classList.toggle('show', willShow);
+        collapseTrigger.setAttribute('aria-expanded', willShow ? 'true' : 'false');
+        collapseTrigger.classList.toggle('collapsed', !willShow);
+    }
+});
+
 document.addEventListener('DOMContentLoaded', function() {
     const varBtns = document.querySelectorAll('.var-btn');
     varBtns.forEach(btn => {
@@ -364,8 +408,12 @@ function addGrade(sIndex) {
     // Auto expand the stage if collapsed so the user sees the new grade added
     const collapseEl = document.getElementById(`stage-collapse-${sIndex}`);
     if (collapseEl && !collapseEl.classList.contains('show')) {
-        const bsCollapse = new bootstrap.Collapse(collapseEl, { show: true });
-        bsCollapse.show();
+        collapseEl.classList.add('show');
+        const trigger = document.querySelector(`[data-bs-target="#stage-collapse-${sIndex}"]`);
+        if (trigger) {
+            trigger.classList.remove('collapsed');
+            trigger.setAttribute('aria-expanded', 'true');
+        }
     }
     
     const html = `
