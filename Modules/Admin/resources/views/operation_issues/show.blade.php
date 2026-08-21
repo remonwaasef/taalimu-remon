@@ -32,12 +32,13 @@
         
         <!-- Status Actions -->
         <div class="col-md-4 text-end">
-            <div class="dropdown d-inline-block">
-                <button class="btn btn-{{ $issue->status == 'resolved' ? 'success' : 'secondary' }} dropdown-toggle btn-lg shadow-sm" type="button" id="statusDropdown" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false">
+            <div class="dropdown d-inline-block position-relative" x-data="{ open: false }" @click.outside="open = false">
+                <button class="btn btn-{{ $issue->status == 'resolved' ? 'success' : 'secondary' }} dropdown-toggle btn-lg shadow-sm" type="button" id="statusDropdown" @click="open = !open" :aria-expanded="open ? 'true' : 'false'">
                     <i class="fas fa-tasks me-2"></i>
                     {{ __('admin.operation_issues.statuses.' . $issue->status) }}
                 </button>
-                <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0" aria-labelledby="statusDropdown">
+                <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0" aria-labelledby="statusDropdown" x-show="open" x-cloak
+                    style="position: absolute; inset-inline-end: 0; top: 100%; margin-top: 0.5rem; min-width: 12rem; list-style: none; padding: 0.5rem 0; background: white; border-radius: 0.75rem; z-index: 50;">
                     <li><h6 class="dropdown-header">{{ __('admin.operation_issues.filters.status') }}</h6></li>
                     <li>
                         <a class="dropdown-item d-flex align-items-center gap-2 status-change-btn" href="#" data-status="acknowledged">
@@ -369,20 +370,6 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Initialize status dropdown explicitly
-        var statusDropdownEl = document.getElementById('statusDropdown');
-        if (statusDropdownEl && typeof bootstrap !== 'undefined') {
-            new bootstrap.Dropdown(statusDropdownEl);
-            
-            // Add manual click handler as fallback
-            statusDropdownEl.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                var dropdown = bootstrap.Dropdown.getOrCreateInstance(this);
-                dropdown.toggle();
-            });
-        }
-        
         // Status change buttons
         document.querySelectorAll('.status-change-btn').forEach(function(btn) {
             btn.addEventListener('click', function(e) {

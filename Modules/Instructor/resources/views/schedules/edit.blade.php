@@ -59,7 +59,7 @@
                         <div class="col-md-6">
                             <div class="d-flex justify-content-between align-items-center mb-1">
                                 <label class="form-label fw-bold mb-0">{{ __('instructor::schedules.hall') }} <span class="text-muted small">({{ __('instructor::online_classes.optional') }})</span></label>
-                                <button type="button" class="btn btn-link btn-sm p-0 text-decoration-none" data-bs-toggle="modal" data-bs-target="#addClassroomModal">
+                                <button type="button" class="btn btn-link btn-sm p-0 text-decoration-none" onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'addClassroomModal' }))">
                                     <i class="fas fa-plus-circle me-1"></i>{{ __('instructor::schedules.add_hall') ?? 'إضافة قاعة' }}
                                 </button>
                             </div>
@@ -169,29 +169,19 @@
     </div>
 </div>
 @push('modals')
-<div class="modal fade" id="addClassroomModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 rounded-4 shadow">
-            <div class="modal-header border-0 pb-0">
-                <h5 class="fw-bold">{{ __('instructor::schedules.add_hall') ?? 'إضافة قاعة جديدة' }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body p-4">
-                <div class="mb-3">
-                    <label class="form-label fw-bold">{{ __('instructor::schedules.hall_name') ?? 'اسم القاعة' }}</label>
-                    <input type="text" id="new_classroom_name" class="form-control rounded-pill" placeholder="مثلاً: قاعة 101">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label fw-bold">{{ __('instructor::schedules.capacity') ?? 'السعة' }}</label>
-                    <input type="number" id="new_classroom_capacity" class="form-control rounded-pill" placeholder="30">
-                </div>
-            </div>
-            <div class="modal-footer border-0 pt-0">
-                <button type="button" id="saveClassroomBtn" class="btn btn-primary w-100 rounded-pill border-0" style="background: var(--primary-color);">{{ __('instructor::sidebar.save') ?? 'حفظ' }}</button>
-            </div>
-        </div>
+<x-ui.modal id="addClassroomModal" title="{{ __('instructor::schedules.add_hall') ?? 'إضافة قاعة جديدة' }}">
+    <div class="mb-3">
+        <label class="form-label fw-bold">{{ __('instructor::schedules.hall_name') ?? 'اسم القاعة' }}</label>
+        <input type="text" id="new_classroom_name" class="form-control rounded-pill" placeholder="مثلاً: قاعة 101">
     </div>
-</div>
+    <div class="mb-3">
+        <label class="form-label fw-bold">{{ __('instructor::schedules.capacity') ?? 'السعة' }}</label>
+        <input type="number" id="new_classroom_capacity" class="form-control rounded-pill" placeholder="30">
+    </div>
+    <x-slot name="footer">
+        <button type="button" id="saveClassroomBtn" class="btn btn-primary w-100 rounded-pill border-0" style="background: var(--primary-color);">{{ __('instructor::sidebar.save') ?? 'حفظ' }}</button>
+    </x-slot>
+</x-ui.modal>
 @endpush
 
 @push('scripts')
@@ -199,7 +189,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     const saveBtn = document.getElementById('saveClassroomBtn');
     const classroomSelect = document.getElementById('classroom_id');
-    const modal = new bootstrap.Modal(document.getElementById('addClassroomModal'));
 
     if (saveBtn) {
         saveBtn.addEventListener('click', function() {
@@ -236,7 +225,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         classroomSelect.appendChild(option);
                     });
                     
-                    modal.hide();
+                    window.dispatchEvent(new CustomEvent('close-modal', { detail: 'addClassroomModal' }));
                     document.getElementById('new_classroom_name').value = '';
                     document.getElementById('new_classroom_capacity').value = '';
                 }

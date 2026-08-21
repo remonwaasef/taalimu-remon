@@ -14,12 +14,12 @@
     <!-- Wizard Navigation -->
     <ul class="nav nav-pills nav-justified mb-8 pb-4 border-b border-brand-border dark:border-slate-800 gap-3" id="studentWizard" role="tablist">
         <li class="nav-item" role="presentation">
-            <button class="nav-link active rounded-xl font-bold py-3 text-xs uppercase tracking-wider transition-all" id="step1-tab" data-bs-toggle="pill" data-bs-target="#step1" type="button" role="tab" aria-controls="step1" aria-selected="true">
+            <button class="nav-link active rounded-xl font-bold py-3 text-xs uppercase tracking-wider transition-all" id="step1-tab" onclick="showWizardStep(1)" type="button" role="tab" aria-controls="step1" aria-selected="true">
                 <i class="fas fa-id-card me-2"></i> 1. البيانات الأساسية
             </button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link rounded-xl font-bold py-3 text-xs uppercase tracking-wider transition-all" id="step2-tab" data-bs-toggle="pill" data-bs-target="#step2" type="button" role="tab" aria-controls="step2" aria-selected="false">
+            <button class="nav-link rounded-xl font-bold py-3 text-xs uppercase tracking-wider transition-all" id="step2-tab" onclick="showWizardStep(2)" type="button" role="tab" aria-controls="step2" aria-selected="false">
                 <i class="fas fa-graduation-cap me-2"></i> 2. التسجيل والدورات
             </button>
         </li>
@@ -114,7 +114,7 @@
             <div class="row mb-4">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h5 class="text-secondary mb-0"><i class="bi bi-mortarboard me-2"></i>{{ __('center::students.form.academic_stage') }}</h5>
-                    <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#gradePickerModal" id="gradePickerTrigger">
+                    <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'gradePickerModal' }))" id="gradePickerTrigger">
                         <i class="bi bi-grid-3x3-gap me-1"></i> {{ __('center::students.choose_from_list') }}
                     </button>
                 </div>
@@ -217,42 +217,51 @@
 
 @if($showGrade)
 <!-- Grade Picker Modal -->
-<div class="modal fade" id="gradePickerModal" tabindex="-1" aria-labelledby="gradePickerModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content border-0 shadow-lg rounded-5">
-            <div class="modal-header border-0 p-4">
-                <h5 class="modal-title fw-bold" id="gradePickerModalLabel">{{ __('center::students.choose_from_list') }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<x-ui.modal id="gradePickerModal" title="{{ __('center::students.choose_from_list') }}" size="lg">
+    <div class="row g-3">
+        @foreach($stages as $stage)
+            <div class="col-12 mt-4 mb-2">
+                <h6 class="text-muted fw-bold small text-uppercase letter-spacing-1 border-bottom pb-2">
+                    <i class="bi bi-folder2-open me-2"></i>{{ $stage->name }}
+                </h6>
             </div>
-            <div class="modal-body p-4 pt-0">
-                <div class="row g-3">
-                    @foreach($stages as $stage)
-                        <div class="col-12 mt-4 mb-2">
-                            <h6 class="text-muted fw-bold small text-uppercase letter-spacing-1 border-bottom pb-2">
-                                <i class="bi bi-folder2-open me-2"></i>{{ $stage->name }}
-                            </h6>
+            @foreach($stage->grades as $grade)
+                <div class="col-md-4 col-6">
+                    <div class="grade-card p-3 rounded-4 border text-center cursor-pointer transition-all hover-shadow-sm h-100 d-flex flex-column justify-content-center align-items-center" 
+                         onclick="selectGrade('{{ $grade->id }}', '{{ $grade->name }}', '{{ $stage->name }}')"
+                         data-grade-id="{{ $grade->id }}">
+                        <div class="grade-icon mb-2 rounded-circle bg-light d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
+                            <i class="bi bi-book text-primary fs-5"></i>
                         </div>
-                        @foreach($stage->grades as $grade)
-                            <div class="col-md-4 col-6">
-                                <div class="grade-card p-3 rounded-4 border text-center cursor-pointer transition-all hover-shadow-sm h-100 d-flex flex-column justify-content-center align-items-center" 
-                                     onclick="selectGrade('{{ $grade->id }}', '{{ $grade->name }}', '{{ $stage->name }}')"
-                                     data-grade-id="{{ $grade->id }}">
-                                    <div class="grade-icon mb-2 rounded-circle bg-light d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
-                                        <i class="bi bi-book text-primary fs-5"></i>
-                                    </div>
-                                    <span class="fw-bold small">{{ $grade->name }}</span>
-                                </div>
-                            </div>
-                        @endforeach
-                    @endforeach
+                        <span class="fw-bold small">{{ $grade->name }}</span>
+                    </div>
                 </div>
-            </div>
-        </div>
+            @endforeach
+        @endforeach
     </div>
-</div>
+</x-ui.modal>
 @endif
 
 <script>
+    // Wizard step switching (Bootstrap-free)
+    window.showWizardStep = function(n) {
+        document.querySelectorAll('#studentWizardContent > .tab-pane').forEach(function(p) {
+            p.classList.remove('active', 'show');
+        });
+        const pane = document.getElementById('step' + n);
+        if (pane) pane.classList.add('active', 'show');
+
+        document.querySelectorAll('#studentWizard .nav-link').forEach(function(b) {
+            b.classList.remove('active');
+            b.setAttribute('aria-selected', 'false');
+        });
+        const tab = document.getElementById('step' + n + '-tab');
+        if (tab) {
+            tab.classList.add('active');
+            tab.setAttribute('aria-selected', 'true');
+        }
+    };
+
     document.addEventListener('DOMContentLoaded', function() {
         
         // Wizard Navigation
@@ -261,16 +270,14 @@
         
         if(nextBtn) {
             nextBtn.addEventListener('click', function() {
-                const step2Tab = new bootstrap.Tab(document.querySelector('#step2-tab'));
-                step2Tab.show();
+                showWizardStep(2);
                 window.scrollTo(0, 0);
             });
         }
         
         if(prevBtn) {
             prevBtn.addEventListener('click', function() {
-                const step1Tab = new bootstrap.Tab(document.querySelector('#step1-tab'));
-                step1Tab.show();
+                showWizardStep(1);
                 window.scrollTo(0, 0);
             });
         }
@@ -387,7 +394,7 @@
         window.selectGrade = function(id, name, stageName) {
             mainSelect.value = id;
             updateGradeUI(id, name, stageName);
-            bootstrap.Modal.getInstance(document.getElementById('gradePickerModal')).hide();
+            window.dispatchEvent(new CustomEvent('close-modal', { detail: 'gradePickerModal' }));
         };
 
         function updateGradeUI(id, name, stageName) {
@@ -435,8 +442,7 @@
                 if (checkedCourses.length === 0) {
                     e.preventDefault();
                     if (courseErr) courseErr.classList.remove('d-none');
-                    const step2Tab = new bootstrap.Tab(document.querySelector('#step2-tab'));
-                    step2Tab.show();
+                    showWizardStep(2);
                     const step2El = document.getElementById('step2');
                     if (step2El) step2El.scrollIntoView({ behavior: 'smooth' });
                 } else {
