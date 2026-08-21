@@ -187,44 +187,7 @@
 
 @push('scripts')
 <script>
-// ─── Lightweight Tabs / Pills / Collapse behavior (Bootstrap-free) ───
-document.addEventListener('click', function(e) {
-    const tabTrigger = e.target.closest('[data-bs-toggle="tab"], [data-bs-toggle="pill"]');
-    if (tabTrigger) {
-        e.preventDefault();
-        const pane = tabTrigger.dataset.bsTarget ? document.querySelector(tabTrigger.dataset.bsTarget) : null;
-
-        const nav = tabTrigger.closest('[role="tablist"]');
-        if (nav) {
-            nav.querySelectorAll('[data-bs-toggle="tab"], [data-bs-toggle="pill"]').forEach(function(b) {
-                b.classList.remove('active');
-                b.setAttribute('aria-selected', 'false');
-            });
-        }
-        tabTrigger.classList.add('active');
-        tabTrigger.setAttribute('aria-selected', 'true');
-
-        if (pane) {
-            const content = pane.closest('.tab-content');
-            if (content) {
-                content.querySelectorAll(':scope > .tab-pane').forEach(function(p) { p.classList.remove('active', 'show'); });
-            }
-            pane.classList.add('active', 'show');
-        }
-        return;
-    }
-
-    const collapseTrigger = e.target.closest('[data-bs-toggle="collapse"]');
-    if (collapseTrigger) {
-        e.preventDefault();
-        const target = collapseTrigger.dataset.bsTarget ? document.querySelector(collapseTrigger.dataset.bsTarget) : null;
-        if (!target) return;
-        const willShow = !target.classList.contains('show');
-        target.classList.toggle('show', willShow);
-        collapseTrigger.setAttribute('aria-expanded', willShow ? 'true' : 'false');
-        collapseTrigger.classList.toggle('collapsed', !willShow);
-    }
-});
+// Tabs / Pills / Collapse behaviors are handled globally by bs-compat.js
 
 document.addEventListener('DOMContentLoaded', function() {
     const varBtns = document.querySelectorAll('.var-btn');
