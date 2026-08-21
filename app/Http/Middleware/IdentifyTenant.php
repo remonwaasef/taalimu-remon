@@ -39,9 +39,18 @@ class IdentifyTenant
 
             // Use the configured tenant domain (e.g., yourdomain.com)
             $mainHost = config('app.tenant_domain') ?: parse_url(config('app.url'), PHP_URL_HOST);
+            $centralHosts = array_unique(array_filter([
+                $mainHost,
+                'www.' . $mainHost,
+                'localhost',
+                '127.0.0.1',
+                'taalimu.com',
+                'www.taalimu.com',
+                parse_url(config('app.url'), PHP_URL_HOST)
+            ]));
 
             // Skip if it's 'www' or exactly the main domain
-            if ($host === $mainHost || $host === 'www.'.$mainHost || $host === 'localhost' || $host === '127.0.0.1') {
+            if (in_array($host, $centralHosts, true)) {
                 // Even if we skip deeper tenant identification, if the route matched a {tenant} group,
                 // we should ensure URL generation doesn't break for these routes.
                 if ($request->route() && $request->route()->hasParameter('tenant')) {

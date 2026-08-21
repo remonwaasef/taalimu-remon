@@ -8,7 +8,7 @@ Route::get('/offline', function () {
 });
 
 // Main domain routes (without tenant subdomain)
-Route::middleware(['web', 'throttle:global'])->domain(config('app.tenant_domain', 'localhost'))->group(function () {
+Route::middleware(['web', 'throttle:global'])->group(function () {
     Route::get('/', [App\Http\Controllers\LandingController::class, 'index'])->name('home');
 
     Route::get('/register', [App\Http\Controllers\RegistrationController::class, 'showRegistrationForm'])->name('register');
