@@ -119,7 +119,15 @@ if ($mode === 'path' || $mode === 'subdomain') {
         $domain = $appUrlHost;
     }
 
-    Route::domain($domain == 'localhost' ? '{tenant}.localhost' : '{tenant}.'.$domain)
-        ->middleware([\App\Http\Middleware\IdentifyTenant::class])
-        ->group($instructorRoutes);
+    $domains = array_unique(array_filter([
+        $domain == 'localhost' ? '{tenant}.localhost' : '{tenant}.'.$domain,
+        '{tenant}.localhost',
+        '{tenant}.taalimu.com'
+    ]));
+
+    foreach ($domains as $d) {
+        Route::domain($d)
+            ->middleware([\App\Http\Middleware\IdentifyTenant::class])
+            ->group($instructorRoutes);
+    }
 }

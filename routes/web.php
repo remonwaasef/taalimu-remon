@@ -22,12 +22,18 @@ Route::middleware(['web', 'throttle:global'])->group(function () {
         if ($user && $user->tenant_id) {
             $tenant = \App\Models\Tenant::find($user->tenant_id);
             if ($tenant) {
-                // Redirect instructors to the instructor dashboard
-                if ($user->role === 'instructor' || $tenant->type === 'instructor') {
-                    return redirect()->away(tenant_url('instructor', $tenant));
+                $currentHost = request()->getHost();
+                $targetUrl = ($user->role === 'instructor' || $tenant->type === 'instructor')
+                    ? tenant_url('instructor', $tenant)
+                    : tenant_url('dashboard', $tenant);
+                $targetHost = parse_url($targetUrl, PHP_URL_HOST);
+
+                // If we are already on the tenant's host, don't redirect away to prevent loops
+                if ($currentHost === $targetHost) {
+                    return redirect()->route('center.dashboard');
                 }
 
-                return redirect()->away(tenant_url('dashboard', $tenant));
+                return redirect()->away($targetUrl);
             }
         }
 

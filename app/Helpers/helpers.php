@@ -29,7 +29,15 @@ if (! function_exists('tenant_url')) {
         $protocol = $secure ? 'https://' : 'http://';
 
         $mode = config('app.tenancy_mode', 'subdomain');
-        $baseDomain = config('app.tenant_domain', parse_url(config('app.url'), PHP_URL_HOST));
+        $currentHost = request()->getHost();
+        $baseDomain = config('app.tenant_domain');
+        if (empty($baseDomain) || $baseDomain === 'localhost') {
+            if (str_ends_with($currentHost, 'taalimu.com')) {
+                $baseDomain = 'taalimu.com';
+            } else {
+                $baseDomain = parse_url(config('app.url'), PHP_URL_HOST) ?: 'localhost';
+            }
+        }
         $port = request()->getPort();
         $portSuffix = ($port && ! in_array($port, [80, 443])) ? ':'.$port : '';
 
