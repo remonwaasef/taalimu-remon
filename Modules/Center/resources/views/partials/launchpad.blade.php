@@ -1,10 +1,10 @@
 @php
     $steps = [
-        'education_system' => ['icon' => 'fa-map-signs', 'color' => 'primary', 'route' => 'center.settings.index'],
-        'instructor' => ['icon' => 'fa-user-tie', 'color' => 'info', 'route' => 'center.instructors.create'],
-        'course' => ['icon' => 'fa-book-open', 'color' => 'warning', 'route' => 'center.courses.create'],
-        'student' => ['icon' => 'fa-user-graduate', 'color' => 'success', 'route' => 'center.students.create'],
-        'attendance' => ['icon' => 'fa-clipboard-check', 'color' => 'danger', 'route' => 'center.attendance.index'],
+        'education_system' => ['icon' => 'fa-map-signs', 'color' => '#2E8B83', 'route' => 'center.settings.index'],
+        'instructor' => ['icon' => 'fa-user-tie', 'color' => '#0284c7', 'route' => 'center.instructors.create'],
+        'course' => ['icon' => 'fa-book-open', 'color' => '#d97706', 'route' => 'center.courses.create'],
+        'student' => ['icon' => 'fa-user-graduate', 'color' => '#16a34a', 'route' => 'center.students.create'],
+        'attendance' => ['icon' => 'fa-clipboard-check', 'color' => '#dc2626', 'route' => 'center.attendance.index'],
     ];
 
     // Find first incomplete step to highlight it
@@ -17,120 +17,154 @@
     }
 @endphp
 
-<div class="card glass-card launchpad-card border-0 rounded-4 mb-4 overflow-hidden position-relative">
-    <!-- Decorative background elements -->
-    <div class="position-absolute top-0 end-0 p-3 opacity-10">
-        <i class="fas fa-rocket fa-7x transform-rotate-15"></i>
+<div class="card glass-card launchpad-card mb-4 overflow-hidden position-relative" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 1.25rem; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
+    <!-- Decorative rocket -->
+    <div style="position: absolute; top: 0.5rem; {{ app()->getLocale() == 'ar' ? 'left: 1.5rem;' : 'right: 1.5rem;' }} opacity: 0.05; pointer-events: none;">
+        <i class="fas fa-rocket" style="font-size: 5rem; transform: rotate(-15deg); color: #2E8B83;"></i>
     </div>
 
-    <div class="card-body p-4 position-relative">
-        <div class="row align-items-center mb-4">
-            <div class="col-lg-7">
-                <div class="d-flex flex-wrap align-items-center gap-3">
-                    <h5 class="fw-bold mb-1 text-dark dark:text-slate-100">🚀 {{ __('center::dashboard.launchpad.title', ['name' => auth()->user()->name]) }}</h5>
+    <div class="card-body p-4" style="position: relative; z-index: 2;">
+        {{-- Header & Progress --}}
+        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.25rem; margin-bottom: 1.5rem;">
+            <div>
+                <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+                    <h5 style="font-size: 1.15rem; font-weight: 900; color: #0f172a; margin: 0;">
+                        🚀 {{ __('center::dashboard.launchpad.title', ['name' => auth()->user()->name]) }}
+                    </h5>
                     @php
                         $hasDemoData = \App\Models\Instructor::where('tenant_id', app('tenant')->id)->where('email', 'like', '%.demo@%')->exists();
                     @endphp
 
                     @if($hasDemoData)
-                        <form action="{{ route('center.demo.reset', ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}" method="POST" id="deleteRowForm_1">
+                        <form action="{{ route('center.demo.reset', ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}" method="POST" id="deleteRowForm_1" style="margin: 0;">
                             @csrf
-                            <button type="button" data-confirm-delete data-form="deleteRowForm_1" class="btn btn-sm btn-outline-danger rounded-pill px-3 py-1 border-dotted" 
-                                    style="border-style: dashed !important; font-size: 0.7rem;"
-                                    data-bs-toggle="tooltip" 
-                                    title="{{ __('center::dashboard.launchpad.reset_demo_desc') }}">
-                                <i class="fas fa-trash-alt me-1"></i> {{ __('center::dashboard.launchpad.reset_demo') }}
+                            <button type="button" data-confirm-delete data-form="deleteRowForm_1" style="background: #fef2f2; border: 1px dashed #fca5a5; color: #dc2626; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; cursor: pointer;">
+                                <i class="fas fa-trash-alt" style="margin-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}: 0.25rem;"></i>
+                                {{ __('center::dashboard.launchpad.reset_demo') }}
                             </button>
                         </form>
                     @else
-                        <form action="{{ route('center.demo.seed', ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}" method="POST" id="demoDataForm">
+                        <form action="{{ route('center.demo.seed', ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}" method="POST" id="demoDataForm" style="margin: 0;">
                             @csrf
-                            <button type="submit" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1 border-dotted" 
-                                    style="border-style: dashed !important; font-size: 0.7rem;"
-                                    data-bs-toggle="tooltip" 
-                                    title="{{ __('center::dashboard.launchpad.explore_demo_desc') }}">
-                                <i class="fas fa-magic me-1"></i> {{ __('center::dashboard.launchpad.explore_demo') }}
+                            <button type="submit" style="background: #E6F4F3; border: 1px dashed #B2DDD9; color: #25746D; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; cursor: pointer;">
+                                <i class="fas fa-magic" style="margin-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}: 0.25rem;"></i>
+                                {{ __('center::dashboard.launchpad.explore_demo') }}
                             </button>
                         </form>
                     @endif
                 </div>
-                <p class="text-muted small mb-0">{{ __('center::dashboard.launchpad.subtitle') }}</p>
+                <p style="color: #64748b; font-size: 0.85rem; margin: 0.25rem 0 0 0;">{{ __('center::dashboard.launchpad.subtitle') }}</p>
             </div>
-            <div class="col-lg-5">
-                <div class="mt-3 mt-lg-0">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span class="fw-bold text-primary">{{ __('center::dashboard.launchpad.progress') }}</span>
-                        <span class="badge bg-primary rounded-pill px-3">{{ $launchpadProgress }}%</span>
-                    </div>
-                    <div class="progress shadow-sm" style="height: 12px; border-radius: 10px; background-color: rgba(0,0,0,0.05);">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" 
-                             role="progressbar" 
-                             style="width: {{ $launchpadProgress }}%; border-radius: 10px;" 
-                             aria-valuenow="{{ $launchpadProgress }}" 
-                             aria-valuemin="0" 
-                             aria-valuemax="100"></div>
-                    </div>
+
+            {{-- Progress Bar --}}
+            <div style="min-width: 220px; flex: 0 1 280px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+                    <span style="font-size: 0.8rem; font-weight: 700; color: #475569;">{{ __('center::dashboard.launchpad.progress') }}</span>
+                    <span style="font-size: 0.8rem; font-weight: 900; color: #2E8B83; background: #E6F4F3; padding: 0.15rem 0.5rem; border-radius: 9999px;">{{ $launchpadProgress }}%</span>
+                </div>
+                <div style="height: 8px; border-radius: 9999px; background: #f1f5f9; overflow: hidden;">
+                    <div style="height: 100%; width: {{ $launchpadProgress }}%; background: linear-gradient(90deg, #2E8B83, #10b981); border-radius: 9999px; transition: width 0.4s ease;"></div>
                 </div>
             </div>
         </div>
 
-        <div class="row g-4 justify-content-center">
+        {{-- Horizontal Steps Grid (All 5 Steps in One Line) --}}
+        <div style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 0.875rem;
+            align-items: stretch;
+        ">
             @foreach($steps as $key => $data)
                 @php
                     $isCompleted = $launchpadSteps[$key] ?? false;
                     $isCurrent = ($key === $highlightStep);
                 @endphp
-                <div class="col-md-6 col-xl">
-                    <div class="card launchpad-step-card h-100 border-0 shadow-sm rounded-4 transition-all hover-translate-y-n3 {{ $isCurrent ? 'border-primary border-2' : '' }} {{ $isCompleted ? 'bg-success bg-opacity-10' : '' }}"
-                         style="{{ $isCurrent ? 'box-shadow: 0 10px 25px rgba(13, 110, 253, 0.15) !important;' : '' }}">
-                        <div class="card-body p-4 d-flex flex-column text-center">
-                            <!-- Icon and Status Circle -->
-                            <div class="position-relative mb-3 mx-auto">
-                                <div class="rounded-circle d-flex align-items-center justify-content-center bg-{{ $isCompleted ? 'success' : ($isCurrent ? $data['color'] : 'light') }} text-{{ $isCompleted || $isCurrent ? 'white' : 'muted' }}" 
-                                     style="width: 65px; height: 65px; font-size: 1.5rem; transition: all 0.3s ease;">
-                                    <i class="fas {{ $isCompleted ? 'fa-check' : $data['icon'] }}"></i>
-                                </div>
-                                @if($isCurrent)
-                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary border border-white">
-                                        {{ __('center::dashboard.launchpad.action') }}
-                                        <span class="visually-hidden">current step</span>
-                                    </span>
-                                @endif
+                <div style="
+                    background: {{ $isCompleted ? '#f0fdf4' : ($isCurrent ? '#ffffff' : '#f8fafc') }};
+                    border: 1.5px solid {{ $isCompleted ? '#bbf7d0' : ($isCurrent ? '#2E8B83' : '#e2e8f0') }};
+                    border-radius: 1rem;
+                    padding: 1.125rem 0.875rem;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    text-align: center;
+                    position: relative;
+                    box-shadow: {{ $isCurrent ? '0 8px 20px rgba(46,139,131,0.12)' : 'none' }};
+                    transition: transform 0.2s, box-shadow 0.2s;
+                " onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                    
+                    {{-- Step Icon --}}
+                    <div style="
+                        width: 2.75rem;
+                        height: 2.75rem;
+                        border-radius: 50%;
+                        background: {{ $isCompleted ? '#dcfce7' : ($isCurrent ? '#E6F4F3' : '#ffffff') }};
+                        color: {{ $isCompleted ? '#16a34a' : ($isCurrent ? '#2E8B83' : '#94a3b8') }};
+                        border: 1px solid {{ $isCompleted ? '#86efac' : ($isCurrent ? '#B2DDD9' : '#e2e8f0') }};
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 1.15rem;
+                        margin-bottom: 0.65rem;
+                        flex-shrink: 0;
+                    ">
+                        <i class="fas {{ $isCompleted ? 'fa-check' : $data['icon'] }}"></i>
+                    </div>
+
+                    {{-- Step Title --}}
+                    <h6 style="
+                        font-size: 0.85rem;
+                        font-weight: 800;
+                        color: {{ $isCompleted ? '#15803d' : ($isCurrent ? '#0f172a' : '#475569') }};
+                        margin: 0 0 0.75rem 0;
+                        line-height: 1.3;
+                    ">
+                        {{ __('center::dashboard.launchpad.steps.'.$key.'.title') }}
+                    </h6>
+
+                    {{-- Action Button / Status --}}
+                    <div style="margin-top: auto; width: 100%;">
+                        @if($isCompleted)
+                            <div style="color: #16a34a; font-size: 0.75rem; font-weight: 800; display: inline-flex; align-items: center; gap: 0.25rem;">
+                                <i class="fas fa-check-circle"></i>
+                                <span>{{ __('center::launchpad.demo_data_ready') }}</span>
                             </div>
-
-                            <!-- Content -->
-                            <h6 class="fw-bold mb-1 {{ $isCompleted ? 'text-success' : 'text-dark dark:text-slate-100' }}">
-                                {{ __('center::dashboard.launchpad.steps.'.$key.'.title') }}
-                            </h6>
-                            
-                            @if($isCurrent)
-                                <p class="text-muted small mb-3 flex-grow-1">
-                                    {{ __('center::dashboard.launchpad.steps.'.$key.'.desc') }}
-                                </p>
-                            @else
-                                <div class="mb-3 flex-grow-1"></div>
-                            @endif
-
-                            <!-- Button -->
-                            @if($isCompleted)
-                                <div class="text-success fw-bold x-small">
-                                    <i class="fas fa-check-circle me-1"></i>{{ __('center::launchpad.demo_data_ready') }}</div>
-                            @elseif($key === 'education_system')
-                                <button type="button" 
-                                        class="btn {{ $isCurrent ? 'btn-'.$data['color'] : 'btn-outline-light text-muted border-0' }} rounded-pill btn-sm fw-bold px-3 py-1 mt-auto"
-                                        style="font-size: 0.75rem;"
-                                        data-bs-toggle="modal" 
-                                        data-bs-target="#educationSystemModal">
-                                   {{ __('center::dashboard.launchpad.action') }}
-                                </button>
-                            @else
-                                <a href="{{ route($data['route'], ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}" 
-                                   class="btn {{ $isCurrent ? 'btn-'.$data['color'] : 'btn-outline-light text-muted border-0' }} rounded-pill btn-sm fw-bold px-3 py-1 mt-auto"
-                                   style="font-size: 0.75rem;">
-                                   {{ __('center::dashboard.launchpad.action') }}
-                                </a>
-                            @endif
-                        </div>
+                        @elseif($key === 'education_system')
+                            <button type="button" 
+                                    style="
+                                        width: 100%;
+                                        padding: 0.35rem 0.65rem;
+                                        border-radius: 0.5rem;
+                                        font-size: 0.75rem;
+                                        font-weight: 800;
+                                        border: none;
+                                        cursor: pointer;
+                                        background: {{ $isCurrent ? '#2E8B83' : '#e2e8f0' }};
+                                        color: {{ $isCurrent ? '#ffffff' : '#475569' }};
+                                        transition: opacity 0.2s;
+                                    "
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#educationSystemModal">
+                               {{ __('center::dashboard.launchpad.action') }}
+                            </button>
+                        @else
+                            <a href="{{ route($data['route'], ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}" 
+                               style="
+                                    width: 100%;
+                                    display: block;
+                                    padding: 0.35rem 0.65rem;
+                                    border-radius: 0.5rem;
+                                    font-size: 0.75rem;
+                                    font-weight: 800;
+                                    text-decoration: none;
+                                    background: {{ $isCurrent ? '#2E8B83' : '#e2e8f0' }};
+                                    color: {{ $isCurrent ? '#ffffff' : '#475569' }} !important;
+                                    transition: opacity 0.2s;
+                               ">
+                               {{ __('center::dashboard.launchpad.action') }}
+                            </a>
+                        @endif
                     </div>
                 </div>
             @endforeach
@@ -181,24 +215,12 @@
 </div>
 
 <script>
-    document.getElementById('educationSystemForm').addEventListener('submit', function() {
+    document.getElementById('educationSystemForm')?.addEventListener('submit', function() {
         const btn = document.getElementById('submitTemplateBtn');
-        btn.disabled = true;
-        btn.querySelector('.normal-state').classList.add('d-none');
-        btn.querySelector('.loading-state').classList.remove('d-none');
+        if (btn) {
+            btn.disabled = true;
+            btn.querySelector('.normal-state')?.classList.add('d-none');
+            btn.querySelector('.loading-state')?.classList.remove('d-none');
+        }
     });
 </script>
-
-<style>
-    .hover-translate-y-n3:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 1rem 3rem rgba(0,0,0,0.1) !important;
-    }
-    .transform-rotate-15 {
-        transform: rotate(-15deg);
-    }
-    .transition-all {
-        transition: all 0.3s ease;
-    }
-</style>
-
