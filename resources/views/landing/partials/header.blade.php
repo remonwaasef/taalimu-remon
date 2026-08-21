@@ -9,7 +9,7 @@
     @keydown.escape.window="isMenuOpen = false"
     x-effect="document.body.style.overflow = isMenuOpen ? 'hidden' : ''"
 >
-    <div class="container mx-auto px-4 lg:px-12">
+    <div class="container mx-auto px-4 lg:px-12" style="max-width: 1240px; margin: 0 auto;">
         <div class="flex items-center justify-between gap-4" style="min-height: 4.5rem;">
             <!-- Logo -->
             <a href="{{ route('home') }}" class="flex items-center gap-2 lg:gap-3 group shrink-0">
@@ -18,8 +18,8 @@
 
             <!-- Nav Links (Desktop) -->
             <nav class="hidden lg:flex items-center gap-6 xl:gap-8">
-                <a href="#showcase" class="nav-link" style="color: #334155; font-weight: 600; font-size: 0.9rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#334155'">
-                    {{ __('landing.nav.features') }}
+                <a href="#outcome" class="nav-link" style="color: #334155; font-weight: 600; font-size: 0.9rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#334155'">
+                    {{ __('landing.outcome.badge') }}
                 </a>
                 <a href="#whatsapp" class="nav-link" style="color: #334155; font-weight: 600; font-size: 0.9rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#334155'">
                     {{ __('landing.nav.whatsapp') }}
@@ -121,8 +121,8 @@
         class="lg:hidden absolute top-full left-0 right-0 bg-white border-b border-slate-200 shadow-xl py-6 px-6 z-40 max-h-[80vh] overflow-y-auto"
     >
         <nav class="flex flex-col gap-4">
-            <a href="#showcase" @click="isMenuOpen = false" style="color: #0f172a; font-weight: 700; font-size: 1.05rem; padding: 0.35rem 0; text-decoration: none;">
-                {{ __('landing.nav.features') }}
+            <a href="#outcome" @click="isMenuOpen = false" style="color: #0f172a; font-weight: 700; font-size: 1.05rem; padding: 0.35rem 0; text-decoration: none;">
+                {{ __('landing.outcome.badge') }}
             </a>
             <a href="#whatsapp" @click="isMenuOpen = false" style="color: #0f172a; font-weight: 700; font-size: 1.05rem; padding: 0.35rem 0; text-decoration: none;">
                 {{ __('landing.nav.whatsapp') }}

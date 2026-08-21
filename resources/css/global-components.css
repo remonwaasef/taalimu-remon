@@ -503,3 +503,15 @@ html[dir="rtl"] .sidebar-base .sub-nav .nav-link {
         display: none;
     }
 }
+
+/* --------------------------------------------------------------------------
+   10. Bootstrap Compat Utilities (temporary, during Tailwind migration)
+   Critical visibility/behavior utilities still referenced by legacy views.
+   Remove once all views are migrated to Tailwind classes.
+   -------------------------------------------------------------------------- */
+.d-none { display: none !important; }
+
+.tab-content > .tab-pane { display: none; }
+.tab-content > .tab-pane.active { display: block; }
+
+.collapse:not(.show) { display: none; }
