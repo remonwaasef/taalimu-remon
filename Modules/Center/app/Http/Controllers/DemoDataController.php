@@ -33,11 +33,13 @@ class DemoDataController extends Controller
             // Clear dashboard cache to show new data immediately
             static::clearDashboardCache();
 
-            return redirect()->route('center.dashboard')->with('success', __('center::dashboard.demo_seed_success'));
+            return redirect()->route('center.dashboard', ['tenant' => $tenant->domain])
+                ->with('success', __('center::dashboard.demo_seed_success'));
         } catch (\Exception $e) {
             \Log::error('Demo Seeding Failed: '.$e->getMessage());
 
-            return redirect()->back()->with('error', __('center::dashboard.demo_seed_error'));
+            return redirect()->route('center.dashboard', ['tenant' => $tenant->domain])
+                ->with('error', __('center::dashboard.demo_seed_error'));
         }
     }
 
@@ -51,11 +53,13 @@ class DemoDataController extends Controller
             // Clear dashboard cache to show clean state immediately
             static::clearDashboardCache();
 
-            return redirect()->route('center.dashboard')->with('success', __('center::dashboard.demo_destroy_success'));
+            return redirect()->route('center.dashboard', ['tenant' => $tenant->domain])
+                ->with('success', __('center::dashboard.demo_destroy_success'));
         } catch (\Exception $e) {
             \Log::error('Demo Seeding Reset Failed: '.$e->getMessage());
 
-            return redirect()->back()->with('error', __('center::dashboard.demo_destroy_error'));
+            return redirect()->route('center.dashboard', ['tenant' => $tenant->domain])
+                ->with('error', __('center::dashboard.demo_destroy_error'));
         }
     }
 }

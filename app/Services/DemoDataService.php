@@ -103,6 +103,17 @@ class DemoDataService
                     // During self-registration no user is authenticated yet — fall back
                     // to the tenant's admin (first user) as the creator.
                     $creator = auth()->user() ?? User::where('tenant_id', $tenant->id)->orderBy('id')->first();
+                    if (! $creator) {
+                        $creator = User::firstOrCreate(
+                            ['email' => 'admin@' . $tenant->domain . '.local'],
+                            [
+                                'name' => 'مدير ' . $tenant->name,
+                                'password' => 'password',
+                                'role' => 'center_admin',
+                                'tenant_id' => $tenant->id,
+                            ]
+                        );
+                    }
                     $result = $this->studentService->registerStudent($sData, $creator);
                     $student = $result['student'];
 
@@ -132,7 +143,8 @@ class DemoDataService
         try {
             return DB::transaction(function () use ($tenant) {
                 // 1. Delete Demo Students (Users & Profiles)
-                $demoUsers = User::where('tenant_id', $tenant->id)
+                $demoUsers = User::with(['student.sales', 'student.enrollments'])
+                    ->where('tenant_id', $tenant->id)
                     ->where('role', 'student')
                     ->where(function ($q) {
                         $q->where('email', 'like', '%.demo%@%')
@@ -140,8 +152,6 @@ class DemoDataService
                     })->get();
 
                 foreach ($demoUsers as $user) {
-                    // This cascades to student profile via StudentService or foreign keys
-                    // But to be safe, delete related records directly if not cascaded
                     if ($user->student) {
                         $user->student->sales()->delete();
                         $user->student->enrollments()->delete();
@@ -153,16 +163,15 @@ class DemoDataService
                 }
 
                 // 2. Delete Demo Instructors
-                $demoInstructors = Instructor::where('tenant_id', $tenant->id)
+                $demoInstructors = Instructor::with('courses.schedules')
+                    ->where('tenant_id', $tenant->id)
                     ->where('email', 'like', '%.demo@%')->get();
 
                 foreach ($demoInstructors as $instructor) {
-                    $instructor->courses()->chunk(50, function ($courses) {
-                        foreach ($courses as $course) {
-                            $course->schedules()->delete();
-                            $course->delete();
-                        }
-                    });
+                    foreach ($instructor->courses as $course) {
+                        $course->schedules()->delete();
+                        $course->delete();
+                    }
                     $instructor->delete();
                 }
 
