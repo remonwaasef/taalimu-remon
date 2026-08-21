@@ -7,8 +7,17 @@ Route::get('/offline', function () {
     return view('offline');
 });
 
-// Main domain routes (without tenant subdomain)
-Route::middleware(['web', 'throttle:global'])->group(function () {
+// Central domains list
+$centralDomains = array_unique(array_filter([
+    config('app.tenant_domain'),
+    'localhost',
+    '127.0.0.1',
+    'taalimu.com',
+    'www.taalimu.com',
+    parse_url(config('app.url'), PHP_URL_HOST)
+]));
+
+$mainRoutes = function () {
     Route::get('/', [App\Http\Controllers\LandingController::class, 'index'])->name('home');
 
     Route::get('/register', [App\Http\Controllers\RegistrationController::class, 'showRegistrationForm'])->name('register');
@@ -28,7 +37,6 @@ Route::middleware(['web', 'throttle:global'])->group(function () {
                     : tenant_url('dashboard', $tenant);
                 $targetHost = parse_url($targetUrl, PHP_URL_HOST);
 
-                // If we are already on the tenant's host, don't redirect away to prevent loops
                 if ($currentHost === $targetHost) {
                     return redirect()->route('center.dashboard');
                 }
@@ -65,8 +73,6 @@ Route::middleware(['web', 'throttle:global'])->group(function () {
     Route::get('/payment/demo/success', [App\Http\Controllers\PaymentController::class, 'demoSuccess'])
         ->middleware('throttle:60,1')
         ->name('payment.demo.success');
-
-    // PWA offline view is handled globally at the top of this file
 
     // Policy Pages
     Route::get('/privacy', [App\Http\Controllers\PolicyController::class, 'privacy'])->name('privacy');
@@ -125,11 +131,10 @@ Route::middleware(['web', 'throttle:global'])->group(function () {
 
     Route::get('/login', [App\Http\Controllers\UnifiedAuthController::class, 'showLoginForm'])->name('login.portal');
     Route::post('/login', [App\Http\Controllers\UnifiedAuthController::class, 'login'])
-        ->middleware('throttle:login') // Uses the 'login' rate limiter defined in AppServiceProvider
+        ->middleware('throttle:login')
         ->name('unified.login.submit');
 
-    // SEC-04: password reset flow (was orphaned — controllers/views existed but
-    // no routes were registered, so password reset emails pointed to a dead URL).
+    // SEC-04: password reset flow
     Route::get('/password/reset', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'showLinkRequestForm'])
         ->name('password.request');
     Route::post('/password/email', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'sendResetLink'])
@@ -172,10 +177,14 @@ Route::middleware(['web', 'throttle:global'])->group(function () {
             'leaderboard' => $leaderboard
         ]);
     })->middleware('inertia')->name('inertia.demo');
-});
+};
 
-// Global Language Switcher (Accessible from any domain) — rate limited to prevent locale flooding
-// Arabic-market phase: only 'ar' is active. en/fr routes stay (not deleted) but are no-ops.
+// Register main domain routes explicitly on all central domains
+foreach ($centralDomains as $cd) {
+    Route::middleware(['web', 'throttle:global'])->domain($cd)->group($mainRoutes);
+}
+
+// Global Language Switcher (Accessible from any domain)
 Route::get('lang/{locale}', function ($locale) {
     $activeLocales = ['ar'];
 

@@ -58,21 +58,41 @@ return Application::configure(basePath: dirname(__DIR__))
                 return route('parent.login');
             }
 
+            // 3. Tenant Context Bound -> Tenant Login
+            if (app()->bound('tenant')) {
+                return tenant_url('login', app('tenant'));
+            }
+
             $host = $request->getHost();
             $mainDomain = config('app.tenant_domain');
 
-            // 2. Main Domain / Localhost -> Unified Login Portal
-            // Check if host is exactly the main domain or www.maindomain
-            if ($host === $mainDomain || $host === 'www.'.$mainDomain || $host === 'localhost') {
+            // 4. Main Domain / Localhost -> Unified Login Portal
+            $centralHosts = array_unique(array_filter([
+                $mainDomain,
+                'www.' . $mainDomain,
+                'localhost',
+                '127.0.0.1',
+                'taalimu.com',
+                'www.taalimu.com',
+                parse_url(config('app.url'), PHP_URL_HOST)
+            ]));
+
+            if (in_array($host, $centralHosts, true)) {
                 return route('login.portal');
             }
 
-            // 3. Tenant Subdomain -> Tenant Login
-            // Only if it ends with the main domain and has a subdomain
-            if ($mainDomain && str_ends_with($host, '.'.$mainDomain)) {
-                $subdomain = substr($host, 0, -strlen('.'.$mainDomain));
-                if ($subdomain && $subdomain !== 'www') {
-                    return route('center.login', ['tenant' => $subdomain]);
+            // 5. Tenant Subdomain -> Tenant Login
+            if (str_ends_with($host, '.taalimu.com')) {
+                $subdomain = substr($host, 0, -strlen('.taalimu.com'));
+                if ($subdomain && !in_array($subdomain, ['www', 'app', 'admin', 'api'])) {
+                    return tenant_url('login', $subdomain);
+                }
+            }
+
+            if ($mainDomain && str_ends_with($host, '.' . $mainDomain)) {
+                $subdomain = substr($host, 0, -strlen('.' . $mainDomain));
+                if ($subdomain && !in_array($subdomain, ['www', 'app', 'admin', 'api'])) {
+                    return tenant_url('login', $subdomain);
                 }
             }
 
