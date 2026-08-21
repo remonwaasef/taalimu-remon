@@ -1,5 +1,5 @@
 <!-- Alpine.js Tabs Component -->
-<!-- Usage: <x-ui.tabs :tabs="['Tab 1', 'Tab 2']" default="0">Content</x-ui.tabs> -->
+{{-- Usage: <x-center::tabs :tabs="['Tab 1', 'Tab 2']" default="0">Content</x-center::tabs> --}}
 
 @props(['tabs', 'default' => 0])
 

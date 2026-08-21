@@ -1,5 +1,5 @@
 <!-- Alpine.js Collapse Component -->
-<!-- Usage: <x-ui.collapse :open="false">Content</x-ui.collapse> -->
+{{-- Usage: <x-center::collapse :open="false">Content</x-center::collapse> --}}
 
 @props(['open' => false])
 

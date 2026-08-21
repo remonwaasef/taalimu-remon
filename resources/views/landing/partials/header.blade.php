@@ -3,13 +3,26 @@
     style="background-color: #ffffff !important; background: #ffffff !important; opacity: 1 !important; border-bottom: 1px solid #e2e8f0; box-shadow: 0 4px 20px rgba(0,0,0,0.04); z-index: 99999 !important;"
     x-data="{
         scrolled: false,
-        isMenuOpen: false
+        isMenuOpen: false,
+        scrollToSection(selector) {
+            const target = document.querySelector(selector);
+            if (target) {
+                const headerOffset = 70;
+                const elementPosition = target.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+            this.isMenuOpen = false;
+        }
     }"
     @scroll.window="scrolled = window.pageYOffset > 20"
     @keydown.escape.window="isMenuOpen = false"
     x-effect="document.body.style.overflow = isMenuOpen ? 'hidden' : ''"
 >
-    <div class="container mx-auto px-4 lg:px-12" style="max-width: 1240px; margin: 0 auto;">
+    <div class="container mx-auto px-4 lg:px-12" style="max-width: 1140px; margin: 0 auto;">
         <div class="flex items-center justify-between gap-4" style="min-height: 4.5rem;">
             <!-- Logo -->
             <a href="{{ route('home') }}" class="flex items-center gap-2 lg:gap-3 group shrink-0">
@@ -18,19 +31,19 @@
 
             <!-- Nav Links (Desktop) -->
             <nav class="hidden lg:flex items-center gap-6 xl:gap-8">
-                <a href="#outcome" class="nav-link" style="color: #334155; font-weight: 600; font-size: 0.9rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#334155'">
+                <a href="#outcome" @click.prevent="scrollToSection('#outcome')" class="nav-link" style="color: #334155; font-weight: 600; font-size: 0.9rem; text-decoration: none; cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#334155'">
                     {{ __('landing.outcome.badge') }}
                 </a>
-                <a href="#whatsapp" class="nav-link" style="color: #334155; font-weight: 600; font-size: 0.9rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#334155'">
+                <a href="#whatsapp" @click.prevent="scrollToSection('#whatsapp')" class="nav-link" style="color: #334155; font-weight: 600; font-size: 0.9rem; text-decoration: none; cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#334155'">
                     {{ __('landing.nav.whatsapp') }}
                 </a>
-                <a href="#excel" class="nav-link" style="color: #334155; font-weight: 600; font-size: 0.9rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#334155'">
+                <a href="#excel" @click.prevent="scrollToSection('#excel')" class="nav-link" style="color: #334155; font-weight: 600; font-size: 0.9rem; text-decoration: none; cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#334155'">
                     {{ __('landing.nav.excel_migration') }}
                 </a>
-                <a href="#pricing" class="nav-link" style="color: #334155; font-weight: 600; font-size: 0.9rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#334155'">
+                <a href="#pricing" @click.prevent="scrollToSection('#pricing')" class="nav-link" style="color: #334155; font-weight: 600; font-size: 0.9rem; text-decoration: none; cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#334155'">
                     {{ __('landing.nav.pricing') }}
                 </a>
-                <a href="#faq" class="nav-link" style="color: #334155; font-weight: 600; font-size: 0.9rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#334155'">
+                <a href="#faq" @click.prevent="scrollToSection('#faq')" class="nav-link" style="color: #334155; font-weight: 600; font-size: 0.9rem; text-decoration: none; cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#334155'">
                     {{ __('landing.nav.faq') }}
                 </a>
             </nav>
@@ -121,19 +134,19 @@
         class="lg:hidden absolute top-full left-0 right-0 bg-white border-b border-slate-200 shadow-xl py-6 px-6 z-40 max-h-[80vh] overflow-y-auto"
     >
         <nav class="flex flex-col gap-4">
-            <a href="#outcome" @click="isMenuOpen = false" style="color: #0f172a; font-weight: 700; font-size: 1.05rem; padding: 0.35rem 0; text-decoration: none;">
+            <a href="#outcome" @click.prevent="scrollToSection('#outcome')" style="color: #0f172a; font-weight: 700; font-size: 1.05rem; padding: 0.35rem 0; text-decoration: none; cursor: pointer;">
                 {{ __('landing.outcome.badge') }}
             </a>
-            <a href="#whatsapp" @click="isMenuOpen = false" style="color: #0f172a; font-weight: 700; font-size: 1.05rem; padding: 0.35rem 0; text-decoration: none;">
+            <a href="#whatsapp" @click.prevent="scrollToSection('#whatsapp')" style="color: #0f172a; font-weight: 700; font-size: 1.05rem; padding: 0.35rem 0; text-decoration: none; cursor: pointer;">
                 {{ __('landing.nav.whatsapp') }}
             </a>
-            <a href="#excel" @click="isMenuOpen = false" style="color: #0f172a; font-weight: 700; font-size: 1.05rem; padding: 0.35rem 0; text-decoration: none;">
+            <a href="#excel" @click.prevent="scrollToSection('#excel')" style="color: #0f172a; font-weight: 700; font-size: 1.05rem; padding: 0.35rem 0; text-decoration: none; cursor: pointer;">
                 {{ __('landing.nav.excel_migration') }}
             </a>
-            <a href="#pricing" @click="isMenuOpen = false" style="color: #0f172a; font-weight: 700; font-size: 1.05rem; padding: 0.35rem 0; text-decoration: none;">
+            <a href="#pricing" @click.prevent="scrollToSection('#pricing')" style="color: #0f172a; font-weight: 700; font-size: 1.05rem; padding: 0.35rem 0; text-decoration: none; cursor: pointer;">
                 {{ __('landing.nav.pricing') }}
             </a>
-            <a href="#faq" @click="isMenuOpen = false" style="color: #0f172a; font-weight: 700; font-size: 1.05rem; padding: 0.35rem 0; text-decoration: none;">
+            <a href="#faq" @click.prevent="scrollToSection('#faq')" style="color: #0f172a; font-weight: 700; font-size: 1.05rem; padding: 0.35rem 0; text-decoration: none; cursor: pointer;">
                 {{ __('landing.nav.faq') }}
             </a>
             <div style="height: 1px; background: #e2e8f0; margin: 0.5rem 0;"></div>
