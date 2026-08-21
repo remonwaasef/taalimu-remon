@@ -30,6 +30,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
+    <!-- Hope UI & Bootstrap Core CSS (Compatible with TailwindCSS) -->
+    <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/libs.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/hope-ui.css?v=1.1.1') }}">
+    @if(app()->getLocale() == 'ar')
+        <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/rtl.css?v=1.1.1') }}">
+    @endif
+    <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/taalimu-unified.css?v=' . time()) }}">
+
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
@@ -325,6 +333,10 @@
 
     <!-- Global Command Palette Modal (Ctrl+K) -->
     <x-ui.command-palette />
+
+    <!-- Bootstrap & Hope UI Core JS -->
+    <script src="{{ asset('assets/hope-ui/js/libs.min.js') }}"></script>
+    <script src="{{ asset('assets/hope-ui/js/hope-ui.js') }}"></script>
 
     @stack('scripts')
 </body>

@@ -569,3 +569,212 @@ html.dark .dropdown-menu {
     background: #1d2935;
     color: #e2e8f0;
 }
+
+/* --------------------------------------------------------------------------
+   11. Unified Center Panel Component Polish (Light & Dark Modes)
+   -------------------------------------------------------------------------- */
+
+/* Buttons */
+.btn-glass {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem !important;
+    font-size: 0.875rem !important;
+    font-weight: 600 !important;
+    border-radius: 0.625rem !important;
+    background: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    color: #334155 !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+    transition: all 0.2s ease !important;
+    text-decoration: none !important;
+    cursor: pointer;
+}
+.btn-glass:hover {
+    background: #f8fafc !important;
+    border-color: #94a3b8 !important;
+    color: #0f172a !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+}
+html.dark .btn-glass, body.dark .btn-glass {
+    background: #1e293b !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    color: #e2e8f0 !important;
+}
+html.dark .btn-glass:hover, body.dark .btn-glass:hover {
+    background: #334155 !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+}
+
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1.25rem !important;
+    font-size: 0.875rem !important;
+    font-weight: 700 !important;
+    border-radius: 0.625rem !important;
+    background: #2E8B83 !important;
+    border: 1px solid #2E8B83 !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 8px rgba(46, 139, 131, 0.25) !important;
+    transition: all 0.2s ease !important;
+    text-decoration: none !important;
+    cursor: pointer;
+}
+.btn-primary:hover {
+    background: #25746D !important;
+    border-color: #25746D !important;
+    color: #ffffff !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(46, 139, 131, 0.35) !important;
+}
+
+/* Form Controls & Inputs */
+.form-control, .form-select {
+    display: block;
+    width: 100%;
+    padding: 0.55rem 0.875rem !important;
+    font-size: 0.875rem !important;
+    font-weight: 500;
+    line-height: 1.5;
+    color: #1e293b !important;
+    background-color: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 0.625rem !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.form-control:focus, .form-select:focus {
+    border-color: #2E8B83 !important;
+    box-shadow: 0 0 0 3px rgba(46, 139, 131, 0.18) !important;
+    outline: 0;
+}
+html.dark .form-control, html.dark .form-select,
+body.dark .form-control, body.dark .form-select {
+    background-color: #0f172a !important;
+    border-color: #334155 !important;
+    color: #f8fafc !important;
+}
+html.dark .form-control:focus, html.dark .form-select:focus,
+body.dark .form-control:focus, body.dark .form-select:focus {
+    border-color: #2E8B83 !important;
+    box-shadow: 0 0 0 3px rgba(46, 139, 131, 0.25) !important;
+}
+
+/* Cards */
+.card {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 1rem !important;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05) !important;
+    margin-bottom: 1.5rem;
+}
+.card-header {
+    background: transparent !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+    padding: 1rem 1.25rem !important;
+    font-weight: 700;
+}
+.card-body {
+    padding: 1.25rem !important;
+}
+html.dark .card, body.dark .card {
+    background: #1e293b !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2) !important;
+}
+html.dark .card-header, body.dark .card-header {
+    border-bottom-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+/* Tables */
+.table-responsive {
+    border-radius: 0.75rem;
+    overflow-x: auto;
+}
+.table {
+    width: 100%;
+    margin-bottom: 0 !important;
+    vertical-align: middle;
+    color: #1e293b;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+.table thead th {
+    background-color: #f8fafc !important;
+    color: #475569 !important;
+    font-size: 0.8rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+    padding: 0.75rem 1rem !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+.table tbody td {
+    padding: 0.875rem 1rem !important;
+    font-size: 0.875rem;
+    border-bottom: 1px solid #f1f5f9 !important;
+    color: #334155;
+}
+.table tbody tr:last-child td {
+    border-bottom: none !important;
+}
+.table tbody tr:hover td {
+    background-color: #f8fafc !important;
+}
+html.dark .table thead th, body.dark .table thead th {
+    background-color: #0f172a !important;
+    color: #94a3b8 !important;
+    border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+}
+html.dark .table tbody td, body.dark .table tbody td {
+    border-bottom-color: rgba(255, 255, 255, 0.05) !important;
+    color: #cbd5e1;
+}
+html.dark .table tbody tr:hover td, body.dark .table tbody tr:hover td {
+    background-color: rgba(255, 255, 255, 0.02) !important;
+}
+
+/* Navigation Tabs */
+.nav-tabs {
+    border-bottom: 2px solid #e2e8f0 !important;
+    gap: 0.5rem;
+}
+.nav-tabs .nav-link {
+    color: #64748b !important;
+    font-weight: 600;
+    font-size: 0.875rem;
+    border: none !important;
+    border-bottom: 2px solid transparent !important;
+    padding: 0.75rem 1rem !important;
+    border-radius: 0 !important;
+    transition: all 0.2s ease;
+}
+.nav-tabs .nav-link:hover {
+    color: #0f172a !important;
+}
+.nav-tabs .nav-link.active {
+    color: #2E8B83 !important;
+    border-bottom: 2px solid #2E8B83 !important;
+    background: transparent !important;
+    font-weight: 700;
+}
+html.dark .nav-tabs {
+    border-bottom-color: rgba(255, 255, 255, 0.1) !important;
+}
+html.dark .nav-tabs .nav-link {
+    color: #94a3b8 !important;
+}
+html.dark .nav-tabs .nav-link:hover {
+    color: #f8fafc !important;
+}
+html.dark .nav-tabs .nav-link.active {
+    color: #5eead4 !important;
+    border-bottom-color: #2E8B83 !important;
+}
