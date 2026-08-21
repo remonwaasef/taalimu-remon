@@ -42,14 +42,6 @@
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-    <!-- Hope UI & Bootstrap CSS (Legacy Component Support) -->
-    <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/libs.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/hope-ui.css?v=1.3.1') }}">
-    <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/taalimu-unified.css?v=1.3.1') }}">
-    @if(app()->getLocale() == 'ar')
-        <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/rtl.css?v=1.3.1') }}">
-    @endif
-
     <!-- Vite Assets (TailwindCSS + App + Global Interactions) -->
     @vite(['resources/css/tailwind.css', 'resources/css/app.scss', 'resources/js/app.js', 'resources/js/taalimu-global.js'])
 

@@ -21,7 +21,7 @@
                     </div>
                     <div class="text-end d-flex align-items-center gap-2">
                         <!-- Scan Button -->
-                        <button type="button" class="btn btn-success btn-sm rounded-pill px-3 shadow-sm" data-bs-toggle="modal" data-bs-target="#scanQrModal">
+                        <button type="button" class="btn btn-success btn-sm rounded-pill px-3 shadow-sm" onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'scanQrModal' }))">
                             <i class="bi bi-qr-code-scan me-1"></i>{{ __('center::attendance.scan_qr_btn') }}</button>
 
                         @php
@@ -126,58 +126,42 @@
     </div>
 
 <!-- Smart Late Modal -->
-<div class="modal fade" id="lateModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-sm">
-        <div class="modal-content rounded-4 border-0 shadow">
-            <div class="modal-header border-bottom-0 pb-0">
-                <h6 class="modal-title fw-bold" id="lateModalTitle">تسجيل تأخير</h6>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<x-ui.modal id="lateModal" title="تسجيل تأخير" size="sm">
+    <form action="{{ route('center.attendance.store') }}" method="POST">
+        @csrf
+        <div class="text-center">
+            <p class="text-slate-500 text-sm mb-3">طالب: <strong id="lateModalStudentName" class="text-slate-900 dark:text-white"></strong></p>
+            
+            <input type="hidden" name="student_id" id="lateModalStudentId">
+            <input type="hidden" name="course_id" id="lateModalCourseId">
+            <input type="hidden" name="schedule_id" id="lateModalScheduleId">
+            <input type="hidden" name="session_date" value="{{ today()->format('Y-m-d') }}">
+            <input type="hidden" name="status" value="late">
+            
+            <label class="block font-semibold text-sm mb-2 text-start">كم دقيقة تأخير؟</label>
+            <div class="flex gap-2 mb-2">
+                <input type="number" name="late_minutes" id="lateModalMinutes" class="flex-1 px-4 py-3 border border-brand-border dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 text-center font-bold text-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent" required min="1" value="">
+                <span class="px-4 py-3 bg-slate-100 dark:bg-slate-800 border border-brand-border dark:border-slate-700 rounded-xl text-slate-500 flex items-center">دقيقة</span>
             </div>
-            <form action="{{ route('center.attendance.store') }}" method="POST">
-                @csrf
-                <div class="modal-body text-center pt-2">
-                    <p class="text-muted small mb-3">طالب: <strong id="lateModalStudentName" class="text-dark"></strong></p>
-                    
-                    <input type="hidden" name="student_id" id="lateModalStudentId">
-                    <input type="hidden" name="course_id" id="lateModalCourseId">
-                    <input type="hidden" name="schedule_id" id="lateModalScheduleId">
-                    <input type="hidden" name="session_date" value="{{ today()->format('Y-m-d') }}">
-                    <input type="hidden" name="status" value="late">
-                    
-                    <label class="form-label fw-bold">كم دقيقة تأخير؟</label>
-                    <div class="input-group input-group-lg mb-2">
-                        <input type="number" name="late_minutes" id="lateModalMinutes" class="form-control text-center fw-bold" required min="1" value="">
-                        <span class="input-group-text bg-light">دقيقة</span>
-                    </div>
-                    <small class="text-success d-block mb-3" style="font-size: 0.75rem;"><i class="bi bi-robot"></i> تم الحساب آلياً بناءً على وقت الحصة</small>
-                </div>
-                <div class="modal-footer border-top-0 pt-0 justify-content-center">
-                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal" onclick="bootstrap.Modal.getInstance(document.getElementById('lateModal'))?.hide()">إلغاء</button>
-                    <button type="submit" class="btn btn-warning rounded-pill px-4 fw-bold">حفظ التأخير</button>
-                </div>
-            </form>
+            <small class="text-green-600 dark:text-green-400 block mb-4 text-xs"><i class="bi bi-robot"></i> تم الحساب آلياً بناءً على وقت الحصة</small>
         </div>
-    </div>
-</div>
+        <div class="flex items-center justify-center gap-3">
+            <button type="button" class="px-5 py-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors" onclick="window.dispatchEvent(new CustomEvent('close-modal', { detail: 'lateModal' }))">إلغاء</button>
+            <button type="submit" class="px-5 py-2 rounded-full bg-amber-500 hover:bg-amber-600 text-white font-semibold transition-colors">حفظ التأخير</button>
+        </div>
+    </form>
+</x-ui.modal>
 
 <!-- Scan QR Modal -->
-<div class="modal fade" id="scanQrModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content overflow-hidden rounded-4 border-0 shadow-lg">
-            <div class="modal-header border-0 bg-primary text-white">
-                <h5 class="modal-title fw-bold"><i class="bi bi-qr-code-scan me-2"></i>{{ __('center::attendance.scan_qr_modal_title') }}</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body p-0 text-center bg-dark position-relative">
-                <div id="reader" style="width: 100%; min-height: 300px;"></div>
-                <div id="scan-result" class="position-absolute bottom-0 start-0 w-100 p-3 bg-white bg-opacity-90 text-dark fw-bold d-none">{{ __('center::attendance.verifying') }}</div>
-            </div>
-            <div class="modal-footer border-0 bg-light justify-content-center">
-                <small class="text-muted">{{ __('center::attendance.facing_camera_hint') }}</small>
-            </div>
-        </div>
+<x-ui.modal id="scanQrModal" title="{{ __('center::attendance.scan_qr_modal_title') }}">
+    <div class="text-center">
+        <div id="reader" style="width: 100%; min-height: 300px;" class="bg-slate-900 rounded-xl overflow-hidden mx-auto"></div>
+        <div id="scan-result" class="hidden absolute bottom-0 start-0 w-full p-3 bg-white/95 text-slate-900 font-bold">{{ __('center::attendance.verifying') }}</div>
     </div>
-</div>
+    <x-slot name="footer">
+        <small class="text-slate-500 w-full text-center">{{ __('center::attendance.facing_camera_hint') }}</small>
+    </x-slot>
+</x-ui.modal>
 
 @feature('offline_attendance')
 <div id="offlineStatusBar" class="position-fixed bottom-0 start-0 w-100 d-none" style="z-index: 9999;">

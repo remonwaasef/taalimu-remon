@@ -12,27 +12,34 @@
     
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            primary: '#4F46E5',
+                            50: '#EEF2FF',
+                            100: '#E0E7FF',
+                            900: '#312E81',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     
-    <link rel="stylesheet" href="{{ asset('css/landing-new.css') }}">
-    <!-- Network Monitor Styles -->
-    <link rel="stylesheet" href="{{ asset('css/network-monitor.css') }}">
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
     @stack('styles')
 </head>
-<body class="auth-minimal-body">
+<body class="min-h-screen bg-brand-bg dark:bg-slate-950 flex items-center justify-center px-4">
     @yield('content')
     
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Network Monitor -->
-    <script src="{{ asset('js/network-monitor.js') }}"></script>
-    <script>
-        window.TaalimuNetwork.onStatusChange((isOnline) => {
-            document.body.classList.toggle('is-network-offline', !isOnline);
-        });
-    </script>
     @stack('scripts')
 </body>
 </html>

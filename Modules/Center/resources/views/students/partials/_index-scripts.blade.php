@@ -32,57 +32,49 @@
             });
 
             // Quick Payment Logic
-            const payModalEl = document.getElementById('quickPayModal');
-            const payModal = payModalEl ? new bootstrap.Modal(payModalEl) : null;
             document.querySelectorAll('.quick-pay-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
-                    if (payModal) {
-                        document.getElementById('payStudentId').value = this.dataset.id;
-                        document.getElementById('payStudentName').textContent = this.dataset.name;
-                        document.getElementById('payAmountInput').value = this.dataset.balance;
-                        document.getElementById('payBalanceHint').textContent = '{{ __('center::students.current_balance') }}: ' + this.dataset.balance + ' {{ get_currency_symbol() }}';
-                        payModal.show();
-                    }
+                    document.getElementById('payStudentId').value = this.dataset.id;
+                    document.getElementById('payStudentName').textContent = this.dataset.name;
+                    document.getElementById('payAmountInput').value = this.dataset.balance;
+                    document.getElementById('payBalanceHint').textContent = '{{ __('center::students.current_balance') }}: ' + this.dataset.balance + ' {{ get_currency_symbol() }}';
+                    window.dispatchEvent(new CustomEvent('open-modal', { detail: 'quickPayModal' }));
                 });
             });
 
             // Quick Enroll Logic
-            const enrollModalEl = document.getElementById('quickEnrollModal');
-            const enrollModal = enrollModalEl ? new bootstrap.Modal(enrollModalEl) : null;
             const courseSelect = document.getElementById('courseSelect');
             const enrollForm = document.getElementById('enrollForm');
 
             document.querySelectorAll('.quick-enroll-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
-                    if (enrollModal) {
-                        const enrolledIds = this.dataset.enrolled ? this.dataset.enrolled.split(',') : [];
-                        document.getElementById('enrollStudentId').value = this.dataset.id;
-                        document.getElementById('enrollStudentName').textContent = this.dataset.name;
-                        
-                        const options = courseSelect.querySelectorAll('option');
-                        options.forEach(opt => {
-                            if (opt.value && enrolledIds.includes(opt.value)) {
-                                opt.setAttribute('data-enrolled', 'true');
-                                if (!opt.textContent.includes('{{ __('center::students.already_enrolled_label') }}')) {
-                                    opt.textContent = opt.textContent + ' {{ __('center::students.already_enrolled_label') }}';
-                                }
-                            } else {
-                                opt.removeAttribute('data-enrolled');
-                                opt.textContent = opt.textContent.replace(' {{ __('center::students.already_enrolled_label') }}', '');
+                    const enrolledIds = this.dataset.enrolled ? this.dataset.enrolled.split(',') : [];
+                    document.getElementById('enrollStudentId').value = this.dataset.id;
+                    document.getElementById('enrollStudentName').textContent = this.dataset.name;
+                    
+                    const options = courseSelect.querySelectorAll('option');
+                    options.forEach(opt => {
+                        if (opt.value && enrolledIds.includes(opt.value)) {
+                            opt.setAttribute('data-enrolled', 'true');
+                            if (!opt.textContent.includes('{{ __('center::students.already_enrolled_label') }}')) {
+                                opt.textContent = opt.textContent + ' {{ __('center::students.already_enrolled_label') }}';
                             }
-                        });
-                        
-                        if ($.fn.select2) {
-                            $(courseSelect).val("").trigger('change');
                         } else {
-                            courseSelect.value = "";
+                            opt.removeAttribute('data-enrolled');
+                            opt.textContent = opt.textContent.replace(' {{ __('center::students.already_enrolled_label') }}', '');
                         }
-                        
-                        document.getElementById('enrollWarning').classList.add('d-none');
-                        document.getElementById('submitEnrollBtn').disabled = false;
-                        
-                        enrollModal.show();
+                    });
+                    
+                    if ($.fn.select2) {
+                        $(courseSelect).val("").trigger('change');
+                    } else {
+                        courseSelect.value = "";
                     }
+                    
+                    document.getElementById('enrollWarning').classList.add('hidden');
+                    document.getElementById('submitEnrollBtn').disabled = false;
+                    
+                    window.dispatchEvent(new CustomEvent('open-modal', { detail: 'quickEnrollModal' }));
                 });
             });
 

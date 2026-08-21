@@ -252,13 +252,7 @@
 
         document.getElementById('lateModalMinutes').value = diffMinutes;
 
-        const modalEl = document.getElementById('lateModal');
-        if (modalEl.parentNode !== document.body) {
-            document.body.appendChild(modalEl);
-        }
-
-        const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
-        modal.show();
+        window.dispatchEvent(new CustomEvent('open-modal', { detail: 'lateModal' }));
     }
 
     // ─── QR Scanner ───
@@ -294,7 +288,7 @@
         const readerEl = document.getElementById('reader');
         if (!readerEl) return;
         readerEl.innerHTML = '';
-        document.getElementById('scan-result').classList.add('d-none');
+        document.getElementById('scan-result').classList.add('hidden');
 
         html5QrScanner = new Html5Qrcode("reader");
 
@@ -381,10 +375,10 @@
 
     function showResult(message, type) {
         const resultDiv = document.getElementById('scan-result');
-        resultDiv.classList.remove('d-none');
+        const colorMap = { success: 'text-green-600', danger: 'text-red-600', warning: 'text-amber-600', primary: 'text-brand-primary' };
+        resultDiv.className = 'absolute bottom-0 start-0 w-full p-3 bg-white/95 font-bold text-center rounded-b-xl ' + (colorMap[type] || 'text-slate-900');
+        resultDiv.classList.remove('hidden');
         resultDiv.innerHTML = message;
-        const colorMap = { success: 'text-success', danger: 'text-danger', warning: 'text-warning', primary: 'text-primary' };
-        resultDiv.className = 'position-absolute bottom-0 start-0 w-100 p-3 bg-white bg-opacity-95 fw-bold ' + (colorMap[type] || 'text-dark');
     }
 
     // ─── Initialize Everything ───
@@ -403,12 +397,16 @@
             syncOfflineAttendance();
         }
 
-        // QR Scanner modal lifecycle
-        const scanModal = document.getElementById('scanQrModal');
-        if (scanModal) {
-            scanModal.addEventListener('shown.bs.modal', () => startScanner());
-            scanModal.addEventListener('hidden.bs.modal', () => stopScanner());
-        }
+        // QR Scanner modal lifecycle (Alpine open-modal/close-modal events)
+        window.addEventListener('open-modal', function(e) {
+            if (e.detail === 'scanQrModal') {
+                // Wait for Alpine to render the modal before starting the camera
+                setTimeout(startScanner, 150);
+            }
+        });
+        window.addEventListener('close-modal', function(e) {
+            if (e.detail === 'scanQrModal') stopScanner();
+        });
     });
 
     // ─── Network Event Listeners ───

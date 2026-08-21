@@ -27,7 +27,7 @@
       "name": "Taalimu",
       "url": "https://taalimu.com",
       "logo": "https://taalimu.com/images/logo.png",
-      "description": "{{ __('landing.hero.subtitle') }}",
+      "description": "{{ __('landing.seo.description') }}",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web",
       "offer": {

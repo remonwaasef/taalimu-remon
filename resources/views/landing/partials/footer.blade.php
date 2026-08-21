@@ -1,63 +1,55 @@
-﻿<footer class="landing-footer" style="background:#f8fafc; padding-top:5rem; padding-bottom:2.5rem; border-top:1px solid #e2e8f0;">
+<footer class="landing-footer" style="background: #0f172a; color: #cbd5e1; padding: 4.5rem 0 2.5rem 0; border-top: 1px solid #1e293b;">
     <div class="container mx-auto px-4 lg:px-12">
-        <div class="grid lg:grid-cols-5 gap-12 mb-16">
-            {{-- Brand --}}
-            <div class="lg:col-span-2" style="display:flex; flex-direction:column; gap:1.5rem;">
-                <a href="{{ route('home') }}" style="display:flex; align-items:center; gap:0.75rem; text-decoration:none;">
-                    <img src="{{ asset('images/brand/logo-full.png?v=3') }}" alt="{{ config('app.name') }}" style="height:2.25rem; width:auto;">
-                    <span style="font-weight:900; font-size:1.25rem; color:#0f172a; letter-spacing:-0.025em;">
-                        {{ \App\Models\SiteSetting::get('site_name', 'Taalimu') }}
-                    </span>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+            <!-- Brand Column -->
+            <div class="lg:col-span-2">
+                <a href="{{ route('home') }}" class="inline-flex items-center gap-2 mb-4">
+                    <img src="{{ asset('images/brand/logo-full.png?v=3') }}" alt="Taalimu" class="h-8 w-auto brightness-0 invert">
                 </a>
-                <p style="color:#64748b !important; font-weight:500; line-height:1.7; max-width:20rem; font-size:0.875rem;">
-                    {{ \App\Models\SiteSetting::get('site_description_' . app()->getLocale(), __('landing.hero.subtitle')) }}
+                <p style="color: #94a3b8; font-size: 0.95rem; line-height: 1.7; max-width: 24rem; margin-bottom: 1.5rem;">
+                    {{ __('landing.footer.description') }}
                 </p>
-                {{-- Social --}}
-                <div style="display:flex; align-items:center; gap:0.75rem;">
-                    @foreach(['facebook-f', 'linkedin-in', 'twitter', 'instagram'] as $social)
-                    <a href="#" style="width:2.5rem; height:2.5rem; border-radius:0.75rem; background:#e2e8f0; display:flex; align-items:center; justify-content:center; color:#64748b; transition:all 0.3s; text-decoration:none;" onmouseover="this.style.background='#2E8B83'; this.style.color='#ffffff'" onmouseout="this.style.background='#e2e8f0'; this.style.color='#64748b'">
-                        <i class="fab fa-{{ $social }}" style="font-size:0.875rem;"></i>
+                <div style="display: flex; gap: 0.75rem;">
+                    <a href="https://wa.me/" target="_blank" style="width: 2.25rem; height: 2.25rem; border-radius: 0.5rem; background: #1e293b; color: #2E8B83; display: flex; align-items: center; justify-content: center; text-decoration: none;">
+                        <i class="fab fa-whatsapp"></i>
                     </a>
-                    @endforeach
+                    <a href="https://facebook.com/" target="_blank" style="width: 2.25rem; height: 2.25rem; border-radius: 0.5rem; background: #1e293b; color: #38bdf8; display: flex; align-items: center; justify-content: center; text-decoration: none;">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
                 </div>
             </div>
 
-            {{-- Links --}}
+            <!-- Quick Links -->
             <div>
-                <h4 style="color:#0f172a !important; font-weight:700; font-size:0.875rem; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:1.5rem;">{{ __('landing.footer.product.title') }}</h4>
-                <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:0.75rem;">
-                    @foreach(['features', 'pricing', 'integrations', 'updates'] as $link)
-                    <li><a href="#" style="color:#64748b; font-weight:500; font-size:0.875rem; text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#64748b'">{{ __("landing.footer.product.$link") }}</a></li>
-                    @endforeach
+                <h4 style="color: #ffffff; font-weight: 800; font-size: 1rem; margin-bottom: 1.25rem;">
+                    {{ __('landing.footer.quick_links') }}
+                </h4>
+                <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem;">
+                    <li><a href="#showcase" style="color: #94a3b8; font-size: 0.9rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#94a3b8'">{{ __('landing.footer.features_link') }}</a></li>
+                    <li><a href="#whatsapp" style="color: #94a3b8; font-size: 0.9rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#94a3b8'">{{ __('landing.nav.whatsapp') }}</a></li>
+                    <li><a href="#excel" style="color: #94a3b8; font-size: 0.9rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#94a3b8'">{{ __('landing.nav.excel_migration') }}</a></li>
+                    <li><a href="#pricing" style="color: #94a3b8; font-size: 0.9rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#94a3b8'">{{ __('landing.footer.pricing_link') }}</a></li>
+                    <li><a href="#faq" style="color: #94a3b8; font-size: 0.9rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#94a3b8'">{{ __('landing.footer.faq_link') }}</a></li>
                 </ul>
             </div>
+
+            <!-- Portal Links -->
             <div>
-                <h4 style="color:#0f172a !important; font-weight:700; font-size:0.875rem; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:1.5rem;">{{ __('landing.footer.resources.title') }}</h4>
-                <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:0.75rem;">
-                    @foreach(['help', 'docs', 'blog', 'api'] as $link)
-                    <li><a href="#" style="color:#64748b; font-weight:500; font-size:0.875rem; text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#64748b'">{{ __("landing.footer.resources.$link") }}</a></li>
-                    @endforeach
-                </ul>
-            </div>
-            <div>
-                <h4 style="color:#0f172a !important; font-weight:700; font-size:0.875rem; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:1.5rem;">{{ __('landing.footer.legal.title') }}</h4>
-                <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:0.75rem;">
-                    @foreach(['privacy', 'terms', 'cookies'] as $link)
-                    <li><a href="{{ route($link) }}" style="color:#64748b; font-weight:500; font-size:0.875rem; text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#64748b'">{{ __("landing.footer.legal.$link") }}</a></li>
-                    @endforeach
+                <h4 style="color: #ffffff; font-weight: 800; font-size: 1rem; margin-bottom: 1.25rem;">
+                    {{ __('landing.footer.login_link') }}
+                </h4>
+                <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem;">
+                    <li><a href="{{ route('login.portal') }}" style="color: #94a3b8; font-size: 0.9rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#94a3b8'">{{ __('landing.footer.login_link') }}</a></li>
+                    <li><a href="{{ route('register') }}" style="color: #2E8B83; font-weight: 700; font-size: 0.9rem; text-decoration: none;">{{ __('landing.footer.register_link') }}</a></li>
+                    <li><a href="{{ route('privacy') }}" style="color: #94a3b8; font-size: 0.9rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#94a3b8'">{{ __('landing.footer.privacy') }}</a></li>
+                    <li><a href="{{ route('terms') }}" style="color: #94a3b8; font-size: 0.9rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#94a3b8'">{{ __('landing.footer.terms') }}</a></li>
                 </ul>
             </div>
         </div>
 
-        <div style="padding-top:2rem; border-top:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center; gap:1.5rem; flex-wrap:wrap;">
-            <div style="color:#64748b; font-size:0.875rem; font-weight:500;">
-                {{ str_replace(config('app.name'), \App\Models\SiteSetting::get('site_name', config('app.name')), __('landing.footer.copyright')) }}
-            </div>
-
-            <div style="display:flex; align-items:center; gap:0.5rem; padding:0.375rem 1rem; border-radius:9999px; background:#E6F4F3; border:1px solid #B2DDD9;">
-                <span style="width:0.5rem; height:0.5rem; border-radius:50%; background:#22c55e; display:inline-block; animation:pulse 2s infinite;"></span>
-                <span style="font-size:0.65rem; font-weight:700; color:#25746D; text-transform:uppercase; letter-spacing:0.08em;">All Systems Operational</span>
-            </div>
+        <!-- Copyright -->
+        <div style="border-top: 1px solid #1e293b; padding-top: 1.75rem; text-align: center; font-size: 0.85rem; color: #64748b;">
+            <p style="margin: 0;">{{ __('landing.footer.rights') }}</p>
         </div>
     </div>
 </footer>

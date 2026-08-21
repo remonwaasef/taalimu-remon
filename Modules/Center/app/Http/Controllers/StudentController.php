@@ -478,4 +478,107 @@ class StudentController extends Controller
 
         return view('center::students.id_card', compact('student'));
     }
+
+    /**
+     * Bulk change status for selected students.
+     */
+    public function bulkStatus(Request $request)
+    {
+        $this->authorize('update', Student::class);
+
+        $request->validate([
+            'student_ids' => 'required|array|min:1',
+            'student_ids.*' => 'exists:students,id',
+            'status' => 'required|in:active,frozen',
+        ]);
+
+        $studentIds = $request->student_ids;
+        $status = $request->status;
+
+        Student::where('tenant_id', $this->tenant->id)
+            ->whereIn('id', $studentIds)
+            ->update(['status' => $status]);
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => count($studentIds).' طالب تم تحديث حالته بنجاح',
+            ]);
+        }
+
+        return redirect()->back()->with('success', count($studentIds).' طالب تم تحديث حالته بنجاح');
+    }
+
+    /**
+     * Bulk soft delete selected students.
+     */
+    public function bulkDelete(Request $request)
+    {
+        $this->authorize('delete', Student::class);
+
+        $request->validate([
+            'student_ids' => 'required|array|min:1',
+            'student_ids.*' => 'exists:students,id',
+        ]);
+
+        $studentIds = $request->student_ids;
+
+        Student::where('tenant_id', $this->tenant->id)
+            ->whereIn('id', $studentIds)
+            ->delete();
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => count($studentIds).' طالب تم حذفه بنجاح',
+            ]);
+        }
+
+        return redirect()->back()->with('success', count($studentIds).' طالب تم حذفه بنجاح');
+    }
+
+    /**
+     * Export selected students to CSV.
+     */
+    public function bulkExport(Request $request)
+    {
+        $this->authorize('viewAny', Student::class);
+
+        $request->validate([
+            'student_ids' => 'required|array|min:1',
+            'student_ids.*' => 'exists:students,id',
+        ]);
+
+        $studentIds = $request->student_ids;
+
+        return response()->streamDownload(function () use ($studentIds) {
+            $students = Student::where('tenant_id', $this->tenant->id)
+                ->whereIn('id', $studentIds)
+                ->with('grade')
+                ->get();
+
+            $csvHeader = ['ID', 'الاسم', 'البريد الإلكتروني', 'الهاتف', 'المستوى الدراسي', 'المدرسة', 'الشعبة', 'الحالة'];
+            $handle = fopen('php://output', 'w');
+
+            fwrite($handle, chr(0xEF).chr(0xBB).chr(0xBF));
+
+            fputcsv($handle, $csvHeader);
+            foreach ($students as $student) {
+                fputcsv($handle, [
+                    $student->id,
+                    $student->name,
+                    $student->email ?? '',
+                    $student->phone ?? '',
+                    $student->grade->name ?? '',
+                    $student->school_name ?? '',
+                    $student->section_type ?? '',
+                    $student->status,
+                ]);
+            }
+
+            fclose($handle);
+        }, 'students_selected_'.now()->format('Y-m-d').'.csv', [
+            'Content-Type' => 'text/csv',
+        ]);
+    }
 }

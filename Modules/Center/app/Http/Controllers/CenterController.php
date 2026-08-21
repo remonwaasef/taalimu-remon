@@ -6,6 +6,7 @@ use App\Models\Course;
 use App\Models\Expense;
 use App\Models\Sale;
 use App\Models\Student;
+use App\Services\StudentRiskService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Modules\Center\Http\Controllers\CenterBaseController as Controller;
@@ -180,57 +181,23 @@ class CenterController extends Controller
 
     private function getAtRiskStudents($tenantId)
     {
-        // 1. Students with significant score drops
-        // We get students who have at least 5 attempts in total
-        $subquery = DB::table('quiz_attempts')
-            ->join('students', 'quiz_attempts.user_id', '=', 'students.user_id')
-            ->where('students.tenant_id', $tenantId)
-            ->where('quiz_attempts.tenant_id', $tenantId) // Extra security layer
-            ->select('quiz_attempts.*', 'students.name', DB::raw('ROW_NUMBER() OVER(PARTITION BY quiz_attempts.user_id ORDER BY quiz_attempts.created_at DESC) as row_num'));
-
-        $studentsWithDrops = DB::query()
-            ->fromSub($subquery, 'ranked_attempts')
-            ->select('name', 'user_id')
-            ->selectRaw('AVG(CASE WHEN row_num <= 3 THEN score END) as recent_avg')
-            ->selectRaw('AVG(CASE WHEN row_num > 3 THEN score END) as baseline_avg')
-            ->groupBy('user_id', 'name')
-            ->havingRaw('baseline_avg IS NOT NULL AND recent_avg < (baseline_avg * 0.85)')
-            ->limit(3)
-            ->get()
-            ->map(function ($item) {
-                return [
-                    'name' => $item->name,
-                    'risk_level' => 'high',
-                    'reason' => __('center::dashboard.insights.score_drop_detected'),
-                ];
-            })->toArray();
-
-        // 2. Inactive students (no activity in 10 days)
-        $inactiveStudents = Student::where('tenant_id', $tenantId)
-            ->where('status', 'active')
-            ->whereDoesntHave('user.activities', function ($q) {
-                $q->where('created_at', '>=', now()->subDays(10));
-            })
-            ->limit(2)
-            ->get()
-            ->map(function ($student) {
-                return [
-                    'name' => $student->name,
-                    'risk_level' => 'medium',
-                    'reason' => __('center::dashboard.insights.inactivity_detected'),
-                ];
-            })->toArray();
-
-        $merged = array_merge($studentsWithDrops, $inactiveStudents);
+        $riskService = app(\App\Services\StudentRiskService::class);
+        $atRiskStudents = $riskService->getAtRiskStudents($tenantId, 'medium');
 
         // Fallback for demo if no real data yet
-        if (empty($merged)) {
+        if (empty($atRiskStudents)) {
             return [
-                ['name' => 'Demo Student', 'risk_level' => 'low', 'reason' => 'Healthy engagement patterns'],
+                [
+                    'id' => 0,
+                    'name' => 'Demo Student',
+                    'risk_score' => 15,
+                    'risk_level' => 'low',
+                    'risk_reasons' => ['Healthy engagement patterns'],
+                ],
             ];
         }
 
-        return $merged;
+        return $atRiskStudents;
     }
 
     private function getPerformanceTrends($tenantId)

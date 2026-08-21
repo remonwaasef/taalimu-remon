@@ -448,73 +448,60 @@
 
 @push('modals')
     {{-- Quick Payment Modal --}}
-    <div class="modal fade" id="quickPayModal" tabindex="-1" aria-labelledby="quickPayModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-sm modal-dialog-centered">
-            <div class="modal-content border-0 rounded-4 shadow">
-                <form action="{{ route('center.sales.mark-paid') }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="student_id" id="payStudentId">
-                    <div class="modal-body p-4 text-center">
-                        <div class="rounded-circle bg-success bg-opacity-10 text-success p-3 mb-3 d-inline-block">
-                            <i class="fas fa-money-bill-wave fa-2x"></i>
-                        </div>
-                        <h5 class="fw-bold mb-1" id="payStudentName"></h5>
-                        <p class="text-muted small mb-4">{{ __('center::students.quick_pay_desc') }}</p>
-                        
-                        <div class="mb-3 text-start">
-                            <label class="form-label fw-bold small text-muted">{{ __('center::students.collected_amount') }}</label>
-                            <div class="input-group">
-                                <input type="number" name="amount" id="payAmountInput" class="form-control rounded-start-pill" required>
-                                <span class="input-group-text rounded-end-pill">{{ get_currency_symbol() }}</span>
-                            </div>
-                            <div id="payBalanceHint" class="x-small text-danger mt-1"></div>
-                        </div>
-
-                        <button type="submit" class="btn btn-success w-100 rounded-pill py-2 fw-bold">{{ __('center::students.confirm_payment') }}</button>
+    <x-ui.modal id="quickPayModal" title="{{ __('center::students.quick_pay_title') }}" size="sm">
+        <form action="{{ route('center.sales.mark-paid') }}" method="POST">
+            @csrf
+            <input type="hidden" name="student_id" id="payStudentId">
+            <div class="text-center">
+                <div class="rounded-full bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 p-3 mb-3 inline-flex">
+                    <i class="fas fa-money-bill-wave fa-2x"></i>
+                </div>
+                <h3 class="font-semibold mb-1" id="payStudentName"></h3>
+                <p class="text-slate-500 text-sm mb-4">{{ __('center::students.quick_pay_desc') }}</p>
+                
+                <div class="mb-4 text-start">
+                    <label class="block font-medium text-sm text-slate-500 mb-1">{{ __('center::students.collected_amount') }}</label>
+                    <div class="flex gap-2">
+                        <input type="number" name="amount" id="payAmountInput" class="flex-1 px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-primary focus:border-transparent" required>
+                        <span class="px-4 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-500">{{ get_currency_symbol() }}</span>
                     </div>
-                </form>
+                    <div id="payBalanceHint" class="text-xs text-red-500 mt-1"></div>
+                </div>
+
+                <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 rounded-xl transition-colors">{{ __('center::students.confirm_payment') }}</button>
             </div>
-        </div>
-    </div>
+        </form>
+    </x-ui.modal>
 
     {{-- Quick Enroll Modal --}}
-    <div class="modal fade" id="quickEnrollModal" tabindex="-1" aria-labelledby="quickEnrollModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 rounded-4 shadow">
-                <form id="enrollForm" method="POST">
-                    @csrf
-                    <input type="hidden" name="student_id" id="enrollStudentId">
-                    <div class="modal-header border-0 pb-0">
-                        <h5 class="fw-bold"><i class="fas fa-plus-circle me-2 text-info"></i>{{ __('center::students.enroll_in_course') }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body p-4">
-                        <p class="small text-muted mb-4">{{ __('center::students.quick_enroll_desc', ['name' => '<span class="fw-bold text-dark" id="enrollStudentName"></span>']) }}</p>
-                        <div class="mb-3">
-                            <label class="form-label fw-bold small">{{ __('center::students.available_courses') }}</label>
-                            <select id="courseSelect" class="form-select rounded-pill" required>
-                                <option value="">{{ __('center::students.choose_course') }}</option>
-                                @foreach($courses as $course)
-                                    <option value="{{ $course->id }}">{{ $course->title }} ({{ number_format($course->price, 0) }} {{ get_currency_symbol() }})</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="alert alert-soft-info x-small border-0 rounded-3">
-                            {{ __('center::students.auto_invoice_hint') }}
-                        </div>
-                        <div id="enrollWarning" class="alert alert-soft-danger x-small border-0 rounded-3 mt-2 d-none">
-                            <i class="fas fa-exclamation-circle me-2"></i> {{ __('center::students.already_enrolled_warning') }}
-                        </div>
-                    </div>
-                    <div class="modal-footer border-0 pt-0">
-                        <button type="button" id="submitEnrollBtn" class="btn btn-info text-white w-100 rounded-pill py-2 fw-bold">{{ __('center::students.complete_enrollment') }}</button>
-                    </div>
-                </form>
+    <x-ui.modal id="quickEnrollModal" title="{{ __('center::students.enroll_in_course') }}" size="md">
+        <form id="enrollForm" method="POST">
+            @csrf
+            <input type="hidden" name="student_id" id="enrollStudentId">
+            <div class="text-center">
+                <p class="text-slate-500 text-sm mb-4">{{ __('center::students.quick_enroll_desc', ['name' => '<span class="font-semibold text-slate-900 dark:text-slate-100" id="enrollStudentName"></span>']) }}</p>
+                <div class="mb-4 text-start">
+                    <label class="block font-medium text-sm text-slate-500 mb-1">{{ __('center::students.available_courses') }}</label>
+                    <select id="courseSelect" class="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-primary focus:border-transparent" required>
+                        <option value="">{{ __('center::students.choose_course') }}</option>
+                        @foreach($courses as $course)
+                            <option value="{{ $course->id }}">{{ $course->title }} ({{ number_format($course->price, 0) }} {{ get_currency_symbol() }})</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mb-4 p-3 bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-800 rounded-xl text-sm text-indigo-700 dark:text-indigo-300">
+                    {{ __('center::students.auto_invoice_hint') }}
+                </div>
+                <div id="enrollWarning" class="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-xl text-sm text-red-700 dark:text-red-300 hidden">
+                    <i class="fas fa-exclamation-circle me-2"></i> {{ __('center::students.already_enrolled_warning') }}
+                </div>
+                <button type="button" id="submitEnrollBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-xl transition-colors">{{ __('center::students.complete_enrollment') }}</button>
             </div>
-    </div>
+        </form>
+    </x-ui.modal>
 
     {{-- Hidden Form for Direct Email --}}
-    <form id="directEmailForm" method="POST" style="display:none;">
+    <form id="directEmailForm" method="POST" class="hidden">
         @csrf
         <input type="hidden" name="subject" id="directEmailSubject">
         <textarea name="message" id="directEmailMessage"></textarea>

@@ -93,6 +93,10 @@ class Student extends Model
         'status',
         'monthly_fee',
         'payment_due_day',
+        'risk_score',
+        'risk_level',
+        'last_risk_check_at',
+        'risk_reasons',
     ];
 
     protected $casts = [
@@ -100,6 +104,8 @@ class Student extends Model
         'joined_at' => 'date',
         'monthly_fee' => 'decimal:2',
         'payment_due_day' => 'integer',
+        'last_risk_check_at' => 'datetime',
+        'risk_reasons' => 'array',
     ];
 
     /**
@@ -218,5 +224,52 @@ class Student extends Model
         }
 
         return $query;
+    }
+
+    /**
+     * Scope a query to only include at-risk students.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  string  $level  Minimum risk level (low, medium, high, critical)
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeAtRisk($query, string $level = 'medium')
+    {
+        $levelOrder = ['low' => 0, 'medium' => 1, 'high' => 2, 'critical' => 3];
+        $minLevel = $levelOrder[$level] ?? 1;
+
+        return $query->where(function ($q) use ($levelOrder, $minLevel) {
+            foreach ($levelOrder as $l => $value) {
+                if ($value >= $minLevel) {
+                    $q->orWhere('risk_level', $l);
+                }
+            }
+        });
+    }
+
+    /**
+     * Check if student is at risk.
+     */
+    public function isAtRisk(string $level = 'medium'): bool
+    {
+        $levelOrder = ['low' => 0, 'medium' => 1, 'high' => 2, 'critical' => 3];
+        $studentLevel = $levelOrder[$this->risk_level] ?? 0;
+        $minLevel = $levelOrder[$level] ?? 1;
+
+        return $studentLevel >= $minLevel;
+    }
+
+    /**
+     * Get risk level color for UI.
+     */
+    public function getRiskColorAttribute(): string
+    {
+        return match ($this->risk_level) {
+            'critical' => 'red',
+            'high' => 'orange',
+            'medium' => 'yellow',
+            'low' => 'green',
+            default => 'gray',
+        };
     }
 }

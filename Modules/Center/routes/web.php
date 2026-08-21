@@ -26,6 +26,7 @@ use Modules\Center\Http\Controllers\StudentController;
 use Modules\Center\Http\Controllers\SubscriptionController;
 use Modules\Center\Http\Controllers\TicketController;
 use Modules\Center\Http\Controllers\UserController;
+use Modules\Center\Http\Controllers\PublicCourseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +38,12 @@ use Modules\Center\Http\Controllers\UserController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+// Public Course Routes (SEO-friendly, no authentication required)
+Route::get('c/{tenant}/courses', [PublicCourseController::class, 'index'])
+    ->name('center.public.courses.index');
+Route::get('c/{tenant}/courses/{course}', [PublicCourseController::class, 'show'])
+    ->name('center.public.courses.show');
 
 // Define the route group closure once to avoid duplication
 $tenantRoutes = function () {
@@ -191,6 +198,13 @@ $tenantRoutes = function () {
 
         Route::middleware(['can:delete students'])->group(function () {
             Route::delete('students/{student}', [StudentController::class, 'destroy'])->name('center.students.destroy');
+        });
+
+        // Bulk Student Actions
+        Route::middleware(['can:edit students'])->group(function () {
+            Route::post('students/bulk/status', [StudentController::class, 'bulkStatus'])->name('center.students.bulk-status');
+            Route::post('students/bulk/delete', [StudentController::class, 'bulkDelete'])->name('center.students.bulk-delete');
+            Route::post('students/bulk/export', [StudentController::class, 'bulkExport'])->name('center.students.bulk-export');
         });
 
         // Guardian Lookup (Helper for Sibling Support)
