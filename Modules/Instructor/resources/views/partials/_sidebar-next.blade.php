@@ -1,75 +1,100 @@
-{{-- Shared Instructor Sidebar Partial --}}
-{{-- Usage: @include('instructor::partials._sidebar-next', ['active' => 'dashboard']) --}}
-
 @php
+    use Illuminate\Support\Facades\Route;
+
     $active = $active ?? 'dashboard';
+
+    // Route-based active state detection (more reliable than string comparison)
+    $isDashboardActive = Route::currentRouteNamed('instructor.dashboard');
+    $isStudentsActive = Route::currentRouteNamed('instructor.students.*');
+    $isGroupsActive = Route::currentRouteNamed('instructor.groups.*');
+    $isSchedulesActive = Route::currentRouteNamed('instructor.schedules.*');
+    $isOnlineClassesActive = Route::currentRouteNamed('instructor.online_classes.*');
+    $isAttendanceActive = Route::currentRouteNamed('instructor.attendance.*');
+    $isReportsActive = Route::currentRouteNamed('instructor.reports', 'instructor.reports.students', 'instructor.reports.payments');
+    $isBillingActive = Route::currentRouteNamed('instructor.billing');
+    $isSettingsActive = Route::currentRouteNamed('instructor.settings');
 @endphp
 
 <x-ui.sidebar brandName="Taalimu">
-    <div class="space-y-1">
+    <div class="space-y-1.5">
+        {{-- Dashboard --}}
         <a href="{{ route('instructor.dashboard') }}"
-           class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors
-                  {{ $active === 'dashboard' ? 'text-brand-primary bg-brand-50 dark:bg-brand-900/30' : 'text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800' }}">
+           class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors
+                  {{ $isDashboardActive ? 'text-brand-primary bg-brand-50 dark:bg-brand-900/30' : 'text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800' }}"
+           title="{{ __('instructor::sidebar.dashboard') }}">
             <i class="fas fa-home w-4 text-center"></i>
             <span>{{ __('instructor::sidebar.dashboard') }}</span>
         </a>
 
-        <div class="pt-4 pb-1 px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('instructor::sidebar.teaching') }}</div>
+        {{-- ═══════════ TEACHING ═══════════ --}}
+        <div class="sidebar-section-header pt-4 pb-1 px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('instructor::sidebar.teaching') }}</div>
 
         <a href="{{ route('instructor.students.list') }}"
-           class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors
-                  {{ $active === 'students' ? 'text-brand-primary bg-brand-50 dark:bg-brand-900/30' : 'text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800' }}">
+           class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors
+                  {{ $isStudentsActive ? 'text-brand-primary bg-brand-50 dark:bg-brand-900/30' : 'text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800' }}"
+           title="{{ __('instructor::sidebar.students') }}">
             <i class="fas fa-user-graduate w-4 text-center"></i>
             <span>{{ __('instructor::sidebar.students') }}</span>
         </a>
 
         <a href="{{ route('instructor.groups.list') }}"
-           class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors
-                  {{ $active === 'groups' ? 'text-brand-primary bg-brand-50 dark:bg-brand-900/30' : 'text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800' }}">
+           class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors
+                  {{ $isGroupsActive ? 'text-brand-primary bg-brand-50 dark:bg-brand-900/30' : 'text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800' }}"
+           title="{{ __('instructor::sidebar.groups') }}">
             <i class="fas fa-users w-4 text-center"></i>
             <span>{{ __('instructor::sidebar.groups') }}</span>
         </a>
 
         <a href="{{ route('instructor.schedules.index') }}"
-           class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors
-                  {{ $active === 'schedules' ? 'text-brand-primary bg-brand-50 dark:bg-brand-900/30' : 'text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800' }}">
+           class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors
+                  {{ $isSchedulesActive ? 'text-brand-primary bg-brand-50 dark:bg-brand-900/30' : 'text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800' }}"
+           title="{{ __('instructor::sidebar.schedules') }}">
             <i class="fas fa-calendar-alt w-4 text-center"></i>
             <span>{{ __('instructor::sidebar.schedules') }}</span>
         </a>
 
         <a href="{{ route('instructor.online_classes.index') }}"
-           class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors
-                  {{ $active === 'online_classes' ? 'text-brand-primary bg-brand-50 dark:bg-brand-900/30' : 'text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800' }}">
+           class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors
+                  {{ $isOnlineClassesActive ? 'text-brand-primary bg-brand-50 dark:bg-brand-900/30' : 'text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800' }}"
+           title="{{ __('instructor::sidebar.online_classes') }}">
             <i class="fas fa-video w-4 text-center"></i>
             <span>{{ __('instructor::sidebar.online_classes') }}</span>
         </a>
 
         <a href="{{ route('instructor.attendance.index') }}"
-           class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors
-                  {{ $active === 'attendance' ? 'text-brand-primary bg-brand-50 dark:bg-brand-900/30' : 'text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800' }}">
+           class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors
+                  {{ $isAttendanceActive ? 'text-brand-primary bg-brand-50 dark:bg-brand-900/30' : 'text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800' }}"
+           title="{{ __('instructor::sidebar.attendance') }}">
             <i class="fas fa-clipboard-check w-4 text-center"></i>
             <span>{{ __('instructor::sidebar.attendance') }}</span>
         </a>
 
+        {{-- ═══════════ INSIGHTS ═══════════ --}}
+        <div class="sidebar-section-header pt-4 pb-1 px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('instructor::sidebar.insights') ?? 'Insights' }}</div>
+
         <a href="{{ route('instructor.reports.students') }}"
-           class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors
-                  {{ $active === 'reports' ? 'text-brand-primary bg-brand-50 dark:bg-brand-900/30' : 'text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800' }}">
+           class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors
+                  {{ $isReportsActive ? 'text-brand-primary bg-brand-50 dark:bg-brand-900/30' : 'text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800' }}"
+           title="{{ __('instructor::sidebar.reports') }}">
             <i class="fas fa-chart-bar w-4 text-center"></i>
-            <span>{{ __('instructor::sidebar.reports') ?? 'Reports' }}</span>
+            <span>{{ __('instructor::sidebar.reports') }}</span>
         </a>
 
-        <div class="pt-4 pb-1 px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('instructor::sidebar.account') }}</div>
+        {{-- ═══════════ ACCOUNT ═══════════ --}}
+        <div class="sidebar-section-header pt-4 pb-1 px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('instructor::sidebar.account') }}</div>
 
         <a href="{{ route('instructor.billing') }}"
-           class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors
-                  {{ $active === 'billing' ? 'text-brand-primary bg-brand-50 dark:bg-brand-900/30' : 'text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800' }}">
+           class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors
+                  {{ $isBillingActive ? 'text-brand-primary bg-brand-50 dark:bg-brand-900/30' : 'text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800' }}"
+           title="{{ __('instructor::sidebar.billing') }}">
             <i class="fas fa-wallet w-4 text-center"></i>
             <span>{{ __('instructor::sidebar.billing') }}</span>
         </a>
 
         <a href="{{ route('instructor.settings') }}"
-           class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors
-                  {{ $active === 'settings' ? 'text-brand-primary bg-brand-50 dark:bg-brand-900/30' : 'text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800' }}">
+           class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors
+                  {{ $isSettingsActive ? 'text-brand-primary bg-brand-50 dark:bg-brand-900/30' : 'text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800' }}"
+           title="{{ __('instructor::sidebar.settings') }}">
             <i class="fas fa-cog w-4 text-center"></i>
             <span>{{ __('instructor::sidebar.settings') }}</span>
         </a>

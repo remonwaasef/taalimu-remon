@@ -16,6 +16,7 @@ return [
     'teaching' => 'Enseignement et études',
     'account' => 'Compte et paramètres',
     'online_classes' => 'Cours en ligne',
+    'insights' => 'Analyses',
     'add' => 'Ajouter',
     'edit' => 'Modifier',
     'delete' => 'Supprimer',

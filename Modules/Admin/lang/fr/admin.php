@@ -29,6 +29,7 @@ return [
         'management' => 'Gestion',
         'monitoring' => 'Surveillance',
         'administration' => 'Administration',
+        'platform' => 'Plateforme',
         'groups' => [
             'navigation' => 'NAVIGATION PRINCIPALE',
             'management' => 'GESTION ÉDUCATIVE',

@@ -59,4 +59,6 @@ return [
     'classes_structure' => 'الهيكل الأكاديمي والصفوف',
     'management' => 'الإدارة الحية',
     'finance_settings' => 'الشؤون المالية والإعدادات',
+    'daily_work' => 'العمل اليومي',
+    'academics' => 'التعليم',
 ];

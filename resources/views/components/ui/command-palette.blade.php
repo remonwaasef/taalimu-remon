@@ -43,27 +43,76 @@
         </div>
 
         <div class="max-h-80 overflow-y-auto p-2 space-y-1 command-list">
-            <div class="px-3 py-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider">التنقل السريع</div>
+            @php
+                $isCenter = app()->bound('tenant');
+                $user = auth()->user();
+                $isAdmin = $user && in_array($user->role, ['super_admin', 'admin']);
+                $isCenterAdmin = $user && in_array($user->role, ['center_admin', 'center_owner']);
+                $isInstructor = $user && $user->role === 'instructor';
+                $domain = $isCenter ? app('tenant')->domain : null;
+            @endphp
 
-            @if (app()->bound('tenant'))
+            @if($isCenter && $isCenterAdmin)
+                {{-- Center Admin Quick Navigation --}}
+                <div class="px-3 py-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider">التنقل السريع</div>
+
+                <a href="{{ tenant_route('center.dashboard') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-primary transition-colors">
+                    <i class="fas fa-home w-4 text-center"></i>
+                    <span>الرئيسية</span>
+                </a>
+
+                @if($user->can('view students'))
+                <a href="{{ tenant_route('center.students.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-primary transition-colors">
+                    <i class="fas fa-user-graduate w-4 text-center"></i>
+                    <span>الطلاب</span>
+                </a>
+                @endif
+
+                @if($user->can('view attendance'))
+                <a href="{{ tenant_route('center.attendance.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-primary transition-colors">
+                    <i class="fas fa-clipboard-check w-4 text-center"></i>
+                    <span>الحضور والغياب</span>
+                </a>
+                @endif
+
+                @if($user->can('view sales'))
+                <a href="{{ tenant_route('center.sales.account') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-primary transition-colors">
+                    <i class="fas fa-wallet w-4 text-center"></i>
+                    <span>المدفوعات</span>
+                </a>
+                @endif
+
+                <div class="px-3 py-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider pt-3">إجراءات سريعة</div>
+
+                @if($user->can('view students'))
+                <a href="{{ tenant_route('center.students.create') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-primary transition-colors">
+                    <i class="fas fa-user-plus w-4 text-center text-emerald-500"></i>
+                    <span>إضافة طالب جديد</span>
+                </a>
+                @endif
+
+            @elseif($isCenter && $isInstructor)
+                {{-- Instructor Quick Navigation --}}
+                <div class="px-3 py-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider">التنقل السريع</div>
+
                 <a href="{{ tenant_route('instructor.dashboard') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-primary transition-colors">
-                    <i class="fas fa-chart-pie w-4 text-center"></i>
-                    <span>الانتقال للوحة التحكم</span>
+                    <i class="fas fa-home w-4 text-center"></i>
+                    <span>الرئيسية</span>
                 </a>
 
                 <a href="{{ tenant_route('instructor.students.list') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-primary transition-colors">
                     <i class="fas fa-user-graduate w-4 text-center"></i>
-                    <span>دليل وقائمة الطلاب</span>
+                    <span>الطلاب</span>
                 </a>
 
                 <a href="{{ tenant_route('instructor.groups.list') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-primary transition-colors">
                     <i class="fas fa-users w-4 text-center"></i>
-                    <span>إدارة المجموعات الدراسية</span>
+                    <span>المجموعات</span>
                 </a>
 
                 <a href="{{ tenant_route('instructor.schedules.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-primary transition-colors">
                     <i class="fas fa-calendar-alt w-4 text-center"></i>
-                    <span>جدول المواعيد والحصص</span>
+                    <span>المواعيد</span>
                 </a>
 
                 <div class="px-3 py-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider pt-3">إجراءات سريعة</div>
@@ -77,17 +126,33 @@
                     <i class="fas fa-folder-plus w-4 text-center text-brand-primary"></i>
                     <span>إنشاء مجموعة جديدة</span>
                 </a>
+
+            @elseif(!$isCenter && $isAdmin)
+                {{-- Super Admin Quick Navigation --}}
+                <div class="px-3 py-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider">التنقل السريع</div>
+
+                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-primary transition-colors">
+                    <i class="fas fa-chart-pie w-4 text-center"></i>
+                    <span>الرئيسية</span>
+                </a>
+
+                <a href="{{ route('admin.tenants.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-primary transition-colors">
+                    <i class="fas fa-building w-4 text-center"></i>
+                    <span>المراكز التعليمية</span>
+                </a>
+
+                <a href="{{ route('admin.tickets.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-primary transition-colors">
+                    <i class="fas fa-headset w-4 text-center"></i>
+                    <span>الدعم الفني</span>
+                </a>
+
             @else
+                {{-- Fallback --}}
+                <div class="px-3 py-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider">التنقل السريع</div>
+
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-primary transition-colors">
                     <i class="fas fa-chart-pie w-4 text-center"></i>
                     <span>الانتقال للوحة التحكم</span>
-                </a>
-
-                <div class="px-3 py-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider pt-3">إجراءات سريعة</div>
-
-                <a href="{{ route('admin.tenants.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-primary transition-colors">
-                    <i class="fas fa-building w-4 text-center text-brand-primary"></i>
-                    <span>إدارة المراكز</span>
                 </a>
             @endif
         </div>

@@ -29,6 +29,7 @@ return [
         'management' => 'Management',
         'monitoring' => 'Monitoring',
         'administration' => 'Administration',
+        'platform' => 'Platform',
         'groups' => [
             'navigation' => 'MAIN NAVIGATION',
             'management' => 'EDUCATIONAL MGMT',

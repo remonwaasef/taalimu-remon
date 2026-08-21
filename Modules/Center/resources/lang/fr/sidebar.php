@@ -59,4 +59,6 @@ return [
     'classes_structure' => 'Classes & Structure',
     'management' => 'Gestion',
     'finance_settings' => 'Finance & Paramètres',
+    'daily_work' => 'Travail Quotidien',
+    'academics' => 'Enseignement',
 ];

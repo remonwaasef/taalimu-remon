@@ -30,6 +30,8 @@ return [
         'management' => 'الإدارة',
         'monitoring' => 'مراقبة النظام',
         'administration' => 'صلاحيات الإدارة',
+        'centers' => 'المراكز',
+        'platform' => 'المنصة',
         'groups' => [
             'navigation' => 'التصفح الرئيسي',
             'management' => 'إدارة المنظومة التعليمية',
