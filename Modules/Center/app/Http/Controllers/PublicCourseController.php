@@ -50,7 +50,7 @@ class PublicCourseController extends Controller
         $course = Course::where('tenant_id', $tenant->id)
             ->where('id', $course->id)
             ->where('status', 'active')
-            ->with(['instructor', 'grade', 'schedules'])
+            ->with(['instructor', 'schedules'])
             ->firstOrFail();
 
         $seoData = [

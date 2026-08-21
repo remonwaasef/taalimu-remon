@@ -169,8 +169,8 @@
     {{-- Structured Data for SEO --}}
     <script type="application/ld+json">
     {
-        "@context": "https://schema.org",
-        "@type": "EducationalOrganization",
+        "@@context": "https://schema.org",
+        "@@type": "EducationalOrganization",
         "name": "{{ $tenant->name }}",
         "description": "{{ $seoData['description'] }}",
         "url": "{{ url('/') }}"

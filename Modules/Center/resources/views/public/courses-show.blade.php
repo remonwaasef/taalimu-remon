@@ -157,7 +157,7 @@
 
                     {{-- CTA Button --}}
                     @if($course->registration_token)
-                        <a href="{{ route('center.register.group', ['token' => $course->registration_token]) }}"
+                        <a href="{{ route('group.register', ['tenant' => $tenant->domain, 'token' => $course->registration_token]) }}"
                            class="block w-full py-3 px-4 bg-indigo-600 text-white text-center font-medium rounded-lg hover:bg-indigo-700 transition-colors">
                             سجّل الآن
                         </a>
@@ -219,22 +219,22 @@
     {{-- Structured Data for SEO --}}
     <script type="application/ld+json">
     {
-        "@context": "https://schema.org",
-        "@type": "Course",
+        "@@context": "https://schema.org",
+        "@@type": "Course",
         "name": "{{ $course->title }}",
         "description": "{{ $course->description }}",
         "provider": {
-            "@type": "EducationalOrganization",
+            "@@type": "EducationalOrganization",
             "name": "{{ $tenant->name }}"
         },
         "offers": {
-            "@type": "Offer",
+            "@@type": "Offer",
             "price": "{{ $course->price }}",
             "priceCurrency": "EGP"
         }
         @if($course->schedules && $course->schedules->count() > 0),
         "schedule": {
-            "@type": "Schedule",
+            "@@type": "Schedule",
             "repeatFrequency": "Weekly"
         }
         @endif
