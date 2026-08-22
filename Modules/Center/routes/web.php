@@ -357,25 +357,23 @@ $tenantRoutes = function () {
         Route::post('tickets/{ticket}/reply', [TicketController::class, 'reply'])->name('center.tickets.reply');
         Route::post('tickets/{ticket}/close', [TicketController::class, 'close'])->name('center.tickets.close');
 
-        // Sales & Expenses
-        Route::middleware(['feature:financial_reports'])->group(function () {
-            Route::middleware(['can:view sales'])->group(function () {
-                Route::get('sales/students/lookup', [SaleController::class, 'lookupStudents'])->name('center.sales.lookup');
-                Route::get('sales/overdue', [SaleController::class, 'overdue'])->name('center.sales.overdue');
-                Route::get('sales/account', [SaleController::class, 'account'])->name('center.sales.account');
-                Route::get('sales/student-statement/{id}', [SaleController::class, 'downloadStatement'])->name('center.sales.statement');
-                Route::get('sales/student-summary/{id}', [SaleController::class, 'getStudentSummary'])->name('center.sales.student-summary');
-                Route::post('sales/{sale}/payment', [SaleController::class, 'addPayment'])->name('center.sales.payment');
-                Route::post('sales/mark-paid', [SaleController::class, 'markPaid'])->name('center.sales.mark-paid');
-                Route::post('sales/{sale}/refund', [SaleController::class, 'refund'])->name('center.sales.refund');
-                Route::get('sales/{sale}/checkout', [SaleController::class, 'checkout'])->name('center.sales.checkout');
-                Route::get('payments/{payment}/receipt', [SaleController::class, 'downloadReceipt'])->name('center.payments.receipt');
-                Route::resource('sales', SaleController::class)->names('center.sales');
-            });
+        // Sales & Expenses (Core Operations for all plans)
+        Route::middleware(['can:view sales'])->group(function () {
+            Route::get('sales/students/lookup', [SaleController::class, 'lookupStudents'])->name('center.sales.lookup');
+            Route::get('sales/overdue', [SaleController::class, 'overdue'])->name('center.sales.overdue');
+            Route::get('sales/account', [SaleController::class, 'account'])->name('center.sales.account');
+            Route::get('sales/student-statement/{id}', [SaleController::class, 'downloadStatement'])->name('center.sales.statement');
+            Route::get('sales/student-summary/{id}', [SaleController::class, 'getStudentSummary'])->name('center.sales.student-summary');
+            Route::post('sales/{sale}/payment', [SaleController::class, 'addPayment'])->name('center.sales.payment');
+            Route::post('sales/mark-paid', [SaleController::class, 'markPaid'])->name('center.sales.mark-paid');
+            Route::post('sales/{sale}/refund', [SaleController::class, 'refund'])->name('center.sales.refund');
+            Route::get('sales/{sale}/checkout', [SaleController::class, 'checkout'])->name('center.sales.checkout');
+            Route::get('payments/{payment}/receipt', [SaleController::class, 'downloadReceipt'])->name('center.payments.receipt');
+            Route::resource('sales', SaleController::class)->names('center.sales');
+        });
 
-            Route::middleware(['can:manage billing'])->group(function () {
-                Route::resource('expenses', \Modules\Center\Http\Controllers\ExpenseController::class)->names('center.expenses');
-            });
+        Route::middleware(['can:manage billing'])->group(function () {
+            Route::resource('expenses', \Modules\Center\Http\Controllers\ExpenseController::class)->names('center.expenses');
         });
 
         // Analytics
