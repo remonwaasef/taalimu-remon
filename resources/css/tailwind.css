@@ -7,19 +7,22 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ===== Taalimu Design System CSS Variables ===== */
+/* ===== Taalimu Design System CSS Variables (HSL) ===== */
 :root {
     --border: 203 20% 92%;              /* #E7ECEF */
-    --input: 210 14% 92%;
+    --input: 214 14% 88%;               /* #CBD5E1 */
     --ring: 174 50% 36%;                /* #2E8B83 */
     --background: 210 29% 97%;          /* #F6F8FA */
     --foreground: 210 28% 17%;          /* #1F2937 */
     --primary: 174 50% 36%;             /* #2E8B83 */
     --primary-foreground: 0 0% 100%;
-    --secondary: 210 20% 96%;
-    --secondary-foreground: 210 28% 17%;
-    --destructive: 0 84.2% 60.2%;
+    --secondary: 222 47% 11%;           /* #0F172A */
+    --secondary-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;           /* #EF4444 */
     --destructive-foreground: 0 0% 98%;
+    --success: 142 71% 45%;             /* #22C55E */
+    --warning: 38 92% 50%;              /* #F59E0B */
+    --info: 217 91% 60%;                /* #3B82F6 */
     --muted: 210 20% 96%;
     --muted-foreground: 220 10% 46%;    /* #6B7280 */
     --accent: 210 20% 96%;
@@ -50,8 +53,11 @@
     --primary-foreground: 0 0% 100%;
     --secondary: 214 17% 22%;
     --secondary-foreground: 210 20% 98%;
-    --destructive: 0 63% 31%;
+    --destructive: 0 63% 45%;
     --destructive-foreground: 0 0% 98%;
+    --success: 142 71% 45%;
+    --warning: 38 92% 50%;
+    --info: 217 91% 60%;
     --muted: 214 17% 22%;
     --muted-foreground: 213 27% 84%;    /* #CBD5E1 */
     --accent: 214 17% 22%;
@@ -72,33 +78,6 @@
     --sidebar-ring: 174 50% 36%;
 }
 
-/* ===== Custom Component Layer ===== */
-@layer components {
-    /* Smooth Scrollbar */
-    ::-webkit-scrollbar {
-        width: 6px;
-        height: 6px;
-    }
-
-    ::-webkit-scrollbar-track {
-        background: transparent;
-    }
-
-    ::-webkit-scrollbar-thumb {
-        background: rgba(0, 0, 0, 0.08);
-        border-radius: 999px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-        background: rgba(0, 0, 0, 0.15);
-    }
-}
-
-/* Alpine.js x-cloak - Hide elements until Alpine is ready */
-[x-cloak] {
-    display: none !important;
-}
-
 /* ===== Base Layer Resets ===== */
 @layer base {
     * {
@@ -111,9 +90,13 @@
         font-feature-settings: "rlig" 1, "calt" 1;
     }
 
-    /* RTL Support */
+    /* Arabic Typography Support */
     [dir="rtl"] body {
-        font-family: 'Cairo', sans-serif;
+        font-family: var(--font-arabic);
+    }
+
+    [dir="ltr"] body {
+        font-family: var(--font-latin);
     }
 
     /* Focus Visible Outline */
@@ -123,37 +106,112 @@
     }
 }
 
-/* ===== Force Emerald Theme Palette Overrides ===== */
-.nav-pills .nav-link.active,
-.nav-pills .show > .nav-link {
-    background-color: #2E8B83 !important;
-    background: #2E8B83 !important;
-    color: #ffffff !important;
-    box-shadow: 0 4px 12px rgba(46, 139, 131, 0.25) !important;
+/* ===== Custom Component Layer & Typography System ===== */
+@layer components {
+    /* Smooth Scrollbar */
+    ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 999px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: rgba(0, 0, 0, 0.2);
+    }
+
+    .dark ::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.15);
+    }
+
+    .dark ::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.25);
+    }
+
+    /* Standard Typography Classes */
+    .text-display {
+        font-size: var(--font-size-4xl);
+        font-weight: 800;
+        line-height: var(--line-height-tight);
+        letter-spacing: -0.025em;
+    }
+
+    .text-heading-1 {
+        font-size: var(--font-size-3xl);
+        font-weight: 800;
+        line-height: var(--line-height-tight);
+        letter-spacing: -0.02em;
+    }
+
+    .text-heading-2 {
+        font-size: var(--font-size-2xl);
+        font-weight: 700;
+        line-height: var(--line-height-snug);
+        letter-spacing: -0.015em;
+    }
+
+    .text-heading-3 {
+        font-size: var(--font-size-xl);
+        font-weight: 700;
+        line-height: var(--line-height-snug);
+    }
+
+    .text-heading-4 {
+        font-size: var(--font-size-lg);
+        font-weight: 600;
+        line-height: var(--line-height-normal);
+    }
+
+    .text-body-lg {
+        font-size: var(--font-size-lg);
+        line-height: var(--line-height-relaxed);
+    }
+
+    .text-body {
+        font-size: var(--font-size-base);
+        line-height: var(--line-height-normal);
+    }
+
+    .text-body-sm {
+        font-size: var(--font-size-sm);
+        line-height: var(--line-height-normal);
+    }
+
+    .text-caption {
+        font-size: var(--font-size-xs);
+        line-height: var(--line-height-normal);
+        color: var(--color-text-muted);
+    }
+
+    .text-label {
+        font-size: var(--font-size-xs);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--color-text-secondary);
+    }
+
+    /* Universal Focus Ring */
+    .focus-ring {
+        transition: box-shadow 0.15s ease, border-color 0.15s ease;
+    }
+
+    .focus-ring:focus-visible,
+    .focus-ring:focus {
+        outline: none;
+        border-color: var(--color-primary) !important;
+        box-shadow: 0 0 0 3px var(--focus-ring-alpha) !important;
+    }
 }
 
-.btn-primary,
-.bg-primary,
-.btn.btn-primary {
-    background-color: var(--btn-primary-bg) !important;
-    background: var(--btn-primary-bg) !important;
-    border-color: var(--btn-primary-bg) !important;
-    color: var(--btn-primary-text) !important;
-}
-
-.btn-primary:hover,
-.btn-primary:focus,
-.btn-primary:active,
-.btn.btn-primary:hover,
-.btn.btn-primary:focus,
-.btn.btn-primary:active {
-    background-color: var(--btn-primary-hover-bg) !important;
-    background: var(--btn-primary-hover-bg) !important;
-    border-color: var(--btn-primary-hover-bg) !important;
-    color: var(--btn-primary-text) !important;
-    box-shadow: var(--btn-primary-hover-shadow) !important;
-}
-
-.text-primary {
-    color: var(--color-primary) !important;
+/* Alpine.js x-cloak - Hide elements until Alpine is ready */
+[x-cloak] {
+    display: none !important;
 }

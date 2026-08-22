@@ -2,6 +2,7 @@
 
 > This document is the permanent design reference for the Taalimu platform.
 > All colors, typography, spacing, and component standards are defined here.
+> Detailed documentation: `docs/design-system/DESIGN_TOKENS_REFERENCE.md` & `docs/design-system/COMPONENT_GUIDE.md`.
 
 ---
 
@@ -72,12 +73,12 @@
 
 ## Status Colors
 
-| Status | Value |
-|---|---|
-| Success | `#22C55E` |
-| Warning | `#F59E0B` |
-| Error | `#EF4444` |
-| Info | `#3B82F6` |
+| Status | Value | Light Tint | Border |
+|---|---|---|---|
+| Success | `#22C55E` | `#F0FDF4` | `#BBF7D0` |
+| Warning | `#F59E0B` | `#FFFBEB` | `#FDE68A` |
+| Error / Danger | `#EF4444` | `#FEF2F2` | `#FECACA` |
+| Info | `#3B82F6` | `#EFF6FF` | `#BFDBFE` |
 
 ---
 
@@ -102,9 +103,9 @@
 
 ---
 
-## Spacing (8px Grid)
+## Spacing (4px / 8px Grid)
 
-`4 | 8 | 12 | 16 | 24 | 32 | 40 | 48 | 64 | 96 | 128`
+`4 | 8 | 12 | 16 | 20 | 24 | 32 | 40 | 48 | 64 | 96 | 128`
 
 ---
 
@@ -112,21 +113,23 @@
 
 | Element | Value |
 |---|---|
-| Buttons | `12px` |
-| Cards | `16px` |
-| Inputs | `12px` |
-| Dialogs | `20px` |
-| Badges | `999px` |
+| Buttons | `12px` (`--radius-lg`) |
+| Cards | `16px` (`--radius-xl`) |
+| Inputs | `12px` (`--radius-lg`) |
+| Dialogs | `20px` (`--radius-2xl`) |
+| Badges | `999px` (`--radius-full`) |
 
 ---
 
 ## Shadows
 
+- X-Small: `shadow-xs` (`0 1px 2px rgba(15, 23, 42, 0.04)`)
 - Small: `shadow-sm`
 - Medium: `shadow-md`
 - Large: `shadow-lg`
+- X-Large: `shadow-xl`
 
-Never use heavy shadows.
+Never use heavy shadows without purpose.
 
 ---
 
@@ -148,51 +151,27 @@ Whitespace is part of the design. Avoid colorful interfaces.
 
 ---
 
-## Motion System
+## UI Component Library (`resources/views/components/ui/`)
 
-Reference: `resources/css/motion.css` + tokens in `resources/css/design-tokens.css`.
-
-### Speed Tokens
-
-| Token | Value | Use |
+| Component | Tag | Description |
 |---|---|---|
-| `--motion-instant` | 75ms | button press, micro feedback |
-| `--motion-fast` | 125ms | hover, icon changes |
-| `--motion-standard` | 200ms | dropdowns, tooltips, popovers |
-| `--motion-medium` | 300ms | modals, page entrance, cards, sidebar |
-| `--motion-slow` | 500ms | notifications, success states |
-
-### Easing Tokens
-
-| Token | Value | Use |
-|---|---|---|
-| `--ease-out` | `cubic-bezier(0.16,1,0.3,1)` | entrances |
-| `--ease-in` | `cubic-bezier(0.4,0,1,1)` | exits |
-| `--ease-in-out` | `cubic-bezier(0.4,0,0.2,1)` | reversible interactions |
-| `--ease-spring` | `cubic-bezier(0.34,1.3,0.64,1)` | physical effects (bell) |
-
-### Reusable Classes
-
-| Class | Purpose |
-|---|---|
-| `.motion-reveal` / `.motion-reveal-sm` | entrance (8px / 5px rise) |
-| `.motion-stagger` | children cascade 40ms (max 8) |
-| `.motion-page` | full-page-load transition |
-| `.bell-swing` / `.bell-active` / `.badge-pop` | notification bell + badge |
-| `.check-pop` | success icon settle |
-| `.flash-row` | table row change highlight |
-| `.status-change` | badge color cross-fade |
-| `.field-error-enter` | validation message entrance |
-| `.command-list > *` | palette item cascade |
-| `.alert-enter` | flash alert entrance |
-
-### Rules
-
-- Animate only `transform` + `opacity` — never width/height/margin.
-- Every animation must communicate state, feedback or hierarchy.
-- Never animate hundreds of table rows — only changed rows.
-- `prefers-reduced-motion: reduce` is fully supported (motion removed, states stay instant).
-- Trigger pattern: `window.Taalimu.notify(message, type)` plays bell + toast + badge.
+| **Button** | `<x-ui.button>` | 9 variants, 6 sizes, loading state, link mode |
+| **Form Field** | `<x-ui.form-field>` | Unified wrapper with label, helper, errors |
+| **Input** | `<x-ui.input>` | Text input with icons, sizes, error states |
+| **Select** | `<x-ui.select>` | Custom select dropdown matching input tokens |
+| **Textarea** | `<x-ui.textarea>` | Multi-line textarea |
+| **Alert** | `<x-ui.alert>` | Status banners (success, error, warning, info) |
+| **Toast** | `<x-ui.toast>` | Non-blocking notifications container |
+| **Tabs** | `<x-ui.tabs>` | Interactive tabs with badges |
+| **Tooltip** | `<x-ui.tooltip>` | Micro-tooltips for actions |
+| **Progress** | `<x-ui.progress>` | Progress bars with variants |
+| **Drawer** | `<x-ui.drawer>` | Slide-over side panel |
+| **Card** | `<x-ui.card>` | Collapsible, loading states, variants |
+| **Table** | `<x-ui.table>` | Responsive card-mode, stickyHeader, empty states |
+| **Empty State** | `<x-ui.empty-state>` | Multi-size empty placeholder |
+| **Modal** | `<x-ui.modal>` | Standard and destructive dialogs |
+| **Badge** | `<x-ui.badge>` | Status pills, removable tags, dot indicators |
+| **Avatar** | `<x-ui.avatar>` | Initials/photo avatars with status dots |
 
 ---
 
@@ -201,11 +180,13 @@ Reference: `resources/css/motion.css` + tokens in `resources/css/design-tokens.c
 | File | Purpose |
 |---|---|
 | `resources/css/design-tokens.css` | CSS custom properties (source of truth) |
+| `resources/css/bootstrap-compat.css` | Isolated legacy Bootstrap layer |
 | `resources/css/global-components.css` | Global component styles |
-| `resources/css/tailwind.css` | Tailwind base + HSL variables |
-| `tailwind.config.js` | Tailwind brand palette |
-| `public/assets/hope-ui/css/taalimu-unified.css` | Hope UI theme overrides |
+| `resources/css/tailwind.css` | Tailwind base + HSL variables + Typography |
+| `tailwind.config.js` | Tailwind brand palette & theme extensions |
+| `docs/design-system/DESIGN_TOKENS_REFERENCE.md` | Detailed token documentation |
+| `docs/design-system/COMPONENT_GUIDE.md` | Blade component guide |
 
 ---
 
-*Last updated: 2026-08-16*
+*Last updated: 2026-08-22*

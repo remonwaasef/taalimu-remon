@@ -1,30 +1,57 @@
 @props([
     'headers' => [],
-    'label' => 'Table'
+    'label' => 'Table',
+    'striped' => false,
+    'compact' => false,
+    'stickyHeader' => false,
+    'empty' => false,
+    'emptyTitle' => 'No data available',
+    'emptyDescription' => 'There are no records to display at this time.',
+    'emptyIcon' => 'fas fa-inbox'
 ])
 
-<div class="w-full overflow-x-auto rounded-2xl border border-brand-border dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm" role="region" aria-label="{{ $label }}" tabindex="0" data-mobile-cards>
+@php
+    $paddingClass = $compact ? 'px-4 py-2.5 text-xs' : 'px-6 py-3.5 text-xs sm:text-sm';
+    $thPadding = $compact ? 'px-4 py-2.5' : 'px-6 py-3.5';
+@endphp
+
+<div class="w-full overflow-x-auto rounded-2xl border border-brand-border dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm relative" role="region" aria-label="{{ $label }}" tabindex="0" data-mobile-cards>
     <table {{ $attributes->merge(['class' => 'w-full text-start text-sm text-slate-600 dark:text-slate-300 border-collapse']) }}>
         @if(count($headers) > 0 || isset($thead))
-            <thead class="bg-slate-50/80 dark:bg-slate-800/80 border-b border-brand-border dark:border-slate-800 text-xs uppercase font-semibold text-slate-500 dark:text-slate-400 tracking-wider">
+            <thead class="bg-slate-50/90 dark:bg-slate-800/90 border-b border-brand-border dark:border-slate-800 text-[11px] uppercase font-bold text-slate-500 dark:text-slate-400 tracking-wider font-inter {{ $stickyHeader ? 'sticky top-0 z-10 backdrop-blur-xs' : '' }}">
                 @if(isset($thead))
                     {{ $thead }}
                 @else
                     <tr>
                         @foreach($headers as $header)
-                            <th scope="col" class="px-6 py-3.5 text-start font-inter">{{ $header }}</th>
+                            <th scope="col" class="{{ $thPadding }} text-start">{{ $header }}</th>
                         @endforeach
                     </tr>
                 @endif
             </thead>
         @endif
 
-        <tbody class="divide-y divide-brand-border dark:divide-slate-800 font-inter">
-            {{ $slot }}
-        </tbody>
+        @if($empty)
+            <tbody>
+                <tr>
+                    <td colspan="{{ max(1, count($headers)) }}" class="p-8 text-center">
+                        <x-ui.empty-state
+                            :title="$emptyTitle"
+                            :description="$emptyDescription"
+                            :icon="$emptyIcon"
+                            size="sm"
+                        />
+                    </td>
+                </tr>
+            </tbody>
+        @else
+            <tbody class="divide-y divide-brand-border dark:divide-slate-800 font-inter {{ $striped ? '[&>tr:nth-child(even)]:bg-slate-50/40 dark:[&>tr:nth-child(even)]:bg-slate-800/30' : '' }}">
+                {{ $slot }}
+            </tbody>
+        @endif
 
         @if(isset($tfoot))
-            <tfoot class="bg-slate-50/80 dark:bg-slate-800/80 border-t border-brand-border dark:border-slate-800">
+            <tfoot class="bg-slate-50/80 dark:bg-slate-800/80 border-t border-brand-border dark:border-slate-800 font-inter">
                 {{ $tfoot }}
             </tfoot>
         @endif

@@ -9,6 +9,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Taalimu Premium Design System Architecture (2026-08-22)**:
+  - **Design Tokens (`resources/css/design-tokens.css`)**: Expanded with full semantic scales for brand, status (success, warning, error, info with hover/light/border/contrast), surface & layout colors, spacing scale (4px/8px grid), border radius scale, shadows scale (xs to xl), and comprehensive dark mode overrides.
+  - **Base Component Library (`resources/views/components/ui/`)**:
+    - `form-field.blade.php`: Unified wrapper with label, helper text, error messages, and required indicator.
+    - `input.blade.php`: Styled text input supporting icons, sizes, focus rings, error states, and dark mode.
+    - `select.blade.php`: Styled dropdown matching token scales.
+    - `textarea.blade.php`: Resizable multi-line text input with token styling.
+    - `alert.blade.php`: 4 semantic status banners with icons, dismiss transitions, and dark mode.
+    - `toast.blade.php`: Lightweight, non-blocking Alpine.js toast notifications container.
+    - `tabs.blade.php`: Accessible tab navigation with badges and Alpine.js state.
+    - `tooltip.blade.php`: Micro-interaction tooltips for buttons and actions.
+    - `progress.blade.php`: Progress bar with percentage calculation and status variants.
+    - `drawer.blade.php`: Slide-over side panel with RTL animation support.
+    - Enhanced `button.blade.php`, `card.blade.php`, `table.blade.php`, `empty-state.blade.php`, `modal.blade.php`, and `badge.blade.php`.
+  - **CSS Layer Cleanup & Isolation**:
+    - Created `resources/css/bootstrap-compat.css` to isolate legacy Bootstrap utility classes.
+    - Cleaned `resources/css/global-components.css` by replacing hardcoded hex values with CSS variables and removing duplicate button rules.
+    - Updated `tailwind.config.js` and `resources/css/tailwind.css` with standard typography utilities and focus-ring classes.
+  - **Layout Accessibility**: Added WCAG skip-to-content link and Alpine toast listener in `layouts/app-next.blade.php`.
+  - **Documentation**: Created `docs/design-system/DESIGN_TOKENS_REFERENCE.md` and `docs/design-system/COMPONENT_GUIDE.md`, and updated `.agents/DESIGN_SYSTEM.md` and `docs/23_UI_GUIDE.md`.
+
 ### Fixed
 - **Launchpad Education System Setup Modal**: Replaced the Bootstrap nested modal inside [launchpad.blade.php](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/Modules/Center/resources/views/partials/launchpad.blade.php) with the standardized `<x-ui.modal>` Alpine.js component. This resolves a UI freeze where the Bootstrap backdrop rendered over the modal due to parent stacking context containment (`.motion-page` / `.launchpad-card`), restoring full interactivity to select academic templates and trigger generation.
 

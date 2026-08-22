@@ -1,7 +1,8 @@
 @props([
     'id',
     'title' => null,
-    'size' => 'md'
+    'size' => 'md', // sm, md, lg, xl, full
+    'variant' => 'default' // default, destructive
 ])
 
 @php
@@ -58,15 +59,22 @@
                     class="relative transform overflow-hidden rounded-2xl bg-white dark:bg-slate-900 text-start shadow-xl transition-all w-full {{ $modalSize }} border border-brand-border dark:border-slate-800 my-auto"
                 >
                     @if($title || isset($header))
-                        <div class="px-6 py-4 border-b border-brand-border dark:border-slate-800 flex items-center justify-between">
+                        <div class="px-6 py-4 border-b {{ $variant === 'destructive' ? 'border-red-100 dark:border-red-900/40 bg-red-50/50 dark:bg-red-950/20' : 'border-brand-border dark:border-slate-800' }} flex items-center justify-between">
                             @if(isset($header))
                                 {{ $header }}
                             @else
-                                <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 font-inter">{{ $title }}</h3>
+                                <div class="flex items-center gap-2.5">
+                                    @if($variant === 'destructive')
+                                        <div class="w-7 h-7 rounded-lg bg-red-100 dark:bg-red-900/60 text-red-600 dark:text-red-400 flex items-center justify-center text-xs">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                        </div>
+                                    @endif
+                                    <h3 class="text-base font-bold {{ $variant === 'destructive' ? 'text-red-900 dark:text-red-200' : 'text-slate-900 dark:text-slate-100' }} font-inter">{{ $title }}</h3>
+                                </div>
                             @endif
                             
-                            <button @click="show = false" type="button" aria-label="Close" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-                                <i class="fas fa-times text-base"></i>
+                            <button @click="show = false" type="button" aria-label="{{ __('Close') }}" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus:outline-none">
+                                <i class="fas fa-times text-sm"></i>
                             </button>
                         </div>
                     @endif
@@ -76,7 +84,7 @@
                     </div>
 
                     @if(isset($footer))
-                        <div class="px-6 py-4 bg-slate-50 dark:bg-slate-800/50 border-t border-brand-border dark:border-slate-800 flex items-center justify-end gap-3">
+                        <div class="px-6 py-4 bg-slate-50/80 dark:bg-slate-800/50 border-t border-brand-border dark:border-slate-800 flex items-center justify-end gap-3">
                             {{ $footer }}
                         </div>
                     @endif

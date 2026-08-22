@@ -1,75 +1,52 @@
-<div class="flash-messages-container">
+<div class="flash-messages-container mb-6 space-y-3">
     @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show shadow-sm rounded-3 border mb-4 alert-enter" role="alert">
-            <div class="d-flex align-items-center">
-                <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3 flex-shrink-0" style="width: 30px; height: 30px;">
-                    <i class="fas fa-check check-pop"></i>
-                </div>
-                <div class="fw-medium alert-text">{{ session('success') }}</div>
-            </div>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+        <x-ui.alert type="success" :dismissible="true">
+            {{ session('success') }}
+        </x-ui.alert>
     @endif
 
     @if(session('error'))
-        <div class="alert alert-danger alert-dismissible fade show shadow-sm rounded-3 border mb-4 alert-enter" role="alert">
-            <div class="d-flex align-items-center">
-                <div class="bg-danger text-white rounded-circle d-flex align-items-center justify-content-center me-3 flex-shrink-0" style="width: 30px; height: 30px;">
-                    <i class="fas fa-exclamation-triangle"></i>
-                </div>
-                <div class="fw-medium alert-text">{{ session('error') }}</div>
-            </div>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+        <x-ui.alert type="error" :dismissible="true">
+            {{ session('error') }}
+        </x-ui.alert>
     @endif
 
     @if(session('info'))
-        <div class="alert alert-info alert-dismissible fade show shadow-sm rounded-3 border mb-4 alert-enter" role="alert">
-            <div class="d-flex align-items-center">
-                <div class="bg-info text-white rounded-circle d-flex align-items-center justify-content-center me-3 flex-shrink-0" style="width: 30px; height: 30px;">
-                    <i class="fas fa-info"></i>
-                </div>
-                <div class="fw-medium alert-text">{{ session('info') }}</div>
-            </div>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+        <x-ui.alert type="info" :dismissible="true">
+            {{ session('info') }}
+        </x-ui.alert>
     @endif
 
     @if(session('warning'))
-        <div class="alert alert-warning alert-dismissible fade show shadow-sm rounded-3 border mb-4 alert-enter" role="alert">
-            <div class="d-flex align-items-center">
-                <div class="bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center me-3 flex-shrink-0" style="width: 30px; height: 30px;">
-                    <i class="fas fa-exclamation"></i>
-                </div>
-                <div class="fw-medium alert-text">{{ session('warning') }}</div>
-            </div>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+        <x-ui.alert type="warning" :dismissible="true">
+            {{ session('warning') }}
+        </x-ui.alert>
     @endif
 
     @if (isset($errors) && $errors->any())
-        <div class="alert alert-danger alert-dismissible fade show shadow-sm rounded-3 border mb-4 alert-enter" role="alert">
-            <div class="d-flex">
-                <div class="bg-danger text-white rounded-circle d-flex align-items-center justify-content-center me-3 mt-1 flex-shrink-0" style="width: 30px; height: 30px;">
-                    <i class="fas fa-times"></i>
-                </div>
-                <div>
-                    <h6 class="alert-heading fw-bold alert-text mb-1">{{ __('center::messages.validation_error') ?? 'يرجى مراجعة الأخطاء التالية:' }}</h6>
-                    <ul class="mb-0 ps-3 alert-text small">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            </div>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+        <x-ui.alert type="error" :title="__('center::messages.validation_error') ?? 'يرجى مراجعة الأخطاء التالية:'" :dismissible="true">
+            <ul class="mt-1 space-y-1 list-disc ps-4 text-xs">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </x-ui.alert>
     @endif
 </div>
 
-{{-- Toast notifications now use global TaalimuToast from taalimu-global.js --}}
+{{-- Toast notifications trigger --}}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    @if(session('success'))
+        window.dispatchEvent(new CustomEvent('toast', {
+            detail: { type: 'success', message: @json(session('success')) }
+        }));
+    @endif
+    @if(session('error'))
+        window.dispatchEvent(new CustomEvent('toast', {
+            detail: { type: 'error', message: @json(session('error')) }
+        }));
+    @endif
     if (typeof TaalimuToast !== 'undefined') {
         @if(session('success'))
             TaalimuToast.success(@json(session('success')));

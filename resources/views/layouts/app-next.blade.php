@@ -57,6 +57,11 @@
 </head>
 <body class="h-full bg-brand-bg dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-inter antialiased selection:bg-brand-primary selection:text-white transition-colors duration-200" x-data="{ sidebarOpen: false, collapsed: false }" x-effect="document.body.style.overflow = sidebarOpen ? 'hidden' : ''">
 
+    <!-- Accessibility Skip to Main Content Link -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:start-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-brand-primary focus:text-white focus:rounded-xl focus:shadow-lg focus:font-bold">
+        {{ __('Skip to main content') }}
+    </a>
+
     <!-- Mobile Sidebar Overlay -->
     <div
         x-show="sidebarOpen"
@@ -320,7 +325,7 @@
             </header>
 
             <!-- Main Page Content -->
-            <main class="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto motion-page">
+            <main id="main-content" class="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto motion-page">
                 <!-- Flash Messages -->
                 <x-flash-messages />
                 <div class="motion-page" style="animation-delay: 60ms">
@@ -330,6 +335,9 @@
             </main>
         </div>
     </div>
+
+    <!-- Global Toast Notifications Container -->
+    <x-ui.toast />
 
     <!-- Global Command Palette Modal (Ctrl+K) -->
     <x-ui.command-palette />
