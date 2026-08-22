@@ -55,7 +55,7 @@
 
     @stack('styles')
 </head>
-<body class="h-full bg-brand-bg dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-inter antialiased selection:bg-brand-primary selection:text-white transition-colors duration-200" x-data="{ sidebarOpen: false, collapsed: false }" x-effect="document.body.style.overflow = sidebarOpen ? 'hidden' : ''">
+<body class="h-full bg-[#F8FAFB] dark:bg-[#0B1118] text-slate-800 dark:text-slate-100 font-inter antialiased selection:bg-brand-primary selection:text-white transition-colors duration-200" x-data="{ sidebarOpen: false, collapsed: false }" x-effect="document.body.style.overflow = sidebarOpen ? 'hidden' : ''">
 
     <!-- Accessibility Skip to Main Content Link -->
     <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:start-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-brand-primary focus:text-white focus:rounded-xl focus:shadow-lg focus:font-bold">
@@ -108,26 +108,26 @@
         <!-- Main Workspace -->
         <div class="flex-1 flex flex-col min-w-0">
             <!-- Navbar with Mobile Menu Toggle -->
-            <header class="h-16 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-brand-border dark:border-slate-800 sticky top-0 z-20 px-4 sm:px-6 flex items-center justify-between gap-4 font-inter">
+            <header class="h-16 bg-white/90 dark:bg-[#121A24]/90 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 sticky top-0 z-20 px-4 sm:px-6 flex items-center justify-between gap-4 font-inter">
                 <!-- Mobile Menu Button -->
                 <button
                     @click="sidebarOpen = !sidebarOpen"
                     aria-label="{{ __('Toggle navigation') }}"
                     aria-expanded="false"
                     :aria-expanded="sidebarOpen ? 'true' : 'false'"
-                    class="lg:hidden w-9 h-9 rounded-xl border border-brand-border dark:border-slate-800 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors flex items-center justify-center"
+                    class="lg:hidden w-9 h-9 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors flex items-center justify-center"
                 >
                     <i class="fas fa-bars text-sm"></i>
                 </button>
 
                 <!-- Left Section: Command Palette Trigger & Search -->
-                <div class="flex items-center gap-4 flex-1">
+                <div class="flex items-center gap-3 flex-1">
                     <!-- Desktop Sidebar Collapse Toggle -->
                     <button
                         @click="collapsed = !collapsed"
                         aria-label="{{ __('Toggle sidebar') }}"
                         :aria-expanded="collapsed ? 'false' : 'true'"
-                        class="hidden lg:inline-flex w-9 h-9 rounded-xl border border-brand-border dark:border-slate-800 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors items-center justify-center shrink-0"
+                        class="hidden lg:inline-flex w-9 h-9 rounded-xl border border-slate-200/80 dark:border-slate-800 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors items-center justify-center shrink-0"
                     >
                         <i class="fas fa-bars text-sm transition-transform duration-300" :class="collapsed && 'rotate-180'"></i>
                     </button>
@@ -135,14 +135,14 @@
                     <button
                         type="button"
                         @click="$dispatch('open-command-palette')"
-                        class="w-full max-w-md h-9 ps-3.5 pe-4 bg-slate-50 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 rounded-xl text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-all flex items-center justify-between group text-start"
+                        class="w-full max-w-md h-9.5 ps-3.5 pe-3 bg-slate-100/70 hover:bg-slate-100 dark:bg-slate-800/60 dark:hover:bg-slate-800 border border-slate-200/70 dark:border-slate-700/60 rounded-xl text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-all flex items-center justify-between group text-start shadow-2xs"
                     >
                         <span class="flex items-center gap-2">
-                            <i class="fas fa-search text-xs"></i>
-                            <span class="truncate hidden sm:inline">Search or press Ctrl+K...</span>
-                            <span class="truncate sm:hidden">Search...</span>
+                            <i class="fas fa-search text-xs text-slate-400 group-hover:text-brand-primary transition-colors"></i>
+                            <span class="truncate hidden sm:inline">{{ __('Search or press Ctrl+K...') }}</span>
+                            <span class="truncate sm:hidden">{{ __('Search...') }}</span>
                         </span>
-                        <kbd class="hidden sm:inline-flex items-center gap-0.5 px-2 py-0.5 text-[11px] font-mono font-medium text-slate-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md shadow-xs">
+                        <kbd class="hidden sm:inline-flex items-center gap-0.5 px-2 py-0.5 text-[10px] font-mono font-bold text-slate-500 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md shadow-2xs">
                             ⌘K
                         </kbd>
                     </button>
