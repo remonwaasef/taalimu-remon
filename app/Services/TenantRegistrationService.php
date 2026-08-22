@@ -60,14 +60,28 @@ class TenantRegistrationService
                 }
             }
 
-            // Generate Subdomain
-            $subdomain = self::generateSubdomain($data['center_name']);
+            // Generate or use requested Subdomain
+            $subdomain = ! empty($data['subdomain'])
+                ? strtolower(preg_replace('/[^a-z0-9-]/', '', $data['subdomain']))
+                : self::generateSubdomain($data['center_name']);
+
+            if (empty($subdomain)) {
+                $subdomain = self::generateSubdomain($data['center_name']);
+            }
+
+            // Ensure Subdomain uniqueness
+            $base = $subdomain;
+            $counter = 1;
+            while (Tenant::where('domain', $subdomain)->exists()) {
+                $subdomain = $base . '-' . $counter;
+                $counter++;
+            }
 
             // 1. Create Tenant
             $tenant = Tenant::forceCreate([
                 'name' => $data['center_name'],
                 'email' => $data['email'],
-                'phone' => $data['phone'],
+                'phone' => $data['phone'] ?? null,
                 'domain' => $subdomain,
                 'type' => $data['account_type'],
                 'database_name' => 'edu_central',

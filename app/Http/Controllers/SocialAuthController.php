@@ -216,12 +216,28 @@ class SocialAuthController extends Controller
         $validated = $request->validate([
             'account_type' => 'required|in:center,instructor',
             'center_name' => 'required|string|max:255',
-            'phone' => 'nullable|string|max:20|unique:users,phone',
+            'subdomain' => 'nullable|string|min:2|max:50',
+            'phone' => 'nullable|string|max:20',
+            'country_code' => 'nullable|string|max:5',
             'plan' => 'required|exists:packages,slug',
             'billing_cycle' => 'required|in:monthly,term,yearly',
+            'currency' => 'nullable|string|max:5',
             'payment_gateway' => 'nullable|in:paypal,paymob,test',
             'coupon_code' => 'nullable|string|exists:coupons,code',
         ]);
+
+        // Format phone if provided
+        $fullPhone = null;
+        if ($request->filled('phone')) {
+            $phoneDigits = preg_replace('/[^0-9]/', '', $request->input('phone'));
+            if (!empty($phoneDigits)) {
+                $countryCode = preg_replace('/[^0-9]/', '', $request->input('country_code', '20'));
+                $fullPhone = '+' . $countryCode . ltrim($phoneDigits, '0');
+                if (User::where('phone', $fullPhone)->exists()) {
+                    return back()->withErrors(['phone' => __('messages.phone_already_taken')])->withInput();
+                }
+            }
+        }
 
         // 1. Check if user already exists (safety check for race conditions)
         if (User::where('email', $googleData['email'])->exists()) {
@@ -244,7 +260,9 @@ class SocialAuthController extends Controller
             $registrationData = $validated;
             $registrationData['email'] = $googleData['email'];
             $registrationData['name'] = $googleData['name'];
-            $registrationData['currency'] = 'EGP'; // Default to EGP for registration settings
+            $registrationData['phone'] = $fullPhone;
+            $registrationData['subdomain'] = $request->input('subdomain');
+            $registrationData['currency'] = $request->input('currency', session('suggested_currency', 'EGP'));
 
             $result = $registrationService->registerTenant(
                 $registrationData,
@@ -297,7 +315,7 @@ class SocialAuthController extends Controller
                     'registration_hmac' => hash_hmac('sha256', $tenant->id.'|'.$user->id, config('app.key')),
                 ]);
 
-                return redirect()->route('dashboard');
+                return redirect()->away(tenant_url('dashboard', $tenant));
             } else {
                 // Paid Plan Flow (Modular Payment Gateway)
                 session([
