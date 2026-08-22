@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **Launchpad Education System Setup Modal**: Replaced the Bootstrap nested modal inside [launchpad.blade.php](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/Modules/Center/resources/views/partials/launchpad.blade.php) with the standardized `<x-ui.modal>` Alpine.js component. This resolves a UI freeze where the Bootstrap backdrop rendered over the modal due to parent stacking context containment (`.motion-page` / `.launchpad-card`), restoring full interactivity to select academic templates and trigger generation.
+
 ### Added
 - **Security Hardening (2026-08-17 audit round)**: 
   - Password reset tokens are now scoped per tenant (`password_reset_tokens.tenant_id`, migration `2026_08_17_000001`); `ForgotPasswordController`/`ResetPasswordController` resolve the owning tenant and never list reset links for foreign accounts.

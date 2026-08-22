@@ -111,8 +111,7 @@
                         @elseif($key === 'education_system')
                             <button type="button" 
                                     class="w-full py-1.5 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer {{ $isCurrent ? 'bg-brand-primary text-white hover:bg-brand-secondary shadow-sm shadow-brand-primary/20' : 'bg-slate-200/80 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-300' }}"
-                                    data-bs-toggle="modal" 
-                                    data-bs-target="#educationSystemModal">
+                                    @click="$dispatch('open-modal', 'education-system-modal')">
                                {{ __('center::dashboard.launchpad.action') }}
                             </button>
                         @else
@@ -128,50 +127,59 @@
     </div>
 </div>
 
-<!-- Quick Education System Setup Modal -->
-<div class="modal fade" id="educationSystemModal" tabindex="-1" aria-labelledby="educationSystemModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow-xl rounded-2xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700">
-            <div class="modal-header border-b border-slate-100 dark:border-slate-700/60 pt-4 px-5">
-                <h5 class="modal-title font-black text-base" id="educationSystemModalLabel">
-                    <i class="fas fa-map-signs text-brand-primary {{ app()->getLocale() == 'ar' ? 'ms-2' : 'me-2' }}"></i> {{ __('center::dashboard.launchpad.steps.education_system.title') }}
-                </h5>
-                <button type="button" class="btn-close dark:btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+<!-- Quick Education System Setup Modal (Taalimu UI Design System Component) -->
+<x-ui.modal id="education-system-modal" size="md">
+    <x-slot name="header">
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-lg bg-brand-50 dark:bg-brand-950/50 flex items-center justify-center text-brand-primary dark:text-brand-300">
+                <i class="fas fa-map-signs text-sm"></i>
             </div>
-            <form action="{{ route('center.settings.apply-template', ['tenant' => app('tenant')->domain]) }}" method="POST" id="educationSystemForm">
-                @csrf
-                <div class="modal-body p-5">
-                    <p class="text-slate-500 dark:text-slate-400 text-xs mb-4">
-                        {{ __('center::dashboard.launchpad.steps.education_system.desc') }}
-                    </p>
-                    
-                    <label class="form-label font-bold text-xs text-slate-600 dark:text-slate-300 mb-1.5 block">{{ __('center::launchpad.select_data_type') }}</label>
-                    <select name="template_key" class="form-select rounded-xl mb-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-xs" required>
-                        <option value="">{{ __('center::launchpad.select_placeholder') }}</option>
-                        @foreach(config('academic.templates', []) as $tKey => $template)
-                            <option value="{{ $tKey }}">{{ __($template['name']) }}</option>
-                        @endforeach
-                    </select>
-
-                    <div class="bg-brand-50 dark:bg-brand-950/40 border border-brand-200/70 dark:border-brand-800/40 rounded-xl text-xs p-3 text-brand-primary dark:text-brand-300">
-                        <i class="fas fa-info-circle {{ app()->getLocale() == 'ar' ? 'ms-1' : 'me-1' }}"></i>{{ __('center::launchpad.demo_data_hint') }}
-                    </div>
-                </div>
-                <div class="modal-footer border-t border-slate-100 dark:border-slate-700/60 p-4 gap-2">
-                    <button type="button" class="btn btn-light dark:bg-slate-700 dark:text-white rounded-xl px-4 text-xs font-bold" data-bs-dismiss="modal">{{ __('center::launchpad.cancel') }}</button>
-                    <button type="submit" class="btn btn-primary rounded-xl px-4 text-xs font-bold" id="submitTemplateBtn">
-                        <span class="normal-state">
-                            <i class="fas fa-check-circle {{ app()->getLocale() == 'ar' ? 'ms-1' : 'me-1' }}"></i>{{ __('center::launchpad.start_generation') }}
-                        </span>
-                        <span class="loading-state d-none">
-                            <i class="fas fa-spinner fa-spin {{ app()->getLocale() == 'ar' ? 'ms-1' : 'me-1' }}"></i>{{ __('center::launchpad.generating') }}
-                        </span>
-                    </button>
-                </div>
-            </form>
+            <h5 class="font-black text-base text-slate-900 dark:text-white m-0">
+                {{ __('center::dashboard.launchpad.steps.education_system.title') }}
+            </h5>
         </div>
-    </div>
-</div>
+    </x-slot>
+
+    <form action="{{ route('center.settings.apply-template', ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}" method="POST" id="educationSystemForm" class="space-y-4">
+        @csrf
+        <div>
+            <p class="text-slate-500 dark:text-slate-400 text-xs mb-3">
+                {{ __('center::dashboard.launchpad.steps.education_system.desc') }}
+            </p>
+            
+            <label class="form-label font-bold text-xs text-slate-700 dark:text-slate-300 mb-1.5 block">
+                {{ __('center::launchpad.select_data_type') }}
+            </label>
+            <select name="template_key" class="w-full px-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all outline-none" required>
+                <option value="">{{ __('center::launchpad.select_placeholder') }}</option>
+                @foreach(config('academic.templates', []) as $tKey => $template)
+                    <option value="{{ $tKey }}">{{ __($template['name']) }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="bg-brand-50/80 dark:bg-brand-950/40 border border-brand-200/70 dark:border-brand-800/40 rounded-xl text-xs p-3 text-brand-primary dark:text-brand-300 flex items-start gap-2.5">
+            <i class="fas fa-info-circle shrink-0 mt-0.5"></i>
+            <span>{{ __('center::launchpad.demo_data_hint') }}</span>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">
+            <button type="button" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors" @click="show = false">
+                {{ __('center::launchpad.cancel') }}
+            </button>
+            <button type="submit" class="px-4 py-2 rounded-xl text-xs font-bold text-white bg-brand-primary hover:bg-brand-secondary shadow-sm shadow-brand-primary/20 transition-all flex items-center gap-1.5" id="submitTemplateBtn">
+                <span class="normal-state flex items-center gap-1.5">
+                    <i class="fas fa-check-circle"></i>
+                    <span>{{ __('center::launchpad.start_generation') }}</span>
+                </span>
+                <span class="loading-state d-none flex items-center gap-1.5">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <span>{{ __('center::launchpad.generating') }}</span>
+                </span>
+            </button>
+        </div>
+    </form>
+</x-ui.modal>
 
 <script>
     document.getElementById('educationSystemForm')?.addEventListener('submit', function() {
