@@ -8,7 +8,7 @@
     'lookupGuardianUrl' => null,
 ])
 
-<form action="{{ $actionUrl }}" method="POST" enctype="multipart/form-data" data-autosave="create-student">
+<form action="{{ $actionUrl }}" method="POST" enctype="multipart/form-data">
     @csrf
     
     <!-- Wizard Navigation -->

@@ -21,7 +21,7 @@
 
     <div class="max-w-4xl mx-auto">
         <x-ui.card>
-            <form action="{{ route('center.courses.store') }}" method="POST" enctype="multipart/form-data" data-autosave="create-course">
+            <form action="{{ route('center.courses.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 @if ($errors->any())
