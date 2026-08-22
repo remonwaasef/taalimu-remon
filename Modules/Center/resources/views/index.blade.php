@@ -1,11 +1,11 @@
-﻿@extends('center::layouts.app-next')
+@extends('center::layouts.app-next')
 
 @section('title', __('center::dashboard.title'))
 
 @section('panel-content')
     <x-ui.page-header
         title="{{ __('center::dashboard.welcome_back', ['name' => auth()->user()->name ?? 'Manager']) }}"
-        subtitle="{{ $tenant->name ?? 'Educational Center' }} â€¢ {{ now()->translatedFormat('l, d F Y') }}"
+        subtitle="{{ ($tenant->name ?? 'Educational Center') . ' • ' . now()->translatedFormat('l، d F Y') }}"
     >
         <x-slot name="actions">
             <x-ui.button variant="primary" icon="fas fa-user-plus" size="md" href="{{ route('center.students.create', ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}">
