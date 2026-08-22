@@ -76,7 +76,7 @@
     @if($change !== null)
         <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center gap-2 text-xs font-medium">
             @if($changeType === 'positive')
-                <span class="inline-flex items-center text-emerald-700 dark:text-emerald-300 font-bold bg-emerald-50 dark:bg-emerald-950/50 px-2 py-0.5 rounded-full border border-emerald-200/60 dark:border-emerald-800/40 text-[11px]">
+                <span class="inline-flex items-center text-indigo-700 dark:text-indigo-300 font-bold bg-indigo-50 dark:bg-indigo-950/50 px-2 py-0.5 rounded-full border border-indigo-200/60 dark:border-indigo-800/40 text-[11px]">
                     <i class="fas fa-arrow-up text-[9px] me-1"></i>{{ $change }}
                 </span>
             @elseif($changeType === 'negative')

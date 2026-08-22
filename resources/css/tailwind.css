@@ -9,12 +9,12 @@
 
 /* ===== Taalimu Design System CSS Variables (HSL) ===== */
 :root {
-    --border: 203 20% 92%;              /* #E7ECEF */
-    --input: 214 14% 88%;               /* #CBD5E1 */
-    --ring: 174 50% 36%;                /* #2E8B83 */
-    --background: 210 29% 97%;          /* #F6F8FA */
-    --foreground: 210 28% 17%;          /* #1F2937 */
-    --primary: 174 50% 36%;             /* #2E8B83 */
+    --border: 214 32% 91%;              /* #E2E8F0 */
+    --input: 214 32% 91%;               /* #CBD5E1 */
+    --ring: 243 75% 59%;                /* #4F46E5 Indigo */
+    --background: 210 40% 98%;          /* #F8FAFC */
+    --foreground: 222 47% 11%;          /* #0F172A */
+    --primary: 243 75% 59%;             /* #4F46E5 Indigo */
     --primary-foreground: 0 0% 100%;
     --secondary: 222 47% 11%;           /* #0F172A */
     --secondary-foreground: 0 0% 100%;
@@ -22,61 +22,62 @@
     --destructive-foreground: 0 0% 98%;
     --success: 142 71% 45%;             /* #22C55E */
     --warning: 38 92% 50%;              /* #F59E0B */
-    --info: 217 91% 60%;                /* #3B82F6 */
+    --info: 199 89% 48%;                /* #0EA5E9 */
     --muted: 210 20% 96%;
-    --muted-foreground: 220 10% 46%;    /* #6B7280 */
+    --muted-foreground: 215 16% 47%;    /* #64748B */
     --accent: 210 20% 96%;
-    --accent-foreground: 210 28% 17%;
+    --accent-foreground: 222 47% 11%;
     --popover: 0 0% 100%;
-    --popover-foreground: 210 28% 17%;
+    --popover-foreground: 222 47% 11%;
     --card: 0 0% 100%;
-    --card-foreground: 210 28% 17%;
+    --card-foreground: 222 47% 11%;
     --radius: 0.75rem;
-    --divider: 210 31% 95%;             /* #EEF2F6 */
-    --sidebar-background: 0 0% 100%;    /* #FFFFFF */
-    --sidebar-foreground: 210 28% 17%;
-    --sidebar-primary: 174 50% 36%;
+    --divider: 214 32% 95%;             /* #F1F5F9 */
+    --sidebar-background: 222 47% 11%;  /* #0B0F19 */
+    --sidebar-foreground: 210 20% 98%;
+    --sidebar-primary: 243 75% 59%;     /* #4F46E5 */
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 210 20% 96%;
-    --sidebar-accent-foreground: 210 28% 17%;
-    --sidebar-border: 203 20% 92%;
-    --sidebar-ring: 174 50% 36%;
+    --sidebar-accent: 217 33% 17%;
+    --sidebar-accent-foreground: 210 20% 98%;
+    --sidebar-border: 217 33% 17%;
+    --sidebar-ring: 243 75% 59%;
 }
 
 .dark {
-    --border: 214 17% 22%;              /* #2B3644 */
-    --input: 214 17% 22%;
-    --ring: 174 50% 36%;
-    --background: 212 36% 9%;           /* #0F1720 */
+    --border: 217 33% 17%;              /* #1F2937 */
+    --input: 217 33% 17%;
+    --ring: 243 75% 59%;
+    --background: 222 47% 7%;           /* #0B0F19 */
     --foreground: 210 20% 98%;
-    --primary: 174 50% 36%;
+    --primary: 243 75% 59%;             /* #4F46E5 */
     --primary-foreground: 0 0% 100%;
-    --secondary: 214 17% 22%;
+    --secondary: 217 33% 17%;
     --secondary-foreground: 210 20% 98%;
     --destructive: 0 63% 45%;
     --destructive-foreground: 0 0% 98%;
     --success: 142 71% 45%;
     --warning: 38 92% 50%;
-    --info: 217 91% 60%;
-    --muted: 214 17% 22%;
-    --muted-foreground: 213 27% 84%;    /* #CBD5E1 */
-    --accent: 214 17% 22%;
+    --info: 199 89% 48%;
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 16% 65%;
+    --accent: 217 33% 17%;
     --accent-foreground: 210 20% 98%;
-    --popover: 213 30% 9%;
+    --popover: 222 47% 11%;
     --popover-foreground: 210 20% 98%;
-    --card: 210 29% 16%;                /* #1D2935 */
+    --card: 222 47% 11%;                /* #111827 */
     --card-foreground: 210 20% 98%;
     --radius: 0.75rem;
-    --divider: 213 21% 25%;             /* #313D4C */
-    --sidebar-background: 213 33% 11%;  /* #121A24 */
+    --divider: 217 33% 17%;
+    --sidebar-background: 222 47% 5%;   /* #070A10 */
     --sidebar-foreground: 210 20% 98%;
-    --sidebar-primary: 174 50% 36%;
+    --sidebar-primary: 243 75% 59%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 214 17% 22%;
+    --sidebar-accent: 217 33% 17%;
     --sidebar-accent-foreground: 210 20% 98%;
-    --sidebar-border: 214 17% 22%;
-    --sidebar-ring: 174 50% 36%;
+    --sidebar-border: 217 33% 17%;
+    --sidebar-ring: 243 75% 59%;
 }
+
 
 /* ===== Base Layer Resets ===== */
 @layer base {

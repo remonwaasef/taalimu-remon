@@ -42,8 +42,8 @@
             changeType="positive"
             changeLabel="{{ __('center::dashboard.enrolled_students_label') }}"
             icon="fas fa-user-graduate"
-            iconColor="text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/50"
-            accent="emerald"
+            iconColor="text-indigo-600 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/50"
+            accent="brand"
         />
 
         <x-ui.stats-card
@@ -53,7 +53,7 @@
             changeType="positive"
             changeLabel="{{ __('center::dashboard.active_study_groups_label') }}"
             icon="fas fa-users"
-            iconColor="text-brand-primary dark:text-brand-300 bg-brand-50 dark:bg-brand-900/40"
+            iconColor="text-indigo-600 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-900/40"
             accent="brand"
         />
 
@@ -89,38 +89,38 @@
         </div>
 
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <a href="{{ route('center.students.create', ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}" class="p-4.5 rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-brand-primary/40 dark:hover:border-brand-500/40 hover:shadow-md transition-all duration-200 flex flex-col items-center justify-center group text-center shadow-xs">
-                <div class="w-11 h-11 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-lg mb-2.5 group-hover:scale-110 transition-transform">
+            <a href="{{ route('center.students.create', ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}" class="p-4.5 rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-indigo-500/40 dark:hover:border-indigo-500/40 hover:shadow-md transition-all duration-200 flex flex-col items-center justify-center group text-center shadow-xs">
+                <div class="w-11 h-11 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-lg mb-2.5 group-hover:scale-110 transition-transform">
                     <i class="fas fa-user-plus"></i>
                 </div>
-                <span class="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-brand-primary dark:group-hover:text-brand-300 transition-colors leading-tight">
+                <span class="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-300 transition-colors leading-tight">
                     {{ __('center::dashboard.add_new_student') }}
                 </span>
             </a>
 
-            <a href="{{ route('center.courses.create', ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}" class="p-4.5 rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-brand-primary/40 dark:hover:border-brand-500/40 hover:shadow-md transition-all duration-200 flex flex-col items-center justify-center group text-center shadow-xs">
-                <div class="w-11 h-11 rounded-xl bg-brand-50 dark:bg-brand-900/40 text-brand-primary dark:text-brand-300 flex items-center justify-center text-lg mb-2.5 group-hover:scale-110 transition-transform">
+            <a href="{{ route('center.courses.create', ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}" class="p-4.5 rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-indigo-500/40 dark:hover:border-indigo-500/40 hover:shadow-md transition-all duration-200 flex flex-col items-center justify-center group text-center shadow-xs">
+                <div class="w-11 h-11 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-lg mb-2.5 group-hover:scale-110 transition-transform">
                     <i class="fas fa-folder-plus"></i>
                 </div>
-                <span class="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-brand-primary dark:group-hover:text-brand-300 transition-colors leading-tight">
+                <span class="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-300 transition-colors leading-tight">
                     {{ __('center::dashboard.create_new_group') }}
                 </span>
             </a>
 
-            <a href="{{ route('center.attendance.index', ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}" class="p-4.5 rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-brand-primary/40 dark:hover:border-brand-500/40 hover:shadow-md transition-all duration-200 flex flex-col items-center justify-center group text-center shadow-xs">
+            <a href="{{ route('center.attendance.index', ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}" class="p-4.5 rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-indigo-500/40 dark:hover:border-indigo-500/40 hover:shadow-md transition-all duration-200 flex flex-col items-center justify-center group text-center shadow-xs">
                 <div class="w-11 h-11 rounded-xl bg-sky-50 dark:bg-sky-950/40 text-sky-600 dark:text-sky-400 flex items-center justify-center text-lg mb-2.5 group-hover:scale-110 transition-transform">
                     <i class="fas fa-qrcode"></i>
                 </div>
-                <span class="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-brand-primary dark:group-hover:text-brand-300 transition-colors leading-tight">
+                <span class="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-300 transition-colors leading-tight">
                     {{ __('center::dashboard.smart_attendance_btn') }}
                 </span>
             </a>
 
-            <a href="{{ route('center.sales.index', ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}" class="p-4.5 rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-brand-primary/40 dark:hover:border-brand-500/40 hover:shadow-md transition-all duration-200 flex flex-col items-center justify-center group text-center shadow-xs">
+            <a href="{{ route('center.sales.index', ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}" class="p-4.5 rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-indigo-500/40 dark:hover:border-indigo-500/40 hover:shadow-md transition-all duration-200 flex flex-col items-center justify-center group text-center shadow-xs">
                 <div class="w-11 h-11 rounded-xl bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 flex items-center justify-center text-lg mb-2.5 group-hover:scale-110 transition-transform">
                     <i class="fas fa-receipt"></i>
                 </div>
-                <span class="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-brand-primary dark:group-hover:text-brand-300 transition-colors leading-tight">
+                <span class="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-300 transition-colors leading-tight">
                     {{ __('center::dashboard.collect_fees_btn') }}
                 </span>
             </a>
@@ -132,7 +132,7 @@
         <!-- Recent Student Registrations -->
         <x-ui.card title="{{ __('center::dashboard.recent_student_registrations') }}" subtitle="{{ __('center::dashboard.recent_registrations_sub') }}" noPadding="true">
             <x-slot name="action">
-                <a href="{{ route('center.students.index', ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}" class="text-xs font-bold text-brand-primary hover:text-brand-600 dark:text-brand-300 hover:underline">
+                <a href="{{ route('center.students.index', ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}" class="text-xs font-bold text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 hover:underline">
                     {{ __('View All') }} <i class="fas fa-arrow-left text-[10px] rtl:rotate-0 ltr:rotate-180 ms-1"></i>
                 </a>
             </x-slot>
@@ -169,7 +169,7 @@
         <!-- Active Center Groups -->
         <x-ui.card title="{{ __('center::dashboard.active_study_groups') }}" subtitle="{{ __('center::dashboard.active_study_groups_sub') }}" noPadding="true">
             <x-slot name="action">
-                <a href="{{ route('center.courses.index', ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}" class="text-xs font-bold text-brand-primary hover:text-brand-600 dark:text-brand-300 hover:underline">
+                <a href="{{ route('center.courses.index', ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}" class="text-xs font-bold text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 hover:underline">
                     {{ __('View All') }} <i class="fas fa-arrow-left text-[10px] rtl:rotate-0 ltr:rotate-180 ms-1"></i>
                 </a>
             </x-slot>
