@@ -20,6 +20,11 @@ $centralDomains = array_unique(array_filter([
 $mainRoutes = function () {
     Route::get('/', [App\Http\Controllers\LandingController::class, 'index'])->name('home');
 
+    // Taalimu Design System 1.0 Showcase
+    Route::get('/design-system', function () {
+        return view('design-system.index');
+    })->name('design-system.index');
+
     Route::get('/register', [App\Http\Controllers\RegistrationController::class, 'showRegistrationForm'])->name('register');
     Route::post('/register', [App\Http\Controllers\RegistrationController::class, 'register'])
         ->middleware('throttle:registration')

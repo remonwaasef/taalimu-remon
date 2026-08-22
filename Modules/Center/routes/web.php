@@ -47,6 +47,11 @@ Route::get('c/{tenant}/courses/{course}', [PublicCourseController::class, 'show'
 
 // Define the route group closure once to avoid duplication
 $tenantRoutes = function () {
+    // Taalimu Design System 1.0 Showcase
+    Route::get('design-system', function () {
+        return view('design-system.index');
+    })->name('center.design-system.index');
+
     // Guest Routes with rate limiting
     Route::middleware(['guest', 'prevent-back-history'])->group(function () {
         Route::get('login', [AuthController::class, 'showLoginForm'])->name('center.login');

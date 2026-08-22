@@ -1,342 +1,287 @@
 /* ==========================================================================
-   TAALIMU GLOBAL DESIGN TOKENS
+   TAALIMU GLOBAL DESIGN TOKENS — VERSION 1.0
    --------------------------------------------------------------------------
-   This is the Central Source of Truth for all Design Tokens across Taalimu.
-   Changing variables here instantly updates Landing Page, Dashboards, 
-   Hope UI, and Blade components throughout the entire platform.
+   Primary Brand: #4F46E5 (Indigo)
+   Typography: Tajawal (Arabic) + Inter (English)
+   RTL-First, Light & Dark mode variables
    ========================================================================== */
 
 :root {
     /* ----------------------------------------------------------------------
-       1. Core Color Palette (تنسيق الألوان الأساسي)
+       1. Core Brand Colors (Indigo #4F46E5)
        ---------------------------------------------------------------------- */
-    --color-primary: #2E8B83;            /* Taalimu Teal 500 - اللون الرئيسي للمنصة */
-    --color-primary-hover: #25746D;      /* Taalimu Teal 600 - حالة التحويم */
-    --color-primary-active: #1E5E58;     /* Taalimu Teal 700 - حالة الضغط */
-    --color-primary-light: #E6F4F3;      /* Taalimu Teal 50 - خلفيات فاتحة */
-    --color-primary-border: #B2DDD9;     /* Taalimu Teal 200 - حدود خفيفة */
-    --color-primary-contrast: #FFFFFF;   /* نص عالي التباين على اللون الرئيسي */
+    --color-primary-50: #EEF2FF;
+    --color-primary-100: #E0E7FF;
+    --color-primary-200: #C7D2FE;
+    --color-primary-300: #A5B4FC;
+    --color-primary-400: #818CF8;
+    --color-primary-500: #4F46E5;
+    --color-primary-600: #4338CA;
+    --color-primary-700: #3730A3;
+    --color-primary-800: #312E81;
+    --color-primary-900: #1E1B4B;
+    --color-primary-950: #0F0E2A;
 
-    --color-secondary: #0f172a;          /* Slate 900 - اللون الثانوي الداكن */
-    --color-secondary-hover: #1e293b;    /* Slate 800 */
-    --color-secondary-active: #334155;   /* Slate 700 */
-    --color-secondary-light: #f8fafc;    /* Slate 50 */
-    --color-secondary-border: #e2e8f0;   /* Slate 200 */
-    --color-secondary-contrast: #FFFFFF;
+    /* Semantic Primary Alias */
+    --color-primary: #4F46E5;
+    --color-primary-hover: #4338CA;
+    --color-primary-active: #3730A3;
+    --color-primary-light: #EEF2FF;
+    --color-primary-border: #C7D2FE;
+    --color-primary-contrast: #FFFFFF;
 
-    --color-accent: var(--color-soft-blue); /* Alias للتوافق - لون التمييز */
-    --color-accent-light: #E6F4F3;       /* Taalimu Teal tint */
+    /* Secondary / Slate */
+    --color-secondary-50: #F8FAFC;
+    --color-secondary-100: #F1F5F9;
+    --color-secondary-200: #E2E8F0;
+    --color-secondary-300: #CBD5E1;
+    --color-secondary-400: #94A3B8;
+    --color-secondary-500: #64748B;
+    --color-secondary-600: #475569;
+    --color-secondary-700: #334155;
+    --color-secondary-800: #1E293B;
+    --color-secondary-900: #0F172A;
+    --color-secondary-950: #0B0F19;
 
-    --color-blue: #4F7DF3;               /* Blue - لون ثانوي */
-    --color-soft-blue: #69B7C8;          /* Soft Blue - لون ثانوي */
+    --color-secondary: #0F172A;
+    --color-secondary-hover: #1E293B;
+    --color-secondary-active: #334155;
+    --color-secondary-light: #F8FAFC;
+    --color-secondary-border: #E2E8F0;
 
     /* ----------------------------------------------------------------------
-       2. Semantic & Status Colors (الألوان الوظيفية)
+       2. Semantic Status Families (10 Steps)
        ---------------------------------------------------------------------- */
-    /* Success */
+    /* Success / Emerald */
+    --color-success-50: #F0FDF4;
+    --color-success-100: #DCFCE7;
+    --color-success-200: #BBF7D0;
+    --color-success-300: #86EFAC;
+    --color-success-400: #4ADE80;
+    --color-success-500: #22C55E;
+    --color-success-600: #16A34A;
+    --color-success-700: #15803D;
+    --color-success-800: #166534;
+    --color-success-900: #14532D;
+    --color-success-950: #052E16;
+
     --color-success: #22C55E;
     --color-success-hover: #16A34A;
     --color-success-light: #F0FDF4;
     --color-success-border: #BBF7D0;
     --color-success-contrast: #FFFFFF;
 
-    /* Warning */
+    /* Warning / Amber */
+    --color-warning-50: #FFFBEB;
+    --color-warning-100: #FEF3C7;
+    --color-warning-200: #FDE68A;
+    --color-warning-300: #FCD34D;
+    --color-warning-400: #FBBF24;
+    --color-warning-500: #F59E0B;
+    --color-warning-600: #D97706;
+    --color-warning-700: #B45309;
+    --color-warning-800: #92400E;
+    --color-warning-900: #78350F;
+    --color-warning-950: #451A03;
+
     --color-warning: #F59E0B;
     --color-warning-hover: #D97706;
     --color-warning-light: #FFFBEB;
     --color-warning-border: #FDE68A;
     --color-warning-contrast: #FFFFFF;
 
-    /* Danger / Error */
+    /* Error / Danger */
+    --color-error-50: #FEF2F2;
+    --color-error-100: #FEE2E2;
+    --color-error-200: #FECACA;
+    --color-error-300: #FCA5A5;
+    --color-error-400: #F87171;
+    --color-error-500: #EF4444;
+    --color-error-600: #DC2626;
+    --color-error-700: #B91C1C;
+    --color-error-800: #991B1B;
+    --color-error-900: #7F1D1D;
+    --color-error-950: #450A0A;
+
     --color-danger: #EF4444;
     --color-danger-hover: #DC2626;
     --color-danger-light: #FEF2F2;
     --color-danger-border: #FECACA;
     --color-danger-contrast: #FFFFFF;
 
-    /* Info */
-    --color-info: #3B82F6;
-    --color-info-hover: #2563EB;
-    --color-info-light: #EFF6FF;
-    --color-info-border: #BFDBFE;
+    /* Info / Sky */
+    --color-info-50: #F0F9FF;
+    --color-info-100: #E0F2FE;
+    --color-info-200: #BAE6FD;
+    --color-info-300: #7DD3FC;
+    --color-info-400: #38BDF8;
+    --color-info-500: #0EA5E9;
+    --color-info-600: #0284C7;
+    --color-info-700: #0369A1;
+    --color-info-800: #075985;
+    --color-info-900: #0C4A6E;
+    --color-info-950: #082F49;
+
+    --color-info: #0EA5E9;
+    --color-info-hover: #0284C7;
+    --color-info-light: #F0F9FF;
+    --color-info-border: #BAE6FD;
     --color-info-contrast: #FFFFFF;
 
-    /* Focus & Ring */
-    --color-focus-ring: #2E8B83;
-    --focus-ring-alpha: rgba(46, 139, 131, 0.25);
+    /* ----------------------------------------------------------------------
+       3. Surfaces & Neutrals
+       ---------------------------------------------------------------------- */
+    --color-bg-main: #F8FAFC;
+    --color-surface: #FFFFFF;
+    --color-surface-elevated: #FFFFFF;
+    --color-surface-hover: #F1F5F9;
+    --color-bg-sidebar: #0B0F19;         /* Dark Navy Sidebar */
+    --color-bg-header: #FFFFFF;
+    --color-border: #E2E8F0;
+    --color-border-subtle: #F1F5F9;
+    --color-border-strong: #CBD5E1;
+    --color-divider: #F1F5F9;
+
+    /* Text Hierarchy */
+    --color-text-main: #0F172A;
+    --color-text-secondary: #475569;
+    --color-text-muted: #94A3B8;
+    --color-text-disabled: #CBD5E1;
+    --color-text-inverse: #FFFFFF;
+
+    /* Focus Ring */
+    --color-focus-ring: #4F46E5;
+    --focus-ring-alpha: rgba(79, 70, 229, 0.25);
     --focus-ring-offset: 2px;
 
     /* ----------------------------------------------------------------------
-       3. Base Layout & Surface Colors (ألوان الخلفيات والأسطح)
+       4. Typography (Tajawal Arabic + Inter English)
        ---------------------------------------------------------------------- */
-    --color-bg-main: #F6F8FA;
-    --color-surface: #FFFFFF;
-    --color-surface-elevated: #FFFFFF;
-    --color-surface-hover: #F8FAFC;
-    --color-bg-sidebar: #FFFFFF;
-    --color-bg-header: #FFFFFF;
-    --color-border: #E7ECEF;
-    --color-border-subtle: #F1F5F9;
-    --color-border-strong: #CBD5E1;
-    --color-divider: #EEF2F6;
+    --font-family-ar: 'Tajawal', 'Cairo', system-ui, -apple-system, sans-serif;
+    --font-family-en: 'Inter', system-ui, -apple-system, sans-serif;
 
-    /* Text Hierarchy */
-    --color-text-main: #1F2937;
-    --color-text-secondary: #6B7280;
-    --color-text-muted: #9CA3AF;
-    --color-text-disabled: #D1D5DB;
-    --color-text-inverse: #FFFFFF;
+    --font-size-display-1: 3rem;       /* 48px / 56px */
+    --font-size-display-2: 2.25rem;    /* 36px / 44px */
+    --font-size-h1: 1.75rem;           /* 28px / 36px */
+    --font-size-h2: 1.375rem;          /* 22px / 32px */
+    --font-size-h3: 1.125rem;          /* 18px / 28px */
+    --font-size-body-lg: 1rem;         /* 16px / 24px */
+    --font-size-body-md: 0.875rem;     /* 14px / 22px */
+    --font-size-body-sm: 0.75rem;      /* 12px / 20px */
+    --font-size-caption: 0.6875rem;    /* 11px / 16px */
 
     /* ----------------------------------------------------------------------
-       4. Chart Colors (ألوان الرسوم البيانية)
+       5. 8px Base Spacing Scale
        ---------------------------------------------------------------------- */
-    --chart-primary: #2E8B83;
-    --chart-secondary: #4F7DF3;
-    --chart-neutral: #CBD5E1;
-    --chart-accent: #69B7C8;
-    --chart-danger: #EF4444;
-    --chart-warning: #F59E0B;
-    --chart-success: #22C55E;
+    --space-1: 0.5rem;   /* 8px */
+    --space-2: 1rem;     /* 16px */
+    --space-3: 1.5rem;   /* 24px */
+    --space-4: 2rem;     /* 32px */
+    --space-5: 2.5rem;   /* 40px */
+    --space-6: 3rem;     /* 48px */
+    --space-8: 4rem;     /* 64px */
+    --space-10: 5rem;    /* 80px */
+    --space-12: 6rem;    /* 96px */
 
     /* ----------------------------------------------------------------------
-       5. Motion Tokens (نظام الحركة الموحد)
+       6. Border Radius Scale
        ---------------------------------------------------------------------- */
-    --motion-instant: 75ms;            /* ضغطة زر، تغييرات دقيقة */
-    --motion-fast: 125ms;              /* hover، تغيير الأيقونات */
-    --motion-standard: 200ms;          /* dropdowns، tooltips، popovers */
-    --motion-medium: 300ms;            /* modals، دخول الصفحات، الكروت */
-    --motion-slow: 500ms;              /* إشعارات، حالات نجاح محددة */
-
-    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);        /* دخول العناصر */
-    --ease-in: cubic-bezier(0.4, 0, 1, 1);            /* خروج العناصر */
-    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);      /* تفاعلات قابلة للعكس */
-    --ease-spring: cubic-bezier(0.34, 1.3, 0.64, 1);  /* تأثيرات فيزيائية */
-
-    /* ----------------------------------------------------------------------
-       6. Spacing Scale (مقياس التباعد - شبكة 4px / 8px)
-       ---------------------------------------------------------------------- */
-    --space-0-5: 0.125rem;  /* 2px */
-    --space-1:   0.25rem;   /* 4px */
-    --space-1-5: 0.375rem;  /* 6px */
-    --space-2:   0.5rem;    /* 8px */
-    --space-2-5: 0.625rem;  /* 10px */
-    --space-3:   0.75rem;   /* 12px */
-    --space-3-5: 0.875rem;  /* 14px */
-    --space-4:   1rem;      /* 16px */
-    --space-5:   1.25rem;   /* 20px */
-    --space-6:   1.5rem;    /* 24px */
-    --space-8:   2rem;      /* 32px */
-    --space-10:  2.5rem;    /* 40px */
-    --space-12:  3rem;      /* 48px */
-    --space-16:  4rem;      /* 64px */
-    --space-20:  5rem;      /* 80px */
-    --space-24:  6rem;      /* 96px */
-
-    /* ----------------------------------------------------------------------
-       7. Border Radius Scale (مقياس الاستدارة)
-       ---------------------------------------------------------------------- */
-    --radius-xs: 0.25rem;   /* 4px */
-    --radius-sm: 0.375rem;  /* 6px */
+    --radius-sm: 0.25rem;   /* 4px */
     --radius-md: 0.5rem;    /* 8px */
     --radius-lg: 0.75rem;   /* 12px */
     --radius-xl: 1rem;      /* 16px */
-    --radius-2xl: 1.25rem;  /* 20px */
-    --radius-3xl: 1.5rem;   /* 24px */
+    --radius-2xl: 1.5rem;   /* 24px */
     --radius-full: 9999px;
 
-    /* Component radius tokens */
-    --btn-radius: var(--radius-lg);          /* 12px */
-    --card-radius: var(--radius-xl);         /* 16px */
-    --input-radius: var(--radius-lg);        /* 12px */
-    --dialog-radius: var(--radius-2xl);      /* 20px */
-    --badge-radius: var(--radius-full);      /* 9999px */
-    --avatar-radius: var(--radius-full);
+    --btn-radius: var(--radius-lg);
+    --card-radius: var(--radius-xl);
+    --input-radius: var(--radius-lg);
+    --dialog-radius: var(--radius-2xl);
+    --badge-radius: var(--radius-full);
 
     /* ----------------------------------------------------------------------
-       8. Shadows Scale (مقياس الظلال المتوازن)
+       7. Shadows / Elevation System
        ---------------------------------------------------------------------- */
-    --shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
-    --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
-    --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.07), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
-    --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
-    --shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
-    --shadow-inner: inset 0 2px 4px 0 rgba(15, 23, 42, 0.05);
+    --shadow-elevation-0: none;
+    --shadow-elevation-1: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+    --shadow-elevation-2: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    --shadow-elevation-3: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+    --shadow-elevation-4: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+    --shadow-elevation-5: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+    --shadow-xs: var(--shadow-elevation-1);
+    --shadow-sm: var(--shadow-elevation-1);
+    --shadow-md: var(--shadow-elevation-2);
+    --shadow-lg: var(--shadow-elevation-3);
+    --shadow-xl: var(--shadow-elevation-4);
 
     /* ----------------------------------------------------------------------
-       9. Typography Scale (مقياس الخطوط والأحجام)
+       8. Button Tokens
        ---------------------------------------------------------------------- */
-    --font-arabic: 'Cairo', system-ui, -apple-system, sans-serif;
-    --font-latin: 'Inter', system-ui, -apple-system, sans-serif;
-
-    --font-size-2xs: 0.6875rem; /* 11px */
-    --font-size-xs:  0.75rem;   /* 12px */
-    --font-size-sm:  0.875rem;  /* 14px */
-    --font-size-base: 1rem;     /* 16px */
-    --font-size-lg:  1.125rem;  /* 18px */
-    --font-size-xl:  1.25rem;   /* 20px */
-    --font-size-2xl: 1.5rem;    /* 24px */
-    --font-size-3xl: 1.875rem;  /* 30px */
-    --font-size-4xl: 2.25rem;   /* 36px */
-
-    --line-height-tight: 1.25;
-    --line-height-snug: 1.375;
-    --line-height-normal: 1.5;
-    --line-height-relaxed: 1.625;
-
-    /* ----------------------------------------------------------------------
-       10. Global Button Tokens (متغيرات الأزرار الموحدة)
-       ---------------------------------------------------------------------- */
-    /* Primary Button */
-    --btn-primary-bg: var(--color-primary);
-    --btn-primary-hover-bg: var(--color-primary-hover);
+    --btn-primary-bg: #4F46E5;
+    --btn-primary-hover-bg: #4338CA;
     --btn-primary-text: #ffffff;
-    --btn-primary-shadow: 0 4px 14px rgba(46, 139, 131, 0.25);
-    --btn-primary-hover-shadow: 0 6px 20px rgba(46, 139, 131, 0.35);
+    --btn-primary-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+    --btn-primary-hover-shadow: 0 6px 18px rgba(79, 70, 229, 0.35);
 
-    /* Secondary Button */
-    --btn-secondary-bg: var(--color-secondary);
-    --btn-secondary-hover-bg: var(--color-secondary-hover);
-    --btn-secondary-text: #ffffff;
-    --btn-secondary-shadow: 0 4px 14px rgba(15, 23, 42, 0.15);
-
-    /* Success Button */
-    --btn-success-bg: #22C55E;
-    --btn-success-hover-bg: #16A34A;
-    --btn-success-text: #ffffff;
-    --btn-success-shadow: 0 4px 14px rgba(34, 197, 94, 0.22);
-
-    /* Danger Button */
-    --btn-danger-bg: #dc2626;
-    --btn-danger-hover-bg: #b91c1c;
-    --btn-danger-text: #ffffff;
-    --btn-danger-shadow: 0 4px 14px rgba(220, 38, 38, 0.2);
-
-    /* Warning Button */
-    --btn-warning-bg: #f59e0b;
-    --btn-warning-hover-bg: #d97706;
-    --btn-warning-text: #ffffff;
-    --btn-warning-shadow: 0 4px 14px rgba(245, 158, 11, 0.25);
-
-    /* Info Button */
-    --btn-info-bg: #0ea5e9;
-    --btn-info-hover-bg: #0284c7;
-    --btn-info-text: #ffffff;
-    --btn-info-shadow: 0 4px 14px rgba(14, 165, 233, 0.22);
-
-    /* Dark Button */
-    --btn-dark-bg: #0f172a;
-    --btn-dark-hover-bg: #1e293b;
-    --btn-dark-text: #ffffff;
-
-    /* Light Button */
-    --btn-light-bg: #f1f5f9;
-    --btn-light-hover-bg: #e2e8f0;
-    --btn-light-text: #475569;
-    --btn-light-hover-text: #1e293b;
-    --btn-light-border: #e2e8f0;
-
-    /* Outline Button */
-    --btn-outline-border: var(--color-border);
-    --btn-outline-text: var(--color-text-main);
-    --btn-outline-hover-bg: var(--color-primary-light);
-    --btn-outline-hover-text: var(--color-primary);
-
-    /* Shared Button Properties */
     --btn-font-weight: 700;
     --btn-transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 
     /* ----------------------------------------------------------------------
-       11. Global Card & Container Tokens (متغيرات الكروت)
+       9. Card & Input Tokens
        ---------------------------------------------------------------------- */
-    --card-bg: var(--color-surface);
-    --card-border: var(--color-border);
+    --card-bg: #FFFFFF;
+    --card-border: #E2E8F0;
     --card-shadow: var(--shadow-sm);
-    --card-hover-shadow: var(--shadow-lg);
+
+    --input-bg: #FFFFFF;
+    --input-border: #CBD5E1;
+    --input-border-hover: #94A3B8;
+    --input-focus-border: #4F46E5;
+    --input-focus-ring: rgba(79, 70, 229, 0.2);
+    --input-placeholder: #94A3B8;
+    --input-text: #0F172A;
 
     /* ----------------------------------------------------------------------
-       12. Global Input & Form Tokens (متغيرات حقول المدخلات)
-       ---------------------------------------------------------------------- */
-    --input-bg: #f8fafc;
-    --input-border: #cbd5e1;
-    --input-border-hover: #94a3b8;
-    --input-focus-border: var(--color-primary);
-    --input-focus-ring: rgba(46, 139, 131, 0.2);
-    --input-placeholder: #9ca3af;
-    --input-text: var(--color-text-main);
-    --input-disabled-bg: #f1f5f9;
-
-    /* ----------------------------------------------------------------------
-       13. Global Badge & Dialog Tokens (متغيرات الشارات والنوافذ)
-       ---------------------------------------------------------------------- */
-    --badge-font-weight: 600;
-
-    /* ----------------------------------------------------------------------
-       14. Navigation & Layout Dimensions (أبعاد التخطيط والشريط الجانبي)
+       10. Layout Dimensions
        ---------------------------------------------------------------------- */
     --sidebar-width: 16rem;              /* 256px */
     --sidebar-collapsed-width: 4.5rem;   /* 72px */
     --header-height: 4rem;               /* 64px */
-    --z-dropdown: 40;
-    --z-sticky: 30;
-    --z-drawer: 50;
-    --z-modal: 50;
-    --z-toast: 60;
-    --z-tooltip: 70;
 }
 
 /* --------------------------------------------------------------------------
-   Dark Mode Overrides (متغيرات الوضع الداكن الشاملة)
+   Dark Mode Overrides
    -------------------------------------------------------------------------- */
 .dark {
-    --color-bg-main: #0F1720;
-    --color-surface: #17202B;
-    --color-surface-elevated: #1D2935;
-    --color-surface-hover: #22303F;
-    --color-bg-sidebar: #121A24;
-    --color-bg-header: #17202B;
-    --color-border: #2B3644;
-    --color-border-subtle: #1E293B;
-    --color-border-strong: #3B4B5F;
-    --color-divider: #313D4C;
-    --color-text-main: #F9FAFB;
+    --color-bg-main: #0B0F19;
+    --color-surface: #111827;
+    --color-surface-elevated: #1F2937;
+    --color-surface-hover: #1F2937;
+    --color-bg-sidebar: #070A10;
+    --color-bg-header: #111827;
+    --color-border: #1F2937;
+    --color-border-subtle: #161F2E;
+    --color-border-strong: #374151;
+    --color-divider: #1F2937;
+
+    --color-text-main: #F8FAFC;
     --color-text-secondary: #CBD5E1;
     --color-text-muted: #94A3B8;
     --color-text-disabled: #475569;
 
-    /* Primary Light Tint for Dark Mode */
-    --color-primary-light: rgba(46, 139, 131, 0.15);
-    --color-primary-border: rgba(46, 139, 131, 0.35);
+    --color-primary-light: rgba(79, 70, 229, 0.18);
+    --color-primary-border: rgba(79, 70, 229, 0.35);
 
-    /* Semantic Status Tints in Dark Mode */
-    --color-success-light: rgba(34, 197, 94, 0.15);
-    --color-success-border: rgba(34, 197, 94, 0.3);
-    --color-warning-light: rgba(245, 158, 11, 0.15);
-    --color-warning-border: rgba(245, 158, 11, 0.3);
-    --color-danger-light: rgba(239, 68, 68, 0.15);
-    --color-danger-border: rgba(239, 68, 68, 0.3);
-    --color-info-light: rgba(59, 130, 246, 0.15);
-    --color-info-border: rgba(59, 130, 246, 0.3);
+    --card-bg: #111827;
+    --card-border: #1F2937;
+    --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
 
-    /* Button Outlines in Dark Mode */
-    --btn-outline-border: #313D4C;
-    --btn-outline-text: #F9FAFB;
-    --btn-outline-hover-bg: #1D2935;
-    --btn-light-bg: #1D2935;
-    --btn-light-hover-bg: #2B3644;
-    --btn-light-text: #CBD5E1;
-    --btn-light-hover-text: #FFFFFF;
-    --btn-light-border: #2B3644;
-
-    /* Card & Inputs in Dark Mode */
-    --card-bg: #1D2935;
-    --card-border: #2B3644;
-    --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-    --card-hover-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-
-    --input-bg: #131C26;
-    --input-border: #2B3644;
-    --input-border-hover: #3B4B5F;
+    --input-bg: #0B0F19;
+    --input-border: #1F2937;
+    --input-border-hover: #374151;
     --input-placeholder: #64748B;
-    --input-text: #F9FAFB;
-    --input-disabled-bg: #0F1720;
+    --input-text: #F8FAFC;
+
+    --btn-primary-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
 }
