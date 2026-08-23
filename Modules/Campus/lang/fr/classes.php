@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'title' => 'Mes Classes',
+    'subtitle' => 'Sessions en direct, classes à venir et leçons enregistrées',
+    'live_now' => 'En Direct Maintenant',
+    'upcoming' => 'Classes à Venir',
+    'recorded_lessons' => 'Leçons Enregistrées',
+    'join_now' => 'Rejoindre Maintenant',
+    'continue' => 'Continuer le Visionnage',
+    'start_watching' => 'Commencer le Visionnage',
+    'completed' => 'Terminé',
+    'minutes' => 'min',
+    'progress' => 'Progression',
+    'back' => 'Retour aux Classes',
+    'no_recordings' => 'Aucune leçon enregistrée pour le moment.',
+    'no_recordings_desc' => 'Les enregistrements apparaissent ici après la fin de vos classes en direct.',
+    'related_course' => 'Cours Associé',
+    'protected' => 'Protégé',
+    'cannot_load' => 'Impossible de charger la classe en direct',
+    'contact_instructor' => 'Contactez votre instructeur.',
+    'retry' => 'Réessayer',
+    'token_error' => 'Impossible d\'obtenir le jeton de lecture. Veuillez rafraîchir la page.',
+    'playback_error' => 'Erreur de lecture. Tentative de récupération...',
+    'leave' => 'Quitter la Classe',
+];

@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'title' => 'Online Classes Reports',
+    'title' => 'Online Classes',
     'live_classes' => 'Online Classes (Live)',
     'subtitle' => 'Monitor and manage live sessions for all instructors in the center',
     'total_classes' => 'Total Classes',
@@ -28,4 +28,11 @@ return [
     'delete_confirm' => 'Are you sure you want to delete this session? This will cancel it for the group and students.',
     'delete_and_cancel' => 'Cancel and Delete Class',
     'no_classes_found' => 'No classes found matching your search criteria.',
+    // Recording statuses
+    'recording_status' => 'Recording Status',
+    'recording_ready' => 'Ready',
+    'recording_processing' => 'Processing...',
+    'recording_failed' => 'Failed',
+    'recording_unavailable' => 'Unavailable',
+    'recording_ready_badge' => 'Recording Ready',
 ];

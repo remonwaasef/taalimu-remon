@@ -44,6 +44,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->validateCsrfTokens(except: [
             'webhooks/paypal',
             'webhooks/paymob',
+            'webhooks/zoom',
         ]);
 
         // Configure redirect for unauthenticated users

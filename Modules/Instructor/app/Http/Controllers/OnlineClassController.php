@@ -5,47 +5,43 @@ namespace Modules\Instructor\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\OnlineClass;
+use App\Models\OnlineClassParticipant;
+use App\Services\OnlineClassService;
+use App\Services\ZoomService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class OnlineClassController extends Controller
 {
-    /**
-     * Display a listing of the instructor's online classes.
-     */
+    public function __construct(protected OnlineClassService $service)
+    {
+    }
+
     public function index()
     {
         $instructor = auth()->user()->instructor;
 
-        $query = OnlineClass::with(['course']);
+        $query = OnlineClass::with(['course', 'readyRecording'])
+            ->latest('start_time');
 
         if ($instructor) {
             $query->where('instructor_id', $instructor->id);
         }
 
-        $onlineClasses = $query->latest('start_time')->get();
+        $onlineClasses = $query->paginate(15);
 
         return view('instructor::online_classes.index', compact('onlineClasses'));
     }
 
-    /**
-     * Show the form for creating a new online class.
-     */
     public function create()
     {
         $instructor = auth()->user()->instructor;
 
-        if ($instructor) {
-            $courses = $instructor->courses;
-        } else {
-            $courses = Course::select('id', 'title')->get();
-        }
+        $courses = $instructor ? $instructor->courses : Course::select('id', 'title')->get();
 
         return view('instructor::online_classes.create', compact('courses'));
     }
 
-    /**
-     * Store a newly created online class in storage.
-     */
     public function store(Request $request)
     {
         $instructor = auth()->user()->instructor;
@@ -57,87 +53,111 @@ class OnlineClassController extends Controller
         $validated = $request->validate([
             'course_id' => 'required|exists:courses,id',
             'title' => 'required|string|max:255',
-            'platform' => 'required|string|max:50',
-            'meeting_link' => 'required|url',
+            'description' => 'nullable|string',
+            'platform' => 'required|string|in:zoom,manual',
+            'meeting_link' => 'nullable|url|required_if:platform,manual',
             'meeting_id' => 'nullable|string|max:255',
             'meeting_password' => 'nullable|string|max:255',
             'start_time' => 'required|date',
             'duration_minutes' => 'required|integer|min:1',
             'status' => 'required|in:scheduled,in_progress,completed,cancelled',
+            'access_mode' => 'required|in:course,selected',
+            'auto_recording' => 'boolean',
+            'selected_student_ids' => 'array',
+            'selected_student_ids.*' => 'exists:students,id',
         ]);
 
-        $validated['instructor_id'] = $instructor->id;
-        $validated['tenant_id'] = $instructor->tenant_id;
+        $validated['platform'] = $validated['platform'] ?? 'zoom';
+        $validated['auto_recording'] = $request->boolean('auto_recording');
 
-        OnlineClass::create($validated);
+        try {
+            $class = $this->service->createClass($validated, $instructor->id, $instructor->tenant_id);
 
-        return redirect()->route('instructor.online_classes.index')
-            ->with('success', __('instructor::dashboard.online_class_created', ['default' => 'تم إنشاء الدرس الأونلاين بنجاح.']));
+            return redirect()->route('instructor.online_classes.index')
+                ->with('success', __('instructor::dashboard.online_class_created', ['default' => 'تم إنشاء الحصة بنجاح.']));
+        } catch (\Throwable $e) {
+            Log::error('Online class create failed', ['error' => $e->getMessage()]);
+
+            return back()->withInput()->with('error', 'تعذر إنشاء الحصة. يرجى المحاولة لاحقاً.');
+        }
     }
 
-    /**
-     * Show the form for editing the specified online class.
-     */
     public function edit(OnlineClass $onlineClass)
     {
+        $this->authorize('update', $onlineClass);
+
         $instructor = auth()->user()->instructor;
 
-        if ($instructor && $onlineClass->instructor_id !== $instructor->id) {
-            abort(403, 'Unauthorized');
-        }
+        $courses = $instructor ? $instructor->courses : Course::select('id', 'title')->get();
 
-        if ($instructor) {
-            $courses = $instructor->courses;
-        } else {
-            $courses = Course::select('id', 'title')->get();
-        }
+        $selectedStudentIds = $onlineClass->access_mode === 'selected'
+            ? $onlineClass->participants()->pluck('student_id')->toArray()
+            : [];
 
-        return view('instructor::online_classes.edit', compact('onlineClass', 'courses'));
+        return view('instructor::online_classes.edit', compact('onlineClass', 'courses', 'selectedStudentIds'));
     }
 
-    /**
-     * Update the specified online class in storage.
-     */
     public function update(Request $request, OnlineClass $onlineClass)
     {
-        $instructor = auth()->user()->instructor;
-
-        if ($instructor && $onlineClass->instructor_id !== $instructor->id) {
-            abort(403, 'Unauthorized');
-        }
+        $this->authorize('update', $onlineClass);
 
         $validated = $request->validate([
             'course_id' => 'required|exists:courses,id',
             'title' => 'required|string|max:255',
-            'platform' => 'required|string|max:50',
-            'meeting_link' => 'required|url',
+            'description' => 'nullable|string',
+            'platform' => 'required|string|in:zoom,manual',
+            'meeting_link' => 'nullable|url|required_if:platform,manual',
             'meeting_id' => 'nullable|string|max:255',
             'meeting_password' => 'nullable|string|max:255',
             'start_time' => 'required|date',
             'duration_minutes' => 'required|integer|min:1',
             'status' => 'required|in:scheduled,in_progress,completed,cancelled',
+            'access_mode' => 'required|in:course,selected',
+            'auto_recording' => 'boolean',
+            'selected_student_ids' => 'array',
+            'selected_student_ids.*' => 'exists:students,id',
         ]);
 
-        $onlineClass->update($validated);
+        $validated['platform'] = $validated['platform'] ?? 'zoom';
+        $validated['auto_recording'] = $request->boolean('auto_recording');
+
+        try {
+            $this->service->updateClass($onlineClass, $validated);
+
+            return redirect()->route('instructor.online_classes.index')
+                ->with('success', __('instructor::dashboard.online_class_updated', ['default' => 'تم تحديث الحصة بنجاح.']));
+        } catch (\Throwable $e) {
+            Log::error('Online class update failed', ['error' => $e->getMessage()]);
+
+            return back()->withInput()->with('error', 'تعذر تحديث الحصة.');
+        }
+    }
+
+    public function destroy(OnlineClass $onlineClass)
+    {
+        $this->authorize('delete', $onlineClass);
+
+        $this->service->cancelClass($onlineClass);
 
         return redirect()->route('instructor.online_classes.index')
-            ->with('success', __('instructor::dashboard.online_class_updated', ['default' => 'تم تحديث الدرس الأونلاين بنجاح.']));
+            ->with('success', __('instructor::dashboard.online_class_deleted', ['default' => 'تم حذف الحصة بنجاح.']));
     }
 
     /**
-     * Remove the specified online class from storage.
+     * Show the live classroom page (host view with Meeting SDK).
      */
-    public function destroy(OnlineClass $onlineClass)
+    public function show(OnlineClass $onlineClass)
     {
-        $instructor = auth()->user()->instructor;
+        $this->authorize('view', $onlineClass);
 
-        if ($instructor && $onlineClass->instructor_id !== $instructor->id) {
-            abort(403, 'Unauthorized');
+        $joinContext = null;
+
+        if (app(ZoomService::class)->isConfigured() && $onlineClass->meeting_id) {
+            $joinContext = app(ZoomService::class)->getJoinContext($onlineClass, auth()->user(), true);
         }
 
-        $onlineClass->delete();
+        $participants = $onlineClass->participants()->with('student')->get();
 
-        return redirect()->route('instructor.online_classes.index')
-            ->with('success', __('instructor::dashboard.online_class_deleted', ['default' => 'تم حذف الدرس الأونلاين بنجاح.']));
+        return view('instructor::online_classes.show', compact('onlineClass', 'joinContext', 'participants'));
     }
 }

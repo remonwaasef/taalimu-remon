@@ -9,6 +9,7 @@
     $isGroupsActive = Route::currentRouteNamed('instructor.groups.*');
     $isSchedulesActive = Route::currentRouteNamed('instructor.schedules.*');
     $isOnlineClassesActive = Route::currentRouteNamed('instructor.online_classes.*');
+    $isRecordingsActive = Route::currentRouteNamed('instructor.recordings.*');
     $isAttendanceActive = Route::currentRouteNamed('instructor.attendance.*');
     $isReportsActive = Route::currentRouteNamed('instructor.reports', 'instructor.reports.students', 'instructor.reports.payments');
     $isBillingActive = Route::currentRouteNamed('instructor.billing');
@@ -53,12 +54,20 @@
             <span>{{ __('instructor::sidebar.schedules') }}</span>
         </a>
 
-        <a href="{{ route('instructor.online_classes.index') }}"
+<a href="{{ route('instructor.online_classes.index') }}"
            class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors
-                  {{ $isOnlineClassesActive ? 'text-brand-primary bg-brand-50 dark:bg-brand-900/30' : 'text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800' }}"
+                 {{ $isOnlineClassesActive ? 'text-brand-primary bg-brand-50 dark:bg-brand-900/30' : 'text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800' }}"
            title="{{ __('instructor::sidebar.online_classes') }}">
             <i class="fas fa-video w-4 text-center"></i>
             <span>{{ __('instructor::sidebar.online_classes') }}</span>
+        </a>
+
+        <a href="{{ route('instructor.recordings.index') }}"
+           class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors
+                 {{ $isRecordingsActive ? 'text-brand-primary bg-brand-50 dark:bg-brand-900/30' : 'text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800' }}"
+           title="{{ __('instructor::sidebar.recordings') }}">
+            <i class="fas fa-clapperboard w-4 text-center"></i>
+            <span>{{ __('instructor::sidebar.recordings') }}</span>
         </a>
 
         <a href="{{ route('instructor.attendance.index') }}"

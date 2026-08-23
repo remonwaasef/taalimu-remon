@@ -61,4 +61,5 @@ return [
     'finance_settings' => 'الشؤون المالية والإعدادات',
     'daily_work' => 'العمل اليومي',
     'academics' => 'التعليم',
+    'online_classes' => 'الحصص المباشرة',
 ];

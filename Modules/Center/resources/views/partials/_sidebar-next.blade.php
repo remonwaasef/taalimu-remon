@@ -126,6 +126,13 @@
                     <span>{{ __('center::sidebar.instructors') }}</span>
                 </a>
                 @endif
+                @can('manage schedule')
+                <a href="{{ route('center.online_classes.index', ['tenant' => $domain]) }}"
+                   class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs transition-colors {{ Route::currentRouteNamed('center.online_classes.*') ? 'text-brand-primary dark:text-brand-300 font-bold bg-brand-50/50 dark:bg-brand-900/20' : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/40 font-medium' }}">
+                    <i class="fas fa-video text-xs w-4"></i>
+                    <span>{{ __('center::sidebar.online_classes') }}</span>
+                </a>
+                @endcan
             </div>
         </div>
         @endif

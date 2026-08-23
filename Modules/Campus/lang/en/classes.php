@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'title' => 'My Classes',
+    'subtitle' => 'Live sessions, upcoming classes, and recorded lessons',
+    'live_now' => 'Live Now',
+    'upcoming' => 'Upcoming Classes',
+    'recorded_lessons' => 'Recorded Lessons',
+    'join_now' => 'Join Now',
+    'continue' => 'Continue Watching',
+    'start_watching' => 'Start Watching',
+    'completed' => 'Completed',
+    'minutes' => 'min',
+    'progress' => 'Progress',
+    'back' => 'Back to Classes',
+    'no_recordings' => 'No recorded lessons yet.',
+    'no_recordings_desc' => 'Recordings appear here after your live classes finish.',
+    'related_course' => 'Related Course',
+    'protected' => 'Protected',
+    'cannot_load' => 'Cannot load live class',
+    'contact_instructor' => 'Please contact your instructor.',
+    'retry' => 'Retry',
+    'token_error' => 'Unable to obtain playback token. Please refresh the page.',
+    'playback_error' => 'Playback error. Trying to recover...',
+    'leave' => 'Leave Class',
+];

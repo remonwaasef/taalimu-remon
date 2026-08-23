@@ -16,6 +16,7 @@ return [
     'teaching' => 'Teaching & Study',
     'account' => 'Account & Settings',
     'online_classes' => 'Online Classes',
+    'recordings' => 'Recordings',
     'insights' => 'Insights',
     'add' => 'Add',
     'edit' => 'Edit',

@@ -61,4 +61,5 @@ return [
     'finance_settings' => 'Finance & Settings',
     'daily_work' => 'Daily Work',
     'academics' => 'Academics',
+    'online_classes' => 'Online Classes',
 ];

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Campus\Http\Controllers\CampusController;
+use Modules\Campus\Http\Controllers\StudentClassController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +33,13 @@ foreach ($campusDomains as $d) {
                 Route::get('/profile', [CampusController::class, 'profile'])->name('profile');
                 Route::get('/courses', [CampusController::class, 'courses'])->name('courses.index');
                 Route::get('/certificates/{certificate}/download', [CampusController::class, 'downloadCertificate'])->name('certificates.download');
+
+                // Online Classes & Recordings
+                Route::get('/classes', [StudentClassController::class, 'index'])->name('classes.index');
+                Route::get('/classes/{onlineClass}/join', [StudentClassController::class, 'join'])->name('classes.join');
+                Route::get('/recordings/{recording}', [StudentClassController::class, 'watch'])->name('recordings.watch');
+                Route::post('/recordings/{recording}/token', [StudentClassController::class, 'token'])->name('recordings.token');
+                Route::post('/recordings/{recording}/progress', [StudentClassController::class, 'progress'])->name('recordings.progress');
             });
         });
 }

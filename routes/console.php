@@ -50,3 +50,6 @@ Schedule::command('db:monitor-sizes')->weeklyOn(0, '07:00')->withoutOverlapping(
 
 // SEO: regenerate the sitemap nightly
 Schedule::command('sitemap:generate')->dailyAt('03:30')->withoutOverlapping();
+
+// Online Classes: T-15min student reminders (runs every minute, idempotent via reminder_sent_at)
+Schedule::command('online-classes:send-reminders')->everyMinute()->withoutOverlapping();

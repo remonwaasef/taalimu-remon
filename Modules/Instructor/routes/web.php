@@ -2,8 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Instructor\Http\Controllers\AttendanceController;
+use Modules\Instructor\Http\Controllers\ClassRecordingController;
 use Modules\Instructor\Http\Controllers\GroupController;
 use Modules\Instructor\Http\Controllers\InstructorController;
+use Modules\Instructor\Http\Controllers\OnlineClassController;
+use Modules\Instructor\Http\Controllers\OnlineClassSessionController;
 use Modules\Instructor\Http\Controllers\ScheduleController;
 use Modules\Instructor\Http\Controllers\SettingsController;
 use Modules\Instructor\Http\Controllers\StudentController;
@@ -71,7 +74,20 @@ $instructorRoutes = function () {
     Route::middleware(['auth', '2fa', 'verified', 'subscription', 'instructor.role'])->prefix('instructor')->group(function () {
 
         // Online Classes
-        Route::resource('online-classes', \Modules\Instructor\Http\Controllers\OnlineClassController::class)->names('instructor.online_classes');
+        Route::resource('online-classes', OnlineClassController::class)->names('instructor.online_classes');
+
+        // Live Session Controls (AJAX)
+        Route::prefix('online-classes/{onlineClass}')->group(function () {
+            Route::post('start', [OnlineClassSessionController::class, 'start'])->name('instructor.online_classes.start');
+            Route::post('end', [OnlineClassSessionController::class, 'end'])->name('instructor.online_classes.end');
+            Route::get('join-token', [OnlineClassSessionController::class, 'joinToken'])->name('instructor.online_classes.join_token');
+        });
+
+        // Recordings & Analytics
+        Route::prefix('recordings')->name('instructor.recordings.')->group(function () {
+            Route::get('/', [ClassRecordingController::class, 'index'])->name('index');
+            Route::get('{recording}', [ClassRecordingController::class, 'show'])->name('show');
+        });
 
         // Instructor Schedule Management
         Route::get('/schedules', [ScheduleController::class, 'index'])->name('instructor.schedules.index');

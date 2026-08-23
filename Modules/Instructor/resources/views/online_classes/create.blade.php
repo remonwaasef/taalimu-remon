@@ -11,7 +11,7 @@
 @section('content')
 <div class="container-fluid">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-lg-10">
             <div class="card border-0 shadow-sm rounded-4">
                 <div class="card-header bg-white border-0 pt-4 pb-0">
                     <div class="d-flex align-items-center">
@@ -35,6 +35,11 @@
                                 @error('title') <span class="invalid-feedback">{{ $message }}</span> @enderror
                             </div>
 
+                            <div class="col-md-12">
+                                <label class="form-label fw-bold">{{ __('instructor::online_classes.description') }}</label>
+                                <textarea name="description" class="form-control rounded-4 px-3" rows="3" placeholder="{{ __('instructor::online_classes.description_placeholder') }}">{{ old('description') }}</textarea>
+                            </div>
+
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('instructor::online_classes.course_group') }} <span class="text-danger">*</span></label>
                                 <select name="course_id" class="form-select rounded-pill px-3 @error('course_id') is-invalid @enderror" required>
@@ -48,30 +53,52 @@
 
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('instructor::online_classes.stream_platform') }} <span class="text-danger">*</span></label>
-                                <select name="platform" class="form-select rounded-pill px-3 @error('platform') is-invalid @enderror" required>
-                                    <option value="zoom" {{ old('platform') == 'zoom' ? 'selected' : '' }}>Zoom</option>
-                                    <option value="google_meet" {{ old('platform') == 'google_meet' ? 'selected' : '' }}>Google Meet</option>
-                                    <option value="microsoft_teams" {{ old('platform') == 'microsoft_teams' ? 'selected' : '' }}>Microsoft Teams</option>
-                                    <option value="other" {{ old('platform') == 'other' ? 'selected' : '' }}>{{ __('instructor::online_classes.other') }}</option>
+                                <select name="platform" id="platformSelect" class="form-select rounded-pill px-3 @error('platform') is-invalid @enderror" required>
+                                    <option value="zoom" {{ old('platform', 'zoom') == 'zoom' ? 'selected' : '' }}>Zoom (مدمج مع التسجيل التلقائي)</option>
+                                    <option value="manual" {{ old('platform') == 'manual' ? 'selected' : '' }}>رابط يدوي (Google Meet, Teams, غير ذلك)</option>
                                 </select>
                                 @error('platform') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                                <div class="form-text" id="platformHelp">{{ __('instructor::online_classes.platform_help') }}</div>
                             </div>
 
-                            <div class="col-md-12">
+                            <div class="col-md-12" id="manualLinkFields">
                                 <label class="form-label fw-bold">{{ __('instructor::online_classes.meeting_link') }} <span class="text-danger">*</span></label>
-                                <input type="url" name="meeting_link" class="form-control rounded-pill px-3 @error('meeting_link') is-invalid @enderror" value="{{ old('meeting_link') }}" required placeholder="{{ __('instructor::online_classes.enter_link_placeholder') }}">
+                                <input type="url" name="meeting_link" class="form-control rounded-pill px-3 @error('meeting_link') is-invalid @enderror" value="{{ old('meeting_link') }}" placeholder="{{ __('instructor::online_classes.enter_link_placeholder') }}">
                                 @error('meeting_link') <span class="invalid-feedback">{{ $message }}</span> @enderror
                             </div>
 
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">{{ __('instructor::online_classes.meeting_id') }} <span class="text-muted small">{{ __('instructor::online_classes.optional') }}</span></label>
-                                <input type="text" name="meeting_id" class="form-control rounded-pill px-3 @error('meeting_id') is-invalid @enderror" value="{{ old('meeting_id') }}" placeholder="123 456 789">
-                                @error('meeting_id') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                            <div class="col-md-12" id="zoomAutoFields" style="display:none;">
+                                <div class="form-check form-switch mb-2">
+                                    <input class="form-check-input" type="checkbox" name="auto_recording" id="autoRecording" {{ old('auto_recording', true) ? 'checked' : '' }} value="1">
+                                    <label class="form-check-label fw-bold" for="autoRecording">{{ __('instructor::online_classes.auto_recording') }}</label>
+                                </div>
+                                <div class="form-text">{{ __('instructor::online_classes.auto_recording_desc') }}</div>
                             </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">{{ __('instructor::online_classes.password') }} <span class="text-muted small">{{ __('instructor::online_classes.optional') }}</span></label>
-                                <input type="text" name="meeting_password" class="form-control rounded-pill px-3 @error('meeting_password') is-invalid @enderror" value="{{ old('meeting_password') }}" placeholder="123456">
-                                @error('meeting_password') <span class="invalid-feedback">{{ $message }}</span> @enderror
+
+                            <div class="col-md-12">
+                                <label class="form-label fw-bold">{{ __('instructor::online_classes.access_mode') }} <span class="text-danger">*</span></label>
+                                <select name="access_mode" id="accessMode" class="form-select rounded-pill px-3 @error('access_mode') is-invalid @enderror" required>
+                                    <option value="course" {{ old('access_mode', 'course') == 'course' ? 'selected' : '' }}>{{ __('instructor::online_classes.access_course') }}</option>
+                                    <option value="selected" {{ old('access_mode') == 'selected' ? 'selected' : '' }}>{{ __('instructor::online_classes.access_selected') }}</option>
+                                </select>
+                                @error('access_mode') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                                <div class="form-text">{{ __('instructor::online_classes.access_mode_help') }}</div>
+                            </div>
+
+                            <div class="col-md-12" id="selectedStudentsContainer" style="display:none;">
+                                <label class="form-label fw-bold">{{ __('instructor::online_classes.selected_students') }}</label>
+                                <select name="selected_student_ids[]" id="selectedStudents" class="form-select rounded-pill px-3" multiple style="min-height: 120px;">
+                                    @foreach($courses as $course)
+                                        @if($course->students->count())
+                                            <optgroup label="{{ $course->title }}">
+                                                @foreach($course->students as $student)
+                                                    <option value="{{ $student->id }}" {{ in_array($student->id, old('selected_student_ids', [])) ? 'selected' : '' }}>{{ $student->name }} ({{ $student->code }})</option>
+                                                @endforeach
+                                            </optgroup>
+                                        @endif
+                                    @endforeach
+                                </select>
+                                <div class="form-text">{{ __('instructor::online_classes.selected_students_help') }}</div>
                             </div>
 
                             <div class="col-md-6">
@@ -92,6 +119,7 @@
                                     <option value="scheduled" {{ old('status') == 'scheduled' ? 'selected' : '' }}>{{ __('instructor::online_classes.scheduled') }}</option>
                                     <option value="in_progress" {{ old('status') == 'in_progress' ? 'selected' : '' }}>{{ __('instructor::online_classes.in_progress') }}</option>
                                     <option value="completed" {{ old('status') == 'completed' ? 'selected' : '' }}>{{ __('instructor::online_classes.completed') }}</option>
+                                    <option value="cancelled" {{ old('status') == 'cancelled' ? 'selected' : '' }}>{{ __('instructor::online_classes.canceled') }}</option>
                                 </select>
                                 @error('status') <span class="invalid-feedback">{{ $message }}</span> @enderror
                             </div>
@@ -109,3 +137,42 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const platformSelect = document.getElementById('platformSelect');
+    const manualFields = document.getElementById('manualLinkFields');
+    const zoomFields = document.getElementById('zoomAutoFields');
+    const accessMode = document.getElementById('accessMode');
+    const studentContainer = document.getElementById('selectedStudentsContainer');
+
+    function updatePlatformFields() {
+        if (platformSelect.value === 'zoom') {
+            manualFields.style.display = 'none';
+            manualFields.querySelector('input').required = false;
+            zoomFields.style.display = 'block';
+        } else {
+            manualFields.style.display = 'block';
+            manualFields.querySelector('input').required = true;
+            zoomFields.style.display = 'none';
+        }
+    }
+
+    function updateAccessMode() {
+        studentContainer.style.display = accessMode.value === 'selected' ? 'block' : 'none';
+    }
+
+    platformSelect.addEventListener('change', updatePlatformFields);
+    accessMode.addEventListener('change', updateAccessMode);
+
+    updatePlatformFields();
+    updateAccessMode();
+
+    // Initialize Select2-like multi-select if available (plain fallback)
+    if (typeof $ !== 'undefined' && $.fn.select2) {
+        $('#selectedStudents').select2({ placeholder: 'اختر الطلاب...' });
+    }
+});
+</script>
+@endpush

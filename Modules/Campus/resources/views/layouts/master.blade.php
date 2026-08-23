@@ -239,6 +239,10 @@
                 <i class="bi bi-book-fill"></i>
                 <span>تصفح الدورات</span>
             </a>
+            <a href="{{ route('campus.classes.index') }}" class="sidebar-link {{ request()->routeIs('campus.classes.index') ? 'active' : '' }}">
+                <i class="fas fa-video"></i>
+                <span>{{ __('campus::classes.title') }}</span>
+            </a>
             <a href="{{ route('campus.schedule') }}" class="sidebar-link {{ request()->routeIs('campus.schedule') ? 'active' : '' }}">
                 <i class="bi bi-calendar3"></i>
                 <span>الجدول الدراسي</span>

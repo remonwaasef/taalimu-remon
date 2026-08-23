@@ -73,6 +73,11 @@ $mainRoutes = function () {
     Route::get('/payment/paymob/callback', [App\Http\Controllers\PaymentController::class, 'paymobCallback'])->name('payment.paymob.callback');
     Route::post('/webhooks/paymob', [App\Http\Controllers\PaymobWebhookController::class, 'handle'])->name('webhooks.paymob');
 
+    // Zoom webhooks (signature-verified inside the controller)
+    Route::post('/webhooks/zoom', [App\Http\Controllers\ZoomWebhookController::class, 'handle'])
+        ->middleware('throttle:120,1')
+        ->name('webhooks.zoom');
+
     // Demo Payment Routes (for testing without Stripe)
     Route::get('/payment/demo', [App\Http\Controllers\PaymentController::class, 'demo'])->name('payment.demo');
     Route::get('/payment/demo/success', [App\Http\Controllers\PaymentController::class, 'demoSuccess'])
