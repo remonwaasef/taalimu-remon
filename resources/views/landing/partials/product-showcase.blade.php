@@ -65,6 +65,7 @@
                     <div data-animate="fade-up">
                         <h3 style="color: #0f172a; font-size: clamp(1.5rem, 2.5vw, 1.85rem); font-weight: 900; margin: 0 0 1rem 0; line-height: 1.3;">{{ $item['title'] }}</h3>
                         <p style="color: #475569; font-size: 1rem; margin: 0 0 1.5rem 0; line-height: 1.7;">{{ $item['desc'] }}</p>
+                        @if(!empty($item['highlights']))
                         <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem;">
                             @foreach($item['highlights'] as $highlight)
                             <li style="display: flex; align-items: flex-start; gap: 0.75rem; color: #334155; font-size: 0.9rem; font-weight: 600;">
@@ -75,6 +76,7 @@
                             </li>
                             @endforeach
                         </ul>
+                        @endif
                     </div>
                     
                     {{-- Visual / Mockup --}}
@@ -91,11 +93,11 @@
                             justify-content: center;
                             position: relative;
                         ">
-                            @if($item['image'])
+                            @if(!empty($item['image']))
                             <img src="{{ asset('images/landing/' . $item['image']) }}" alt="{{ $item['title'] }}" style="width: 100%; height: 100%; object-fit: cover;">
                             @else
                             <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #94a3b8; text-align: center; padding: 2rem;">
-                                <i class="fas fa-{{ $item['icon'] }}" style="font-size: 3rem; margin-bottom: 1rem; color: #cbd5e1;"></i>
+                                <i class="fas fa-{{ $item['icon'] ?? 'laptop-code' }}" style="font-size: 3rem; margin-bottom: 1rem; color: #cbd5e1;"></i>
                                 <span style="font-size: 1rem; font-weight: 600;">{{ __('landing.showcase.coming_soon') }}</span>
                             </div>
                             @endif

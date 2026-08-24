@@ -48,7 +48,7 @@
                         cursor: pointer;
                     "
                 >
-                    <span style="font-size: 1rem; font-weight: 800; color: #0f172a;">{{ $item['q'] }}</span>
+                    <span style="font-size: 1rem; font-weight: 800; color: #0f172a;">{{ $item['q'] ?? $item['question'] ?? '' }}</span>
                     <div style="width: 2rem; height: 2rem; border-radius: 50%; background: #E6F4F3; color: #2E8B83; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; flex-shrink: 0; transition: transform 0.2s;"
                          :style="open ? 'transform: rotate(180deg);' : ''">
                         <i class="fas fa-chevron-down"></i>
@@ -60,7 +60,7 @@
                     x-collapse
                     style="padding: 0 1.5rem 1.25rem 1.5rem; color: #475569; font-size: 0.95rem; line-height: 1.7;"
                 >
-                    <p style="margin: 0; border-top: 1px solid #f1f5f9; padding-top: 1rem;">{{ $item['a'] }}</p>
+                    <p style="margin: 0; border-top: 1px solid #f1f5f9; padding-top: 1rem;">{{ $item['a'] ?? $item['answer'] ?? '' }}</p>
                 </div>
             </div>
             @endforeach
@@ -68,7 +68,7 @@
 
         {{-- FAQ CTA --}}
         <div class="text-center mt-12" data-animate="fade-up" data-delay="400">
-            <p style="color: #64748b; font-size: 0.95rem; margin: 0 0 1rem 0;">{{ __('landing.faq.cta_text') }}</p>
+            <p style="color: #64748b; font-size: 0.95rem; margin: 0 0 1rem 0;">{{ is_array(__('landing.faq.cta_text')) ? '' : __('landing.faq.cta_text') }}</p>
             <a href="{{ route('register') }}" style="
                 display: inline-flex;
                 align-items: center;
@@ -82,7 +82,7 @@
                 text-decoration: none;
                 transition: transform 0.2s ease;
             " onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
-                {{ __('landing.faq.cta_button') }}
+                {{ is_array(__('landing.faq.cta_button')) ? __('landing.nav.start_trial') : __('landing.faq.cta_button') }}
                 <i class="fas fa-arrow-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}"></i>
             </a>
         </div>

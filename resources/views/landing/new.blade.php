@@ -4,42 +4,36 @@
     {{-- 1. Hero Section --}}
     @include('landing.partials.hero')
 
-    {{-- 2. Problem Section --}}
-    @include('landing.partials.problem')
+    {{-- 2. Problem / Pain Points Section --}}
+    @include('landing.partials.pain-points')
 
-    {{-- 3. QR Registration Feature --}}
-    @include('landing.partials.qr-registration')
+    {{-- 3. Transformation (Before vs After) --}}
+    @include('landing.partials.outcome')
 
-    {{-- 4. WhatsApp Notifications Feature --}}
-    @include('landing.partials.whatsapp-notifications')
+    {{-- 4. Automated WhatsApp Communication --}}
+    @include('landing.partials.whatsapp-killer')
 
-    {{-- 5. QR + WhatsApp Master Flow --}}
-    @include('landing.partials.qr-whatsapp-flow')
+    {{-- 5. Payments & Attendance Management --}}
+    @include('landing.partials.payments-attendance')
 
-    {{-- 6. Audience Section --}}
-    @include('landing.partials.audience')
+    {{-- 6. Seamless Excel Migration --}}
+    @include('landing.partials.excel-migration')
 
-    {{-- 7. Platform Visual --}}
-    @include('landing.partials.platform-visual')
-
-    {{-- 8. Product Showcase --}}
+    {{-- 7. Platform Showcase --}}
     @include('landing.partials.product-showcase')
 
-    {{-- 9. Feature Bento --}}
-    @include('landing.partials.feature-bento')
-
-    {{-- 10. Benefits Section --}}
-    @include('landing.partials.benefits')
-
-    {{-- 11. How It Works --}}
+    {{-- 8. How It Works --}}
     @include('landing.partials.how-it-works')
 
-    {{-- 12. Trust Section --}}
+    {{-- 9. Trust & Security --}}
     @include('landing.partials.trust')
 
-    {{-- 13. FAQ --}}
+    {{-- 10. Pricing Plans --}}
+    @include('landing.partials.pricing')
+
+    {{-- 11. FAQ --}}
     @include('landing.partials.faq')
 
-    {{-- 14. Final CTA --}}
+    {{-- 12. Final Call to Action --}}
     @include('landing.partials.cta')
 @endsection

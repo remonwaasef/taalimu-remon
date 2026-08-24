@@ -35,52 +35,52 @@
             {{-- Product Links --}}
             <div style="flex: 1 1 180px; min-width: 150px;">
                 <h4 style="color: #0f172a !important; font-weight: 800; font-size: 1rem; margin: 0 0 1.25rem 0;">
-                    {{ __('landing.footer.product') }}
+                    {{ is_array(__('landing.footer.product')) ? (__('landing.footer.product.title') ?? 'Product') : __('landing.footer.product') }}
                 </h4>
                 <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem;">
-                    <li><a href="#qr-registration" style="color: #64748b !important; font-size: 0.9rem; font-weight: 500; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#64748b'">{{ __('landing.nav.qr_registration') }}</a></li>
-                    <li><a href="#whatsapp-notifications" style="color: #64748b !important; font-size: 0.9rem; font-weight: 500; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#64748b'">{{ __('landing.nav.whatsapp') }}</a></li>
-                    <li><a href="#solutions" style="color: #64748b !important; font-size: 0.9rem; font-weight: 500; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#64748b'">{{ __('landing.nav.solutions') }}</a></li>
-                    <li><a href="#features" style="color: #64748b !important; font-size: 0.9rem; font-weight: 500; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#64748b'">{{ __('landing.footer.features') }}</a></li>
-                    <li><a href="#pricing" style="color: #64748b !important; font-size: 0.9rem; font-weight: 500; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#64748b'">{{ __('landing.footer.pricing') }}</a></li>
+                    <li><a href="#qr-registration" style="color: #64748b !important; font-size: 0.9rem; font-weight: 500; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#64748b'">{{ is_array(__('landing.nav.qr_registration')) ? 'QR Registration' : __('landing.nav.qr_registration') }}</a></li>
+                    <li><a href="#whatsapp-notifications" style="color: #64748b !important; font-size: 0.9rem; font-weight: 500; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#64748b'">{{ is_array(__('landing.nav.whatsapp')) ? 'WhatsApp' : __('landing.nav.whatsapp') }}</a></li>
+                    <li><a href="#solutions" style="color: #64748b !important; font-size: 0.9rem; font-weight: 500; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#64748b'">{{ is_array(__('landing.nav.solutions')) ? 'Solutions' : __('landing.nav.solutions') }}</a></li>
+                    <li><a href="#features" style="color: #64748b !important; font-size: 0.9rem; font-weight: 500; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#64748b'">{{ is_array(__('landing.footer.features')) ? (__('landing.footer.features_link') ?? 'Features') : __('landing.footer.features') }}</a></li>
+                    <li><a href="#pricing" style="color: #64748b !important; font-size: 0.9rem; font-weight: 500; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#64748b'">{{ is_array(__('landing.footer.pricing')) ? (__('landing.footer.pricing_link') ?? 'Pricing') : __('landing.footer.pricing') }}</a></li>
                 </ul>
             </div>
 
             {{-- Company Links --}}
             <div style="flex: 1 1 180px; min-width: 150px;">
                 <h4 style="color: #0f172a !important; font-weight: 800; font-size: 1rem; margin: 0 0 1.25rem 0;">
-                    {{ __('landing.footer.company') }}
+                    {{ is_array(__('landing.footer.company')) ? (__('landing.footer.company.title') ?? 'Company') : __('landing.footer.company') }}
                 </h4>
                 <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem;">
-                    <li><a href="#about" style="color: #64748b !important; font-size: 0.9rem; font-weight: 500; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#64748b'">{{ __('landing.footer.about') }}</a></li>
-                    <li><a href="#blog" style="color: #64748b !important; font-size: 0.9rem; font-weight: 500; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#64748b'">{{ __('landing.footer.blog') }}</a></li>
-                    <li><a href="#careers" style="color: #64748b !important; font-size: 0.9rem; font-weight: 500; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#64748b'">{{ __('landing.footer.careers') }}</a></li>
-                    <li><a href="{{ route('privacy') }}" style="color: #64748b !important; font-size: 0.9rem; font-weight: 500; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#64748b'">{{ __('landing.footer.privacy') }}</a></li>
-                    <li><a href="{{ route('terms') }}" style="color: #64748b !important; font-size: 0.9rem; font-weight: 500; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#64748b'">{{ __('landing.footer.terms') }}</a></li>
+                    <li><a href="#about" style="color: #64748b !important; font-size: 0.9rem; font-weight: 500; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#64748b'">{{ is_array(__('landing.footer.about')) ? 'About' : __('landing.footer.about') }}</a></li>
+                    <li><a href="#blog" style="color: #64748b !important; font-size: 0.9rem; font-weight: 500; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#64748b'">{{ is_array(__('landing.footer.blog')) ? 'Blog' : __('landing.footer.blog') }}</a></li>
+                    <li><a href="#careers" style="color: #64748b !important; font-size: 0.9rem; font-weight: 500; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#64748b'">{{ is_array(__('landing.footer.careers')) ? 'Careers' : __('landing.footer.careers') }}</a></li>
+                    <li><a href="{{ route('privacy') }}" style="color: #64748b !important; font-size: 0.9rem; font-weight: 500; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#64748b'">{{ is_array(__('landing.footer.privacy')) ? (__('landing.footer.legal.privacy') ?? 'Privacy') : __('landing.footer.privacy') }}</a></li>
+                    <li><a href="{{ route('terms') }}" style="color: #64748b !important; font-size: 0.9rem; font-weight: 500; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#64748b'">{{ is_array(__('landing.footer.terms')) ? (__('landing.footer.legal.terms') ?? 'Terms') : __('landing.footer.terms') }}</a></li>
                 </ul>
             </div>
 
             {{-- Login/Register --}}
             <div style="flex: 1 1 180px; min-width: 150px;">
                 <h4 style="color: #0f172a !important; font-weight: 800; font-size: 1rem; margin: 0 0 1.25rem 0;">
-                    {{ __('landing.footer.access') }}
+                    {{ is_array(__('landing.footer.access')) ? 'Portal' : __('landing.footer.access') }}
                 </h4>
                 <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem;">
-                    <li><a href="{{ route('login.portal') }}" style="color: #64748b !important; font-size: 0.9rem; font-weight: 500; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#64748b'">{{ __('landing.footer.login') }}</a></li>
-                    <li><a href="{{ route('register') }}" style="color: #2E8B83 !important; font-weight: 700; font-size: 0.9rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#10b981'" onmouseout="this.style.color='#2E8B83'">{{ __('landing.footer.register') }}</a></li>
-                    <li><a href="#contact" style="color: #64748b !important; font-size: 0.9rem; font-weight: 500; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#64748b'">{{ __('landing.footer.contact') }}</a></li>
-                    <li><a href="#help" style="color: #64748b !important; font-size: 0.9rem; font-weight: 500; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#64748b'">{{ __('landing.footer.help') }}</a></li>
+                    <li><a href="{{ route('login.portal') }}" style="color: #64748b !important; font-size: 0.9rem; font-weight: 500; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#64748b'">{{ is_array(__('landing.footer.login')) ? 'Login' : __('landing.footer.login') }}</a></li>
+                    <li><a href="{{ route('register') }}" style="color: #2E8B83 !important; font-weight: 700; font-size: 0.9rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#10b981'" onmouseout="this.style.color='#2E8B83'">{{ is_array(__('landing.footer.register')) ? 'Register' : __('landing.footer.register') }}</a></li>
+                    <li><a href="#contact" style="color: #64748b !important; font-size: 0.9rem; font-weight: 500; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#64748b'">{{ is_array(__('landing.footer.contact')) ? 'Contact' : __('landing.footer.contact') }}</a></li>
+                    <li><a href="#help" style="color: #64748b !important; font-size: 0.9rem; font-weight: 500; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#64748b'">{{ is_array(__('landing.footer.help')) ? 'Help' : __('landing.footer.help') }}</a></li>
                 </ul>
             </div>
         </div>
 
         {{-- Copyright Bar --}}
         <div style="border-top: 1px solid #e2e8f0; padding-top: 1.5rem; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem; font-size: 0.825rem; color: #94a3b8 !important;">
-            <p style="margin: 0;">{{ __('landing.footer.rights') }}</p>
+            <p style="margin: 0;">{{ is_array(__('landing.footer.rights')) ? (__('landing.footer.copyright') ?? 'All rights reserved') : __('landing.footer.rights') }}</p>
             <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; justify-content: {{ app()->getLocale() == 'ar' ? 'flex-start' : 'flex-end' }};">
-                <a href="{{ route('privacy') }}" style="color: #94a3b8 !important; font-size: 0.825rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#94a3b8'">{{ __('landing.footer.privacy') }}</a>
-                <a href="{{ route('terms') }}" style="color: #94a3b8 !important; font-size: 0.825rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#94a3b8'">{{ __('landing.footer.terms') }}</a>
-                <a href="{{ route('cookies') }}" style="color: #94a3b8 !important; font-size: 0.825rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#94a3b8'">{{ __('landing.footer.cookies') }}</a>
+                <a href="{{ route('privacy') }}" style="color: #94a3b8 !important; font-size: 0.825rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#94a3b8'">{{ is_array(__('landing.footer.privacy')) ? (__('landing.footer.legal.privacy') ?? 'Privacy') : __('landing.footer.privacy') }}</a>
+                <a href="{{ route('terms') }}" style="color: #94a3b8 !important; font-size: 0.825rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#94a3b8'">{{ is_array(__('landing.footer.terms')) ? (__('landing.footer.legal.terms') ?? 'Terms') : __('landing.footer.terms') }}</a>
+                <a href="{{ route('cookies') }}" style="color: #94a3b8 !important; font-size: 0.825rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#94a3b8'">{{ is_array(__('landing.footer.cookies')) ? (__('landing.footer.legal.cookie') ?? 'Cookies') : __('landing.footer.cookies') }}</a>
             </div>
         </div>
     </div>

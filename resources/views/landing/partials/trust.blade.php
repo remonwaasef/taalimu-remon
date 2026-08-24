@@ -17,7 +17,13 @@
 
         {{-- Trust Items --}}
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;" data-stagger>
-            @foreach(__('landing.trust.items') as $item)
+            @foreach(__('landing.trust.items') as $index => $item)
+            @php
+                $colors = ['#2E8B83', '#2563eb', '#16a34a', '#d97706'];
+                $bgs = ['#E6F4F3', '#eff6ff', '#f0fdf4', '#fffbeb'];
+                $itemBg = $item['bg'] ?? ($bgs[$index % 4]);
+                $itemColor = $item['color'] ?? ($colors[$index % 4]);
+            @endphp
             <div style="
                 background: #f8fafc;
                 border: 1px solid #e2e8f0;
@@ -29,7 +35,7 @@
                 text-align: center;
                 transition: all 0.3s ease;
             " onmouseover="this.style.background='#ffffff'; this.style.borderColor='#2E8B83'; this.style.boxShadow='0 16px 32px rgba(46,139,131,0.1)'" onmouseout="this.style.background='#f8fafc'; this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'">
-                <div style="width: 3.5rem; height: 3.5rem; border-radius: 1rem; background: {{ $item['bg'] }}; display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem; color: {{ $item['color'] }}; font-size: 1.5rem;">
+                <div style="width: 3.5rem; height: 3.5rem; border-radius: 1rem; background: {{ $itemBg }}; display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem; color: {{ $itemColor }}; font-size: 1.5rem;">
                     <i class="fas {{ $item['icon'] }}"></i>
                 </div>
                 <h3 style="color: #0f172a; font-size: 1.1rem; font-weight: 800; margin: 0 0 0.75rem 0;">{{ $item['title'] }}</h3>
@@ -41,20 +47,20 @@
         {{-- Verified Badges Row --}}
         <div class="mt-16" data-animate="fade-up" data-delay="400">
             <div style="text-align: center; margin-bottom: 1.5rem;">
-                <p style="color: #64748b; font-size: 0.875rem; font-weight: 600; margin: 0;">{{ __('landing.trust.verified_by') }}</p>
+                <p style="color: #64748b; font-size: 0.875rem; font-weight: 600; margin: 0;">{{ is_array(__('landing.trust.verified_by')) ? '' : __('landing.trust.badge') }}</p>
             </div>
             <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; align-items: center;">
                 <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 9999px; color: #15803d; font-size: 0.825rem; font-weight: 700;">
-                    <i class="fas fa-shield-check"></i> {{ __('landing.trust.tenant_isolation') }}
+                    <i class="fas fa-shield-check"></i> {{ is_array(__('landing.trust.tenant_isolation')) ? '' : __('landing.trust.badge') }}
                 </div>
                 <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 9999px; color: #2563eb; font-size: 0.825rem; font-weight: 700;">
-                    <i class="fas fa-database"></i> {{ __('landing.trust.backups') }}
+                    <i class="fas fa-database"></i> {{ is_array(__('landing.trust.backups')) ? '' : __('landing.trust.badge') }}
                 </div>
                 <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: #fefce8; border: 1px solid #fde68a; border-radius: 9999px; color: #b45309; font-size: 0.825rem; font-weight: 700;">
-                    <i class="fas fa-user-lock"></i> {{ __('landing.trust.permissions') }}
+                    <i class="fas fa-user-lock"></i> {{ is_array(__('landing.trust.permissions')) ? '' : __('landing.trust.badge') }}
                 </div>
                 <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: #fdf2f8; border: 1px solid #fbcfe8; border-radius: 9999px; color: #be185d; font-size: 0.825rem; font-weight: 700;">
-                    <i class="fas fa-headset"></i> {{ __('landing.trust.support') }}
+                    <i class="fas fa-headset"></i> {{ is_array(__('landing.trust.support')) ? '' : __('landing.trust.badge') }}
                 </div>
             </div>
         </div>

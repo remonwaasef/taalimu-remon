@@ -17,8 +17,18 @@
         </div>
 
         {{-- Steps --}}
+        @php
+            $stepsRaw = __('landing.how_it_works.steps');
+            $steps = is_array($stepsRaw) ? $stepsRaw : [
+                __('landing.how_it_works.step1'),
+                __('landing.how_it_works.step2'),
+                __('landing.how_it_works.step3')
+            ];
+            $colors = ['#2E8B83', '#2563eb', '#16a34a'];
+        @endphp
         <div style="display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center;" data-stagger>
-            @foreach(__('landing.how_it_works.steps') as $index => $step)
+            @foreach($steps as $index => $step)
+            @php $stepColor = $step['color'] ?? ($colors[$index] ?? '#2E8B83'); @endphp
             <div style="
                 flex: 1 1 260px;
                 max-width: 300px;
@@ -28,13 +38,13 @@
                 {{-- Step Number --}}
                 <div style="
                     width: 4.5rem; height: 4.5rem; border-radius: 1.25rem; 
-                    background: {{ $step['color'] }};
+                    background: {{ $stepColor }};
                     display: flex; align-items: center; justify-content: center; 
                     margin: 0 auto 1.25rem auto; color: #ffffff; font-size: 1.5rem; font-weight: 900;
                     box-shadow: 0 8px 24px rgba(0,0,0,0.15);
                     position: relative;
                 ">
-                    {{ $step['num'] }}
+                    {{ $step['num'] ?? sprintf('%02d', $index + 1) }}
                 </div>
                 
                 {{-- Connecting Line (except last) --}}
@@ -45,7 +55,7 @@
                     {{ app()->getLocale() == 'ar' ? 'left: 100%;' : 'right: 100%;' }}
                     width: 50%;
                     height: 2px;
-                    background: linear-gradient(90deg, {{ $step['color'] }}, #e2e8f0);
+                    background: linear-gradient(90deg, {{ $stepColor }}, #e2e8f0);
                     opacity: 0.5;
                     z-index: -1;
                 " aria-hidden="true"></div>
@@ -73,7 +83,7 @@
                 box-shadow: 0 12px 32px rgba(46, 139, 131, 0.32);
                 transition: transform 0.2s ease, box-shadow 0.2s ease;
             " onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 16px 40px rgba(46,139,131,0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 12px 32px rgba(46,139,131,0.32)'">
-                <span>{{ __('landing.how_it_works.cta') }}</span>
+                <span>{{ is_array(__('landing.how_it_works.cta')) ? __('landing.nav.start_trial') : __('landing.how_it_works.cta') }}</span>
                 <i class="fas fa-arrow-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}"></i>
             </a>
         </div>

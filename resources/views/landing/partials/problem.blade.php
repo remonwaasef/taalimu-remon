@@ -5,20 +5,20 @@
         {{-- Header --}}
         <div class="text-center mb-16" data-animate="fade-up">
             <div class="section-badge" style="margin-bottom: 1rem; display: inline-flex; background: #fef2f2; border: 1px solid #fecaca; padding: 0.375rem 1rem; border-radius: 9999px;">
-                <span style="color: #dc2626 !important; font-weight: 700; font-size: 0.825rem;">{{ __('landing.problem.badge') }}</span>
+                <span style="color: #dc2626 !important; font-weight: 700; font-size: 0.825rem;">{{ __('landing.pain_points.badge') }}</span>
             </div>
             <h2 style="color: #0f172a !important; font-size: clamp(1.75rem, 3.5vw, 2.5rem); font-weight: 900; margin-bottom: 0.875rem; letter-spacing: -0.02em; line-height: 1.25;">
-                {{ __('landing.problem.title_prefix') }}
-                <span style="color: #dc2626;">{{ __('landing.problem.title_highlight') }}</span>
+                {{ __('landing.pain_points.title_prefix') }}
+                <span style="color: #dc2626;">{{ __('landing.pain_points.title_highlight') }}</span>
             </h2>
             <p style="color: #475569 !important; font-size: 1.05rem; max-width: 42rem; margin: 0 auto; font-weight: 500; line-height: 1.65;">
-                {{ __('landing.problem.subtitle') }}
+                {{ __('landing.pain_points.subtitle') }}
             </p>
         </div>
 
         {{-- Pain Points Grid --}}
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;" data-stagger>
-            @foreach(__('landing.problem.items') as $index => $item)
+            @foreach(__('landing.pain_points.items') as $index => $item)
             <div style="
                 background: #f8fafc;
                 border: 1px solid #e2e8f0;
@@ -51,8 +51,8 @@
                 <div style="position: absolute; top: -2rem; right: -2rem; width: 8rem; height: 8rem; background: radial-gradient(circle, rgba(46,139,131,0.1) 0%, transparent 70%); pointer-events: none;"></div>
                 <div style="position: absolute; bottom: -2rem; left: -2rem; width: 8rem; height: 8rem; background: radial-gradient(circle, rgba(34,197,94,0.1) 0%, transparent 70%); pointer-events: none;"></div>
                 <div style="position: relative; z-index: 1;">
-                    <h3 style="color: #2E8B83 !important; font-size: clamp(1.35rem, 2.5vw, 1.75rem); font-weight: 900; margin-bottom: 0.75rem;">{{ __('landing.problem.solution_banner_title') }}</h3>
-                    <p style="color: #25746D !important; font-size: 1.05rem; font-weight: 500; max-width: 36rem; margin: 0 auto; line-height: 1.6;">{{ __('landing.problem.solution_banner_subtitle') }}</p>
+                    <h3 style="color: #2E8B83 !important; font-size: clamp(1.35rem, 2.5vw, 1.75rem); font-weight: 900; margin-bottom: 0.75rem;">{{ __('landing.pain_points.solution_banner_title') }}</h3>
+                    <p style="color: #25746D !important; font-size: 1.05rem; font-weight: 500; max-width: 36rem; margin: 0 auto; line-height: 1.6;">{{ __('landing.pain_points.solution_banner_subtitle') }}</p>
                 </div>
             </div>
         </div>

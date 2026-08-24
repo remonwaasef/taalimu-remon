@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **Resolved HTTP 500 Server Error on Main Landing Page (`taalimu.com`) (2026-08-24)**:
+  - Fixed invalid translation key references (`landing.problem.*` -> `landing.pain_points.*`) in landing page partials.
+  - Replaced broken partial includes in `landing/new.blade.php` with verified, fully-translated partials (`pain-points`, `outcome`, `whatsapp-killer`, `payments-attendance`, `excel-migration`, `product-showcase`, `how-it-works`, `trust`, `pricing`, `faq`, `cta`).
+  - Added null coalescence and array-safety checks across `product-showcase.blade.php`, `how-it-works.blade.php`, `trust.blade.php`, `faq.blade.php`, `footer.blade.php`, and `components/ui/input.blade.php` for seamless multi-language compatibility (`ar`, `en`, `fr`).
+
 ### Added
 - **Taalimu Premium Design System Architecture (2026-08-22)**:
   - **Design Tokens (`resources/css/design-tokens.css`)**: Expanded with full semantic scales for brand, status (success, warning, error, info with hover/light/border/contrast), surface & layout colors, spacing scale (4px/8px grid), border radius scale, shadows scale (xs to xl), and comprehensive dark mode overrides.

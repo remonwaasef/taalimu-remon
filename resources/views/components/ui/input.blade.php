@@ -46,7 +46,7 @@
         type="{{ $type }}"
         @if($name) name="{{ $name }}" @endif
         @if($inputId) id="{{ $inputId }}" @endif
-        @if($value !== null) value="{{ old($name, $value) }}" @elseif($name) value="{{ old($name) }}" @endif
+        @if($value !== null) value="{{ is_array(old($name, $value)) ? json_encode(old($name, $value)) : old($name, $value) }}" @elseif($name) value="{{ is_array(old($name)) ? '' : old($name) }}" @endif
         @if($placeholder) placeholder="{{ $placeholder }}" @endif
         @if($disabled) disabled @endif
         @if($readonly) readonly @endif
