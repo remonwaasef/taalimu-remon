@@ -7,33 +7,42 @@
     {{-- 2. Problem / Pain Points Section --}}
     @include('landing.partials.pain-points')
 
-    {{-- 3. Transformation (Before vs After) --}}
-    @include('landing.partials.outcome')
+    {{-- 3. QR Code Registration Section --}}
+    @include('landing.partials.qr-registration')
 
-    {{-- 4. Automated WhatsApp Communication --}}
-    @include('landing.partials.whatsapp-killer')
+    {{-- 4. Meta WhatsApp Notifications Section --}}
+    @include('landing.partials.whatsapp-notifications')
 
-    {{-- 5. Payments & Attendance Management --}}
-    @include('landing.partials.payments-attendance')
+    {{-- 5. Master Story Timeline ("من أول Scan... إلى أول Notification") --}}
+    @include('landing.partials.qr-whatsapp-flow')
 
-    {{-- 6. Seamless Excel Migration --}}
-    @include('landing.partials.excel-migration')
+    {{-- 6. Portals & Audience Section (Teacher, Center, Student, Parent) --}}
+    @include('landing.partials.audience')
 
-    {{-- 7. Platform Showcase --}}
+    {{-- 7. Central Platform Visual Ecosystem --}}
+    @include('landing.partials.platform-visual')
+
+    {{-- 8. Real Product UI Showcase --}}
     @include('landing.partials.product-showcase')
 
-    {{-- 8. How It Works --}}
+    {{-- 9. Bento Grid Feature Overview --}}
+    @include('landing.partials.feature-bento')
+
+    {{-- 10. Seamless Excel Student Import Migration --}}
+    @include('landing.partials.excel-migration')
+
+    {{-- 11. How It Works (4 Steps) --}}
     @include('landing.partials.how-it-works')
 
-    {{-- 9. Trust & Security --}}
+    {{-- 12. Security & Trust Section --}}
     @include('landing.partials.trust')
 
-    {{-- 10. Pricing Plans --}}
+    {{-- 13. Dynamic Pricing Plans --}}
     @include('landing.partials.pricing')
 
-    {{-- 11. FAQ --}}
+    {{-- 14. Accessible FAQ Accordion --}}
     @include('landing.partials.faq')
 
-    {{-- 12. Final Call to Action --}}
+    {{-- 15. Final Call to Action --}}
     @include('landing.partials.cta')
 @endsection

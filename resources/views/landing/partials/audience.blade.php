@@ -1,126 +1,133 @@
-{{-- Audience Section --}}
-<section id="solutions" class="section-alt" style="padding: 5rem 0; background: #ffffff; border-bottom: 1px solid #e2e8f0;">
-    <div class="container mx-auto px-4 lg:px-12" style="max-width: 1140px; margin: 0 auto;">
+<section id="solutions" class="py-20 lg:py-28 bg-slate-50 relative">
+    <div class="container mx-auto px-4 lg:px-8 max-w-7xl">
         
-        {{-- Header --}}
-        <div class="text-center mb-16" data-animate="fade-up">
-            <div class="section-badge" style="margin-bottom: 1rem; display: inline-flex; background: #E6F4F3; border: 1px solid #B2DDD9; padding: 0.375rem 1rem; border-radius: 9999px;">
-                <span style="color: #25746D !important; font-weight: 800; font-size: 0.825rem;">{{ __('landing.audience.badge') }}</span>
+        <!-- Section Header -->
+        <div class="text-center max-w-3xl mx-auto mb-16" data-animate="fade-in">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-50 border border-teal-200/80 text-[#2E8B83] text-xs font-bold mb-4 shadow-sm">
+                <i class="fas fa-users text-xs"></i>
+                <span>{{ __('landing.audiences.badge') }}</span>
             </div>
-            <h2 style="color: #0f172a !important; font-size: clamp(1.75rem, 3.5vw, 2.5rem); font-weight: 900; margin-bottom: 0.875rem; letter-spacing: -0.02em; line-height: 1.25;">
-                {{ __('landing.audience.title') }}
+
+            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 leading-tight mb-4">
+                {{ __('landing.audiences.title') }}
             </h2>
-            <p style="color: #475569 !important; font-size: 1.05rem; max-width: 42rem; margin: 0 auto; font-weight: 500; line-height: 1.65;">
-                {{ __('landing.audience.subtitle') }}
+
+            <p class="text-slate-600 font-medium text-base">
+                {{ __('landing.audiences.subtitle') }}
             </p>
         </div>
 
-        {{-- Four Audience Cards --}}
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;" data-stagger>
+        <!-- 4 Audience Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             
-            {{-- Teacher --}}
-            <div style="
-                background: #ffffff;
-                border: 1px solid #e2e8f0;
-                border-radius: 1.25rem;
-                padding: 2rem 1.75rem;
-                position: relative;
-                overflow: hidden;
-                transition: all 0.3s ease;
-            " onmouseover="this.style.borderColor='#2E8B83'; this.style.boxShadow='0 20px 40px rgba(46,139,131,0.12)'; this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'; this.style.transform='translateY(0)'">
-                <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #2E8B83, #16a34a);"></div>
-                <div style="width: 4rem; height: 4rem; border-radius: 1rem; background: #E6F4F3; display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem; color: #2E8B83; font-size: 1.75rem;">
-                    <i class="fas fa-chalkboard-teacher"></i>
+            <!-- 1. Teacher Card -->
+            <div class="bg-white rounded-3xl p-6 border border-slate-200/80 hover:shadow-xl transition-all duration-300 flex flex-col justify-between" data-animate="fade-in">
+                <div>
+                    <div class="w-12 h-12 rounded-2xl bg-teal-50 text-[#2E8B83] flex items-center justify-center text-xl mb-4 font-bold">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <span class="text-xs font-bold text-[#2E8B83] uppercase tracking-wider block mb-1">
+                        {{ __('landing.audiences.teacher.role') }}
+                    </span>
+                    <h3 class="text-base font-extrabold text-slate-900 mb-4">
+                        {{ __('landing.audiences.teacher.title') }}
+                    </h3>
+                    <ul class="space-y-2.5 mb-6">
+                        @foreach(__('landing.audiences.teacher.features') as $feat)
+                            <li class="flex items-start gap-2 text-xs font-semibold text-slate-700">
+                                <i class="fas fa-check text-emerald-500 mt-0.5"></i>
+                                <span>{{ $feat }}</span>
+                            </li>
+                        @endforeach
+                    </ul>
                 </div>
-                <h3 style="color: #0f172a; font-size: 1.25rem; font-weight: 800; margin: 0 0 0.5rem 0;">{{ __('landing.audience.teacher.title') }}</h3>
-                <p style="color: #64748b; font-size: 0.9rem; margin: 0 0 1.5rem 0; line-height: 1.6;">{{ __('landing.audience.teacher.desc') }}</p>
-                <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.5rem;">
-                    @foreach(__('landing.audience.teacher.items') as $item)
-                    <li style="display: flex; align-items: center; gap: 0.625rem; color: #334155; font-size: 0.85rem; font-weight: 600;">
-                        <i class="fas fa-check" style="color: #2E8B83; font-size: 0.7rem;"></i>
-                        <span>{{ $item }}</span>
-                    </li>
-                    @endforeach
-                </ul>
+                <a href="{{ route('register') }}" class="w-full py-2.5 rounded-xl border border-slate-200 hover:border-[#2E8B83] hover:bg-emerald-50/50 text-[#2E8B83] font-bold text-xs text-center text-decoration-none transition-colors">
+                    بوابة المدرس
+                </a>
             </div>
 
-            {{-- Educational Center --}}
-            <div style="
-                background: #ffffff;
-                border: 1px solid #e2e8f0;
-                border-radius: 1.25rem;
-                padding: 2rem 1.75rem;
-                position: relative;
-                overflow: hidden;
-                transition: all 0.3s ease;
-            " onmouseover="this.style.borderColor='#2E8B83'; this.style.boxShadow='0 20px 40px rgba(46,139,131,0.12)'; this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'; this.style.transform='translateY(0)'">
-                <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #2563eb, #0ea5e9);"></div>
-                <div style="width: 4rem; height: 4rem; border-radius: 1rem; background: #eff6ff; display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem; color: #2563eb; font-size: 1.75rem;">
-                    <i class="fas fa-building"></i>
+            <!-- 2. Educational Center Card -->
+            <div class="bg-white rounded-3xl p-6 border border-teal-200/90 shadow-lg relative flex flex-col justify-between" data-animate="fade-in">
+                <span class="absolute -top-3 end-6 px-2.5 py-0.5 rounded-full bg-emerald-500 text-white text-[10px] font-bold shadow">
+                    الأكثر استخداماً
+                </span>
+                <div>
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center text-xl mb-4 font-bold shadow-md">
+                        <i class="fas fa-school"></i>
+                    </div>
+                    <span class="text-xs font-bold text-emerald-700 uppercase tracking-wider block mb-1">
+                        {{ __('landing.audiences.center.role') }}
+                    </span>
+                    <h3 class="text-base font-extrabold text-slate-900 mb-4">
+                        {{ __('landing.audiences.center.title') }}
+                    </h3>
+                    <ul class="space-y-2.5 mb-6">
+                        @foreach(__('landing.audiences.center.features') as $feat)
+                            <li class="flex items-start gap-2 text-xs font-semibold text-slate-700">
+                                <i class="fas fa-check text-emerald-500 mt-0.5"></i>
+                                <span>{{ $feat }}</span>
+                            </li>
+                        @endforeach
+                    </ul>
                 </div>
-                <h3 style="color: #0f172a; font-size: 1.25rem; font-weight: 800; margin: 0 0 0.5rem 0;">{{ __('landing.audience.center.title') }}</h3>
-                <p style="color: #64748b; font-size: 0.9rem; margin: 0 0 1.5rem 0; line-height: 1.6;">{{ __('landing.audience.center.desc') }}</p>
-                <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.5rem;">
-                    @foreach(__('landing.audience.center.items') as $item)
-                    <li style="display: flex; align-items: center; gap: 0.625rem; color: #334155; font-size: 0.85rem; font-weight: 600;">
-                        <i class="fas fa-check" style="color: #2563eb; font-size: 0.7rem;"></i>
-                        <span>{{ $item }}</span>
-                    </li>
-                    @endforeach
-                </ul>
+                <a href="{{ route('register') }}" class="w-full py-2.5 rounded-xl text-white font-bold text-xs text-center text-decoration-none shadow-md" style="background: linear-gradient(135deg, #2E8B83 0%, #10b981 100%);">
+                    لوحة المركز
+                </a>
             </div>
 
-            {{-- Student --}}
-            <div style="
-                background: #ffffff;
-                border: 1px solid #e2e8f0;
-                border-radius: 1.25rem;
-                padding: 2rem 1.75rem;
-                position: relative;
-                overflow: hidden;
-                transition: all 0.3s ease;
-            " onmouseover="this.style.borderColor='#2E8B83'; this.style.boxShadow='0 20px 40px rgba(46,139,131,0.12)'; this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'; this.style.transform='translateY(0)'">
-                <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #9333ea, #d946ef);"></div>
-                <div style="width: 4rem; height: 4rem; border-radius: 1rem; background: #f3e8ff; display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem; color: #9333ea; font-size: 1.75rem;">
-                    <i class="fas fa-user-graduate"></i>
+            <!-- 3. Student Card -->
+            <div class="bg-white rounded-3xl p-6 border border-slate-200/80 hover:shadow-xl transition-all duration-300 flex flex-col justify-between" data-animate="fade-in">
+                <div>
+                    <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl mb-4 font-bold">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <span class="text-xs font-bold text-blue-600 uppercase tracking-wider block mb-1">
+                        {{ __('landing.audiences.student.role') }}
+                    </span>
+                    <h3 class="text-base font-extrabold text-slate-900 mb-4">
+                        {{ __('landing.audiences.student.title') }}
+                    </h3>
+                    <ul class="space-y-2.5 mb-6">
+                        @foreach(__('landing.audiences.student.features') as $feat)
+                            <li class="flex items-start gap-2 text-xs font-semibold text-slate-700">
+                                <i class="fas fa-check text-blue-500 mt-0.5"></i>
+                                <span>{{ $feat }}</span>
+                            </li>
+                        @endforeach
+                    </ul>
                 </div>
-                <h3 style="color: #0f172a; font-size: 1.25rem; font-weight: 800; margin: 0 0 0.5rem 0;">{{ __('landing.audience.student.title') }}</h3>
-                <p style="color: #64748b; font-size: 0.9rem; margin: 0 0 1.5rem 0; line-height: 1.6;">{{ __('landing.audience.student.desc') }}</p>
-                <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.5rem;">
-                    @foreach(__('landing.audience.student.items') as $item)
-                    <li style="display: flex; align-items: center; gap: 0.625rem; color: #334155; font-size: 0.85rem; font-weight: 600;">
-                        <i class="fas fa-check" style="color: #9333ea; font-size: 0.7rem;"></i>
-                        <span>{{ $item }}</span>
-                    </li>
-                    @endforeach
-                </ul>
+                <a href="{{ route('login.portal') }}" class="w-full py-2.5 rounded-xl border border-slate-200 hover:border-blue-500 hover:bg-blue-50/50 text-blue-600 font-bold text-xs text-center text-decoration-none transition-colors">
+                    بوابة الطالب
+                </a>
             </div>
 
-            {{-- Parent --}}
-            <div style="
-                background: #ffffff;
-                border: 1px solid #e2e8f0;
-                border-radius: 1.25rem;
-                padding: 2rem 1.75rem;
-                position: relative;
-                overflow: hidden;
-                transition: all 0.3s ease;
-            " onmouseover="this.style.borderColor='#2E8B83'; this.style.boxShadow='0 20px 40px rgba(46,139,131,0.12)'; this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'; this.style.transform='translateY(0)'">
-                <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #f59e0b, #f97316);"></div>
-                <div style="width: 4rem; height: 4rem; border-radius: 1rem; background: #fffbeb; display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem; color: #f59e0b; font-size: 1.75rem;">
-                    <i class="fas fa-user-shield"></i>
+            <!-- 4. Parent Card -->
+            <div class="bg-white rounded-3xl p-6 border border-slate-200/80 hover:shadow-xl transition-all duration-300 flex flex-col justify-between" data-animate="fade-in">
+                <div>
+                    <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl mb-4 font-bold">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <span class="text-xs font-bold text-purple-600 uppercase tracking-wider block mb-1">
+                        {{ __('landing.audiences.parent.role') }}
+                    </span>
+                    <h3 class="text-base font-extrabold text-slate-900 mb-4">
+                        {{ __('landing.audiences.parent.title') }}
+                    </h3>
+                    <ul class="space-y-2.5 mb-6">
+                        @foreach(__('landing.audiences.parent.features') as $feat)
+                            <li class="flex items-start gap-2 text-xs font-semibold text-slate-700">
+                                <i class="fas fa-check text-purple-500 mt-0.5"></i>
+                                <span>{{ $feat }}</span>
+                            </li>
+                        @endforeach
+                    </ul>
                 </div>
-                <h3 style="color: #0f172a; font-size: 1.25rem; font-weight: 800; margin: 0 0 0.5rem 0;">{{ __('landing.audience.parent.title') }}</h3>
-                <p style="color: #64748b; font-size: 0.9rem; margin: 0 0 1.5rem 0; line-height: 1.6;">{{ __('landing.audience.parent.desc') }}</p>
-                <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.5rem;">
-                    @foreach(__('landing.audience.parent.items') as $item)
-                    <li style="display: flex; align-items: center; gap: 0.625rem; color: #334155; font-size: 0.85rem; font-weight: 600;">
-                        <i class="fas fa-check" style="color: #f59e0b; font-size: 0.7rem;"></i>
-                        <span>{{ $item }}</span>
-                    </li>
-                    @endforeach
-                </ul>
+                <a href="{{ route('login.portal') }}" class="w-full py-2.5 rounded-xl border border-slate-200 hover:border-purple-500 hover:bg-purple-50/50 text-purple-600 font-bold text-xs text-center text-decoration-none transition-colors">
+                    تحديثات ولي الأمر
+                </a>
             </div>
+
         </div>
+
     </div>
 </section>

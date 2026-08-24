@@ -1,111 +1,156 @@
-{{-- Product Showcase Section --}}
-<section id="product-showcase" class="section-alt" style="padding: 5rem 0; background: #ffffff; border-bottom: 1px solid #e2e8f0;"
-         x-data="{ activeTab: 'dashboard' }">
-    <div class="container mx-auto px-4 lg:px-12" style="max-width: 1140px; margin: 0 auto;">
+<section class="py-20 lg:py-28 bg-slate-50 relative">
+    <div class="container mx-auto px-4 lg:px-8 max-w-7xl">
         
-        {{-- Header --}}
-        <div class="text-center mb-10" data-animate="fade-up">
-            <div class="section-badge" style="margin-bottom: 1rem; display: inline-flex; background: #E6F4F3; border: 1px solid #B2DDD9; padding: 0.375rem 1rem; border-radius: 9999px;">
-                <span style="color: #25746D !important; font-weight: 800; font-size: 0.825rem;">{{ __('landing.showcase.badge') }}</span>
+        <!-- Section Header -->
+        <div class="text-center max-w-3xl mx-auto mb-12" data-animate="fade-in">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-50 border border-teal-200/80 text-[#2E8B83] text-xs font-bold mb-4 shadow-sm">
+                <i class="fas fa-desktop text-xs"></i>
+                <span>{{ __('landing.showcase.badge') }}</span>
             </div>
-            <h2 style="color: #0f172a !important; font-size: clamp(1.75rem, 3.5vw, 2.5rem); font-weight: 900; margin-bottom: 0.875rem; letter-spacing: -0.02em; line-height: 1.25;">
+
+            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 leading-tight mb-4">
                 {{ __('landing.showcase.title') }}
             </h2>
-            <p style="color: #475569 !important; font-size: 1.05rem; max-width: 42rem; margin: 0 auto; font-weight: 500; line-height: 1.65;">
+
+            <p class="text-slate-600 font-medium text-base">
                 {{ __('landing.showcase.subtitle') }}
             </p>
         </div>
 
-        {{-- Tab Navigation --}}
-        <div class="flex flex-wrap justify-center gap-3 mb-10" data-animate="fade-up" data-delay="100" role="tablist" aria-label="{{ __('landing.showcase.tabs_label') }}">
-            @foreach(__('landing.showcase.tabs') as $key => $tab)
-            <button
-                @click="activeTab = '{{ $key }}'"
-                role="tab"
-                :aria-selected="activeTab === '{{ $key }}'"
-                aria-controls="{{ $key }}-panel"
-                style="
-                    padding: 0.75rem 1.5rem;
-                    border-radius: 9999px;
-                    font-size: 0.875rem;
-                    font-weight: 700;
-                    border: 1px solid;
-                    background: #ffffff;
-                    cursor: pointer;
-                    transition: all 0.2s ease;
-                "
-                :style="activeTab === '{{ $key }}' ? 'background: #2E8B83; border-color: #2E8B83; color: #ffffff; box-shadow: 0 4px 16px rgba(46,139,131,0.25);' : 'border-color: #e2e8f0; color: #475569;'"
-                onmouseover="activeTab !== '{{ $key }}' && (this.style.borderColor='#2E8B83', this.style.color='#2E8B83')"
-                onmouseout="activeTab !== '{{ $key }}' && (this.style.borderColor='#e2e8f0', this.style.color='#475569')"
-            >
-                {{ $tab }}
-            </button>
-            @endforeach
-        </div>
+        <!-- Interactive Tabs Navigation -->
+        <div x-data="{ activeTab: 'center' }" data-animate="scale-in">
+            
+            <div class="flex flex-wrap items-center justify-center gap-2 mb-8 bg-white p-2 rounded-2xl border border-slate-200/80 max-w-3xl mx-auto shadow-sm">
+                <button @click="activeTab = 'center'" type="button" class="px-4 py-2.5 rounded-xl text-xs font-bold transition-all" :class="activeTab === 'center' ? 'bg-[#2E8B83] text-white shadow-md' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'">
+                    <i class="fas fa-chart-line me-1.5"></i>
+                    <span>{{ __('landing.showcase.tabs.center') }}</span>
+                </button>
+                
+                <button @click="activeTab = 'scanner'" type="button" class="px-4 py-2.5 rounded-xl text-xs font-bold transition-all" :class="activeTab === 'scanner' ? 'bg-[#2E8B83] text-white shadow-md' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'">
+                    <i class="fas fa-qrcode me-1.5"></i>
+                    <span>{{ __('landing.showcase.tabs.scanner') }}</span>
+                </button>
+                
+                <button @click="activeTab = 'whatsapp'" type="button" class="px-4 py-2.5 rounded-xl text-xs font-bold transition-all" :class="activeTab === 'whatsapp' ? 'bg-[#2E8B83] text-white shadow-md' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'">
+                    <i class="fab fa-whatsapp me-1.5"></i>
+                    <span>{{ __('landing.showcase.tabs.whatsapp') }}</span>
+                </button>
+                
+                <button @click="activeTab = 'pos'" type="button" class="px-4 py-2.5 rounded-xl text-xs font-bold transition-all" :class="activeTab === 'pos' ? 'bg-[#2E8B83] text-white shadow-md' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'">
+                    <i class="fas fa-cash-register me-1.5"></i>
+                    <span>{{ __('landing.showcase.tabs.pos') }}</span>
+                </button>
 
-        {{-- Tab Panels --}}
-        <div style="position: relative; min-height: 400px;">
-            @foreach(__('landing.showcase.items') as $key => $item)
-            <div 
-                id="{{ $key }}-panel"
-                role="tabpanel"
-                x-show="activeTab === '{{ $key }}'"
-                x-transition:enter="transition ease-out duration-300"
-                x-transition:enter-start="opacity-0 translate-y-4"
-                x-transition:enter-end="opacity-100 translate-y-0"
-                style="display: none;"
-            >
-                <div style="
-                    display: grid;
-                    grid-template-columns: 1fr 1fr;
-                    gap: 3rem;
-                    align-items: center;
-                ">
-                    {{-- Content --}}
-                    <div data-animate="fade-up">
-                        <h3 style="color: #0f172a; font-size: clamp(1.5rem, 2.5vw, 1.85rem); font-weight: 900; margin: 0 0 1rem 0; line-height: 1.3;">{{ $item['title'] }}</h3>
-                        <p style="color: #475569; font-size: 1rem; margin: 0 0 1.5rem 0; line-height: 1.7;">{{ $item['desc'] }}</p>
-                        @if(!empty($item['highlights']))
-                        <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem;">
-                            @foreach($item['highlights'] as $highlight)
-                            <li style="display: flex; align-items: flex-start; gap: 0.75rem; color: #334155; font-size: 0.9rem; font-weight: 600;">
-                                <div style="width: 1.5rem; height: 1.5rem; border-radius: 50%; background: #E6F4F3; color: #2E8B83; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.6rem; margin-top: 0.125rem;">
-                                    <i class="fas fa-check"></i>
-                                </div>
-                                <span>{{ $highlight }}</span>
-                            </li>
-                            @endforeach
-                        </ul>
-                        @endif
+                <button @click="activeTab = 'parent'" type="button" class="px-4 py-2.5 rounded-xl text-xs font-bold transition-all" :class="activeTab === 'parent' ? 'bg-[#2E8B83] text-white shadow-md' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'">
+                    <i class="fas fa-user-shield me-1.5"></i>
+                    <span>{{ __('landing.showcase.tabs.parent') }}</span>
+                </button>
+            </div>
+
+            <!-- Tab 1: Center Dashboard -->
+            <div x-show="activeTab === 'center'" x-cloak x-transition class="bg-white rounded-3xl p-6 lg:p-8 border border-slate-200 shadow-2xl">
+                <div class="mb-6">
+                    <h3 class="text-xl font-bold text-slate-900 mb-1">{{ __('landing.showcase.center_title') }}</h3>
+                    <p class="text-slate-600 text-xs sm:text-sm font-medium">{{ __('landing.showcase.center_desc') }}</p>
+                </div>
+                <img src="{{ asset('images/hero-dashboard.webp') }}" alt="Center Dashboard Showcase" class="w-full h-auto rounded-2xl border border-slate-100 shadow-sm object-cover">
+            </div>
+
+            <!-- Tab 2: QR Scanner -->
+            <div x-show="activeTab === 'scanner'" x-cloak x-transition class="bg-white rounded-3xl p-6 lg:p-8 border border-slate-200 shadow-2xl">
+                <div class="mb-6">
+                    <h3 class="text-xl font-bold text-slate-900 mb-1">{{ __('landing.showcase.scanner_title') }}</h3>
+                    <p class="text-slate-600 text-xs sm:text-sm font-medium">{{ __('landing.showcase.scanner_desc') }}</p>
+                </div>
+                <div class="bg-slate-900 rounded-2xl p-8 text-center max-w-lg mx-auto text-white shadow-xl">
+                    <div class="w-24 h-24 mx-auto bg-white rounded-2xl p-2 flex items-center justify-center mb-4 relative shadow-lg">
+                        <i class="fas fa-qrcode text-6xl text-slate-900"></i>
+                        <div class="absolute inset-x-0 h-0.5 bg-emerald-500 shadow-[0_0_8px_#10b981] animate-pulse top-1/2"></div>
                     </div>
-                    
-                    {{-- Visual / Mockup --}}
-                    <div data-animate="scale-in" data-delay="200">
-                        <div style="
-                            border-radius: 1rem;
-                            overflow: hidden;
-                            border: 1px solid #cbd5e1;
-                            box-shadow: 0 20px 40px -10px rgba(15,23,42,0.12);
-                            background: #f8fafc;
-                            aspect-ratio: 16/10;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            position: relative;
-                        ">
-                            @if(!empty($item['image']))
-                            <img src="{{ asset('images/landing/' . $item['image']) }}" alt="{{ $item['title'] }}" style="width: 100%; height: 100%; object-fit: cover;">
-                            @else
-                            <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #94a3b8; text-align: center; padding: 2rem;">
-                                <i class="fas fa-{{ $item['icon'] ?? 'laptop-code' }}" style="font-size: 3rem; margin-bottom: 1rem; color: #cbd5e1;"></i>
-                                <span style="font-size: 1rem; font-weight: 600;">{{ __('landing.showcase.coming_soon') }}</span>
+                    <h4 class="text-base font-bold text-white mb-1">ماسح حضور الطلاب الكاميرا الفوري</h4>
+                    <p class="text-xs text-slate-400">وجه كاميرا الموبايل نحو كرنيه الطالب ليتم تسديد الحضور واستدعاء ولي الأمر في ثانية.</p>
+                </div>
+            </div>
+
+            <!-- Tab 3: WhatsApp Log -->
+            <div x-show="activeTab === 'whatsapp'" x-cloak x-transition class="bg-white rounded-3xl p-6 lg:p-8 border border-slate-200 shadow-2xl">
+                <div class="mb-6">
+                    <h3 class="text-xl font-bold text-slate-900 mb-1">{{ __('landing.showcase.whatsapp_title') }}</h3>
+                    <p class="text-slate-600 text-xs sm:text-sm font-medium">{{ __('landing.showcase.whatsapp_desc') }}</p>
+                </div>
+                <div class="space-y-3 max-w-2xl mx-auto">
+                    <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <i class="fab fa-whatsapp text-2xl text-emerald-600"></i>
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-900">تنبيه حضور - أحمد محمود</h4>
+                                <p class="text-[11px] text-slate-500">تم الإرسال لـ +2010****8941</p>
                             </div>
-                            @endif
                         </div>
+                        <span class="px-2.5 py-1 rounded bg-emerald-500 text-white text-[10px] font-bold">تم التسليم <i class="fas fa-check-double ms-1"></i></span>
+                    </div>
+
+                    <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <i class="fab fa-whatsapp text-2xl text-emerald-600"></i>
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-900">إيصال سداد - سلمى خالد</h4>
+                                <p class="text-[11px] text-slate-500">تم الإرسال لـ +2011****3301</p>
+                            </div>
+                        </div>
+                        <span class="px-2.5 py-1 rounded bg-emerald-500 text-white text-[10px] font-bold">تم التسليم <i class="fas fa-check-double ms-1"></i></span>
                     </div>
                 </div>
             </div>
-            @endforeach
+
+            <!-- Tab 4: Financial POS -->
+            <div x-show="activeTab === 'pos'" x-cloak x-transition class="bg-white rounded-3xl p-6 lg:p-8 border border-slate-200 shadow-2xl">
+                <div class="mb-6">
+                    <h3 class="text-xl font-bold text-slate-900 mb-1">{{ __('landing.showcase.pos_title') }}</h3>
+                    <p class="text-slate-600 text-xs sm:text-sm font-medium">{{ __('landing.showcase.pos_desc') }}</p>
+                </div>
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 max-w-xl mx-auto">
+                    <div class="flex items-center justify-between pb-3 border-b border-slate-200 mb-4">
+                        <span class="font-bold text-sm text-slate-900">إصدار فاتورة اشتراك كورس</span>
+                        <span class="text-xs font-mono text-slate-500">INV-2026-0041</span>
+                    </div>
+                    <div class="space-y-2 text-xs text-slate-700 font-medium mb-4">
+                        <div class="flex justify-between"><span>اسم الطالب:</span><span class="font-bold text-slate-900">يوسف أحمد</span></div>
+                        <div class="flex justify-between"><span>الكورس / المادة:</span><span class="font-bold text-slate-900">الفيزياء الحديثة</span></div>
+                        <div class="flex justify-between"><span>المبلغ المدفوع:</span><span class="font-bold text-emerald-600">500 ج.م</span></div>
+                        <div class="flex justify-between"><span>المتبقي:</span><span class="font-bold text-slate-500">0 ج.م</span></div>
+                    </div>
+                    <button class="w-full py-2.5 rounded-xl bg-[#2E8B83] text-white font-bold text-xs shadow-md">
+                        طباعة الإيصال وإرسال الواتساب
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tab 5: Parent View -->
+            <div x-show="activeTab === 'parent'" x-cloak x-transition class="bg-white rounded-3xl p-6 lg:p-8 border border-slate-200 shadow-2xl">
+                <div class="mb-6">
+                    <h3 class="text-xl font-bold text-slate-900 mb-1">{{ __('landing.showcase.parent_title') }}</h3>
+                    <p class="text-slate-600 text-xs sm:text-sm font-medium">{{ __('landing.showcase.parent_desc') }}</p>
+                </div>
+                <div class="bg-purple-50/60 border border-purple-100 p-6 rounded-2xl max-w-lg mx-auto">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-full bg-purple-600 text-white flex items-center justify-center text-lg">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-bold text-slate-900">تحديثات ولي الأمر التفاعلية</h4>
+                            <span class="text-xs text-purple-700 font-medium">شفافية كاملة على هاتف الوالد</span>
+                        </div>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border border-purple-100 text-xs text-slate-700 space-y-1.5">
+                        <div class="flex items-center gap-2"><i class="fas fa-check-circle text-emerald-500"></i><span>سجل حضور الطالب يوم الأحد الساعة 04:30 م</span></div>
+                        <div class="flex items-center gap-2"><i class="fas fa-check-circle text-emerald-500"></i><span>درجة اختبار الفيزياء الشهري: 48 / 50</span></div>
+                        <div class="flex items-center gap-2"><i class="fas fa-check-circle text-emerald-500"></i><span>رصيد الاشتراك مسدد بالكامل</span></div>
+                    </div>
+                </div>
+            </div>
+
         </div>
+
     </div>
 </section>

@@ -9,7 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Fixed
+### Added
+- **Rebuilt Taalimu Ultimate Premium SaaS Landing Page (2026-08-24)**:
+  - Re-architected landing page with Arabic-first, RTL-first modern SaaS aesthetics in `resources/views/landing/new.blade.php`.
+  - Added dedicated **QR Code Registration Spotlight** section (`qr-registration.blade.php`) demonstrating instant student ID generation, smartphone scanner, and real-time profile lookup.
+  - Added dedicated **Meta Cloud API WhatsApp Notifications Spotlight** section (`whatsapp-notifications.blade.php`) featuring attendance alerts, digital payment receipts, due debt reminders, and OTP verification messages.
+  - Added interactive **Master Story Timeline: "من أول Scan... إلى أول Notification"** (`qr-whatsapp-flow.blade.php`) with a 6-step lifecycle workflow.
+  - Added dedicated **4-Audience Portals Showcase** (`audience.blade.php`) for Teacher, Educational Center, Student, and Parent roles.
+  - Added central **Ecosystem Architecture Diagram** (`platform-visual.blade.php`) showing connected stakeholders.
+  - Added interactive **Product Showcase Tabs** (`product-showcase.blade.php`) displaying real UI screens for Center Dashboard, QR Scanner, WhatsApp Log, POS Invoicing, and Parent Portal.
+  - Added modern **Bento Grid Feature Overview** (`feature-bento.blade.php`), 4-Step Onboarding (`how-it-works.blade.php`), Trust & Security Pillars (`trust.blade.php`), and accessible FAQ Accordion (`faq.blade.php`).
+  - Synchronized full trilingual translations across Arabic (`resources/lang/ar/landing.php`), English (`resources/lang/en/landing.php`), and French (`resources/lang/fr/landing.php`).
+
 - **Resolved HTTP 500 Server Error on Main Landing Page (`taalimu.com`) (2026-08-24)**:
   - Fixed invalid translation key references (`landing.problem.*` -> `landing.pain_points.*`) in landing page partials.
   - Replaced broken partial includes in `landing/new.blade.php` with verified, fully-translated partials (`pain-points`, `outcome`, `whatsapp-killer`, `payments-attendance`, `excel-migration`, `product-showcase`, `how-it-works`, `trust`, `pricing`, `faq`, `cta`).

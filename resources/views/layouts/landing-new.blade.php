@@ -11,8 +11,10 @@
 
     {!! SEO::generate() !!}
     
-    <!-- Multilingual SEO (Arabic-market phase: only 'ar' active) -->
+    <!-- Multilingual SEO -->
     <link rel="alternate" hreflang="ar" href="{{ url()->current() }}?hl=ar" />
+    <link rel="alternate" hreflang="en" href="{{ url()->current() }}?hl=en" />
+    <link rel="alternate" hreflang="fr" href="{{ url()->current() }}?hl=fr" />
     <link rel="alternate" hreflang="x-default" href="{{ url()->current() }}" />
     
     <!-- Favicon -->
@@ -22,16 +24,16 @@
     <!-- Schema.org JSON-LD -->
     <script type="application/ld+json">
     {
-      "@@context": "https://schema.org",
-      "@@type": "WebApplication",
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
       "name": "Taalimu",
       "url": "https://taalimu.com",
-      "logo": "https://taalimu.com/images/logo.png",
+      "logo": "https://taalimu.com/images/brand/logo-full.png",
       "description": "{{ __('landing.seo.description') }}",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web",
       "offer": {
-        "@@type": "Offer",
+        "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
       }
@@ -41,9 +43,9 @@
     <!-- Fonts - Optimized Loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Icons Icons -->
+    <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">    
     <!-- Preload Hero Image for faster LCP -->
@@ -64,19 +66,41 @@
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             window.pwaDeferredPrompt = e;
-            // Dispatch custom event for components that are already loaded
             window.dispatchEvent(new CustomEvent('pwa-prompt-available'));
         });
     </script>
 
-    <!-- Scripts -->
+    <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('css/landing-new.css') }}?v={{ filemtime(public_path('css/landing-new.css')) }}">
-    <!-- Network Monitor Styles -->
     <link rel="stylesheet" href="{{ asset('css/network-monitor.css') }}">
+    
+    <style>
+        [data-animate] {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        [data-animate="scale-in"] {
+            opacity: 0;
+            transform: scale(0.96) translateY(12px);
+        }
+        [data-animate].is-visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        @media (prefers-reduced-motion: reduce) {
+            [data-animate] {
+                opacity: 1 !important;
+                transform: none !important;
+                transition: none !important;
+            }
+        }
+    </style>
+
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
-<body class="font-sans antialiased landing-page" style="background:#ffffff; color:#0f172a;">
+<body class="font-sans antialiased landing-page bg-white text-slate-900">
     <div class="min-h-screen flex flex-col">
         @include('landing.partials.header')
 
@@ -89,7 +113,6 @@
         @include('landing.partials.footer')
     </div>
     
-    
     <!-- Cookie Consent Banner -->
     @include('components.cookie-consent')
     
@@ -98,7 +121,6 @@
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script>
-        // SweetAlert2 Toast Configuration
         const Toast = Swal.mixin({
             toast: true,
             position: '{{ app()->getLocale() == "ar" ? "top-start" : "top-end" }}',
@@ -128,7 +150,6 @@
 
     <!-- Service Worker Registration & PWA Redirection -->
     <script>
-        // Redirect to login if opened as PWA from home page
         if (window.matchMedia('(display-mode: standalone)').matches && 
             (window.location.pathname === '/' || window.location.pathname === '')) {
             window.location.href = '/login';
@@ -143,16 +164,15 @@
         }
     </script>
 
-    <!-- Network Monitor (Real Connectivity Detection) -->
+    <!-- Network Monitor -->
     <script src="{{ asset('js/network-monitor.js') }}"></script>
     <script>
-        // Toggle body class for offline CSS effects
         window.TaalimuNetwork.onStatusChange((isOnline) => {
             document.body.classList.toggle('is-network-offline', !isOnline);
         });
     </script>
 
-    <!-- V2: Scroll Animation Observer -->
+    <!-- Scroll Animation Observer -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const observer = new IntersectionObserver((entries) => {
@@ -162,9 +182,9 @@
                         observer.unobserve(entry.target);
                     }
                 });
-            }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+            }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
 
-            document.querySelectorAll('[data-animate], [data-stagger]').forEach(el => observer.observe(el));
+            document.querySelectorAll('[data-animate]').forEach(el => observer.observe(el));
         });
     </script>
     @stack('scripts')

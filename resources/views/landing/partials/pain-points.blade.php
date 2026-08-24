@@ -1,85 +1,59 @@
-{{-- Pain Points / Problem Section --}}
-<section id="problem" class="section-light" style="padding: 6rem 0; background: #ffffff; border-bottom: 1px solid #e2e8f0;">
-    <div class="container mx-auto px-4 lg:px-12">
-        <div class="text-center mb-16" data-animate>
-            <div class="section-badge" style="margin-bottom: 1.25rem; display: inline-flex; background: #fef2f2; border: 1px solid #fecaca; padding: 0.375rem 1rem; border-radius: 9999px;">
-                <span style="color: #dc2626 !important; font-weight: 700; font-size: 0.825rem;">{{ __('landing.pain_points.badge') }}</span>
+<section id="features" class="py-20 lg:py-28 bg-white relative">
+    <div class="container mx-auto px-4 lg:px-8 max-w-7xl">
+        
+        <!-- Section Header -->
+        <div class="text-center max-w-3xl mx-auto mb-16" data-animate="fade-in">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-50 border border-red-200/80 text-red-600 text-xs font-bold mb-4 shadow-sm">
+                <i class="fas fa-exclamation-triangle text-xs"></i>
+                <span>{{ __('landing.pain_points.badge') }}</span>
             </div>
-            <h2 style="color: #0f172a !important; font-size: clamp(1.875rem, 4vw, 3rem); font-weight: 900; margin-bottom: 1.25rem; letter-spacing: -0.025em; line-height: 1.25;">
-                {{ __('landing.pain_points.title_prefix') }} <span style="color: #dc2626 !important;">{{ __('landing.pain_points.title_highlight') }}</span>
+
+            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 leading-tight mb-4">
+                {{ __('landing.pain_points.title_prefix') }}
+                <span class="text-red-600">{{ __('landing.pain_points.title_highlight') }}</span>
             </h2>
-            <p style="color: #475569 !important; font-size: 1.125rem; max-width: 44rem; margin: 0 auto; font-weight: 500; line-height: 1.7;">
+
+            <p class="text-slate-600 font-medium text-base">
                 {{ __('landing.pain_points.subtitle') }}
             </p>
         </div>
 
-        {{-- 6 Real Daily Pain Cards --}}
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto mb-16" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;" data-stagger>
-            @foreach(__('landing.pain_points.items') as $index => $item)
-            <div style="
-                background: #ffffff;
-                border: 1px solid #e2e8f0;
-                border-radius: 1rem;
-                padding: 1.75rem;
-                transition: all 0.25s ease;
-                box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-            " onmouseover="this.style.borderColor='#f87171'; this.style.transform='translateY(-3px)'; this.style.boxShadow='0 10px 25px -5px rgba(220,38,38,0.08)';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.transform='translateY(0)'; this.style.boxShadow='0 1px 3px rgba(0,0,0,0.02)';">
-                <div style="
-                    width: 3rem;
-                    height: 3rem;
-                    border-radius: 0.75rem;
-                    background: #fef2f2;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    margin-bottom: 1.25rem;
-                ">
-                    <i class="fas {{ $item['icon'] }}" style="color: #dc2626; font-size: 1.25rem;"></i>
+        <!-- Pain Points Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-16">
+            @foreach(__('landing.pain_points.items') as $item)
+                <div class="p-6 rounded-2xl bg-slate-50/80 border border-slate-200/80 hover:bg-white hover:border-slate-300 hover:shadow-xl transition-all duration-300 group" data-animate="fade-in">
+                    <div class="w-12 h-12 rounded-xl bg-red-100/80 text-red-600 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fas {{ $item['icon'] }}"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">
+                        {{ $item['title'] }}
+                    </h3>
+                    <p class="text-slate-600 text-sm leading-relaxed font-medium">
+                        {{ $item['desc'] }}
+                    </p>
                 </div>
-                <h3 style="color: #0f172a !important; font-size: 1.15rem; font-weight: 800; margin-bottom: 0.65rem; line-height: 1.35;">
-                    {{ $item['title'] }}
-                </h3>
-                <p style="color: #64748b !important; font-size: 0.9rem; line-height: 1.65; margin: 0;">
-                    {{ $item['desc'] }}
-                </p>
-            </div>
             @endforeach
         </div>
 
-        {{-- Resolution Callout Banner --}}
-        <div class="max-w-4xl mx-auto" data-animate>
-            <div style="
-                background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-                border-radius: 1.25rem;
-                padding: 2.25rem 2rem;
-                text-align: center;
-                color: #ffffff;
-                box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.2);
-                border: 1px solid rgba(255, 255, 255, 0.1);
-            ">
-                <h3 style="color: #ffffff !important; font-size: clamp(1.25rem, 3vw, 1.75rem); font-weight: 900; margin-bottom: 0.75rem;">
+        <!-- Solution Banner -->
+        <div class="rounded-3xl p-8 lg:p-12 text-white relative overflow-hidden shadow-2xl" style="background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);">
+            <div class="absolute -end-10 -bottom-10 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="relative z-10 text-center max-w-3xl mx-auto">
+                <div class="w-12 h-12 mx-auto rounded-2xl bg-emerald-500/20 border border-emerald-400/30 text-emerald-400 flex items-center justify-center text-2xl mb-4 shadow-lg">
+                    <i class="fas fa-[#2E8B83] fa-magic text-[#2E8B83]"></i>
+                </div>
+                <h3 class="text-xl sm:text-2xl lg:text-3xl font-extrabold mb-3 text-white">
                     {{ __('landing.pain_points.solution_banner_title') }}
                 </h3>
-                <p style="color: #cbd5e1 !important; font-size: 1.05rem; margin-bottom: 1.5rem; max-width: 36rem; margin-left: auto; margin-right: auto; line-height: 1.6;">
+                <p class="text-slate-300 text-sm sm:text-base font-medium mb-6">
                     {{ __('landing.pain_points.solution_banner_subtitle') }}
                 </p>
-                <a href="{{ route('register') }}" style="
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 0.5rem;
-                    padding: 0.875rem 2rem;
-                    background: linear-gradient(135deg, #2E8B83 0%, #10b981 100%);
-                    color: #ffffff !important;
-                    font-weight: 800;
-                    font-size: 0.95rem;
-                    border-radius: 0.75rem;
-                    text-decoration: none;
-                    box-shadow: 0 4px 14px rgba(46, 139, 131, 0.35);
-                ">
-                    <span>{{ __('landing.hero.cta_free') }}</span>
-                    <i class="fas fa-arrow-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}"></i>
+                <a href="{{ route('register') }}" class="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl text-white font-extrabold text-sm text-decoration-none shadow-lg hover:shadow-xl transition-all" style="background: linear-gradient(135deg, #2E8B83 0%, #10b981 100%);">
+                    <span>{{ __('landing.nav.start_trial') }}</span>
+                    <i class="fas fa-arrow-left text-xs"></i>
                 </a>
             </div>
         </div>
+
     </div>
 </section>

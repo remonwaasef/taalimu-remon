@@ -1,60 +1,41 @@
-{{-- Final CTA Section --}}
-<section id="final-cta" style="padding: 5rem 0; background: #ffffff;">
-    <div class="container mx-auto px-4 lg:px-12" style="max-width: 1140px; margin: 0 auto;">
-        <div class="max-w-3xl mx-auto">
-            <div style="
-                background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f2720 100%);
-                border-radius: 1.5rem;
-                padding: 3.5rem 2rem;
-                text-align: center;
-                position: relative;
-                overflow: hidden;
-                box-shadow: 0 25px 50px -12px rgba(15,23,42,0.3);
-            " data-animate="scale-in">
-                {{-- Glow Effects --}}
-                <div style="position: absolute; top: -5rem; right: -5rem; width: 15rem; height: 15rem; background: radial-gradient(circle, rgba(16,185,129,0.15) 0%, transparent 70%); pointer-events: none;"></div>
-                <div style="position: absolute; bottom: -5rem; left: -5rem; width: 15rem; height: 15rem; background: radial-gradient(circle, rgba(46,139,131,0.15) 0%, transparent 70%); pointer-events: none;"></div>
+<section class="py-20 lg:py-28 bg-white relative overflow-hidden">
+    <div class="container mx-auto px-4 lg:px-8 max-w-7xl">
+        
+        <div class="rounded-3xl p-10 sm:p-16 text-white text-center relative overflow-hidden shadow-2xl" style="background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);" data-animate="scale-in">
+            <!-- Background Glow Effects -->
+            <div class="absolute -top-24 start-1/2 -translate-x-1/2 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-24 end-10 w-96 h-96 bg-teal-500/20 rounded-full blur-3xl pointer-events-none"></div>
 
-                <div style="position: relative; z-index: 10;">
-                    <h2 style="color: #ffffff !important; font-size: clamp(1.75rem, 3.5vw, 2.5rem); font-weight: 900; margin-bottom: 1rem; letter-spacing: -0.02em; line-height: 1.25;">
-                        {{ __('landing.cta.title') }}
-                    </h2>
-
-                    <p style="color: rgba(226,232,240,0.85) !important; font-size: 1.1rem; margin-bottom: 2rem; max-width: 36rem; margin-left: auto; margin-right: auto; font-weight: 500; line-height: 1.65;">
-                        {{ __('landing.cta.subtitle') }}
-                    </p>
-
-                    {{-- Primary CTA Button --}}
-                    <div style="display: flex; justify-content: center; margin-bottom: 1.5rem;">
-                        <a href="{{ route('register') }}"
-                           style="
-                                background: #ffffff;
-                                color: #2E8B83 !important;
-                                padding: 1.125rem 3rem;
-                                border-radius: 1rem;
-                                font-weight: 900;
-                                font-size: 1.1rem;
-                                display: inline-flex;
-                                align-items: center;
-                                gap: 0.75rem;
-                                box-shadow: 0 12px 32px rgba(0,0,0,0.25);
-                                transition: all 0.2s;
-                                text-decoration: none;
-                           "
-                           onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 16px 40px rgba(0,0,0,0.3)'" 
-                           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 12px 32px rgba(0,0,0,0.25)'">
-                            <span style="color: #2E8B83 !important;">{{ __('landing.cta.cta_primary') }}</span>
-                            <i class="fas fa-arrow-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}" style="color: #2E8B83 !important; font-size: 1rem;"></i>
-                        </a>
-                    </div>
-
-                    {{-- Trust Reassurance Note --}}
-                    <p style="font-size: 0.85rem; font-weight: 600; color: rgba(226,232,240,0.75) !important; display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin: 0;">
-                        <i class="fas fa-check-circle" style="color: #34d399;"></i>
-                        <span>{{ __('landing.cta.trust_note') }}</span>
-                    </p>
+            <div class="relative z-10 max-w-3xl mx-auto">
+                <div class="w-16 h-16 mx-auto rounded-3xl bg-emerald-500/20 border border-emerald-400/30 text-emerald-400 flex items-center justify-center text-3xl mb-6 shadow-lg">
+                    <i class="fas fa-[#2E8B83] fa-rocket text-[#2E8B83]"></i>
                 </div>
+
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-tight mb-6">
+                    {{ __('landing.cta.title') }}
+                </h2>
+
+                <p class="text-slate-300 text-base sm:text-lg font-medium leading-relaxed mb-8 max-w-2xl mx-auto">
+                    {{ __('landing.cta.subtitle') }}
+                </p>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
+                    <a href="{{ route('register') }}" class="w-full sm:w-auto px-8 py-4 rounded-xl text-white font-extrabold text-base text-decoration-none shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-0.5 text-center flex items-center justify-center gap-2" style="background: linear-gradient(135deg, #2E8B83 0%, #10b981 100%);">
+                        <span>{{ __('landing.cta.primary_btn') }}</span>
+                        <i class="fas fa-arrow-left text-sm"></i>
+                    </a>
+
+                    <a href="#solutions" class="w-full sm:w-auto px-7 py-4 rounded-xl border border-slate-700 bg-slate-800/80 text-white font-bold text-base hover:bg-slate-800 transition-all text-decoration-none text-center">
+                        {{ __('landing.cta.secondary_btn') }}
+                    </a>
+                </div>
+
+                <p class="text-xs text-slate-400 font-medium">
+                    <i class="fas fa-shield-alt text-emerald-400 me-1"></i>
+                    {{ __('landing.cta.note') }}
+                </p>
             </div>
         </div>
+
     </div>
 </section>

@@ -1,157 +1,127 @@
-{{-- QR Registration Feature Section --}}
-<section id="qr-registration" class="section-light" style="padding: 5rem 0; background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
-    <div class="container mx-auto px-4 lg:px-12" style="max-width: 1140px; margin: 0 auto;">
+<section id="qr-registration" class="py-20 lg:py-28 bg-slate-50 relative overflow-hidden">
+    <div class="container mx-auto px-4 lg:px-8 max-w-7xl relative z-10">
         
-        {{-- Header --}}
-        <div class="text-center mb-16" data-animate="fade-up">
-            <div class="section-badge" style="margin-bottom: 1rem; display: inline-flex; background: #E6F4F3; border: 1px solid #B2DDD9; padding: 0.375rem 1rem; border-radius: 9999px;">
-                <i class="fas fa-qrcode" style="color: #2E8B83; margin-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}: 0.5rem;"></i>
-                <span style="color: #25746D !important; font-weight: 800; font-size: 0.825rem;">{{ __('landing.qr_registration.badge') }}</span>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-12 items-center">
+            
+            <!-- Visual Column (QR Cards & Scanner Mockup) -->
+            <div class="lg:col-span-6 order-2 lg:order-1" data-animate="scale-in">
+                <div class="relative mx-auto max-w-md lg:max-w-none">
+                    
+                    <!-- Background Backdrop Card -->
+                    <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200/80 relative">
+                        <div class="flex items-center justify-between pb-4 mb-6 border-b border-slate-100">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-teal-50 text-[#2E8B83] flex items-center justify-center font-bold text-lg">
+                                    <i class="fas fa-qrcode"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-extrabold text-slate-900 text-base">نظام QR Code الذكي</h3>
+                                    <span class="text-xs text-slate-500">منظومة التسجيل والتتبع الفوري</span>
+                                </div>
+                            </div>
+                            <span class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200">
+                                نشط الآن
+                            </span>
+                        </div>
+
+                        <!-- Real Digital Student Badge Mockup -->
+                        <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white rounded-2xl p-6 shadow-xl mb-6 relative overflow-hidden">
+                            <div class="absolute -end-10 -top-10 w-32 h-32 bg-emerald-500/20 rounded-full blur-2xl pointer-events-none"></div>
+                            
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-xs font-mono tracking-widest text-emerald-400 font-bold">STUDENT PASS</span>
+                                <img src="{{ asset('images/brand/logo-icon.png') }}" alt="Taalimu" class="h-6 w-auto">
+                            </div>
+
+                            <div class="flex items-center gap-4">
+                                <!-- Simulated QR Code -->
+                                <div class="bg-white p-2 rounded-xl shadow-md shrink-0">
+                                    <i class="fas fa-qrcode text-5xl text-slate-900"></i>
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <h4 class="text-base font-bold text-white truncate">أحمد محمود عمر</h4>
+                                    <p class="text-xs text-slate-400 mb-1">الصف الثاني الثانوي - كيمياء</p>
+                                    <div class="inline-block px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-mono border border-emerald-400/30">
+                                        ID: #ST-892401
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Live Attendance Scanning Result Banner -->
+                        <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-full bg-emerald-500 text-white flex items-center justify-center shrink-0">
+                                <i class="fas fa-check text-base"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <h4 class="text-xs font-bold text-slate-900">تم تسجيل الحضور وخصم الحصة</h4>
+                                    <span class="text-[10px] text-emerald-700 font-bold">04:30 م</span>
+                                </div>
+                                <p class="text-[11px] text-slate-600">تنبيه ولي الأمر: تم إرسال الرسالة بنجاح عبر WhatsApp</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
-            <h2 style="color: #0f172a !important; font-size: clamp(1.75rem, 3.5vw, 2.5rem); font-weight: 900; margin-bottom: 0.875rem; letter-spacing: -0.02em; line-height: 1.25;">
-                {{ __('landing.qr_registration.title') }}
-            </h2>
-            <p style="color: #475569 !important; font-size: 1.05rem; max-width: 42rem; margin: 0 auto; font-weight: 500; line-height: 1.65;">
-                {{ __('landing.qr_registration.subtitle') }}
-            </p>
+
+            <!-- Content Column -->
+            <div class="lg:col-span-6 order-1 lg:order-2" data-animate="fade-in">
+                <!-- Section Badge -->
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-50 border border-teal-200/80 text-[#2E8B83] text-xs font-bold mb-4 shadow-sm">
+                    <i class="fas fa-qrcode text-xs"></i>
+                    <span>{{ __('landing.qr_section.badge') }}</span>
+                </div>
+
+                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 leading-tight mb-4">
+                    {{ __('landing.qr_section.title') }}
+                </h2>
+
+                <p class="text-slate-600 font-medium text-base leading-relaxed mb-8">
+                    {{ __('landing.qr_section.subtitle') }}
+                </p>
+
+                <!-- Workflow Steps -->
+                <div class="space-y-4 mb-8">
+                    <div class="flex items-start gap-4 p-3.5 rounded-xl bg-white border border-slate-200/60 shadow-sm">
+                        <div class="w-8 h-8 rounded-lg bg-teal-50 text-[#2E8B83] flex items-center justify-center font-bold text-sm shrink-0">1</div>
+                        <div>
+                            <h3 class="text-sm font-bold text-slate-900 mb-0.5">{{ __('landing.qr_section.step1_title') }}</h3>
+                            <p class="text-xs text-slate-600 font-medium">{{ __('landing.qr_section.step1_desc') }}</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-4 p-3.5 rounded-xl bg-white border border-slate-200/60 shadow-sm">
+                        <div class="w-8 h-8 rounded-lg bg-teal-50 text-[#2E8B83] flex items-center justify-center font-bold text-sm shrink-0">2</div>
+                        <div>
+                            <h3 class="text-sm font-bold text-slate-900 mb-0.5">{{ __('landing.qr_section.step2_title') }}</h3>
+                            <p class="text-xs text-slate-600 font-medium">{{ __('landing.qr_section.step2_desc') }}</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-4 p-3.5 rounded-xl bg-white border border-slate-200/60 shadow-sm">
+                        <div class="w-8 h-8 rounded-lg bg-teal-50 text-[#2E8B83] flex items-center justify-center font-bold text-sm shrink-0">3</div>
+                        <div>
+                            <h3 class="text-sm font-bold text-slate-900 mb-0.5">{{ __('landing.qr_section.step3_title') }}</h3>
+                            <p class="text-xs text-slate-600 font-medium">{{ __('landing.qr_section.step3_desc') }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Benefits List -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-slate-200">
+                    @foreach(__('landing.qr_section.benefits') as $benefit)
+                        <div class="flex items-center gap-2 text-xs font-bold text-slate-700">
+                            <i class="fas fa-check-circle text-emerald-500 text-sm"></i>
+                            <span>{{ $benefit }}</span>
+                        </div>
+                    @endforeach
+                </div>
+
+            </div>
+
         </div>
 
-        {{-- Visual Workflow --}}
-        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 2rem; max-width: 1000px; margin: 0 auto 3rem auto;" data-stagger>
-            {{-- Step 1: Teacher Creates QR --}}
-            <div style="flex: 1 1 200px; text-align: center;">
-                <div class="workflow-step" style="
-                    width: 4.5rem; height: 4.5rem; border-radius: 1.25rem; background: #E6F4F3; 
-                    display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto; 
-                    color: #2E8B83; font-size: 1.5rem; box-shadow: 0 4px 16px rgba(46,139,131,0.15);
-                ">
-                    <i class="fas fa-chalkboard-teacher"></i>
-                </div>
-                <h3 style="color: #0f172a; font-size: 1rem; font-weight: 800; margin: 0 0 0.375rem 0;">{{ __('landing.qr_registration.step1_title') }}</h3>
-                <p style="color: #64748b; font-size: 0.85rem; margin: 0;">{{ __('landing.qr_registration.step1_desc') }}</p>
-            </div>
-            <div class="workflow-arrow" style="color: #cbd5e1; font-size: 1.5rem; flex-shrink: 0;">
-                <i class="fas fa-arrow-{{ app()->getLocale() == 'ar' ? 'right' : 'left' }}"></i>
-            </div>
-            
-            {{-- Step 2: Student Scans --}}
-            <div style="flex: 1 1 200px; text-align: center;">
-                <div class="workflow-step" style="
-                    width: 4.5rem; height: 4.5rem; border-radius: 1.25rem; background: #eff6ff; 
-                    display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto; 
-                    color: #2563eb; font-size: 1.5rem; box-shadow: 0 4px 16px rgba(37,99,235,0.15);
-                ">
-                    <i class="fas fa-mobile-alt"></i>
-                </div>
-                <h3 style="color: #0f172a; font-size: 1rem; font-weight: 800; margin: 0 0 0.375rem 0;">{{ __('landing.qr_registration.step2_title') }}</h3>
-                <p style="color: #64748b; font-size: 0.85rem; margin: 0;">{{ __('landing.qr_registration.step2_desc') }}</p>
-            </div>
-            <div class="workflow-arrow" style="color: #cbd5e1; font-size: 1.5rem; flex-shrink: 0;">
-                <i class="fas fa-arrow-{{ app()->getLocale() == 'ar' ? 'right' : 'left' }}"></i>
-            </div>
-            
-            {{-- Step 3: Registration Form --}}
-            <div style="flex: 1 1 200px; text-align: center;">
-                <div class="workflow-step" style="
-                    width: 4.5rem; height: 4.5rem; border-radius: 1.25rem; background: #fffbeb; 
-                    display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto; 
-                    color: #f59e0b; font-size: 1.5rem; box-shadow: 0 4px 16px rgba(245,158,11,0.15);
-                ">
-                    <i class="fas fa-user-plus"></i>
-                </div>
-                <h3 style="color: #0f172a; font-size: 1rem; font-weight: 800; margin: 0 0 0.375rem 0;">{{ __('landing.qr_registration.step3_title') }}</h3>
-                <p style="color: #64748b; font-size: 0.85rem; margin: 0;">{{ __('landing.qr_registration.step3_desc') }}</p>
-            </div>
-            <div class="workflow-arrow" style="color: #cbd5e1; font-size: 1.5rem; flex-shrink: 0;">
-                <i class="fas fa-arrow-{{ app()->getLocale() == 'ar' ? 'right' : 'left' }}"></i>
-            </div>
-            
-            {{-- Step 4: Student Profile --}}
-            <div style="flex: 1 1 200px; text-align: center;">
-                <div class="workflow-step" style="
-                    width: 4.5rem; height: 4.5rem; border-radius: 1.25rem; background: #f0fdf4; 
-                    display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto; 
-                    color: #16a34a; font-size: 1.5rem; box-shadow: 0 4px 16px rgba(22,163,74,0.15);
-                ">
-                    <i class="fas fa-id-card"></i>
-                </div>
-                <h3 style="color: #0f172a; font-size: 1rem; font-weight: 800; margin: 0 0 0.375rem 0;">{{ __('landing.qr_registration.step4_title') }}</h3>
-                <p style="color: #64748b; font-size: 0.85rem; margin: 0;">{{ __('landing.qr_registration.step4_desc') }}</p>
-            </div>
-            <div class="workflow-arrow" style="color: #cbd5e1; font-size: 1.5rem; flex-shrink: 0;">
-                <i class="fas fa-arrow-{{ app()->getLocale() == 'ar' ? 'right' : 'left' }}"></i>
-            </div>
-            
-            {{-- Step 5: Dashboard --}}
-            <div style="flex: 1 1 200px; text-align: center;">
-                <div class="workflow-step" style="
-                    width: 4.5rem; height: 4.5rem; border-radius: 1.25rem; background: #f3e8ff; 
-                    display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto; 
-                    color: #9333ea; font-size: 1.5rem; box-shadow: 0 4px 16px rgba(147,51,234,0.15);
-                ">
-                    <i class="fas fa-tachometer-alt"></i>
-                </div>
-                <h3 style="color: #0f172a; font-size: 1rem; font-weight: 800; margin: 0 0 0.375rem 0;">{{ __('landing.qr_registration.step5_title') }}</h3>
-                <p style="color: #64748b; font-size: 0.85rem; margin: 0;">{{ __('landing.qr_registration.step5_desc') }}</p>
-            </div>
-        </div>
-
-        {{-- Benefits Grid --}}
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem;" data-stagger>
-            @foreach(__('landing.qr_registration.benefits') as $benefit)
-            <div style="
-                background: #ffffff;
-                border: 1px solid #e2e8f0;
-                border-radius: 1rem;
-                padding: 1.5rem;
-                display: flex;
-                align-items: flex-start;
-                gap: 1rem;
-                transition: all 0.2s ease;
-            " onmouseover="this.style.borderColor='#2E8B83'; this.style.boxShadow='0 8px 24px rgba(46,139,131,0.08)'" onmouseout="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'">
-                <div style="
-                    width: 3rem; height: 3rem; border-radius: 0.75rem; 
-                    background: {{ $benefit['color'] }}; 
-                    display: flex; align-items: center; justify-content: center; 
-                    flex-shrink: 0; color: #ffffff; font-size: 1.25rem;
-                ">
-                    <i class="fas {{ $benefit['icon'] }}"></i>
-                </div>
-                <div>
-                    <h4 style="color: #0f172a; font-size: 0.95rem; font-weight: 800; margin: 0 0 0.375rem 0;">{{ $benefit['title'] }}</h4>
-                    <p style="color: #64748b; font-size: 0.85rem; margin: 0; line-height: 1.55;">{{ $benefit['desc'] }}</p>
-                </div>
-            </div>
-            @endforeach
-        </div>
-
-        {{-- QR Visual Demo --}}
-        <div class="text-center mt-12" data-animate="fade-up" data-delay="300">
-            <div style="display: inline-block; position: relative;">
-                <div style="
-                    width: 200px; height: 200px; background: #ffffff; border: 2px solid #B2DDD9; 
-                    border-radius: 1rem; display: flex; align-items: center; justify-content: center;
-                    box-shadow: 0 12px 32px rgba(46,139,131,0.12);
-                ">
-                    <div id="hero-qr-code" style="width: 160px; height: 160px;"></div>
-                </div>
-                <p style="margin-top: 1rem; color: #64748b; font-size: 0.9rem; font-weight: 600;">{{ __('landing.qr_registration.scan_to_try') }}</p>
-            </div>
-        </div>
     </div>
 </section>
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    if (typeof QRCode !== 'undefined' && document.getElementById('hero-qr-code')) {
-        new QRCode(document.getElementById('hero-qr-code'), {
-            text: 'https://taalimu.com/register?source=qr_demo',
-            width: 160,
-            height: 160,
-            colorDark: '#2E8B83',
-            colorLight: '#ffffff',
-            correctLevel: QRCode.CorrectLevel.H
-        });
-    }
-});
-</script>
