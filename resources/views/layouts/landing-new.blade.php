@@ -21,11 +21,10 @@
     <link rel="icon" type="image/png" href="{{ asset('images/brand/logo-icon.png') }}">
     <link rel="apple-touch-icon" href="{{ asset('images/brand/logo-icon.png') }}">
 
-    <!-- Schema.org JSON-LD -->
     <script type="application/ld+json">
     {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
+      "@@context": "https://schema.org",
+      "@@type": "WebApplication",
       "name": "Taalimu",
       "url": "https://taalimu.com",
       "logo": "https://taalimu.com/images/brand/logo-full.png",
@@ -33,12 +32,13 @@
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web",
       "offer": {
-        "@type": "Offer",
+        "@@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
       }
     }
     </script>
+
 
     <!-- Fonts - Optimized Loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
