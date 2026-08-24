@@ -31,17 +31,20 @@
 
             <!-- Nav Links (Desktop) -->
             <nav class="hidden lg:flex items-center gap-6 xl:gap-8">
-                <a href="#outcome" @click.prevent="scrollToSection('#outcome')" class="nav-link" style="color: #334155; font-weight: 600; font-size: 0.9rem; text-decoration: none; cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#334155'">
-                    {{ __('landing.outcome.badge') }}
+                <a href="#features" @click.prevent="scrollToSection('#features')" class="nav-link" style="color: #334155; font-weight: 600; font-size: 0.9rem; text-decoration: none; cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#334155'">
+                    {{ __('landing.nav.features') }}
                 </a>
-                <a href="#whatsapp" @click.prevent="scrollToSection('#whatsapp')" class="nav-link" style="color: #334155; font-weight: 600; font-size: 0.9rem; text-decoration: none; cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#334155'">
+                <a href="#qr-registration" @click.prevent="scrollToSection('#qr-registration')" class="nav-link" style="color: #334155; font-weight: 600; font-size: 0.9rem; text-decoration: none; cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#334155'">
+                    {{ __('landing.nav.qr_registration') }}
+                </a>
+                <a href="#whatsapp-notifications" @click.prevent="scrollToSection('#whatsapp-notifications')" class="nav-link" style="color: #334155; font-weight: 600; font-size: 0.9rem; text-decoration: none; cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#334155'">
                     {{ __('landing.nav.whatsapp') }}
                 </a>
-                <a href="#excel" @click.prevent="scrollToSection('#excel')" class="nav-link" style="color: #334155; font-weight: 600; font-size: 0.9rem; text-decoration: none; cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#334155'">
-                    {{ __('landing.nav.excel_migration') }}
+                <a href="#solutions" @click.prevent="scrollToSection('#solutions')" class="nav-link" style="color: #334155; font-weight: 600; font-size: 0.9rem; text-decoration: none; cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#334155'">
+                    {{ __('landing.nav.solutions') }}
                 </a>
-                <a href="#pricing" @click.prevent="scrollToSection('#pricing')" class="nav-link" style="color: #334155; font-weight: 600; font-size: 0.9rem; text-decoration: none; cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#334155'">
-                    {{ __('landing.nav.pricing') }}
+                <a href="#how-it-works" @click.prevent="scrollToSection('#how-it-works')" class="nav-link" style="color: #334155; font-weight: 600; font-size: 0.9rem; text-decoration: none; cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#334155'">
+                    {{ __('landing.nav.how_it_works') }}
                 </a>
                 <a href="#faq" @click.prevent="scrollToSection('#faq')" class="nav-link" style="color: #334155; font-weight: 600; font-size: 0.9rem; text-decoration: none; cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#334155'">
                     {{ __('landing.nav.faq') }}
@@ -62,6 +65,9 @@
                         </a>
                         <a href="{{ route('lang.switch', ['locale' => 'en']) }}" style="display: block; padding: 0.5rem 1rem; font-size: 0.85rem; text-decoration: none; {{ app()->isLocale('en') ? 'color: #2E8B83; font-weight: 700; background: #E6F4F3;' : 'color: #334155;' }}">
                             English (EN)
+                        </a>
+                        <a href="{{ route('lang.switch', ['locale' => 'fr']) }}" style="display: block; padding: 0.5rem 1rem; font-size: 0.85rem; text-decoration: none; {{ app()->isLocale('fr') ? 'color: #2E8B83; font-weight: 700; background: #E6F4F3;' : 'color: #334155;' }}">
+                            Français (FR)
                         </a>
                     </div>
                 </div>
@@ -102,6 +108,9 @@
                         <a href="{{ route('lang.switch', ['locale' => 'en']) }}" style="display: block; padding: 0.5rem 0.75rem; font-size: 0.75rem; text-decoration: none; {{ app()->isLocale('en') ? 'color: #2E8B83; font-weight: 700; background: #E6F4F3;' : 'color: #334155;' }}">
                             English
                         </a>
+                        <a href="{{ route('lang.switch', ['locale' => 'fr']) }}" style="display: block; padding: 0.5rem 0.75rem; font-size: 0.75rem; text-decoration: none; {{ app()->isLocale('fr') ? 'color: #2E8B83; font-weight: 700; background: #E6F4F3;' : 'color: #334155;' }}">
+                            Français
+                        </a>
                     </div>
                 </div>
 
@@ -134,17 +143,20 @@
         class="lg:hidden absolute top-full left-0 right-0 bg-white border-b border-slate-200 shadow-xl py-6 px-6 z-40 max-h-[80vh] overflow-y-auto"
     >
         <nav class="flex flex-col gap-4">
-            <a href="#outcome" @click.prevent="scrollToSection('#outcome')" style="color: #0f172a; font-weight: 700; font-size: 1.05rem; padding: 0.35rem 0; text-decoration: none; cursor: pointer;">
-                {{ __('landing.outcome.badge') }}
+            <a href="#features" @click.prevent="scrollToSection('#features')" style="color: #0f172a; font-weight: 700; font-size: 1.05rem; padding: 0.35rem 0; text-decoration: none; cursor: pointer;">
+                {{ __('landing.nav.features') }}
             </a>
-            <a href="#whatsapp" @click.prevent="scrollToSection('#whatsapp')" style="color: #0f172a; font-weight: 700; font-size: 1.05rem; padding: 0.35rem 0; text-decoration: none; cursor: pointer;">
+            <a href="#qr-registration" @click.prevent="scrollToSection('#qr-registration')" style="color: #0f172a; font-weight: 700; font-size: 1.05rem; padding: 0.35rem 0; text-decoration: none; cursor: pointer;">
+                {{ __('landing.nav.qr_registration') }}
+            </a>
+            <a href="#whatsapp-notifications" @click.prevent="scrollToSection('#whatsapp-notifications')" style="color: #0f172a; font-weight: 700; font-size: 1.05rem; padding: 0.35rem 0; text-decoration: none; cursor: pointer;">
                 {{ __('landing.nav.whatsapp') }}
             </a>
-            <a href="#excel" @click.prevent="scrollToSection('#excel')" style="color: #0f172a; font-weight: 700; font-size: 1.05rem; padding: 0.35rem 0; text-decoration: none; cursor: pointer;">
-                {{ __('landing.nav.excel_migration') }}
+            <a href="#solutions" @click.prevent="scrollToSection('#solutions')" style="color: #0f172a; font-weight: 700; font-size: 1.05rem; padding: 0.35rem 0; text-decoration: none; cursor: pointer;">
+                {{ __('landing.nav.solutions') }}
             </a>
-            <a href="#pricing" @click.prevent="scrollToSection('#pricing')" style="color: #0f172a; font-weight: 700; font-size: 1.05rem; padding: 0.35rem 0; text-decoration: none; cursor: pointer;">
-                {{ __('landing.nav.pricing') }}
+            <a href="#how-it-works" @click.prevent="scrollToSection('#how-it-works')" style="color: #0f172a; font-weight: 700; font-size: 1.05rem; padding: 0.35rem 0; text-decoration: none; cursor: pointer;">
+                {{ __('landing.nav.how_it_works') }}
             </a>
             <a href="#faq" @click.prevent="scrollToSection('#faq')" style="color: #0f172a; font-weight: 700; font-size: 1.05rem; padding: 0.35rem 0; text-decoration: none; cursor: pointer;">
                 {{ __('landing.nav.faq') }}
