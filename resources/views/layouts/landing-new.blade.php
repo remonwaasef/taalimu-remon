@@ -21,24 +21,6 @@
     <link rel="icon" type="image/png" href="{{ asset('images/brand/logo-icon.png') }}">
     <link rel="apple-touch-icon" href="{{ asset('images/brand/logo-icon.png') }}">
 
-    <script type="application/ld+json">
-    {
-      "@@context": "https://schema.org",
-      "@@type": "WebApplication",
-      "name": "Taalimu",
-      "url": "https://taalimu.com",
-      "logo": "https://taalimu.com/images/brand/logo-full.png",
-      "description": "{{ __('landing.seo.description') }}",
-      "applicationCategory": "EducationalApplication",
-      "operatingSystem": "Web",
-      "offer": {
-        "@@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      }
-    }
-    </script>
-
 
     <!-- Fonts - Optimized Loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -107,6 +89,8 @@
         <main class="flex-grow">
             @yield('content')
         </main>
+
+        @include('landing.partials.mobile-sticky-cta')
 
         <x-pwa-install />
 
@@ -185,6 +169,37 @@
             }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
 
             document.querySelectorAll('[data-animate]').forEach(el => observer.observe(el));
+        });
+    </script>
+
+    <!-- Consent-gated Conversion Event Tracking (no third-party scripts; dataLayer-compatible) -->
+    <script>
+        window.TaalimuTrack = window.TaalimuTrack || function (event, params) {
+            try {
+                if ((localStorage.getItem('gdpr_cookie_consent') || '') !== 'accepted') return;
+                var payload = Object.assign({ event: event, ts: Date.now() }, params || {});
+                if (Array.isArray(window.dataLayer)) window.dataLayer.push(payload);
+                else { (window.TaalimuEvents = window.TaalimuEvents || []).push(payload); }
+            } catch (e) { /* no-op */ }
+        };
+
+        document.addEventListener('click', function (e) {
+            var el = e.target.closest('[data-track]');
+            if (!el) return;
+            TaalimuTrack(el.getAttribute('data-track'), { href: el.getAttribute('href') });
+        }, false);
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var depthMarks = { 50: false, 90: false };
+            window.addEventListener('scroll', function () {
+                var progress = window.pageYOffset / Math.max(1, document.body.scrollHeight - window.innerHeight);
+                if (!depthMarks[50] && progress >= 0.5) {
+                    depthMarks[50] = true; TaalimuTrack('landing_scroll_depth', { depth: 50 });
+                }
+                if (!depthMarks[90] && progress >= 0.9) {
+                    depthMarks[90] = true; TaalimuTrack('landing_scroll_depth', { depth: 90 });
+                }
+            }, { passive: true });
         });
     </script>
     @stack('scripts')

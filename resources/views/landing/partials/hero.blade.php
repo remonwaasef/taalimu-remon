@@ -26,7 +26,7 @@
 
                 <!-- Call-to-Action Buttons -->
                 <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-8">
-                    <a href="{{ route('register') }}" class="w-full sm:w-auto px-8 py-4 rounded-xl text-white font-extrabold text-base text-decoration-none shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 text-center flex items-center justify-center gap-2" style="background: linear-gradient(135deg, #2E8B83 0%, #10b981 100%);">
+                    <a href="{{ route('register') }}" data-track="landing_hero_cta_clicked" class="w-full sm:w-auto px-8 py-4 rounded-xl text-white font-extrabold text-base text-decoration-none shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 text-center flex items-center justify-center gap-2" style="background: linear-gradient(135deg, #2E8B83 0%, #10b981 100%);">
                         <span>{{ __('landing.hero.cta_primary') }}</span>
                         <i class="fas fa-arrow-left text-sm rtl:rotate-0 ltr:rotate-180"></i>
                     </a>
@@ -110,14 +110,14 @@
                                 <div class="flex-1 min-w-0">
                                     <div class="flex items-center justify-between">
                                         <h4 class="text-xs font-bold text-slate-900 truncate">{{ __('landing.hero.card_whatsapp_title') }}</h4>
-                                        <span class="text-[9px] text-emerald-600 font-bold bg-emerald-50 px-1.5 py-0.5 rounded">الآن</span>
+                                        <span class="text-[9px] text-emerald-600 font-bold bg-emerald-50 px-1.5 py-0.5 rounded">{{ __('landing.hero.card_now') }}</span>
                                     </div>
                                     <p class="text-[10px] text-slate-500 truncate">{{ __('landing.hero.card_whatsapp_sub') }}</p>
                                 </div>
                             </div>
                             <div class="bg-emerald-50/80 rounded-lg p-2 border border-emerald-100 text-[10px] text-slate-700 font-medium">
                                 <i class="fas fa-check-double text-emerald-600 me-1"></i>
-                                <span>تم إشعار ولي الأمر بحضور الطالب والتحديث المالي</span>
+                                <span>{{ __('landing.hero.card_whatsapp_msg') }}</span>
                             </div>
                         </div>
 
