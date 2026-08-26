@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'seo' => [
+        'title' => 'Taalimu — Système intelligent pour piloter votre centre éducatif',
+        'description' => 'Système intelligent pour piloter votre centre éducatif : inscription des élèves, présence par QR code, gestion des frais, alertes WhatsApp instantanées. Essai gratuit.',
+    ],
     'nav' => [
         'features' => 'Fonctionnalités',
         'showcase' => 'Visite du produit',

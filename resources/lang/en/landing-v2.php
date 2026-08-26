@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'seo' => [
+        'title' => 'Taalimu — Smart system to run your educational center',
+        'description' => 'Smart system to run your educational center: student registration, QR attendance in seconds, fee tracking, and instant WhatsApp alerts. Try free.',
+    ],
     'nav' => [
         'features' => 'Features',
         'showcase' => 'Product Tour',
