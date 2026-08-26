@@ -8,7 +8,7 @@
 
             <div class="relative z-10 max-w-3xl mx-auto">
                 <div class="w-16 h-16 mx-auto rounded-3xl bg-emerald-500/20 border border-emerald-400/30 text-emerald-400 flex items-center justify-center text-3xl mb-6 shadow-lg">
-                    <i class="fas fa-[#2E8B83] fa-rocket text-[#2E8B83]"></i>
+                    <i class="fas fa-rocket text-[#2E8B83]"></i>
                 </div>
 
                 <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-tight mb-6">
@@ -20,7 +20,7 @@
                 </p>
 
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
-                    <a href="{{ route('register') }}" class="w-full sm:w-auto px-8 py-4 rounded-xl text-white font-extrabold text-base text-decoration-none shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-0.5 text-center flex items-center justify-center gap-2" style="background: linear-gradient(135deg, #2E8B83 0%, #10b981 100%);">
+                    <a href="{{ route('register') }}" data-track="landing_final_cta_clicked" class="w-full sm:w-auto px-8 py-4 rounded-xl text-white font-extrabold text-base text-decoration-none shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-0.5 text-center flex items-center justify-center gap-2" style="background: linear-gradient(135deg, #2E8B83 0%, #10b981 100%);">
                         <span>{{ __('landing.cta.primary_btn') }}</span>
                         <i class="fas fa-arrow-left text-sm"></i>
                     </a>

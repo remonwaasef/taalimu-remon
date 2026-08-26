@@ -67,8 +67,8 @@
                         <i class="fas fa-qrcode text-6xl text-slate-900"></i>
                         <div class="absolute inset-x-0 h-0.5 bg-emerald-500 shadow-[0_0_8px_#10b981] animate-pulse top-1/2"></div>
                     </div>
-                    <h4 class="text-base font-bold text-white mb-1">ماسح حضور الطلاب الكاميرا الفوري</h4>
-                    <p class="text-xs text-slate-400">وجه كاميرا الموبايل نحو كرنيه الطالب ليتم تسديد الحضور واستدعاء ولي الأمر في ثانية.</p>
+                    <h4 class="text-base font-bold text-white mb-1">{{ __('landing.mockups.scanner_title') }}</h4>
+                    <p class="text-xs text-slate-400">{{ __('landing.mockups.scanner_hint') }}</p>
                 </div>
             </div>
 
@@ -83,22 +83,22 @@
                         <div class="flex items-center gap-3">
                             <i class="fab fa-whatsapp text-2xl text-emerald-600"></i>
                             <div>
-                                <h4 class="text-xs font-bold text-slate-900">تنبيه حضور - أحمد محمود</h4>
-                                <p class="text-[11px] text-slate-500">تم الإرسال لـ +2010****8941</p>
+                                <h4 class="text-xs font-bold text-slate-900">{{ __('landing.mockups.whatsapp_attendance_entry') }}</h4>
+                                <p class="text-[11px] text-slate-500">{{ __('landing.mockups.sent_to') }} +2010****8941</p>
                             </div>
                         </div>
-                        <span class="px-2.5 py-1 rounded bg-emerald-500 text-white text-[10px] font-bold">تم التسليم <i class="fas fa-check-double ms-1"></i></span>
+                        <span class="px-2.5 py-1 rounded bg-emerald-500 text-white text-[10px] font-bold">{{ __('landing.mockups.delivered') }} <i class="fas fa-check-double ms-1"></i></span>
                     </div>
 
                     <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl flex items-center justify-between">
                         <div class="flex items-center gap-3">
                             <i class="fab fa-whatsapp text-2xl text-emerald-600"></i>
                             <div>
-                                <h4 class="text-xs font-bold text-slate-900">إيصال سداد - سلمى خالد</h4>
-                                <p class="text-[11px] text-slate-500">تم الإرسال لـ +2011****3301</p>
+                                <h4 class="text-xs font-bold text-slate-900">{{ __('landing.mockups.whatsapp_payment_entry') }}</h4>
+                                <p class="text-[11px] text-slate-500">{{ __('landing.mockups.sent_to') }} +2011****3301</p>
                             </div>
                         </div>
-                        <span class="px-2.5 py-1 rounded bg-emerald-500 text-white text-[10px] font-bold">تم التسليم <i class="fas fa-check-double ms-1"></i></span>
+                        <span class="px-2.5 py-1 rounded bg-emerald-500 text-white text-[10px] font-bold">{{ __('landing.mockups.delivered') }} <i class="fas fa-check-double ms-1"></i></span>
                     </div>
                 </div>
             </div>
@@ -111,17 +111,17 @@
                 </div>
                 <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 max-w-xl mx-auto">
                     <div class="flex items-center justify-between pb-3 border-b border-slate-200 mb-4">
-                        <span class="font-bold text-sm text-slate-900">إصدار فاتورة اشتراك كورس</span>
+                        <span class="font-bold text-sm text-slate-900">{{ __('landing.mockups.invoice_title') }}</span>
                         <span class="text-xs font-mono text-slate-500">INV-2026-0041</span>
                     </div>
                     <div class="space-y-2 text-xs text-slate-700 font-medium mb-4">
-                        <div class="flex justify-between"><span>اسم الطالب:</span><span class="font-bold text-slate-900">يوسف أحمد</span></div>
-                        <div class="flex justify-between"><span>الكورس / المادة:</span><span class="font-bold text-slate-900">الفيزياء الحديثة</span></div>
-                        <div class="flex justify-between"><span>المبلغ المدفوع:</span><span class="font-bold text-emerald-600">500 ج.م</span></div>
-                        <div class="flex justify-between"><span>المتبقي:</span><span class="font-bold text-slate-500">0 ج.م</span></div>
+                        <div class="flex justify-between"><span>{{ __('landing.mockups.invoice_student') }}</span><span class="font-bold text-slate-900">{{ __('landing.mockups.student_name') }}</span></div>
+                        <div class="flex justify-between"><span>{{ __('landing.mockups.invoice_course') }}</span><span class="font-bold text-slate-900">{{ __('landing.mockups.invoice_course_value') }}</span></div>
+                        <div class="flex justify-between"><span>{{ __('landing.mockups.invoice_paid') }}</span><span class="font-bold text-emerald-600">500 {{ app()->isLocale('ar') ? 'ج.م' : 'EGP' }}</span></div>
+                        <div class="flex justify-between"><span>{{ __('landing.mockups.invoice_remaining') }}</span><span class="font-bold text-slate-500">0 {{ app()->isLocale('ar') ? 'ج.م' : 'EGP' }}</span></div>
                     </div>
-                    <button class="w-full py-2.5 rounded-xl bg-[#2E8B83] text-white font-bold text-xs shadow-md">
-                        طباعة الإيصال وإرسال الواتساب
+                    <button type="button" class="w-full py-2.5 rounded-xl bg-[#2E8B83] text-white font-bold text-xs shadow-md">
+                        {{ __('landing.mockups.invoice_print') }}
                     </button>
                 </div>
             </div>
@@ -138,14 +138,14 @@
                             <i class="fas fa-heart"></i>
                         </div>
                         <div>
-                            <h4 class="text-sm font-bold text-slate-900">تحديثات ولي الأمر التفاعلية</h4>
-                            <span class="text-xs text-purple-700 font-medium">شفافية كاملة على هاتف الوالد</span>
+                            <h4 class="text-sm font-bold text-slate-900">{{ __('landing.mockups.parent_updates_title') }}</h4>
+                            <span class="text-xs text-purple-700 font-medium">{{ __('landing.mockups.parent_updates_sub') }}</span>
                         </div>
                     </div>
                     <div class="bg-white p-3 rounded-xl border border-purple-100 text-xs text-slate-700 space-y-1.5">
-                        <div class="flex items-center gap-2"><i class="fas fa-check-circle text-emerald-500"></i><span>سجل حضور الطالب يوم الأحد الساعة 04:30 م</span></div>
-                        <div class="flex items-center gap-2"><i class="fas fa-check-circle text-emerald-500"></i><span>درجة اختبار الفيزياء الشهري: 48 / 50</span></div>
-                        <div class="flex items-center gap-2"><i class="fas fa-check-circle text-emerald-500"></i><span>رصيد الاشتراك مسدد بالكامل</span></div>
+                        <div class="flex items-center gap-2"><i class="fas fa-check-circle text-emerald-500"></i><span>{{ __('landing.mockups.parent_update_attendance') }}</span></div>
+                        <div class="flex items-center gap-2"><i class="fas fa-check-circle text-emerald-500"></i><span>{{ __('landing.mockups.parent_update_grade') }}</span></div>
+                        <div class="flex items-center gap-2"><i class="fas fa-check-circle text-emerald-500"></i><span>{{ __('landing.mockups.parent_update_paid') }}</span></div>
                     </div>
                 </div>
             </div>

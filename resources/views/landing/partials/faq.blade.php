@@ -21,10 +21,13 @@
         <div x-data="{ activeAccordion: null }" class="space-y-4" data-animate="fade-in">
             @foreach(__('landing.faq.items') as $index => $item)
                 <div class="bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-sm hover:border-slate-300 transition-colors">
-                    <button 
+                    <button
                         @click="activeAccordion = (activeAccordion === {{ $index }} ? null : {{ $index }})"
-                        type="button" 
-                        class="w-full p-5 text-start flex items-center justify-between gap-4 font-bold text-slate-900 text-sm sm:text-base focus:outline-none"
+                        type="button"
+                        :aria-expanded="activeAccordion === {{ $index }} ? 'true' : 'false'"
+                        aria-controls="faq-answer-{{ $index }}"
+                        id="faq-question-{{ $index }}"
+                        class="w-full p-5 text-start flex items-center justify-between gap-4 font-bold text-slate-900 text-sm sm:text-base focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2E8B83] focus-visible:ring-offset-2 rounded-2xl"
                     >
                         <span>{{ $item['q'] }}</span>
                         <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 shrink-0 transition-transform" :class="{ 'rotate-180 bg-teal-50 text-[#2E8B83]': activeAccordion === {{ $index }} }">
@@ -32,10 +35,13 @@
                         </div>
                     </button>
 
-                    <div 
-                        x-show="activeAccordion === {{ $index }}" 
-                        x-cloak 
-                        x-collapse 
+                    <div
+                        id="faq-answer-{{ $index }}"
+                        role="region"
+                        aria-labelledby="faq-question-{{ $index }}"
+                        x-show="activeAccordion === {{ $index }}"
+                        x-cloak
+                        x-collapse
                         class="px-5 pb-5 pt-1 text-slate-600 font-medium text-xs sm:text-sm leading-relaxed border-t border-slate-100/60"
                     >
                         <p>{{ $item['a'] }}</p>

@@ -31,7 +31,7 @@
                         </div>
                         <div>
                             <h4 class="font-extrabold text-slate-900 text-sm mb-0.5">{{ __('landing.platform_visual.node_teacher') }}</h4>
-                            <span class="text-xs text-slate-500">حضور، جدول، عمولات</span>
+                            <span class="text-xs text-slate-500">{{ __('landing.mockups.node_teacher_sub') }}</span>
                         </div>
                     </div>
 
@@ -42,7 +42,7 @@
                         </div>
                         <div>
                             <h4 class="font-extrabold text-slate-900 text-sm mb-0.5">{{ __('landing.platform_visual.node_center') }}</h4>
-                            <span class="text-xs text-slate-500">إدارة، مالية، فواتير</span>
+                            <span class="text-xs text-slate-500">{{ __('landing.mockups.node_center_sub') }}</span>
                         </div>
                     </div>
                 </div>
@@ -65,7 +65,7 @@
                         </div>
                         <div>
                             <h4 class="font-extrabold text-slate-900 text-sm mb-0.5">{{ __('landing.platform_visual.node_student') }}</h4>
-                            <span class="text-xs text-slate-500">كود QR، حصص، اختبارات</span>
+                            <span class="text-xs text-slate-500">{{ __('landing.mockups.node_student_sub') }}</span>
                         </div>
                     </div>
 
@@ -76,7 +76,7 @@
                         </div>
                         <div>
                             <h4 class="font-extrabold text-slate-900 text-sm mb-0.5">{{ __('landing.platform_visual.node_parent') }}</h4>
-                            <span class="text-xs text-slate-500">إشعارات الواتساب، الشفافية</span>
+                            <span class="text-xs text-slate-500">{{ __('landing.mockups.node_parent_sub') }}</span>
                         </div>
                     </div>
                 </div>

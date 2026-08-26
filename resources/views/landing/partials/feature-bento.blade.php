@@ -36,9 +36,9 @@
                 <div class="bg-white rounded-2xl p-4 border border-slate-200 flex items-center justify-between shadow-sm">
                     <div class="flex items-center gap-3">
                         <i class="fas fa-barcode text-2xl text-[#2E8B83]"></i>
-                        <span class="text-xs font-bold text-slate-800">كرنيه الطالب والتسجيل السريع</span>
+                        <span class="text-xs font-bold text-slate-800">{{ __('landing.mockups.bento_student_pass') }}</span>
                     </div>
-                    <span class="px-2.5 py-1 rounded bg-teal-50 text-[#2E8B83] text-[10px] font-bold">تلقائي</span>
+                    <span class="px-2.5 py-1 rounded bg-teal-50 text-[#2E8B83] text-[10px] font-bold">{{ __('landing.mockups.bento_badge_auto') }}</span>
                 </div>
             </div>
 
@@ -57,7 +57,7 @@
                 </div>
                 <div class="bg-slate-800/80 rounded-2xl p-3.5 border border-slate-700/80 text-xs text-emerald-300 flex items-center gap-2">
                     <i class="fas fa-check-double text-emerald-400"></i>
-                    <span>تكامل رسمي موثق عبر Meta Cloud API</span>
+                    <span>{{ __('landing.mockups.bento_meta_verified') }}</span>
                 </div>
             </div>
 

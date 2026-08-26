@@ -1,8 +1,8 @@
 <footer class="bg-slate-900 text-slate-400 py-16 border-t border-slate-800">
     <div class="container mx-auto px-4 lg:px-8 max-w-7xl">
-        
+
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-slate-800">
-            
+
             <!-- Brand Column -->
             <div class="lg:col-span-2">
                 <a href="{{ route('home') }}" class="inline-block mb-4 text-decoration-none">
@@ -11,17 +11,6 @@
                 <p class="text-xs sm:text-sm text-slate-400 font-medium leading-relaxed max-w-sm mb-6">
                     {{ __('landing.footer.description') }}
                 </p>
-                <div class="flex items-center gap-3">
-                    <a href="#" class="w-9 h-9 rounded-full bg-slate-800 text-slate-400 hover:text-white hover:bg-emerald-600 transition-colors flex items-center justify-center text-sm">
-                        <i class="fab fa-facebook-f"></i>
-                    </a>
-                    <a href="#" class="w-9 h-9 rounded-full bg-slate-800 text-slate-400 hover:text-white hover:bg-emerald-600 transition-colors flex items-center justify-center text-sm">
-                        <i class="fab fa-whatsapp"></i>
-                    </a>
-                    <a href="#" class="w-9 h-9 rounded-full bg-slate-800 text-slate-400 hover:text-white hover:bg-emerald-600 transition-colors flex items-center justify-center text-sm">
-                        <i class="fab fa-linkedin-in"></i>
-                    </a>
-                </div>
             </div>
 
             <!-- Solutions Links -->
@@ -30,11 +19,11 @@
                     {{ __('landing.footer.col_solutions') }}
                 </h4>
                 <ul class="space-y-2.5 text-xs font-medium">
-                    <li><a href="#qr-registration" class="hover:text-emerald-400 transition-colors text-decoration-none">تسجيل QR Code</a></li>
-                    <li><a href="#whatsapp-notifications" class="hover:text-emerald-400 transition-colors text-decoration-none">إشعارات Meta WhatsApp</a></li>
-                    <li><a href="#solutions" class="hover:text-emerald-400 transition-colors text-decoration-none">لوحة المراكز والأكاديميات</a></li>
-                    <li><a href="#solutions" class="hover:text-emerald-400 transition-colors text-decoration-none">بوابة المدرسين</a></li>
-                    <li><a href="#solutions" class="hover:text-emerald-400 transition-colors text-decoration-none">بوابة ولي الأمر والطلاب</a></li>
+                    <li><a href="#qr-registration" class="hover:text-emerald-400 transition-colors text-decoration-none">{{ __('landing.footer.links.qr_registration') }}</a></li>
+                    <li><a href="#whatsapp-notifications" class="hover:text-emerald-400 transition-colors text-decoration-none">{{ __('landing.footer.links.whatsapp_alerts') }}</a></li>
+                    <li><a href="#solutions" class="hover:text-emerald-400 transition-colors text-decoration-none">{{ __('landing.footer.links.centers_dashboard') }}</a></li>
+                    <li><a href="#solutions" class="hover:text-emerald-400 transition-colors text-decoration-none">{{ __('landing.footer.links.teachers_portal') }}</a></li>
+                    <li><a href="#solutions" class="hover:text-emerald-400 transition-colors text-decoration-none">{{ __('landing.footer.links.parent_student_portal') }}</a></li>
                 </ul>
             </div>
 
@@ -44,11 +33,11 @@
                     {{ __('landing.footer.col_features') }}
                 </h4>
                 <ul class="space-y-2.5 text-xs font-medium">
-                    <li><a href="#features" class="hover:text-emerald-400 transition-colors text-decoration-none">الحضور والغياب الذكي</a></li>
-                    <li><a href="#features" class="hover:text-emerald-400 transition-colors text-decoration-none">المالية وفواتير (POS)</a></li>
-                    <li><a href="#features" class="hover:text-emerald-400 transition-colors text-decoration-none">استيراد كشوفات Excel</a></li>
-                    <li><a href="#features" class="hover:text-emerald-400 transition-colors text-decoration-none">الاختبارات وبنك الأسئلة</a></li>
-                    <li><a href="#pricing" class="hover:text-emerald-400 transition-colors text-decoration-none">الباقات والأسعار</a></li>
+                    <li><a href="#features" class="hover:text-emerald-400 transition-colors text-decoration-none">{{ __('landing.footer.links.smart_attendance') }}</a></li>
+                    <li><a href="#features" class="hover:text-emerald-400 transition-colors text-decoration-none">{{ __('landing.footer.links.finance_pos') }}</a></li>
+                    <li><a href="#excel" class="hover:text-emerald-400 transition-colors text-decoration-none">{{ __('landing.footer.links.excel_import') }}</a></li>
+                    <li><a href="#features" class="hover:text-emerald-400 transition-colors text-decoration-none">{{ __('landing.footer.links.quizzes') }}</a></li>
+                    <li><a href="#pricing" class="hover:text-emerald-400 transition-colors text-decoration-none">{{ __('landing.footer.links.plans_pricing') }}</a></li>
                 </ul>
             </div>
 
@@ -58,10 +47,10 @@
                     {{ __('landing.footer.col_company') }}
                 </h4>
                 <ul class="space-y-2.5 text-xs font-medium">
-                    <li><a href="#how-it-works" class="hover:text-emerald-400 transition-colors text-decoration-none">كيف تبدأ مع المنصة</a></li>
-                    <li><a href="#faq" class="hover:text-emerald-400 transition-colors text-decoration-none">الأسئلة الشائعة</a></li>
-                    <li><a href="{{ route('login.portal') }}" class="hover:text-emerald-400 transition-colors text-decoration-none">تسجيل الدخول للمركز</a></li>
-                    <li><a href="{{ route('register') }}" class="hover:text-emerald-400 transition-colors text-decoration-none">إنشاء حساب جديد</a></li>
+                    <li><a href="#how-it-works" class="hover:text-emerald-400 transition-colors text-decoration-none">{{ __('landing.footer.links.get_started') }}</a></li>
+                    <li><a href="#faq" class="hover:text-emerald-400 transition-colors text-decoration-none">{{ __('landing.footer.links.faq') }}</a></li>
+                    <li><a href="{{ route('login.portal') }}" class="hover:text-emerald-400 transition-colors text-decoration-none">{{ __('landing.footer.links.login') }}</a></li>
+                    <li><a href="{{ route('register') }}" class="hover:text-emerald-400 transition-colors text-decoration-none">{{ __('landing.footer.links.create_account') }}</a></li>
                 </ul>
             </div>
 
@@ -71,8 +60,8 @@
         <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-medium text-slate-500">
             <p>{{ __('landing.footer.copyright') }}</p>
             <div class="flex items-center gap-6">
-                <a href="#" class="hover:text-slate-400 transition-colors text-decoration-none">{{ __('landing.footer.privacy') }}</a>
-                <a href="#" class="hover:text-slate-400 transition-colors text-decoration-none">{{ __('landing.footer.terms') }}</a>
+                <a href="{{ route('privacy') }}" class="hover:text-slate-400 transition-colors text-decoration-none">{{ __('landing.footer.privacy') }}</a>
+                <a href="{{ route('terms') }}" class="hover:text-slate-400 transition-colors text-decoration-none">{{ __('landing.footer.terms') }}</a>
             </div>
         </div>
 

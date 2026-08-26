@@ -198,6 +198,7 @@
                     {{-- CTA Button --}}
                     <div style="margin-top: auto;">
                         <a :href="'{{ route('register') }}?plan={{ $package->slug }}&cycle=' + billingCycle + '&currency=' + selectedCurrency"
+                           data-track="landing_pricing_cta_clicked"
                            style="
                                 width: 100%;
                                 display: flex;

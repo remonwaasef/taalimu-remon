@@ -27,7 +27,7 @@
                             <span class="px-3 py-1 rounded-full bg-emerald-100/80 text-emerald-800 text-xs font-bold border border-emerald-200">
                                 {{ $case['tag'] }}
                             </span>
-                            <span class="text-xs text-slate-400 font-medium"><i class="fas fa-bolt text-amber-500 me-1"></i> أوتوماتيكي</span>
+                            <span class="text-xs text-slate-400 font-medium"><i class="fas fa-bolt text-amber-500 me-1"></i> {{ __('landing.mockups.auto_badge') }}</span>
                         </div>
 
                         <h3 class="text-lg font-bold text-slate-900 mb-2">
@@ -48,13 +48,13 @@
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-center justify-between mb-1">
                                     <span class="text-xs font-bold text-emerald-900">Taalimu Notifications</span>
-                                    <span class="text-[10px] text-slate-400">الآن</span>
+                                    <span class="text-[10px] text-slate-400">{{ __('landing.hero.card_now') }}</span>
                                 </div>
                                 <p class="text-xs text-slate-800 font-sans leading-relaxed">
                                     {{ $case['msg'] }}
                                 </p>
                                 <div class="flex items-center justify-end gap-1 mt-2 text-[10px] text-emerald-700 font-bold">
-                                    <span>مرسل عبر Meta WhatsApp API</span>
+                                    <span>{{ __('landing.mockups.sent_via_api') }}</span>
                                     <i class="fas fa-check-double text-emerald-600"></i>
                                 </div>
                             </div>

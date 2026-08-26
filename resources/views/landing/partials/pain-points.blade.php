@@ -40,7 +40,7 @@
             <div class="absolute -end-10 -bottom-10 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
             <div class="relative z-10 text-center max-w-3xl mx-auto">
                 <div class="w-12 h-12 mx-auto rounded-2xl bg-emerald-500/20 border border-emerald-400/30 text-emerald-400 flex items-center justify-center text-2xl mb-4 shadow-lg">
-                    <i class="fas fa-[#2E8B83] fa-magic text-[#2E8B83]"></i>
+                    <i class="fas fa-magic text-[#2E8B83]"></i>
                 </div>
                 <h3 class="text-xl sm:text-2xl lg:text-3xl font-extrabold mb-3 text-white">
                     {{ __('landing.pain_points.solution_banner_title') }}
@@ -48,7 +48,7 @@
                 <p class="text-slate-300 text-sm sm:text-base font-medium mb-6">
                     {{ __('landing.pain_points.solution_banner_subtitle') }}
                 </p>
-                <a href="{{ route('register') }}" class="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl text-white font-extrabold text-sm text-decoration-none shadow-lg hover:shadow-xl transition-all" style="background: linear-gradient(135deg, #2E8B83 0%, #10b981 100%);">
+                <a href="{{ route('register') }}" data-track="landing_pain_solution_cta_clicked" class="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl text-white font-extrabold text-sm text-decoration-none shadow-lg hover:shadow-xl transition-all" style="background: linear-gradient(135deg, #2E8B83 0%, #10b981 100%);">
                     <span>{{ __('landing.nav.start_trial') }}</span>
                     <i class="fas fa-arrow-left text-xs"></i>
                 </a>

@@ -15,12 +15,12 @@
                                     <i class="fas fa-qrcode"></i>
                                 </div>
                                 <div>
-                                    <h3 class="font-extrabold text-slate-900 text-base">نظام QR Code الذكي</h3>
-                                    <span class="text-xs text-slate-500">منظومة التسجيل والتتبع الفوري</span>
+                                    <h3 class="font-extrabold text-slate-900 text-base">{{ __('landing.mockups.qr_system_title') }}</h3>
+                                    <span class="text-xs text-slate-500">{{ __('landing.mockups.qr_system_sub') }}</span>
                                 </div>
                             </div>
                             <span class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200">
-                                نشط الآن
+                                {{ __('landing.mockups.active_now') }}
                             </span>
                         </div>
 
@@ -39,8 +39,8 @@
                                     <i class="fas fa-qrcode text-5xl text-slate-900"></i>
                                 </div>
                                 <div class="min-w-0 flex-1">
-                                    <h4 class="text-base font-bold text-white truncate">أحمد محمود عمر</h4>
-                                    <p class="text-xs text-slate-400 mb-1">الصف الثاني الثانوي - كيمياء</p>
+                                    <h4 class="text-base font-bold text-white truncate">{{ __('landing.mockups.student_name') }}</h4>
+                                    <p class="text-xs text-slate-400 mb-1">{{ __('landing.mockups.student_class') }}</p>
                                     <div class="inline-block px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-mono border border-emerald-400/30">
                                         ID: #ST-892401
                                     </div>
@@ -55,10 +55,10 @@
                             </div>
                             <div class="flex-1">
                                 <div class="flex items-center justify-between">
-                                    <h4 class="text-xs font-bold text-slate-900">تم تسجيل الحضور وخصم الحصة</h4>
-                                    <span class="text-[10px] text-emerald-700 font-bold">04:30 م</span>
+                                    <h4 class="text-xs font-bold text-slate-900">{{ __('landing.mockups.attendance_done') }}</h4>
+                                    <span class="text-[10px] text-emerald-700 font-bold">{{ app()->isLocale('ar') ? '04:30 م' : '04:30 PM' }}</span>
                                 </div>
-                                <p class="text-[11px] text-slate-600">تنبيه ولي الأمر: تم إرسال الرسالة بنجاح عبر WhatsApp</p>
+                                <p class="text-[11px] text-slate-600">{{ __('landing.mockups.parent_notified') }}</p>
                             </div>
                         </div>
 

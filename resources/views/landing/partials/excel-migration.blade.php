@@ -24,19 +24,19 @@
             <div style="background: #ffffff; border: 1px solid #B2DDD9; border-radius: 0.875rem; padding: 1.125rem 1.25rem; box-shadow: 0 2px 8px rgba(46, 139, 131, 0.04); text-align: {{ app()->getLocale() == 'ar' ? 'right' : 'left' }};">
                 <div style="width: 2rem; height: 2rem; border-radius: 0.4rem; background: #E6F4F3; color: #2E8B83; font-weight: 900; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; margin-bottom: 0.65rem;">1</div>
                 <h3 style="font-size: 0.925rem; font-weight: 800; color: #0f172a; margin: 0 0 0.25rem 0;">{{ __('landing.excel_migration.step1') }}</h3>
-                <p style="font-size: 0.8rem; color: #64748b; margin: 0; line-height: 1.45;">ارفع ملفك الحالي مع أرقام الطلاب وأولياء الأمور والمجموعات.</p>
+                <p style="font-size: 0.8rem; color: #64748b; margin: 0; line-height: 1.45;">{{ __('landing.excel_migration.step1_desc') }}</p>
             </div>
 
             <div style="background: #ffffff; border: 1px solid #B2DDD9; border-radius: 0.875rem; padding: 1.125rem 1.25rem; box-shadow: 0 2px 8px rgba(46, 139, 131, 0.04); text-align: {{ app()->getLocale() == 'ar' ? 'right' : 'left' }};">
                 <div style="width: 2rem; height: 2rem; border-radius: 0.4rem; background: #E6F4F3; color: #2E8B83; font-weight: 900; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; margin-bottom: 0.65rem;">2</div>
                 <h3 style="font-size: 0.925rem; font-weight: 800; color: #0f172a; margin: 0 0 0.25rem 0;">{{ __('landing.excel_migration.step2') }}</h3>
-                <p style="font-size: 0.8rem; color: #64748b; margin: 0; line-height: 1.45;">مطابقة تلقائية وسريعة لكافة الأعمدة والبيانات بدون تعقيد.</p>
+                <p style="font-size: 0.8rem; color: #64748b; margin: 0; line-height: 1.45;">{{ __('landing.excel_migration.step2_desc') }}</p>
             </div>
 
             <div style="background: #ffffff; border: 1px solid #B2DDD9; border-radius: 0.875rem; padding: 1.125rem 1.25rem; box-shadow: 0 2px 8px rgba(46, 139, 131, 0.04); text-align: {{ app()->getLocale() == 'ar' ? 'right' : 'left' }};">
                 <div style="width: 2rem; height: 2rem; border-radius: 0.4rem; background: #E6F4F3; color: #2E8B83; font-weight: 900; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; margin-bottom: 0.65rem;">3</div>
                 <h3 style="font-size: 0.925rem; font-weight: 800; color: #0f172a; margin: 0 0 0.25rem 0;">{{ __('landing.excel_migration.step3') }}</h3>
-                <p style="font-size: 0.8rem; color: #64748b; margin: 0; line-height: 1.45;">ابدأ فوراً بتسجيل الحضور، كشف المتأخرات، وتنبيهات الواتساب.</p>
+                <p style="font-size: 0.8rem; color: #64748b; margin: 0; line-height: 1.45;">{{ __('landing.excel_migration.step3_desc') }}</p>
             </div>
         </div>
 
@@ -47,8 +47,8 @@
                     <i class="fas fa-qrcode"></i>
                 </div>
                 <div>
-                    <h4 style="font-size: 0.875rem; font-weight: 800; color: #0f172a; margin: 0 0 0.15rem 0;">حضور فوري بـ QR</h4>
-                    <p style="font-size: 0.775rem; color: #64748b; margin: 0; line-height: 1.35;">مسح سريع لكل طالب مع إشعار فوري لولي الأمر.</p>
+                    <h4 style="font-size: 0.875rem; font-weight: 800; color: #0f172a; margin: 0 0 0.15rem 0;">{{ __('landing.excel_migration.power_qr_title') }}</h4>
+                    <p style="font-size: 0.775rem; color: #64748b; margin: 0; line-height: 1.35;">{{ __('landing.excel_migration.power_qr_desc') }}</p>
                 </div>
             </div>
 
@@ -57,8 +57,8 @@
                     <i class="fas fa-money-check-alt"></i>
                 </div>
                 <div>
-                    <h4 style="font-size: 0.875rem; font-weight: 800; color: #0f172a; margin: 0 0 0.15rem 0;">كشف المتأخرات</h4>
-                    <p style="font-size: 0.775rem; color: #64748b; margin: 0; line-height: 1.35;">معرفة فوريّة لمن دفع ومن لم يسدد اشتراكه.</p>
+                    <h4 style="font-size: 0.875rem; font-weight: 800; color: #0f172a; margin: 0 0 0.15rem 0;">{{ __('landing.excel_migration.power_debts_title') }}</h4>
+                    <p style="font-size: 0.775rem; color: #64748b; margin: 0; line-height: 1.35;">{{ __('landing.excel_migration.power_debts_desc') }}</p>
                 </div>
             </div>
 
@@ -67,8 +67,8 @@
                     <i class="fas fa-user-shield"></i>
                 </div>
                 <div>
-                    <h4 style="font-size: 0.875rem; font-weight: 800; color: #0f172a; margin: 0 0 0.15rem 0;">صلاحيات المساعدين</h4>
-                    <p style="font-size: 0.775rem; color: #64748b; margin: 0; line-height: 1.35;">تحكم كامل بما يراه كل موظف وحماية المالية.</p>
+                    <h4 style="font-size: 0.875rem; font-weight: 800; color: #0f172a; margin: 0 0 0.15rem 0;">{{ __('landing.excel_migration.power_roles_title') }}</h4>
+                    <p style="font-size: 0.775rem; color: #64748b; margin: 0; line-height: 1.35;">{{ __('landing.excel_migration.power_roles_desc') }}</p>
                 </div>
             </div>
 
@@ -77,15 +77,15 @@
                     <i class="fas fa-calculator"></i>
                 </div>
                 <div>
-                    <h4 style="font-size: 0.875rem; font-weight: 800; color: #0f172a; margin: 0 0 0.15rem 0;">أرباح ونسب المدرسين</h4>
-                    <p style="font-size: 0.775rem; color: #64748b; margin: 0; line-height: 1.35;">حساب تلقائي دقيق للمستحقات الشهرية.</p>
+                    <h4 style="font-size: 0.875rem; font-weight: 800; color: #0f172a; margin: 0 0 0.15rem 0;">{{ __('landing.excel_migration.power_payouts_title') }}</h4>
+                    <p style="font-size: 0.775rem; color: #64748b; margin: 0; line-height: 1.35;">{{ __('landing.excel_migration.power_payouts_desc') }}</p>
                 </div>
             </div>
         </div>
 
         {{-- CTA Button --}}
         <div class="text-center">
-            <a href="{{ route('register') }}" style="
+            <a href="{{ route('register') }}" data-track="landing_migration_cta_clicked" style="
                 display: inline-flex;
                 align-items: center;
                 gap: 0.5rem;

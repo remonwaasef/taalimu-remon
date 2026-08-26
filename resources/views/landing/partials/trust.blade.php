@@ -49,7 +49,7 @@
             <!-- Pillar 3: Daily Backups -->
             <div class="bg-slate-50/80 rounded-3xl p-6 border border-slate-200/80 hover:shadow-xl transition-all" data-animate="fade-in">
                 <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl mb-4 font-bold">
-                    <i class="fas fa-[#2E8B83] fa-history text-[#2E8B83]"></i>
+                    <i class="fas fa-history text-[#2E8B83]"></i>
                 </div>
                 <h3 class="text-base font-bold text-slate-900 mb-2">
                     {{ __('landing.trust.backup_title') }}

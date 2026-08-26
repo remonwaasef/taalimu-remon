@@ -41,15 +41,15 @@
                         @endforeach
                     </ul>
                 </div>
-                <a href="{{ route('register') }}" class="w-full py-2.5 rounded-xl border border-slate-200 hover:border-[#2E8B83] hover:bg-emerald-50/50 text-[#2E8B83] font-bold text-xs text-center text-decoration-none transition-colors">
-                    بوابة المدرس
+                <a href="{{ route('register') }}" data-track="landing_audience_teacher_cta" class="w-full py-2.5 rounded-xl border border-slate-200 hover:border-[#2E8B83] hover:bg-emerald-50/50 text-[#2E8B83] font-bold text-xs text-center text-decoration-none transition-colors">
+                    {{ __('landing.mockups.audience_teacher_cta') }}
                 </a>
             </div>
 
             <!-- 2. Educational Center Card -->
             <div class="bg-white rounded-3xl p-6 border border-teal-200/90 shadow-lg relative flex flex-col justify-between" data-animate="fade-in">
                 <span class="absolute -top-3 end-6 px-2.5 py-0.5 rounded-full bg-emerald-500 text-white text-[10px] font-bold shadow">
-                    الأكثر استخداماً
+                    {{ __('landing.mockups.audience_center_badge') }}
                 </span>
                 <div>
                     <div class="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center text-xl mb-4 font-bold shadow-md">
@@ -70,8 +70,8 @@
                         @endforeach
                     </ul>
                 </div>
-                <a href="{{ route('register') }}" class="w-full py-2.5 rounded-xl text-white font-bold text-xs text-center text-decoration-none shadow-md" style="background: linear-gradient(135deg, #2E8B83 0%, #10b981 100%);">
-                    لوحة المركز
+                <a href="{{ route('register') }}" data-track="landing_audience_center_cta" class="w-full py-2.5 rounded-xl text-white font-bold text-xs text-center text-decoration-none shadow-md" style="background: linear-gradient(135deg, #2E8B83 0%, #10b981 100%);">
+                    {{ __('landing.mockups.audience_center_cta') }}
                 </a>
             </div>
 
@@ -97,7 +97,7 @@
                     </ul>
                 </div>
                 <a href="{{ route('login.portal') }}" class="w-full py-2.5 rounded-xl border border-slate-200 hover:border-blue-500 hover:bg-blue-50/50 text-blue-600 font-bold text-xs text-center text-decoration-none transition-colors">
-                    بوابة الطالب
+                    {{ __('landing.mockups.audience_student_cta') }}
                 </a>
             </div>
 
@@ -123,7 +123,7 @@
                     </ul>
                 </div>
                 <a href="{{ route('login.portal') }}" class="w-full py-2.5 rounded-xl border border-slate-200 hover:border-purple-500 hover:bg-purple-50/50 text-purple-600 font-bold text-xs text-center text-decoration-none transition-colors">
-                    تحديثات ولي الأمر
+                    {{ __('landing.mockups.audience_parent_cta') }}
                 </a>
             </div>
 
