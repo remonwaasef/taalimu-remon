@@ -37,7 +37,7 @@
         });
     </script>
 </head>
-<body class="antialiased">
+<body class="antialiased overflow-x-hidden">
     <div class="min-h-screen flex flex-col">
         @include('landing.v2.header')
 

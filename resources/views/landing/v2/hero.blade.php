@@ -3,11 +3,11 @@
     <div class="pointer-events-none absolute -top-32 start-1/2 -translate-x-1/2 w-[52rem] h-[26rem] rounded-full blur-3xl" style="background: radial-gradient(closest-side, rgba(79,70,229,0.10), transparent);"></div>
     <div class="pointer-events-none absolute top-40 -end-24 w-80 h-80 rounded-full blur-3xl" style="background: radial-gradient(closest-side, rgba(79,70,229,0.07), transparent);"></div>
 
-    <div class="v2-container relative z-10">
-        <div class="grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+<div class="v2-container relative z-10 overflow-hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
 
             {{-- Copy --}}
-            <div class="text-center lg:text-start" data-reveal>
+            <div class="text-center lg:text-start min-w-0" data-reveal>
                 <span class="v2-eyebrow mb-5">
                     <span class="w-1.5 h-1.5 rounded-full bg-[color:var(--color-primary-500)]"></span>
                     {{ __('landing-v2.hero.eyebrow') }}
@@ -42,7 +42,7 @@
             </div>
 
             {{-- Real product visual --}}
-            <div class="relative" data-reveal style="--reveal-delay: 120ms;">
+            <div class="relative min-w-0" data-reveal style="--reveal-delay: 120ms;">
                 <div class="v2-product-frame">
                     <div class="v2-browser-bar">
                         <div class="flex items-center gap-1.5" aria-hidden="true">
