@@ -29,8 +29,8 @@ class LandingController extends Controller
         }
 
         // Set Dynamic SEO Metadata based on locale & new positioning
-        $title = __('landing-v2.seo.title');
-        $description = __('landing-v2.seo.description');
+        $title = __('landing-v3.seo.title');
+        $description = __('landing-v3.seo.description');
 
         SEOMeta::setTitle($title);
         SEOMeta::setDescription($description);
@@ -63,6 +63,6 @@ class LandingController extends Controller
             ->get()
             ->groupBy('category');
 
-        return view('landing.v2', compact('packages', 'featuresByCategory'));
+        return view('landing.v3.layout', compact('packages', 'featuresByCategory'));
     }
 }
