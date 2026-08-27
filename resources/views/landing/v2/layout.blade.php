@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#4F46E5">
+    <meta name="theme-color" content="#2E8B83">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <link rel="manifest" href="{{ asset('manifest.json') }}?v=3">
@@ -18,17 +18,31 @@
     <link rel="alternate" hreflang="fr" href="{{ url()->current() }}?hl=fr" />
     <link rel="alternate" hreflang="x-default" href="{{ url()->current() }}" />
 
-    {{-- Dashboard-aligned typography: Tajawal (AR) + Inter (EN) --}}
+    {{-- Dashboard-aligned typography: Cairo (AR) + Inter (EN) --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     {{-- LCP preload: the real product visual --}}
     <link rel="preload" as="image" href="{{ asset('images/hero-dashboard.webp') }}" type="image/webp">
 
     <link rel="stylesheet" href="{{ asset('css/landing-v2.css') }}?v={{ filemtime(public_path('css/landing-v2.css')) }}">
 
+    {{-- Inline Dark Mode Auto-Detection & Enhanced UI Styles --}}
     <script>
+        (function() {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.classList.add('dark');
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+                if (event.matches) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            });
+        })();
+
         window.pwaDeferredPrompt = null;
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
@@ -36,14 +50,106 @@
             window.dispatchEvent(new CustomEvent('pwa-prompt-available'));
         });
     </script>
+    <style>
+        /* Smooth scrolling and typography */
+        html {
+            font-family: 'Cairo', 'Inter', system-ui, -apple-system, sans-serif;
+            scroll-behavior: smooth;
+        }
+        [dir="ltr"] body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+        /* Dark mode enhanced backgrounds */
+        .dark body {
+            background-color: #0b1312;
+            color: #f3fbfb;
+        }
+        .dark .bg-white {
+            background-color: #111f1e !important;
+        }
+        .dark .v2-card {
+            background-color: #111f1e;
+            border-color: #1f3936;
+        }
+        .dark .v2-product-frame {
+            background-color: #111f1e;
+            border-color: #1f3936;
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.6), 0 0 30px rgba(46, 139, 131, 0.15);
+        }
+        .dark .v2-browser-bar {
+            background-color: #0d1817;
+            border-color: #182e2c;
+        }
+        .dark .v2-node {
+            background-color: #111f1e;
+            border-color: #1f3936;
+        }
+        .dark .v2-node:hover {
+            border-color: #2e8b83;
+            background-color: #142524;
+        }
+        .dark .v2-preview {
+            background-color: #0b1312;
+            border-color: #182e2c;
+        }
+        .dark .v2-preview-toolbar {
+            background-color: #111f1e;
+            border-color: #182e2c;
+        }
+        .dark .v2-faq-item {
+            background-color: #111f1e;
+            border-color: #1f3936;
+        }
+        .dark .v2-faq-item:hover {
+            border-color: #2e8b83;
+        }
+        .dark .v2-sticky-bar {
+            background-color: rgba(17, 31, 30, 0.95);
+            border-color: #1f3936;
+        }
+        /* Micro-animations */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-6px) rotate(0.5deg); }
+        }
+        .animate-float-slow {
+            animation: floatSlow 5s ease-in-out infinite;
+        }
+        .animate-float-reverse {
+            animation: floatSlow 6s ease-in-out infinite reverse;
+        }
+        /* Brand gradients */
+        .bg-brand-gradient {
+            background: linear-gradient(135deg, #2E8B83 0%, #1E5E58 100%);
+        }
+        .text-brand-gradient {
+            background: linear-gradient(135deg, #2E8B83 0%, #4F7DF3 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* Feature hover */
+        .v2-feature-card {
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .v2-feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 32px -8px rgba(46, 139, 131, 0.16);
+            border-color: #80c4bd;
+        }
+        .dark .v2-feature-card:hover {
+            box-shadow: 0 16px 32px -8px rgba(0, 0, 0, 0.5), 0 0 20px rgba(46, 139, 131, 0.2);
+            border-color: #2e8b83;
+        }
+    </style>
 </head>
-<body class="antialiased overflow-x-hidden">
+<body class="antialiased overflow-x-hidden transition-colors duration-300">
     <div class="min-h-screen flex flex-col">
         @include('landing.v2.header')
 
         <main class="flex-grow">
             @include('landing.v2.hero')
             @include('landing.v2.ecosystem')
+            @include('landing.v2.features')
             @include('landing.v2.value')
             @include('landing.v2.showcase')
             @include('landing.v2.pricing')

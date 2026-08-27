@@ -1,15 +1,18 @@
 <section id="pricing" class="v2-section" aria-labelledby="v2-pricing-title">
     <div class="v2-container">
         <div class="text-center max-w-2xl mx-auto mb-10 lg:mb-12" data-reveal>
-            <span class="v2-eyebrow mb-4">{{ __('landing-v2.pricing.badge') }}</span>
+            <span class="v2-eyebrow mb-4">
+                <span class="w-1.5 h-1.5 rounded-full bg-[color:var(--color-primary-500)]"></span>
+                {{ __('landing-v2.pricing.badge') }}
+            </span>
             <h2 id="v2-pricing-title" class="v2-h2 mb-3">{{ __('landing-v2.pricing.title') }}</h2>
             <p class="v2-lead mb-7">{{ __('landing-v2.pricing.subtitle') }}</p>
 
-            <div class="inline-flex p-1 rounded-xl bg-white border border-[color:var(--color-border)]" role="group" aria-label="{{ __('landing-v2.pricing.badge') }}">
+            <div class="inline-flex p-1 rounded-xl bg-white dark:bg-[#111f1e] border border-[color:var(--color-border)] dark:border-[#1f3936] shadow-sm" role="group" aria-label="{{ __('landing-v2.pricing.badge') }}">
                 @foreach(['monthly' => __('landing.pricing.monthly'), 'term' => __('landing.pricing.term'), 'yearly' => __('landing.pricing.yearly')] as $cycle => $label)
                     <button type="button"
                             class="px-4 py-2 rounded-lg text-xs font-extrabold border-0 cursor-pointer transition-all"
-                            :class="cycle === '{{ $cycle }}' ? 'bg-slate-950 text-white shadow-sm' : 'bg-transparent text-[color:var(--color-text-secondary)]'"
+                            :class="cycle === '{{ $cycle }}' ? 'bg-[color:var(--color-primary-500)] text-white shadow-sm' : 'bg-transparent text-[color:var(--color-text-secondary)] hover:text-[color:var(--color-text-main)]'"
                             @click="cycle = '{{ $cycle }}'">{{ $label }}</button>
                 @endforeach
             </div>
@@ -30,9 +33,9 @@
                         default => $package->description_en ?: $package->description,
                     };
                 @endphp
-                <article class="relative flex flex-col p-6 pt-7 bg-white {{ $package->is_featured
-                    ? 'rounded-[var(--radius-2xl)] border-2 border-[color:var(--color-primary-500)] shadow-[0_20px_40px_-12px_rgba(79,70,229,0.18)] lg:-translate-y-1'
-                    : 'rounded-[var(--radius-2xl)] border border-[color:var(--color-border)] shadow-[var(--shadow-elevation-1)]' }}">
+                <article class="relative flex flex-col p-6 pt-7 bg-white dark:bg-[#111f1e] {{ $package->is_featured
+                    ? 'rounded-[var(--radius-2xl)] border-2 border-[color:var(--color-primary-500)] shadow-[0_20px_40px_-12px_rgba(46,139,131,0.25)] lg:-translate-y-1'
+                    : 'rounded-[var(--radius-2xl)] border border-[color:var(--color-border)] dark:border-[#1f3936] shadow-[var(--shadow-elevation-1)]' }}">
                     @if($package->is_featured)
                         <span class="absolute -top-3 left-1/2 -translate-x-1/2 rtl:translate-x-1/2 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[color:var(--color-primary-500)] text-white text-[11px] font-extrabold whitespace-nowrap shadow-md">
                             <i class="fas fa-star text-[8px] text-amber-300"></i>{{ __('landing.pricing.featured') }}
@@ -58,7 +61,7 @@
                     <span class="block mt-1.5 text-[10px] font-bold uppercase tracking-wide text-[color:var(--color-text-muted)]"
                           x-text="{ monthly: @js(__('landing.pricing.per_month')), term: @js(__('landing.pricing.per_term')), yearly: @js(__('landing.pricing.per_year')) }[cycle]"></span>
 
-                    <ul class="mt-5 pt-4 border-t border-[color:var(--color-border-subtle)] space-y-2.5 flex-1">
+                    <ul class="mt-5 pt-4 border-t border-[color:var(--color-border-subtle)] dark:border-[#182e2c] space-y-2.5 flex-1">
                         @foreach(($package->display_features ?? []) ? array_slice($package->display_features, 0, 5) : [] as $feature)
                             <li class="flex items-start gap-2 text-xs font-semibold text-[color:var(--color-text-secondary)]">
                                 <i class="fas fa-check text-[color:var(--color-success-500)] mt-0.5"></i>
@@ -69,7 +72,7 @@
 
                     <a :href="'{{ route('register') }}?plan={{ $package->slug }}&cycle=' + cycle + '&currency=' + currency"
                        data-track="v2_pricing_cta_clicked"
-                       class="v2-btn w-full mt-6 {{ $package->is_featured ? 'v2-btn-primary' : 'v2-btn-ghost' }}">
+                       class="v2-btn w-full mt-6 {{ $package->is_featured ? 'v2-btn-primary shadow-md' : 'v2-btn-ghost dark:bg-[#142524] dark:border-[#1f3936]' }}">
                         {{ __('landing.pricing.cta_free') }}
                     </a>
                 </article>
@@ -81,7 +84,7 @@
             <h3 class="text-center text-lg font-extrabold text-[color:var(--color-text-main)] mb-6" data-reveal>{{ __('landing-v2.pricing.faq_title') }}</h3>
             <div class="space-y-3" x-data="{ open: null }" data-reveal style="--reveal-delay: 100ms;">
                 @foreach(__('landing-v2.pricing.faq') as $i => $item)
-                    <div class="v2-faq-item overflow-hidden">
+                    <div class="v2-faq-item overflow-hidden dark:bg-[#111f1e] dark:border-[#1f3936]">
                         <button type="button" class="v2-faq-btn"
                                 @click="open = (open === {{ $i }} ? null : {{ $i }})"
                                 :aria-expanded="open === {{ $i }} ? 'true' : 'false'"
