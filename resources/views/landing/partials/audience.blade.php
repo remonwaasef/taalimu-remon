@@ -1,51 +1,28 @@
-{{-- Portals Section matching C:\Users\new\Downloads\Taalimu_Landing_Page_HTML_CSS_Fixed --}}
-<section id="portals" class="portals">
+{{-- Portals — 4 Cards — Redesigned Reference --}}
+<section class="section portals">
   <div class="container">
-    <p class="section-kicker">بوابات مخصصة لكل مستخدم</p>
+    <div class="section-head center">
+      <span class="kicker">تجربة لكل طرف</span>
+      <h2>كل مستخدم لديه <span>مساحته الخاصة</span></h2>
+      <p>مدير المركز يدير، والمدرس يدرّس، والطالب وولي الأمر يتابعان — من نفس النظام.</p>
+    </div>
+
     <div class="portal-grid">
-      <article class="portal-card parent">
-        <div class="portal-content">
-          <span class="icon">👥</span>
-          <h3>بوابة ولي الأمر</h3>
-          <p>تابع تقدم ابنك بكل سهولة</p>
-          <ul>
-            <li>متابعة الحضور والغياب</li>
-            <li>الاطلاع على الدرجات</li>
-            <li>التواصل مع المدرسة والمعلمين</li>
-            <li>استلام الإشعارات والتنبيهات</li>
-          </ul>
-          <a href="{{ route('login.portal') }}">دخول ولي الأمر ←</a>
-        </div>
+      <article class="portal-card">
+        <span class="portal-icon">◉</span><h3>مدير المركز</h3><p>تحكم كامل في الطلاب، المدرسين، الحضور، المالية والتقارير.</p>
+        <ul><li>لوحة تحكم</li><li>تقارير وإحصائيات</li><li>إدارة الصلاحيات</li></ul>
       </article>
-
-      <article class="portal-card student">
-        <div class="portal-content">
-          <span class="icon">▣</span>
-          <h3>بوابة الطالب</h3>
-          <p>كل دراستك في مكان واحد</p>
-          <ul>
-            <li>عرض الجدول الدراسي</li>
-            <li>الحضور والغياب</li>
-            <li>الاطلاع على الدرجات والتقييمات</li>
-            <li>التواصل مع المعلمين</li>
-          </ul>
-          <a href="{{ route('login.portal') }}">دخول الطالب ←</a>
-        </div>
+      <article class="portal-card">
+        <span class="portal-icon">♙</span><h3>المدرس</h3><p>أدوات يومية للحصص والحضور والدرجات والتواصل.</p>
+        <ul><li>الحضور</li><li>الدرجات</li><li>المواد والملفات</li></ul>
       </article>
-
-      <article class="portal-card teacher">
-        <div class="portal-content">
-          <span class="icon">🎓</span>
-          <h3>بوابة المدرس</h3>
-          <p>كل ما تحتاجه لإدارة حصصك</p>
-          <ul>
-            <li>تسجيل الحضور والغياب</li>
-            <li>إدارة الدرجات والتقييمات</li>
-            <li>رفع المواد والملفات</li>
-            <li>التواصل مع الطلاب وأولياء الأمور</li>
-          </ul>
-          <a href="{{ route('login.portal') }}">دخول المدرس ←</a>
-        </div>
+      <article class="portal-card">
+        <span class="portal-icon">▣</span><h3>الطالب</h3><p>جدوله وحضوره ودرجاته وكل ما يخص رحلته التعليمية.</p>
+        <ul><li>الجدول</li><li>الحضور والغياب</li><li>النتائج</li></ul>
+      </article>
+      <article class="portal-card">
+        <span class="portal-icon">♡</span><h3>ولي الأمر</h3><p>متابعة تقدم الابن واستلام التنبيهات والمعلومات المهمة.</p>
+        <ul><li>الحضور</li><li>الدرجات</li><li>الإشعارات</li></ul>
       </article>
     </div>
   </div>

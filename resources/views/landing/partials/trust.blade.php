@@ -1,78 +1,87 @@
-<section class="py-20 lg:py-28 bg-white relative">
-    <div class="container mx-auto px-4 lg:px-8 max-w-7xl">
-        
-        <!-- Section Header -->
-        <div class="text-center max-w-3xl mx-auto mb-16" data-animate="fade-in">
-            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200/80 text-emerald-700 text-xs font-bold mb-4 shadow-sm">
-                <i class="fas fa-shield-alt text-xs"></i>
-                <span>{{ __('landing.trust.badge') }}</span>
-            </div>
-
-            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 leading-tight mb-4">
-                {{ __('landing.trust.title') }}
-            </h2>
-
-            <p class="text-slate-600 font-medium text-base">
-                {{ __('landing.trust.subtitle') }}
-            </p>
-        </div>
-
-        <!-- Trust Pillars Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            
-            <!-- Pillar 1: Tenant Isolation -->
-            <div class="bg-slate-50/80 rounded-3xl p-6 border border-slate-200/80 hover:shadow-xl transition-all" data-animate="fade-in">
-                <div class="w-12 h-12 rounded-2xl bg-teal-50 text-[#2E8B83] flex items-center justify-center text-xl mb-4 font-bold">
-                    <i class="fas fa-database"></i>
-                </div>
-                <h3 class="text-base font-bold text-slate-900 mb-2">
-                    {{ __('landing.trust.isolation_title') }}
-                </h3>
-                <p class="text-xs text-slate-600 font-medium leading-relaxed">
-                    {{ __('landing.trust.isolation_desc') }}
-                </p>
-            </div>
-
-            <!-- Pillar 2: RBAC Role Permissions -->
-            <div class="bg-slate-50/80 rounded-3xl p-6 border border-slate-200/80 hover:shadow-xl transition-all" data-animate="fade-in">
-                <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl mb-4 font-bold">
-                    <i class="fas fa-user-lock"></i>
-                </div>
-                <h3 class="text-base font-bold text-slate-900 mb-2">
-                    {{ __('landing.trust.roles_title') }}
-                </h3>
-                <p class="text-xs text-slate-600 font-medium leading-relaxed">
-                    {{ __('landing.trust.roles_desc') }}
-                </p>
-            </div>
-
-            <!-- Pillar 3: Daily Backups -->
-            <div class="bg-slate-50/80 rounded-3xl p-6 border border-slate-200/80 hover:shadow-xl transition-all" data-animate="fade-in">
-                <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl mb-4 font-bold">
-                    <i class="fas fa-history text-[#2E8B83]"></i>
-                </div>
-                <h3 class="text-base font-bold text-slate-900 mb-2">
-                    {{ __('landing.trust.backup_title') }}
-                </h3>
-                <p class="text-xs text-slate-600 font-medium leading-relaxed">
-                    {{ __('landing.trust.backup_desc') }}
-                </p>
-            </div>
-
-            <!-- Pillar 4: SSL Encryption -->
-            <div class="bg-slate-50/80 rounded-3xl p-6 border border-slate-200/80 hover:shadow-xl transition-all" data-animate="fade-in">
-                <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl mb-4 font-bold">
-                    <i class="fas fa-lock"></i>
-                </div>
-                <h3 class="text-base font-bold text-slate-900 mb-2">
-                    {{ __('landing.trust.https_title') }}
-                </h3>
-                <p class="text-xs text-slate-600 font-medium leading-relaxed">
-                    {{ __('landing.trust.https_desc') }}
-                </p>
-            </div>
-
-        </div>
-
+{{-- Proof Bar — Redesigned Reference --}}
+<section class="proof">
+  <div class="container proof-inner">
+    <div class="proof-title">كل ما يحتاجه مركزك في نظام واحد</div>
+    <div class="proof-items">
+      <span>الطلاب</span><b>•</b><span>الحضور</span><b>•</b><span>المالية</span><b>•</b><span>WhatsApp</span><b>•</b><span>التقارير</span>
     </div>
+  </div>
+</section>
+
+{{-- Problem Section — Before/After --}}
+<section class="section problem">
+  <div class="container narrow">
+    <div class="section-head">
+      <span class="kicker">ودّع الفوضى الإدارية</span>
+      <h2>بدل 5 أدوات مختلفة، <span>استخدم منصة واحدة</span></h2>
+      <p>لا مزيد من ملفات Excel المتفرقة، الدفاتر، والرسائل اليدوية. Taalimu يجمع دورة العمل اليومية في مكان واحد.</p>
+    </div>
+
+    <div class="before-after">
+      <div class="ba-card old">
+        <span class="ba-icon">×</span>
+        <h3>قبل Taalimu</h3>
+        <ul>
+          <li>ملفات Excel وبيانات متفرقة</li>
+          <li>تسجيل حضور يدوي</li>
+          <li>متابعة أقساط على أكثر من مكان</li>
+          <li>رسائل أولياء الأمور يدويًا</li>
+        </ul>
+      </div>
+
+      <div class="ba-arrow">←</div>
+
+      <div class="ba-card new">
+        <span class="ba-icon">✓</span>
+        <h3>مع Taalimu</h3>
+        <ul>
+          <li>لوحة تحكم واحدة للمركز</li>
+          <li>حضور سريع عبر QR Code</li>
+          <li>متابعة مالية وتقارير تلقائية</li>
+          <li>إشعارات WhatsApp في الوقت المناسب</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+{{-- Workflow — 4 Steps --}}
+<section class="section workflow" id="how">
+  <div class="container">
+    <div class="section-head center">
+      <span class="kicker">الميزة التي تختصر يومك</span>
+      <h2>من <span>Scan واحد</span> إلى إشعار ولي الأمر</h2>
+      <p>أتمتة بسيطة تجعل الحضور والتواصل والمتابعة المالية جزءًا من نفس العملية.</p>
+    </div>
+
+    <div class="steps">
+      <article class="step">
+        <div class="step-number">01</div>
+        <div class="step-icon">▣</div>
+        <h3>الطالب يمسح QR</h3>
+        <p>تسجيل حضور سريع من الهاتف بدون أوراق أو إدخال يدوي.</p>
+      </article>
+      <div class="step-line"></div>
+      <article class="step">
+        <div class="step-number">02</div>
+        <div class="step-icon">✓</div>
+        <h3>الحضور يتحدث تلقائيًا</h3>
+        <p>تظهر الحالة فورًا في لوحة المركز وسجل الطالب.</p>
+      </article>
+      <div class="step-line"></div>
+      <article class="step">
+        <div class="step-number">03</div>
+        <div class="step-icon">↗</div>
+        <h3>الإدارة تعرف كل شيء</h3>
+        <p>تقارير الحضور والرسوم والمتابعة متاحة في مكان واحد.</p>
+      </article>
+      <div class="step-line"></div>
+      <article class="step">
+        <div class="step-number">04</div>
+        <div class="step-icon">◌</div>
+        <h3>ولي الأمر يستلم الإشعار</h3>
+        <p>تواصل أسرع عبر WhatsApp عند الحاجة وبدون عمل يدوي.</p>
+      </article>
+    </div>
+  </div>
 </section>
