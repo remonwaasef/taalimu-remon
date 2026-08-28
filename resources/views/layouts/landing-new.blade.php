@@ -73,8 +73,8 @@
         });
     </script>
 
-    <!-- Styles -->
-    <link rel="stylesheet" href="{{ asset('css/landing-new.css') }}?v={{ filemtime(public_path('css/landing-new.css')) }}">
+    <!-- Vite Assets -->
+    @vite(['resources/css/landing-new.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="{{ asset('css/network-monitor.css') }}">
     
     <style>
