@@ -2,152 +2,175 @@
 <section id="portals" class="py-16 lg:py-24 bg-white">
     <div class="container mx-auto px-5 lg:px-12 max-w-7xl">
 
-        {{-- Section Header --}}
+        {{-- Section Title Header --}}
         <div class="text-center mb-12" data-animate="fade-in">
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#e8f5f3] border border-[#c5e8e4] text-xs font-bold text-[#2E8B83] mb-4">
-                <i class="fas fa-users text-[10px]"></i>
-                <span>بوابات مخصصة لكل مستخدم</span>
-            </div>
+            <h2 class="text-2xl sm:text-3xl font-black text-[#2E8B83] tracking-tight">
+                بوابات مخصصة لكل مستخدم
+            </h2>
         </div>
 
-        {{-- 3 Portal Cards --}}
+        {{-- 3 User Portal Cards Grid --}}
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8" data-animate="fade-in">
 
             {{-- Card 1: Teacher Portal --}}
-            <div class="group bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-xl hover:border-[#2E8B83]/30 transition-all duration-300">
-                {{-- Card Image --}}
-                <div class="relative h-48 overflow-hidden bg-gradient-to-br from-[#e8f5f3] to-[#d1ede9]">
+            <div class="group bg-white rounded-3xl border border-slate-200/80 overflow-hidden hover:shadow-xl hover:border-[#2E8B83]/40 transition-all duration-300 flex flex-col">
+                {{-- Card Banner Image --}}
+                <div class="relative h-52 overflow-hidden bg-slate-100">
                     <img src="{{ asset('images/portals/teacher_v2.png') }}"
                          alt="بوابة المدرس"
                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                          loading="lazy">
                 </div>
-                {{-- Card Content --}}
-                <div class="p-5">
-                    {{-- Icon + Title --}}
-                    <div class="flex items-center gap-3 mb-3">
-                        <div class="w-10 h-10 rounded-xl bg-[#e8f5f3] flex items-center justify-center">
-                            <i class="fas fa-chalkboard-teacher text-[#2E8B83]"></i>
+
+                {{-- Card Main Body --}}
+                <div class="p-6 flex-grow flex flex-col justify-between">
+                    <div>
+                        {{-- Icon + Title Header --}}
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-lg">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-black text-slate-900">بوابة المدرس</h3>
+                                <p class="text-xs text-slate-400 font-semibold">كل ما تحتاجه لإدارة صفوفك</p>
+                            </div>
                         </div>
-                        <h3 class="text-lg font-black text-slate-900">بوابة المدرس</h3>
+
+                        {{-- Features Bullets --}}
+                        <ul class="space-y-2.5 my-5 text-xs sm:text-sm text-slate-600 font-medium">
+                            <li class="flex items-center gap-2.5">
+                                <i class="fas fa-check text-purple-600 text-xs"></i>
+                                <span>تسجيل الحضور والغياب</span>
+                            </li>
+                            <li class="flex items-center gap-2.5">
+                                <i class="fas fa-check text-purple-600 text-xs"></i>
+                                <span>إنشاء الواجبات والاختبارات</span>
+                            </li>
+                            <li class="flex items-center gap-2.5">
+                                <i class="fas fa-check text-purple-600 text-xs"></i>
+                                <span>رفع المواد والملفات</span>
+                            </li>
+                            <li class="flex items-center gap-2.5">
+                                <i class="fas fa-check text-purple-600 text-xs"></i>
+                                <span>التواصل مع الطلاب وأولياء الأمور</span>
+                            </li>
+                        </ul>
                     </div>
-                    {{-- Features List --}}
-                    <ul class="space-y-2 mb-5 text-sm text-slate-600">
-                        <li class="flex items-start gap-2">
-                            <i class="fas fa-check text-[#2E8B83] text-xs mt-1"></i>
-                            <span>إدارة الحضور والغياب</span>
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <i class="fas fa-check text-[#2E8B83] text-xs mt-1"></i>
-                            <span>رصد الدرجات والتقييمات</span>
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <i class="fas fa-check text-[#2E8B83] text-xs mt-1"></i>
-                            <span>الاطلاع على الجدول والتقارير</span>
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <i class="fas fa-check text-[#2E8B83] text-xs mt-1"></i>
-                            <span>رفع المواد والأنشطة</span>
-                        </li>
-                    </ul>
+
                     {{-- CTA Button --}}
-                    <a href="{{ route('register') }}"
-                       class="w-full py-2.5 rounded-xl text-sm font-bold text-center inline-flex items-center justify-center gap-2 text-decoration-none transition-all border-2 border-[#2E8B83] text-[#2E8B83] hover:bg-[#2E8B83] hover:text-white">
-                        <i class="fas fa-arrow-left text-xs rtl:rotate-0 ltr:rotate-180"></i>
+                    <a href="{{ route('login.portal') }}"
+                       class="w-full py-3 rounded-full text-sm font-bold text-center inline-flex items-center justify-center gap-2 text-decoration-none transition-all bg-[#4338ca] text-white hover:bg-[#3730a3] shadow-xs hover:shadow-md">
                         <span>دخول المدرس</span>
+                        <i class="fas fa-arrow-left text-xs rtl:rotate-0 ltr:rotate-180"></i>
                     </a>
                 </div>
             </div>
 
             {{-- Card 2: Student Portal --}}
-            <div class="group bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-xl hover:border-[#2E8B83]/30 transition-all duration-300">
-                {{-- Card Image --}}
-                <div class="relative h-48 overflow-hidden bg-gradient-to-br from-[#e8f5f3] to-[#d1ede9]">
+            <div class="group bg-white rounded-3xl border border-slate-200/80 overflow-hidden hover:shadow-xl hover:border-[#2E8B83]/40 transition-all duration-300 flex flex-col">
+                {{-- Card Banner Image --}}
+                <div class="relative h-52 overflow-hidden bg-slate-100">
                     <img src="{{ asset('images/portals/student_v2.png') }}"
                          alt="بوابة الطالب"
                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                          loading="lazy">
                 </div>
-                {{-- Card Content --}}
-                <div class="p-5">
-                    {{-- Icon + Title --}}
-                    <div class="flex items-center gap-3 mb-3">
-                        <div class="w-10 h-10 rounded-xl bg-[#e8f5f3] flex items-center justify-center">
-                            <i class="fas fa-user-graduate text-[#2E8B83]"></i>
+
+                {{-- Card Main Body --}}
+                <div class="p-6 flex-grow flex flex-col justify-between">
+                    <div>
+                        {{-- Icon + Title Header --}}
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-[#2E8B83] flex items-center justify-center text-lg">
+                                <i class="fas fa-book-open"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-black text-slate-900">بوابة الطالب</h3>
+                                <p class="text-xs text-slate-400 font-semibold">كل دراستك في مكان واحد</p>
+                            </div>
                         </div>
-                        <h3 class="text-lg font-black text-slate-900">بوابة الطالب</h3>
+
+                        {{-- Features Bullets --}}
+                        <ul class="space-y-2.5 my-5 text-xs sm:text-sm text-slate-600 font-medium">
+                            <li class="flex items-center gap-2.5">
+                                <i class="fas fa-check text-[#2E8B83] text-xs"></i>
+                                <span>عرض الجدول الدراسي</span>
+                            </li>
+                            <li class="flex items-center gap-2.5">
+                                <i class="fas fa-check text-[#2E8B83] text-xs"></i>
+                                <span>متابعة الواجبات والاختبارات</span>
+                            </li>
+                            <li class="flex items-center gap-2.5">
+                                <i class="fas fa-check text-[#2E8B83] text-xs"></i>
+                                <span>الاطلاع على الدرجات والتقييمات</span>
+                            </li>
+                            <li class="flex items-center gap-2.5">
+                                <i class="fas fa-check text-[#2E8B83] text-xs"></i>
+                                <span>التواصل مع المعلمين</span>
+                            </li>
+                        </ul>
                     </div>
-                    {{-- Subtitle --}}
-                    <p class="text-xs text-slate-400 font-medium mb-2">كل دراستك في مكان واحد</p>
-                    {{-- Features List --}}
-                    <ul class="space-y-2 mb-5 text-sm text-slate-600">
-                        <li class="flex items-start gap-2">
-                            <i class="fas fa-check text-[#2E8B83] text-xs mt-1"></i>
-                            <span>كل ما تحتاجه لإدارة صفوفك</span>
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <i class="fas fa-check text-[#2E8B83] text-xs mt-1"></i>
-                            <span>متابعة الواجبات والأنشطة</span>
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <i class="fas fa-check text-[#2E8B83] text-xs mt-1"></i>
-                            <span>الاطلاع على التقييمات</span>
-                        </li>
-                    </ul>
+
                     {{-- CTA Button --}}
-                    <a href="{{ route('register') }}"
-                       class="w-full py-2.5 rounded-xl text-sm font-bold text-center inline-flex items-center justify-center gap-2 text-decoration-none transition-all text-white"
+                    <a href="{{ route('login.portal') }}"
+                       class="w-full py-3 rounded-full text-sm font-bold text-center inline-flex items-center justify-center gap-2 text-decoration-none transition-all text-white shadow-xs hover:shadow-md"
                        style="background-color: #2E8B83;">
-                        <i class="fas fa-arrow-left text-xs rtl:rotate-0 ltr:rotate-180"></i>
                         <span>دخول الطالب</span>
+                        <i class="fas fa-arrow-left text-xs rtl:rotate-0 ltr:rotate-180"></i>
                     </a>
                 </div>
             </div>
 
             {{-- Card 3: Parent Portal --}}
-            <div class="group bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-xl hover:border-[#2E8B83]/30 transition-all duration-300">
-                {{-- Card Image --}}
-                <div class="relative h-48 overflow-hidden bg-gradient-to-br from-[#e8f5f3] to-[#d1ede9]">
+            <div class="group bg-white rounded-3xl border border-slate-200/80 overflow-hidden hover:shadow-xl hover:border-orange-500/40 transition-all duration-300 flex flex-col">
+                {{-- Card Banner Image --}}
+                <div class="relative h-52 overflow-hidden bg-slate-100">
                     <img src="{{ asset('images/portals/parent_v2.png') }}"
                          alt="بوابة ولي الأمر"
                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                          loading="lazy">
                 </div>
-                {{-- Card Content --}}
-                <div class="p-5">
-                    {{-- Icon + Title --}}
-                    <div class="flex items-center gap-3 mb-3">
-                        <div class="w-10 h-10 rounded-xl bg-[#fff3e0] flex items-center justify-center">
-                            <i class="fas fa-user-friends text-orange-500"></i>
+
+                {{-- Card Main Body --}}
+                <div class="p-6 flex-grow flex flex-col justify-between">
+                    <div>
+                        {{-- Icon + Title Header --}}
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-10 h-10 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center text-lg">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-black text-slate-900">بوابة ولي الأمر</h3>
+                                <p class="text-xs text-slate-400 font-semibold">تابع تقدم أبنائك بكل سهولة</p>
+                            </div>
                         </div>
-                        <h3 class="text-lg font-black text-slate-900">بوابة ولي الأمر</h3>
+
+                        {{-- Features Bullets --}}
+                        <ul class="space-y-2.5 my-5 text-xs sm:text-sm text-slate-600 font-medium">
+                            <li class="flex items-center gap-2.5">
+                                <i class="fas fa-check text-orange-600 text-xs"></i>
+                                <span>متابعة الحضور والغياب</span>
+                            </li>
+                            <li class="flex items-center gap-2.5">
+                                <i class="fas fa-check text-orange-600 text-xs"></i>
+                                <span>الاطلاع على الدرجات والتقارير</span>
+                            </li>
+                            <li class="flex items-center gap-2.5">
+                                <i class="fas fa-check text-orange-600 text-xs"></i>
+                                <span>التواصل مع المدرسة والمعلمين</span>
+                            </li>
+                            <li class="flex items-center gap-2.5">
+                                <i class="fas fa-check text-orange-600 text-xs"></i>
+                                <span>استلام الإشعارات والتنبيهات</span>
+                            </li>
+                        </ul>
                     </div>
-                    {{-- Subtitle --}}
-                    <p class="text-xs text-slate-400 font-medium mb-2">تابع تقدم أبنائك بكل سهولة</p>
-                    {{-- Features List --}}
-                    <ul class="space-y-2 mb-5 text-sm text-slate-600">
-                        <li class="flex items-start gap-2">
-                            <i class="fas fa-check text-orange-500 text-xs mt-1"></i>
-                            <span>متابعة الحضور والغياب</span>
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <i class="fas fa-check text-orange-500 text-xs mt-1"></i>
-                            <span>الاطلاع على الدرجات والتقارير</span>
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <i class="fas fa-check text-orange-500 text-xs mt-1"></i>
-                            <span>استقبال الإشعارات والتنبيهات</span>
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <i class="fas fa-check text-orange-500 text-xs mt-1"></i>
-                            <span>التواصل مع المؤسسة والمدرسين</span>
-                        </li>
-                    </ul>
+
                     {{-- CTA Button --}}
-                    <a href="{{ route('register') }}"
-                       class="w-full py-2.5 rounded-xl text-sm font-bold text-center inline-flex items-center justify-center gap-2 text-decoration-none transition-all border-2 border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white">
-                        <i class="fas fa-arrow-left text-xs rtl:rotate-0 ltr:rotate-180"></i>
+                    <a href="{{ route('login.portal') }}"
+                       class="w-full py-3 rounded-full text-sm font-bold text-center inline-flex items-center justify-center gap-2 text-decoration-none transition-all text-white bg-orange-600 hover:bg-orange-700 shadow-xs hover:shadow-md">
                         <span>دخول ولي الأمر</span>
+                        <i class="fas fa-arrow-left text-xs rtl:rotate-0 ltr:rotate-180"></i>
                     </a>
                 </div>
             </div>

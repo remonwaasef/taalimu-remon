@@ -1,69 +1,69 @@
 {{-- 6 Tools Grid — Matching Reference Image --}}
-<section id="capabilities" class="py-16 lg:py-24 bg-white">
+<section id="capabilities" class="py-16 lg:py-24 bg-white border-t border-slate-100">
     <div class="container mx-auto px-5 lg:px-12 max-w-7xl">
 
         {{-- Section Header --}}
-        <div class="text-center mb-12" data-animate="fade-in">
-            <h2 class="text-xl sm:text-2xl lg:text-3xl font-black text-slate-900 leading-tight">
+        <div class="text-center mb-14" data-animate="fade-in">
+            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 leading-tight">
                 كل الأدوات التي تحتاجها لإدارة مؤسستك بكفاءة واحترافية
             </h2>
         </div>
 
-        {{-- 6 Tools Grid --}}
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6" data-animate="fade-in">
+        {{-- 6 Tools Horizontal Grid --}}
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 sm:gap-8" data-animate="fade-in">
 
             {{-- Tool 1: Reports & Analytics --}}
-            <div class="text-center group">
-                <div class="w-14 h-14 mx-auto mb-3 rounded-2xl bg-[#e8f5f3] flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <i class="fas fa-chart-pie text-xl" style="color: #2E8B83;"></i>
+            <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-2xs hover:shadow-md hover:border-[#2E8B83]/30 transition-all text-center group">
+                <div class="w-12 h-12 mx-auto mb-3.5 rounded-xl bg-[#e8f5f3] text-[#2E8B83] flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                    <i class="fas fa-chart-line"></i>
                 </div>
-                <h4 class="text-sm font-bold text-slate-900 mb-1">التقارير والتحليلات</h4>
-                <p class="text-[11px] text-slate-400 leading-relaxed">تقارير شاملة عن أداء المؤسسة والطلاب والمدرسين</p>
+                <h3 class="text-sm font-extrabold text-slate-900 mb-1.5">التقارير والتحليلات</h3>
+                <p class="text-[11px] sm:text-xs text-slate-500 font-medium leading-relaxed">تقارير تفصيلية تساعدك على اتخاذ قرارات أفضل</p>
             </div>
 
             {{-- Tool 2: Communication & Notifications --}}
-            <div class="text-center group">
-                <div class="w-14 h-14 mx-auto mb-3 rounded-2xl bg-[#e8f5f3] flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <i class="fas fa-bell text-xl" style="color: #2E8B83;"></i>
+            <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-2xs hover:shadow-md hover:border-[#2E8B83]/30 transition-all text-center group">
+                <div class="w-12 h-12 mx-auto mb-3.5 rounded-xl bg-[#e8f5f3] text-[#2E8B83] flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                    <i class="fas fa-comments"></i>
                 </div>
-                <h4 class="text-sm font-bold text-slate-900 mb-1">التواصل والإشعارات</h4>
-                <p class="text-[11px] text-slate-400 leading-relaxed">تواصل فعّال عبر المنصة مع إشعارات فورية</p>
+                <h3 class="text-sm font-extrabold text-slate-900 mb-1.5">التواصل والإشعارات</h3>
+                <p class="text-[11px] sm:text-xs text-slate-500 font-medium leading-relaxed">تواصل فعال عبر المنصة وعبر WhatsApp</p>
             </div>
 
             {{-- Tool 3: Payments --}}
-            <div class="text-center group">
-                <div class="w-14 h-14 mx-auto mb-3 rounded-2xl bg-[#e8f5f3] flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <i class="fas fa-wallet text-xl" style="color: #2E8B83;"></i>
+            <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-2xs hover:shadow-md hover:border-[#2E8B83]/30 transition-all text-center group">
+                <div class="w-12 h-12 mx-auto mb-3.5 rounded-xl bg-[#e8f5f3] text-[#2E8B83] flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                    <i class="fas fa-wallet"></i>
                 </div>
-                <h4 class="text-sm font-bold text-slate-900 mb-1">المدفوعات</h4>
-                <p class="text-[11px] text-slate-400 leading-relaxed">إدارة المدفوعات والفواتير بسهولة تامة</p>
+                <h3 class="text-sm font-extrabold text-slate-900 mb-1.5">المدفوعات</h3>
+                <p class="text-[11px] sm:text-xs text-slate-500 font-medium leading-relaxed">متابعة الرسوم والمدفوعات والفواتير بسهولة</p>
             </div>
 
-            {{-- Tool 4: Lessons & Exams --}}
-            <div class="text-center group">
-                <div class="w-14 h-14 mx-auto mb-3 rounded-2xl bg-[#e8f5f3] flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <i class="fas fa-clipboard-list text-xl" style="color: #2E8B83;"></i>
+            {{-- Tool 4: Exams & Grades --}}
+            <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-2xs hover:shadow-md hover:border-[#2E8B83]/30 transition-all text-center group">
+                <div class="w-12 h-12 mx-auto mb-3.5 rounded-xl bg-[#e8f5f3] text-[#2E8B83] flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                    <i class="fas fa-file-signature"></i>
                 </div>
-                <h4 class="text-sm font-bold text-slate-900 mb-1">الدروس والاختبارات</h4>
-                <p class="text-[11px] text-slate-400 leading-relaxed">إنشاء الاختبارات والدروس وإدارتها بكل مرونة</p>
+                <h3 class="text-sm font-extrabold text-slate-900 mb-1.5">الدرجات والاختبارات</h3>
+                <p class="text-[11px] sm:text-xs text-slate-500 font-medium leading-relaxed">إنشاء الاختبارات وتقييم الطلاب ومتابعة النتائج</p>
             </div>
 
             {{-- Tool 5: Attendance --}}
-            <div class="text-center group">
-                <div class="w-14 h-14 mx-auto mb-3 rounded-2xl bg-[#e8f5f3] flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <i class="fas fa-calendar-check text-xl" style="color: #2E8B83;"></i>
+            <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-2xs hover:shadow-md hover:border-[#2E8B83]/30 transition-all text-center group">
+                <div class="w-12 h-12 mx-auto mb-3.5 rounded-xl bg-[#e8f5f3] text-[#2E8B83] flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                    <i class="fas fa-user-check"></i>
                 </div>
-                <h4 class="text-sm font-bold text-slate-900 mb-1">الحضور والانصراف</h4>
-                <p class="text-[11px] text-slate-400 leading-relaxed">تسجيل الحضور والغياب بطرق ذكية ومتعددة</p>
+                <h3 class="text-sm font-extrabold text-slate-900 mb-1.5">الحضور والانصراف</h3>
+                <p class="text-[11px] sm:text-xs text-slate-500 font-medium leading-relaxed">تسجيل الحضور والغياب بتقارير دقيقة ومفصلة</p>
             </div>
 
-            {{-- Tool 6: Students & Teachers --}}
-            <div class="text-center group">
-                <div class="w-14 h-14 mx-auto mb-3 rounded-2xl bg-[#e8f5f3] flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <i class="fas fa-users text-xl" style="color: #2E8B83;"></i>
+            {{-- Tool 6: Students & Classes --}}
+            <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-2xs hover:shadow-md hover:border-[#2E8B83]/30 transition-all text-center group">
+                <div class="w-12 h-12 mx-auto mb-3.5 rounded-xl bg-[#e8f5f3] text-[#2E8B83] flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                    <i class="fas fa-[#2E8B83] fa-users"></i>
                 </div>
-                <h4 class="text-sm font-bold text-slate-900 mb-1">الطلاب والمعلمين</h4>
-                <p class="text-[11px] text-slate-400 leading-relaxed">إدارة بيانات الطلاب والمعلمين وملفاتهم</p>
+                <h3 class="text-sm font-extrabold text-slate-900 mb-1.5">الطلاب والفصول</h3>
+                <p class="text-[11px] sm:text-xs text-slate-500 font-medium leading-relaxed">إدارة شاملة للطلاب والفصول والتسجيل والتنقلات</p>
             </div>
 
         </div>

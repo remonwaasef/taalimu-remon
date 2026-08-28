@@ -1,6 +1,6 @@
 {{-- Minimal Clean Header Matching Reference Image --}}
 <header
-    class="landing-header fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white/95 backdrop-blur-md border-b border-slate-100/90 shadow-[0_2px_10px_rgba(0,0,0,0.02)]"
+    class="landing-header fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-[0_2px_10px_rgba(0,0,0,0.02)]"
     x-data="{
         scrolled: false,
         isMenuOpen: false,
@@ -20,12 +20,14 @@
     }"
     @scroll.window="scrolled = window.pageYOffset > 20"
 >
-    <div class="container mx-auto px-6 lg:px-12 max-w-7xl">
+    <div class="container mx-auto px-5 lg:px-12 max-w-7xl">
         <div class="flex items-center justify-between h-20">
             
             <!-- Right side (in RTL): Brand Logo -->
-            <a href="{{ route('home') }}" class="flex items-center gap-2.5 shrink-0 text-decoration-none">
-                <img src="{{ asset('images/brand/logo-icon.png') }}" alt="Taalimu" class="w-8 h-8 object-contain">
+            <a href="{{ route('home') }}" class="flex items-center gap-2.5 shrink-0 text-decoration-none group">
+                <div class="w-9 h-9 rounded-xl bg-[#e8f5f3] flex items-center justify-center group-hover:scale-105 transition-transform">
+                    <img src="{{ asset('images/brand/logo-icon.png') }}" alt="Taalimu" class="w-6 h-6 object-contain">
+                </div>
                 <span class="text-2xl font-black text-slate-900 tracking-tight font-sans">Taalimu</span>
             </a>
 
