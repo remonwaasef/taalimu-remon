@@ -1,10 +1,10 @@
-{{-- Section 3: Portals Section Matching Image 2 --}}
+{{-- Section 3: Portals Section Matching Reference Image --}}
 <section id="portals" class="py-20 lg:py-28 bg-white relative">
     <div class="container mx-auto px-6 lg:px-12 max-w-7xl">
         
         <!-- Section Eyebrow Centered -->
         <div class="text-center mb-16" data-animate="fade-in">
-            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-50/80 border border-emerald-200/70 text-[#008A70] text-xs font-bold shadow-2xs">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-50/80 border border-emerald-200/70 text-xs font-bold shadow-2xs" style="color: #2E8B83;">
                 <span>بوابات مخصصة لكل مستخدم</span>
             </div>
         </div>
@@ -56,7 +56,7 @@
                     </div>
 
                     <!-- Action Button -->
-                    <a href="{{ route('login.portal') }}" class="w-full py-3 rounded-xl bg-[#5C52E6] hover:bg-[#4d44cb] text-white font-extrabold text-xs text-center text-decoration-none transition-all flex items-center justify-center gap-2 shadow-xs">
+                    <a href="{{ route('login.portal') }}" class="w-full py-3 rounded-xl text-white font-extrabold text-xs text-center text-decoration-none transition-all flex items-center justify-center gap-2 shadow-xs" style="background-color: #5C52E6; color: #ffffff;">
                         <span>دخول المدرس</span>
                         <i class="fas fa-arrow-left text-[10px] rtl:rotate-0 ltr:rotate-180"></i>
                     </a>
@@ -74,7 +74,7 @@
                 <div class="p-6 sm:p-7 flex flex-col justify-between flex-grow bg-white border-t border-slate-100">
                     <div class="mb-6">
                         <!-- Icon Circle -->
-                        <div class="w-10 h-10 rounded-2xl bg-emerald-50 text-[#008A70] flex items-center justify-center text-lg font-bold mb-3">
+                        <div class="w-10 h-10 rounded-2xl bg-emerald-50 flex items-center justify-center text-lg font-bold mb-3" style="color: #2E8B83;">
                             <i class="fas fa-book-open"></i>
                         </div>
                         
@@ -88,26 +88,26 @@
                         <!-- Features Checklist -->
                         <ul class="space-y-2 text-xs font-semibold text-slate-700 list-none p-0 m-0">
                             <li class="flex items-center gap-2">
-                                <i class="fas fa-check text-[#008A70] text-[10px]"></i>
+                                <i class="fas fa-check text-[10px]" style="color: #2E8B83;"></i>
                                 <span>عرض الجدول الدراسي</span>
                             </li>
                             <li class="flex items-center gap-2">
-                                <i class="fas fa-check text-[#008A70] text-[10px]"></i>
+                                <i class="fas fa-check text-[10px]" style="color: #2E8B83;"></i>
                                 <span>متابعة الواجبات والاختبارات</span>
                             </li>
                             <li class="flex items-center gap-2">
-                                <i class="fas fa-check text-[#008A70] text-[10px]"></i>
+                                <i class="fas fa-check text-[10px]" style="color: #2E8B83;"></i>
                                 <span>الاطلاع على الدرجات والتقييمات</span>
                             </li>
                             <li class="flex items-center gap-2">
-                                <i class="fas fa-check text-[#008A70] text-[10px]"></i>
+                                <i class="fas fa-check text-[10px]" style="color: #2E8B83;"></i>
                                 <span>التواصل مع المعلمين</span>
                             </li>
                         </ul>
                     </div>
 
                     <!-- Action Button -->
-                    <a href="{{ route('login.portal') }}" class="w-full py-3 rounded-xl bg-[#008A70] hover:bg-[#00745e] text-white font-extrabold text-xs text-center text-decoration-none transition-all flex items-center justify-center gap-2 shadow-xs">
+                    <a href="{{ route('login.portal') }}" class="w-full py-3 rounded-xl text-white font-extrabold text-xs text-center text-decoration-none transition-all flex items-center justify-center gap-2 shadow-xs" style="background-color: #2E8B83; color: #ffffff;">
                         <span>دخول الطالب</span>
                         <i class="fas fa-arrow-left text-[10px] rtl:rotate-0 ltr:rotate-180"></i>
                     </a>
@@ -158,7 +158,7 @@
                     </div>
 
                     <!-- Action Button -->
-                    <a href="{{ route('login.portal') }}" class="w-full py-3 rounded-xl bg-[#E05D26] hover:bg-[#c94e1c] text-white font-extrabold text-xs text-center text-decoration-none transition-all flex items-center justify-center gap-2 shadow-xs">
+                    <a href="{{ route('login.portal') }}" class="w-full py-3 rounded-xl text-white font-extrabold text-xs text-center text-decoration-none transition-all flex items-center justify-center gap-2 shadow-xs" style="background-color: #E05D26; color: #ffffff;">
                         <span>دخول ولي الأمر</span>
                         <i class="fas fa-arrow-left text-[10px] rtl:rotate-0 ltr:rotate-180"></i>
                     </a>

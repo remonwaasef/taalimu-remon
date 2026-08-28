@@ -1,4 +1,4 @@
-{{-- Minimal Clean Light Footer Matching Image 2 --}}
+{{-- Minimal Clean Light Footer Matching Reference Image --}}
 <footer class="bg-white text-slate-600 pt-16 pb-8 border-t border-slate-100">
     <div class="container mx-auto px-6 lg:px-12 max-w-7xl">
 
@@ -13,8 +13,8 @@
                     احصل على آخر التحديثات والنصائح الخاصة بإدارة المؤسسات التعليمية
                 </p>
                 <form class="space-y-2" onsubmit="event.preventDefault(); alert('شكرًا لاشتراكك في نشرة Taalimu!');">
-                    <input type="email" placeholder="أدخل بريدك الإلكتروني" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#008A70]/30 bg-[#FAFBFB] text-center">
-                    <button type="submit" class="w-full py-2.5 rounded-xl bg-[#008A70] hover:bg-[#00745e] text-white font-extrabold text-xs transition-colors shadow-2xs">
+                    <input type="email" placeholder="أدخل بريدك الإلكتروني" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2E8B83]/30 bg-[#FAFBFB] text-center">
+                    <button type="submit" class="w-full py-2.5 rounded-xl text-white font-extrabold text-xs transition-colors shadow-2xs" style="background-color: #2E8B83; color: #ffffff;">
                         اشتراك الآن
                     </button>
                 </form>
@@ -29,9 +29,9 @@
                         الشركة
                     </h4>
                     <ul class="space-y-2.5 text-xs font-semibold list-none p-0 m-0">
-                        <li><a href="#portals" class="text-slate-600 hover:text-[#008A70] transition-colors text-decoration-none">من نحن</a></li>
-                        <li><a href="#" class="text-slate-600 hover:text-[#008A70] transition-colors text-decoration-none">وظائف</a></li>
-                        <li><a href="#" class="text-slate-600 hover:text-[#008A70] transition-colors text-decoration-none">تواصل معنا</a></li>
+                        <li><a href="#portals" class="text-slate-600 hover:text-[#2E8B83] transition-colors text-decoration-none">من نحن</a></li>
+                        <li><a href="#" class="text-slate-600 hover:text-[#2E8B83] transition-colors text-decoration-none">وظائف</a></li>
+                        <li><a href="#" class="text-slate-600 hover:text-[#2E8B83] transition-colors text-decoration-none">تواصل معنا</a></li>
                     </ul>
                 </div>
 
@@ -41,9 +41,9 @@
                         الموارد
                     </h4>
                     <ul class="space-y-2.5 text-xs font-semibold list-none p-0 m-0">
-                        <li><a href="#" class="text-slate-600 hover:text-[#008A70] transition-colors text-decoration-none">المدونة</a></li>
-                        <li><a href="#" class="text-slate-600 hover:text-[#008A70] transition-colors text-decoration-none">الأدلة</a></li>
-                        <li><a href="#" class="text-slate-600 hover:text-[#008A70] transition-colors text-decoration-none">الأسئلة الشائعة</a></li>
+                        <li><a href="#" class="text-slate-600 hover:text-[#2E8B83] transition-colors text-decoration-none">المدونة</a></li>
+                        <li><a href="#" class="text-slate-600 hover:text-[#2E8B83] transition-colors text-decoration-none">الأدلة</a></li>
+                        <li><a href="#" class="text-slate-600 hover:text-[#2E8B83] transition-colors text-decoration-none">الأسئلة الشائعة</a></li>
                     </ul>
                 </div>
 
@@ -53,9 +53,9 @@
                         المنتج
                     </h4>
                     <ul class="space-y-2.5 text-xs font-semibold list-none p-0 m-0">
-                        <li><a href="#capabilities" class="text-slate-600 hover:text-[#008A70] transition-colors text-decoration-none">المميزات</a></li>
-                        <li><a href="#capabilities" class="text-slate-600 hover:text-[#008A70] transition-colors text-decoration-none">الأسعار</a></li>
-                        <li><a href="#" class="text-slate-600 hover:text-[#008A70] transition-colors text-decoration-none">التحديثات</a></li>
+                        <li><a href="#capabilities" class="text-slate-600 hover:text-[#2E8B83] transition-colors text-decoration-none">المميزات</a></li>
+                        <li><a href="#capabilities" class="text-slate-600 hover:text-[#2E8B83] transition-colors text-decoration-none">الأسعار</a></li>
+                        <li><a href="#" class="text-slate-600 hover:text-[#2E8B83] transition-colors text-decoration-none">التحديثات</a></li>
                     </ul>
                 </div>
 
@@ -64,21 +64,19 @@
             <!-- Left Column in RTL (Span 3): Brand & Description -->
             <div class="lg:col-span-3 order-3 text-center lg:text-start">
                 <a href="{{ route('home') }}" class="inline-flex items-center gap-2 mb-3 text-decoration-none">
-                    <div class="w-7 h-7 rounded-lg bg-[#008A70] text-white flex items-center justify-center font-black text-sm">
-                        <i class="fas fa-graduation-cap text-xs"></i>
-                    </div>
-                    <span class="text-lg font-black text-slate-900 tracking-tight font-sans">Taalimu</span>
+                    <img src="{{ asset('images/brand/logo-icon.png') }}" alt="Taalimu" class="w-7 h-7 object-contain">
+                    <span class="text-xl font-black text-slate-900 tracking-tight font-sans">Taalimu</span>
                 </a>
                 <p class="text-xs text-slate-500 font-medium leading-relaxed mb-4">
-                    منصة متكاملة لإدارة المؤسسات التعليمية نجمع كل ما تحتاجه في منصة ذكية وآمنة
+                    منصة متكاملة لإدارة المؤسسات التعليمية تجمع كل ما تحتاجه في منصة ذكية وآمنة
                 </p>
                 <!-- Social Icons -->
                 <div class="flex items-center justify-center lg:justify-start gap-2.5 text-slate-400 text-xs">
-                    <a href="#" class="w-7 h-7 rounded-lg bg-slate-50 hover:bg-emerald-50 hover:text-[#008A70] flex items-center justify-center transition-colors text-decoration-none"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="w-7 h-7 rounded-lg bg-slate-50 hover:bg-emerald-50 hover:text-[#008A70] flex items-center justify-center transition-colors text-decoration-none"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="w-7 h-7 rounded-lg bg-slate-50 hover:bg-emerald-50 hover:text-[#008A70] flex items-center justify-center transition-colors text-decoration-none"><i class="fab fa-youtube"></i></a>
-                    <a href="#" class="w-7 h-7 rounded-lg bg-slate-50 hover:bg-emerald-50 hover:text-[#008A70] flex items-center justify-center transition-colors text-decoration-none"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#" class="w-7 h-7 rounded-lg bg-slate-50 hover:bg-emerald-50 hover:text-[#008A70] flex items-center justify-center transition-colors text-decoration-none"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="w-7 h-7 rounded-lg bg-slate-50 hover:bg-emerald-50 hover:text-[#2E8B83] flex items-center justify-center transition-colors text-decoration-none"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="w-7 h-7 rounded-lg bg-slate-50 hover:bg-emerald-50 hover:text-[#2E8B83] flex items-center justify-center transition-colors text-decoration-none"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="w-7 h-7 rounded-lg bg-slate-50 hover:bg-emerald-50 hover:text-[#2E8B83] flex items-center justify-center transition-colors text-decoration-none"><i class="fab fa-youtube"></i></a>
+                    <a href="#" class="w-7 h-7 rounded-lg bg-slate-50 hover:bg-emerald-50 hover:text-[#2E8B83] flex items-center justify-center transition-colors text-decoration-none"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" class="w-7 h-7 rounded-lg bg-slate-50 hover:bg-emerald-50 hover:text-[#2E8B83] flex items-center justify-center transition-colors text-decoration-none"><i class="fab fa-instagram"></i></a>
                 </div>
             </div>
 

@@ -1,4 +1,4 @@
-{{-- Section 4: Dual Split Feature Cards (QR Attendance & WhatsApp Notifications) Matching Image 2 --}}
+{{-- Section 4: Dual Split Feature Cards (QR Attendance & WhatsApp Notifications) Matching Reference Image --}}
 <section id="features-split" class="py-20 lg:py-28 bg-[#FAFBFB] relative border-y border-slate-100">
     <div class="container mx-auto px-6 lg:px-12 max-w-7xl">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
@@ -7,7 +7,7 @@
             <div class="bg-white rounded-3xl p-8 sm:p-10 border border-slate-200/80 shadow-sm flex flex-col justify-between" data-animate="fade-in">
                 <div>
                     <!-- Eyebrow -->
-                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-[#008A70] text-xs font-bold mb-4">
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-xs font-bold mb-4" style="color: #2E8B83;">
                         <span>حضور ذكي وسريع</span>
                     </div>
 
@@ -22,31 +22,31 @@
                     <!-- 4 Mini Feature Pills in 2x2 Grid -->
                     <div class="grid grid-cols-2 gap-2.5 mb-8">
                         <div class="flex items-center gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs font-bold text-slate-700">
-                            <i class="fas fa-bullseye text-[#008A70]"></i>
+                            <i class="fas fa-bullseye" style="color: #2E8B83;"></i>
                             <span>دقة عالية</span>
                         </div>
                         <div class="flex items-center gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs font-bold text-slate-700">
-                            <i class="fas fa-bolt text-[#008A70]"></i>
+                            <i class="fas fa-bolt" style="color: #2E8B83;"></i>
                             <span>سريع ومريح</span>
                         </div>
                         <div class="flex items-center gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs font-bold text-slate-700">
-                            <i class="fas fa-chart-bar text-[#008A70]"></i>
+                            <i class="fas fa-chart-bar" style="color: #2E8B83;"></i>
                             <span>تقارير فورية</span>
                         </div>
                         <div class="flex items-center gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs font-bold text-slate-700">
-                            <i class="fas fa-shield-alt text-[#008A70]"></i>
+                            <i class="fas fa-shield-alt" style="color: #2E8B83;"></i>
                             <span>أمن وموثوق</span>
                         </div>
                     </div>
 
                     <!-- Button -->
-                    <button type="button" @click="$dispatch('open-demo-modal')" class="px-5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-800 font-bold text-xs hover:border-[#008A70] hover:text-[#008A70] transition-colors inline-flex items-center gap-2 shadow-2xs mb-8">
+                    <button type="button" @click="$dispatch('open-demo-modal')" class="px-5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-800 font-bold text-xs hover:border-[#2E8B83] hover:text-[#2E8B83] transition-colors inline-flex items-center gap-2 shadow-2xs mb-8">
                         <span>تعرف على نظام الحضور</span>
                         <i class="fas fa-arrow-left text-[10px] rtl:rotate-0 ltr:rotate-180"></i>
                     </button>
                 </div>
 
-                <!-- 3D Smartphone Device Mockup with QR Scanner (Matching Image 2) -->
+                <!-- 3D Smartphone Device Mockup with QR Scanner (Matching Reference Image) -->
                 <div class="relative max-w-xs mx-auto w-full pt-4">
                     <div class="bg-slate-900 rounded-[2.5rem] p-3 shadow-[0_20px_45px_rgba(15,23,42,0.22)] border-2 border-slate-800">
                         <div class="bg-slate-950 rounded-[2rem] p-4 text-center text-white border border-slate-800">
@@ -84,7 +84,7 @@
 
                 <div>
                     <!-- Eyebrow -->
-                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-[#008A70] text-xs font-bold mb-4">
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-xs font-bold mb-4" style="color: #2E8B83;">
                         <span>تواصل فوري وفعال</span>
                     </div>
 
@@ -99,31 +99,31 @@
                     <!-- 4 Mini Feature Pills in 2x2 Grid -->
                     <div class="grid grid-cols-2 gap-2.5 mb-8 max-w-sm">
                         <div class="flex items-center gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs font-bold text-slate-700">
-                            <i class="fas fa-comments text-[#008A70]"></i>
+                            <i class="fas fa-comments" style="color: #2E8B83;"></i>
                             <span>متكاملة</span>
                         </div>
                         <div class="flex items-center gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs font-bold text-slate-700">
-                            <i class="fas fa-lock text-[#008A70]"></i>
+                            <i class="fas fa-lock" style="color: #2E8B83;"></i>
                             <span>آمنة</span>
                         </div>
                         <div class="flex items-center gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs font-bold text-slate-700">
-                            <i class="fas fa-check-double text-[#008A70]"></i>
+                            <i class="fas fa-check-double" style="color: #2E8B83;"></i>
                             <span>موثوقة</span>
                         </div>
                         <div class="flex items-center gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs font-bold text-slate-700">
-                            <i class="fas fa-bolt text-[#008A70]"></i>
+                            <i class="fas fa-bolt" style="color: #2E8B83;"></i>
                             <span>فورية</span>
                         </div>
                     </div>
 
                     <!-- Button -->
-                    <button type="button" @click="$dispatch('open-demo-modal')" class="px-5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-800 font-bold text-xs hover:border-[#008A70] hover:text-[#008A70] transition-colors inline-flex items-center gap-2 shadow-2xs mb-8">
+                    <button type="button" @click="$dispatch('open-demo-modal')" class="px-5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-800 font-bold text-xs hover:border-[#2E8B83] hover:text-[#2E8B83] transition-colors inline-flex items-center gap-2 shadow-2xs mb-8">
                         <span>تعرف على الإشعارات</span>
                         <i class="fas fa-arrow-left text-[10px] rtl:rotate-0 ltr:rotate-180"></i>
                     </button>
                 </div>
 
-                <!-- 3D Smartphone Device Mockup with WhatsApp Messages (Matching Image 2) -->
+                <!-- 3D Smartphone Device Mockup with WhatsApp Messages (Matching Reference Image) -->
                 <div class="relative max-w-xs mx-auto w-full pt-4">
                     <div class="bg-slate-900 rounded-[2.5rem] p-3 shadow-[0_20px_45px_rgba(15,23,42,0.22)] border-2 border-slate-800">
                         <div class="bg-[#ECE5DD] rounded-[2rem] p-3 min-h-[260px] flex flex-col justify-start border border-slate-300">

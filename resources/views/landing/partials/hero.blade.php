@@ -8,14 +8,14 @@
                 
                 <!-- Eyebrow Badge with Green Dot -->
                 <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50/80 border border-emerald-200/70 text-slate-700 text-xs font-bold mb-6 shadow-2xs">
-                    <span class="w-2 h-2 rounded-full bg-[#008A70]"></span>
+                    <span class="w-2 h-2 rounded-full" style="background-color: #2E8B83;"></span>
                     <span>منصة متكاملة لإدارة المؤسسات التعليمية</span>
                 </div>
 
                 <!-- Main Headline -->
                 <h1 class="text-3xl sm:text-4xl lg:text-5xl xl:text-[54px] font-black text-slate-900 leading-[1.3] tracking-tight mb-6">
                     كل ما تحتاجه لإدارة<br>
-                    <span class="text-[#008A70]">مؤسستك التعليمية</span><br>
+                    <span style="color: #2E8B83;">مؤسستك التعليمية</span><br>
                     في منصة واحدة
                 </h1>
 
@@ -26,7 +26,7 @@
 
                 <!-- Two Action Buttons -->
                 <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-10">
-                    <a href="{{ route('register') }}" data-track="hero_primary_cta" class="w-full sm:w-auto px-8 py-3.5 rounded-xl text-white font-extrabold text-sm sm:text-base text-decoration-none shadow-sm hover:shadow-md transition-all transform hover:-translate-y-0.5 bg-[#008A70] hover:bg-[#00745e] text-center flex items-center justify-center gap-2">
+                    <a href="{{ route('register') }}" data-track="hero_primary_cta" class="w-full sm:w-auto px-8 py-3.5 rounded-xl text-white font-extrabold text-sm sm:text-base text-decoration-none shadow-sm hover:shadow-md transition-all transform hover:-translate-y-0.5 text-center flex items-center justify-center gap-2" style="background-color: #2E8B83; color: #ffffff;">
                         <span>ابدأ مجاناً الآن</span>
                         <i class="fas fa-arrow-left text-xs rtl:rotate-0 ltr:rotate-180"></i>
                     </a>
@@ -36,7 +36,7 @@
                         @click="$dispatch('open-demo-modal')"
                         class="w-full sm:w-auto px-6 py-3.5 rounded-xl border border-slate-200 bg-white text-slate-800 font-bold text-sm sm:text-base hover:bg-slate-50 transition-all text-center flex items-center justify-center gap-2 shadow-2xs"
                     >
-                        <i class="far fa-calendar-alt text-[#008A70]"></i>
+                        <i class="far fa-calendar-alt" style="color: #2E8B83;"></i>
                         <span>احجز عرض توضيحي</span>
                     </button>
                 </div>
@@ -44,15 +44,15 @@
                 <!-- Three Trust Points Bar -->
                 <div class="flex flex-wrap items-center justify-center lg:justify-start gap-y-2 gap-x-6 text-xs font-bold text-slate-500">
                     <div class="flex items-center gap-2">
-                        <i class="fas fa-credit-card text-[#008A70]"></i>
+                        <i class="fas fa-credit-card" style="color: #2E8B83;"></i>
                         <span>بدون بطاقة ائتمان</span>
                     </div>
                     <div class="flex items-center gap-2">
-                        <i class="fas fa-headset text-[#008A70]"></i>
+                        <i class="fas fa-headset" style="color: #2E8B83;"></i>
                         <span>دعم فني 24/7</span>
                     </div>
                     <div class="flex items-center gap-2">
-                        <i class="fas fa-bolt text-[#008A70]"></i>
+                        <i class="fas fa-bolt" style="color: #2E8B83;"></i>
                         <span>إعداد سريع خلال دقائق</span>
                     </div>
                 </div>
@@ -120,9 +120,9 @@
                                         <span class="text-[8px] text-slate-400 font-bold">هذا الأسبوع</span>
                                     </div>
                                     <!-- Wave Graph Simulation -->
-                                    <svg viewBox="0 0 200 45" class="w-full h-10 stroke-[#008A70] fill-emerald-50/50">
-                                        <path d="M0,35 Q25,10 50,22 T100,15 T150,25 T200,8 L200,45 L0,45 Z" />
-                                        <path d="M0,35 Q25,10 50,22 T100,15 T150,25 T200,8" fill="none" stroke-width="2" />
+                                    <svg viewBox="0 0 200 45" class="w-full h-10 fill-emerald-50/50" style="stroke: #2E8B83;">
+                                         <path d="M0,35 Q25,10 50,22 T100,15 T150,25 T200,8 L200,45 L0,45 Z" />
+                                         <path d="M0,35 Q25,10 50,22 T100,15 T150,25 T200,8" fill="none" stroke-width="2" />
                                     </svg>
                                     <div class="flex justify-between text-[7px] text-slate-400 pt-1 font-mono">
                                         <span>يناير</span><span>فبراير</span><span>مارس</span><span>أبريل</span><span>مايو</span><span>يونيو</span>
@@ -135,12 +135,12 @@
                                     <div class="relative w-12 h-12 mx-auto my-1">
                                         <svg viewBox="0 0 36 36" class="w-full h-full transform -rotate-90">
                                             <circle cx="18" cy="18" r="14" fill="transparent" stroke="#E2E8F0" stroke-width="4"></circle>
-                                            <circle cx="18" cy="18" r="14" fill="transparent" stroke="#008A70" stroke-width="4" stroke-dasharray="60 100"></circle>
+                                            <circle cx="18" cy="18" r="14" fill="transparent" stroke="#2E8B83" stroke-width="4" stroke-dasharray="60 100"></circle>
                                             <circle cx="18" cy="18" r="14" fill="transparent" stroke="#38BDF8" stroke-width="4" stroke-dasharray="25 100" stroke-dashoffset="-60"></circle>
                                         </svg>
                                     </div>
                                     <div class="flex justify-around text-[7px] text-slate-500 font-bold">
-                                        <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-[#008A70]"></span>ابتدائي</span>
+                                        <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full" style="background-color: #2E8B83;"></span>ابتدائي</span>
                                         <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span>متوسط</span>
                                     </div>
                                 </div>
@@ -196,14 +196,14 @@
                                 </div>
                                 <div class="flex items-center justify-between">
                                     <span class="text-base font-black text-slate-900">90%</span>
-                                    <div class="w-5 h-5 rounded-full border-2 border-[#008A70] border-t-transparent animate-spin"></div>
+                                    <div class="w-5 h-5 rounded-full border-2 border-t-transparent animate-spin" style="border-color: #2E8B83; border-top-color: transparent;"></div>
                                 </div>
                             </div>
 
                             <!-- 4 Mini Quick Action Buttons -->
                             <div class="grid grid-cols-2 gap-1.5 mb-2">
                                 <div class="bg-emerald-50/70 p-1.5 rounded-lg text-center border border-emerald-100">
-                                    <i class="fas fa-qrcode text-[#008A70] text-[10px] mb-0.5"></i>
+                                    <i class="fas fa-qrcode text-[10px] mb-0.5" style="color: #2E8B83;"></i>
                                     <span class="text-[7px] font-bold text-slate-800 block">تسجيل حضور</span>
                                 </div>
                                 <div class="bg-slate-50 p-1.5 rounded-lg text-center border border-slate-100">
@@ -222,7 +222,7 @@
 
                             <!-- Bottom Mini Bar -->
                             <div class="flex justify-around pt-1 border-t border-slate-100 text-[8px] text-slate-400 font-bold">
-                                <span class="text-[#008A70]">الرئيسية</span>
+                                <span style="color: #2E8B83;">الرئيسية</span>
                                 <span>الطلاب</span>
                                 <span>الحصص</span>
                             </div>
