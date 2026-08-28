@@ -13,6 +13,9 @@
     {{-- 4. Key Capabilities (6 All-in-one Tools) --}}
     @include('landing.partials.feature-bento')
 
-    {{-- 5. Final Call to Action --}}
+    {{-- 5. Pricing Section (Packages & Billing Cycles) --}}
+    @include('landing.partials.pricing')
+
+    {{-- 6. Final Call to Action --}}
     @include('landing.partials.cta')
 @endsection
