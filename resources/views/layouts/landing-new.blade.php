@@ -34,23 +34,24 @@
     <link rel="preload" as="image" href="{{ asset('images/hero-dashboard.webp') }}" type="image/webp">
     
     <!-- FAQ Schema Structured Data for Rich Snippets -->
+    @php
+        $faqSchemaData = [
+            '@context' => 'https://schema.org',
+            '@type' => 'FAQPage',
+            'mainEntity' => array_map(function ($item) {
+                return [
+                    '@type' => 'Question',
+                    'name' => $item['q'] ?? '',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => $item['a'] ?? '',
+                    ],
+                ];
+            }, __('landing.faq.items') ?: [])
+        ];
+    @endphp
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        @foreach(__('landing.faq.items') as $index => $faqItem)
-        {
-          "@type": "Question",
-          "name": "{{ addslashes($faqItem['q']) }}",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "{{ addslashes($faqItem['a']) }}"
-          }
-        }{{ $loop->last ? '' : ',' }}
-        @endforeach
-      ]
-    }
+    {!! json_encode($faqSchemaData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}
     </script>
     
     <!-- Resource Hints -->
