@@ -1,5 +1,5 @@
-{{-- Pricing Section — Compact Layout --}}
-<section id="pricing" class="section-alt" style="padding: 4rem 0; background: #f8fafc; border-bottom: 1px solid #e2e8f0;"
+{{-- Pricing Section — Premium Responsive Layout --}}
+<section id="pricing" class="py-16 lg:py-24 bg-[#f8fafc] border-t border-b border-slate-200/80"
          x-data="{
             billingCycle: 'monthly',
             selectedCurrency: '{{ session('suggested_currency', 'EGP') }}',
@@ -59,29 +59,28 @@
             }
          }">
 
-    <div class="container mx-auto px-4 lg:px-12" style="max-width: 1140px; margin: 0 auto;">
-        {{-- Header --}}
-        <div class="text-center mb-10" data-animate>
-            <div class="section-badge" style="margin-bottom: 0.875rem; display: inline-flex; background: #E6F4F3; border: 1px solid #B2DDD9; padding: 0.3rem 0.85rem; border-radius: 9999px;">
-                <span style="color: #25746D !important; font-weight: 700; font-size: 0.775rem;">{{ __('landing.pricing.badge') }}</span>
+    <div class="container mx-auto px-5 lg:px-12 max-w-7xl">
+        {{-- Section Header --}}
+        <div class="text-center mb-12" data-animate="fade-in">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#e8f5f3] border border-[#c5e8e4] text-xs font-bold text-[#2E8B83] mb-4">
+                <i class="fas fa-[#2E8B83] fa-tags text-[10px]"></i>
+                <span>{{ __('landing.pricing.badge') }}</span>
             </div>
-            <h2 style="color: #0f172a !important; font-size: clamp(1.5rem, 2.8vw, 2.15rem); font-weight: 900; margin-bottom: 0.75rem; letter-spacing: -0.02em; line-height: 1.25;">
+            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 leading-tight mb-3">
                 {{ __('landing.pricing.title') }}
             </h2>
-            <p style="color: #475569 !important; font-size: 0.975rem; max-width: 38rem; margin: 0 auto; font-weight: 500; line-height: 1.6;">
+            <p class="text-sm sm:text-base text-slate-600 font-medium max-w-xl mx-auto leading-relaxed">
                 {{ __('landing.pricing.subtitle') }}
             </p>
 
             {{-- Billing Cycle Toggles --}}
-            <div style="margin-top: 1.5rem; display: flex; flex-direction: column; align-items: center; gap: 0.75rem;">
-                <div class="pricing-toggle-container" style="background: #ffffff; border: 1px solid #cbd5e1; padding: 0.25rem; border-radius: 0.75rem; display: inline-flex; gap: 0.25rem;">
+            <div class="mt-6 flex flex-col items-center justify-center gap-3">
+                <div class="bg-white p-1 rounded-full border border-slate-200 shadow-2xs inline-flex items-center gap-1">
                     @foreach(['monthly' => 'landing.pricing.monthly', 'term' => 'landing.pricing.term', 'yearly' => 'landing.pricing.yearly'] as $cycle => $label)
                     <button
                         @click="billingCycle = '{{$cycle}}'"
-                        class="pricing-toggle-btn"
-                        :class="billingCycle === '{{$cycle}}' ? 'active' : ''"
-                        :style="billingCycle === '{{$cycle}}' ? 'background:#0f172a; color:#ffffff; font-weight:800;' : 'color:#475569; font-weight:600;'"
-                        style="position: relative; padding: 0.45rem 1rem; border-radius: 0.5rem; font-size: 0.8rem; border: none; transition: all 0.2s;"
+                        class="px-4 py-2 rounded-full text-xs font-extrabold transition-all"
+                        :class="billingCycle === '{{$cycle}}' ? 'bg-[#2E8B83] text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'"
                     >
                         {{ __($label) }}
                     </button>
@@ -90,37 +89,26 @@
             </div>
         </div>
 
-        {{-- Pricing Cards --}}
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-5xl mx-auto items-stretch" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; align-items: stretch;" data-stagger>
+        {{-- Pricing Cards Grid --}}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch" data-animate="fade-in">
             @foreach($packages as $index => $package)
                 @php
                     $isFeatured = $package->is_featured;
                     $regionalPrices = $package->regional_prices ?? [];
                 @endphp
 
-                <div style="
-                    background: #ffffff;
-                    border-radius: 1rem;
-                    padding: 1.5rem 1.35rem;
-                    display: flex;
-                    flex-direction: column;
-                    transition: all 0.25s;
-                    position: relative;
-                    {{ $isFeatured
-                        ? 'border: 2px solid #2E8B83; box-shadow: 0 15px 35px -8px rgba(46,139,131,0.15); transform: translateY(-4px); z-index: 10;'
-                        : 'border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.03);'
-                    }}
-                ">
+                <div class="bg-white rounded-3xl p-6 sm:p-8 flex flex-col justify-between relative transition-all duration-300 {{ $isFeatured ? 'border-2 border-[#2E8B83] shadow-xl hover:shadow-2xl' : 'border border-slate-200/80 shadow-2xs hover:shadow-lg' }}">
+                    
                     @if($isFeatured)
-                    <div style="position: absolute; top: -0.75rem; left: 50%; transform: translateX(-50%); background: #2E8B83; color: #ffffff; padding: 0.25rem 1rem; border-radius: 9999px; font-size: 0.675rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 0.35rem; white-space: nowrap;">
-                        <i class="fas fa-crown" style="color: #fde68a; font-size: 0.65rem;"></i>
+                    <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#2E8B83] text-white px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-wider flex items-center gap-1.5 shadow-xs whitespace-nowrap">
+                        <i class="fas fa-crown text-amber-300 text-xs"></i>
                         <span>{{ __('landing.pricing.featured') }}</span>
                     </div>
                     @endif
 
                     {{-- Package Header --}}
-                    <div style="margin-bottom: 1.25rem;">
-                        <h3 style="color: #0f172a !important; font-size: 1.25rem; font-weight: 900; margin-bottom: 0.35rem;">
+                    <div>
+                        <h3 class="text-xl font-black text-slate-900 mb-2">
                             @php
                                 $packageName = match(app()->getLocale()) {
                                     'ar' => $package->name,
@@ -135,101 +123,86 @@
                             @endphp
                             {{ $packageName ?: __('landing.pricing.plans.' . $package->slug . '.name') }}
                         </h3>
-                        <p style="color: #64748b !important; font-size: 0.825rem; font-weight: 500; line-height: 1.45; margin-bottom: 1rem; min-height: 2.25rem;">
+                        <p class="text-xs sm:text-sm text-slate-500 font-medium leading-relaxed mb-5 min-h-[40px]">
                             {{ $packageDesc ?: __('landing.pricing.plans.' . $package->slug . '.description') }}
                         </p>
 
                         <div x-data="{ localPrice: {} }"
                              x-effect="localPrice = getRegionalPrice({{ json_encode($package->regional_prices) }}, {{ $package->price }}, {{ $package->term_price }}, {{ $package->yearly_price }})"
+                             class="mb-6"
                         >
-                            {{-- 30-Day Free Trial Badge --}}
-                            <div style="margin-bottom: 0.75rem;">
-                                <span style="display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.25rem 0.65rem; border-radius: 9999px; background: #E6F4F3; border: 1px solid #B2DDD9; font-size: 0.7rem; font-weight: 800; color: #25746D;">
-                                    <i class="fas fa-gift" style="color: #2E8B83;"></i>
+                            {{-- Free Trial Badge --}}
+                            <div class="mb-3">
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#e8f5f3] border border-[#c5e8e4] text-xs font-extrabold text-[#2E8B83]">
+                                    <i class="fas fa-gift text-xs"></i>
                                     <span>{{ __('landing.pricing.trial_days', ['days' => $package->trial_days ?: 30]) }}</span>
                                 </span>
                             </div>
 
-                            <div style="display: flex; align-items: baseline; gap: 0.35rem;">
+                            <div class="flex items-baseline gap-1.5">
                                 @if(app()->getLocale() == 'ar')
-                                    <span style="color: #2E8B83; font-size: 0.95rem; font-weight: 800;" x-text="localPrice.currency"></span>
-                                    <span style="color: #0f172a; font-size: clamp(1.85rem, 3.5vw, 2.25rem); font-weight: 900; letter-spacing: -0.04em;"
+                                    <span class="text-lg font-black text-[#2E8B83]" x-text="localPrice.currency"></span>
+                                    <span class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight"
                                           x-text="billingCycle === 'monthly' ? localPrice.amount : (billingCycle === 'term' ? localPrice.term_price : localPrice.yearly_price)">
                                     </span>
                                 @else
-                                    <span style="color: #0f172a; font-size: clamp(1.85rem, 3.5vw, 2.25rem); font-weight: 900; letter-spacing: -0.04em;"
+                                    <span class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight"
                                           x-text="billingCycle === 'monthly' ? localPrice.amount : (billingCycle === 'term' ? localPrice.term_price : localPrice.yearly_price)">
                                     </span>
-                                    <span style="color: #2E8B83; font-size: 0.95rem; font-weight: 800;" x-text="localPrice.currency"></span>
+                                    <span class="text-lg font-black text-[#2E8B83]" x-text="localPrice.currency"></span>
                                 @endif
                             </div>
-                            <div style="margin-top: 0.25rem; font-size: 0.7rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">
+                            <div class="mt-1 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">
                                 <span x-show="billingCycle === 'monthly'">{{ __('landing.pricing.per_month') }}</span>
                                 <span x-show="billingCycle === 'term'">{{ __('landing.pricing.per_term') }}</span>
                                 <span x-show="billingCycle === 'yearly'">{{ __('landing.pricing.per_year') }}</span>
                             </div>
                         </div>
+
+                        {{-- Features Checklist --}}
+                        <ul class="space-y-3 pt-5 border-t border-slate-100 mb-8">
+                            @php
+                                $pFeatures = [];
+                                foreach ($package->features as $feat) {
+                                    $val = $feat->pivot->value;
+                                    if ($feat->type === 'boolean' && ($val === 'false' || !$val)) continue;
+                                    if ($feat->type === 'limit' && $val === '0') continue;
+                                    $transKey = 'features.' . $feat->code;
+                                    $label = __($transKey) !== $transKey ? __($transKey) : (app()->getLocale() === 'en' && $feat->name_en ? $feat->name_en : $feat->name);
+                                    $unlimitedText = __('features.unlimited');
+                                    $pFeatures[] = ($val === '-1') ? ($label . ': ' . $unlimitedText) : (($feat->type === 'boolean') ? $label : ($label . ': ' . $val));
+                                }
+                            @endphp
+                            @foreach(array_slice($pFeatures, 0, 8) as $feature)
+                            <li class="flex items-start gap-2.5 text-xs sm:text-sm font-semibold text-slate-700">
+                                <div class="w-5 h-5 rounded-full bg-[#e8f5f3] text-[#2E8B83] flex items-center justify-center text-[10px] shrink-0 mt-0.5">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <span>{{ $feature }}</span>
+                            </li>
+                            @endforeach
+                        </ul>
                     </div>
 
-                    {{-- Features Checklist --}}
-                    <ul style="list-style: none; padding: 0; margin: 0 0 1.5rem 0; flex-grow: 1; border-top: 1px solid #f1f5f9; padding-top: 1rem;">
-                        @php
-                            $pFeatures = [];
-                            foreach ($package->features as $feat) {
-                                $val = $feat->pivot->value;
-                                if ($feat->type === 'boolean' && ($val === 'false' || !$val)) continue;
-                                if ($feat->type === 'limit' && $val === '0') continue;
-                                $transKey = 'features.' . $feat->code;
-                                $label = __($transKey) !== $transKey ? __($transKey) : (app()->getLocale() === 'en' && $feat->name_en ? $feat->name_en : $feat->name);
-                                $unlimitedText = __('features.unlimited');
-                                $pFeatures[] = ($val === '-1') ? ($label . ': ' . $unlimitedText) : (($feat->type === 'boolean') ? $label : ($label . ': ' . $val));
-                            }
-                        @endphp
-                        @foreach(array_slice($pFeatures, 0, 7) as $feature)
-                        <li style="display: flex; align-items: flex-start; gap: 0.625rem; margin-bottom: 0.65rem;">
-                            <div style="width: 1.1rem; height: 1.1rem; border-radius: 50%; background: #E6F4F3; color: #2E8B83; display: flex; align-items: center; justify-content: center; font-size: 0.55rem; flex-shrink: 0; margin-top: 0.15rem;">
-                                <i class="fas fa-check"></i>
-                            </div>
-                            <span style="color: #334155; font-size: 0.825rem; font-weight: 600; line-height: 1.35;">{{ $feature }}</span>
-                        </li>
-                        @endforeach
-                    </ul>
-
                     {{-- CTA Button --}}
-                    <div style="margin-top: auto;">
+                    <div>
                         <a :href="'{{ route('register') }}?plan={{ $package->slug }}&cycle=' + billingCycle + '&currency=' + selectedCurrency"
                            data-track="landing_pricing_cta_clicked"
-                           style="
-                                width: 100%;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                padding: 0.85rem;
-                                border-radius: 0.75rem;
-                                font-weight: 800;
-                                font-size: 0.85rem;
-                                text-decoration: none;
-                                transition: all 0.2s;
-                                {{ $isFeatured
-                                    ? 'background: linear-gradient(135deg, #2E8B83, #10b981); color: #ffffff !important; box-shadow: 0 6px 18px rgba(46,139,131,0.25);'
-                                    : 'background: #0f172a; color: #ffffff !important;'
-                                }}
-                           "
-                           onmouseover="this.style.transform='translateY(-2px)'"
-                           onmouseout="this.style.transform='translateY(0)'"
+                           class="w-full py-3.5 rounded-full font-extrabold text-sm text-center inline-flex items-center justify-center gap-2 text-decoration-none transition-all shadow-xs hover:shadow-md {{ $isFeatured ? 'bg-[#2E8B83] text-white hover:bg-[#1b635d]' : 'bg-slate-900 text-white hover:bg-slate-800' }}"
                         >
-                            {{ __('landing.pricing.cta_free') }}
+                            <span>{{ __('landing.pricing.cta_free') }}</span>
+                            <i class="fas fa-arrow-left text-xs rtl:rotate-0 ltr:rotate-180"></i>
                         </a>
-                        <p style="text-align: center; font-size: 0.675rem; font-weight: 600; color: #94a3b8; margin-top: 0.65rem;">
-                            <i class="fas fa-shield-alt" style="color: #2E8B83; margin-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}: 0.2rem;"></i>
-                            {{ __('landing.pricing.cta_note') }}
+                        <p class="text-center text-[11px] font-semibold text-slate-400 mt-2.5">
+                            <i class="fas fa-shield-alt text-[#2E8B83] me-1"></i>
+                            <span>{{ __('landing.pricing.cta_note') }}</span>
                         </p>
                     </div>
                 </div>
             @endforeach
         </div>
 
-        <p style="text-align: center; font-size: 0.825rem; font-weight: 600; color: #64748b; margin-top: 2rem;">
+        <p class="text-center text-xs sm:text-sm font-bold text-slate-500 mt-10">
             {{ __('landing.pricing.bottom_note') }}
         </p>
     </div>
