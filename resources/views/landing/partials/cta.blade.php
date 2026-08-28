@@ -1,44 +1,38 @@
-{{-- Section 6: Final CTA Matching Reference Image --}}
-<section class="py-16 lg:py-24 bg-white relative overflow-hidden">
-    <div class="container mx-auto px-6 lg:px-12 max-w-6xl">
-        
-        <!-- Mint Box Container -->
-        <div class="relative rounded-3xl bg-[#EAF5F3] p-10 sm:p-16 border border-[#BDE3DC] overflow-hidden text-center" data-animate="fade-in">
-            
-            <!-- Left Decorative Potted Plant (Matching Reference Image) -->
-            <div class="absolute -bottom-6 start-4 sm:start-8 w-28 sm:w-40 pointer-events-none hidden md:block opacity-90">
-                <img src="{{ asset('images/decor/plant.png') }}" alt="Decoration" class="w-full h-auto object-contain">
-            </div>
+{{-- Final CTA Section — Matching Reference Image --}}
+<section id="final-cta" class="py-16 lg:py-20 bg-white">
+    <div class="container mx-auto px-5 lg:px-12 max-w-7xl" data-animate="fade-in">
+        <div class="rounded-3xl px-6 py-12 sm:px-12 sm:py-16 text-center relative overflow-hidden" style="background: linear-gradient(135deg, #2E8B83 0%, #1a6b64 100%);">
 
-            <!-- Centered Content -->
-            <div class="max-w-2xl mx-auto relative z-10">
-                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 leading-tight mb-4">
+            {{-- Decorative circles --}}
+            <div class="absolute top-0 start-0 w-40 h-40 bg-white/5 rounded-full -translate-x-1/2 -translate-y-1/2"></div>
+            <div class="absolute bottom-0 end-0 w-60 h-60 bg-white/5 rounded-full translate-x-1/3 translate-y-1/3"></div>
+
+            {{-- Content --}}
+            <div class="relative z-10">
+                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black text-white leading-tight mb-4">
                     جاهز للارتقاء بإدارة مؤسستك التعليمية؟
                 </h2>
-
-                <p class="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed mb-8 max-w-xl mx-auto">
+                <p class="text-sm sm:text-base text-white/80 font-medium max-w-xl mx-auto mb-8">
                     ابدأ رحلتك المجانية الآن واكتشف كيف يمكن لـ Taalimu تبسيط عملك وتنظيم مؤسستك.
                 </p>
 
-                <!-- Two Action Buttons -->
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <a href="{{ route('register') }}" data-track="final_cta_primary" class="w-full sm:w-auto px-8 py-3.5 rounded-xl text-white font-extrabold text-sm text-decoration-none shadow-xs hover:shadow-md transition-all transform hover:-translate-y-0.5 text-center flex items-center justify-center gap-2" style="background-color: #2E8B83; color: #ffffff;">
+                {{-- Buttons --}}
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+                    <a href="{{ route('register') }}"
+                       data-track="cta_primary"
+                       class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white font-extrabold text-sm text-decoration-none shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 text-center inline-flex items-center justify-center gap-2"
+                       style="color: #2E8B83;">
                         <span>ابدأ مجاناً الآن</span>
                         <i class="fas fa-arrow-left text-xs rtl:rotate-0 ltr:rotate-180"></i>
                     </a>
-
-                    <button
-                        type="button"
-                        @click="$dispatch('open-demo-modal')"
-                        class="w-full sm:w-auto px-6 py-3.5 rounded-xl border border-slate-300 bg-white text-slate-800 font-bold text-sm hover:bg-slate-50 transition-all text-center flex items-center justify-center gap-2 shadow-2xs"
-                    >
-                        <i class="far fa-calendar-alt" style="color: #2E8B83;"></i>
+                    <button type="button"
+                            @click="$dispatch('open-demo-modal')"
+                            class="w-full sm:w-auto px-6 py-3.5 rounded-xl border-2 border-white/40 text-white font-bold text-sm hover:bg-white/10 transition-all text-center inline-flex items-center justify-center gap-2">
+                        <i class="far fa-calendar-alt text-sm"></i>
                         <span>احجز عرض توضيحي</span>
                     </button>
                 </div>
             </div>
-
         </div>
-
     </div>
 </section>

@@ -1,234 +1,145 @@
-{{-- Section 2: Hero Section Matching Image 2 --}}
-<section id="hero" class="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden bg-gradient-to-b from-[#F7FAF9] via-white to-white">
-    <div class="container mx-auto px-6 lg:px-12 max-w-7xl relative z-10">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
-            
-            <!-- Right Column: Confident Arabic Typography & CTA (RTL) -->
-            <div class="lg:col-span-6 text-center lg:text-start" data-animate="fade-in">
-                
-                <!-- Eyebrow Badge with Green Dot -->
-                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50/80 border border-emerald-200/70 text-slate-700 text-xs font-bold mb-6 shadow-2xs">
-                    <span class="w-2 h-2 rounded-full" style="background-color: #2E8B83;"></span>
+{{-- Hero Section — Matches Reference Image Exactly --}}
+<section id="hero" class="relative pt-28 pb-16 lg:pt-36 lg:pb-24 overflow-hidden bg-gradient-to-b from-[#f0faf8] via-white to-white">
+    <div class="container mx-auto px-5 lg:px-12 max-w-7xl relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-6 items-center">
+
+            {{-- Right Column (RTL): Text Content --}}
+            <div class="text-center lg:text-start order-2 lg:order-1" data-animate="fade-in">
+
+                {{-- Eyebrow Badge --}}
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#e8f5f3] border border-[#c5e8e4] text-xs font-bold text-slate-700 mb-6">
+                    <span class="w-2 h-2 rounded-full bg-[#2E8B83]"></span>
                     <span>منصة متكاملة لإدارة المؤسسات التعليمية</span>
                 </div>
 
-                <!-- Main Headline -->
-                <h1 class="text-3xl sm:text-4xl lg:text-5xl xl:text-[54px] font-black text-slate-900 leading-[1.3] tracking-tight mb-6">
+                {{-- Main Headline --}}
+                <h1 class="text-3xl sm:text-4xl lg:text-[44px] xl:text-[52px] font-black text-slate-900 leading-[1.35] tracking-tight mb-5">
                     كل ما تحتاجه لإدارة<br>
                     <span style="color: #2E8B83;">مؤسستك التعليمية</span><br>
                     في منصة واحدة
                 </h1>
 
-                <!-- Supporting Copy -->
-                <p class="text-base sm:text-lg text-slate-600 font-medium leading-relaxed mb-8 max-w-xl mx-auto lg:mx-0">
-                    إدارة الطلبة والمعلمين والفصول والدرجات والمدفوعات، التقارير والتواصل... بسهولة تامة من أي مكان وفي أي وقت.
+                {{-- Subtitle --}}
+                <p class="text-sm sm:text-base lg:text-lg text-slate-500 font-medium leading-relaxed mb-8 max-w-lg mx-auto lg:mx-0">
+                    إدارة الطلبة والمعلمين والفصول والدرجات والمدفوعات.
+                    التقارير والتواصل... بسهولة تامة من أي مكان وفي أي وقت.
                 </p>
 
-                <!-- Two Action Buttons -->
-                <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-10">
-                    <a href="{{ route('register') }}" data-track="hero_primary_cta" class="w-full sm:w-auto px-8 py-3.5 rounded-xl text-white font-extrabold text-sm sm:text-base text-decoration-none shadow-sm hover:shadow-md transition-all transform hover:-translate-y-0.5 text-center flex items-center justify-center gap-2" style="background-color: #2E8B83; color: #ffffff;">
+                {{-- CTA Buttons --}}
+                <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 mb-8">
+                    <a href="{{ route('register') }}"
+                       data-track="hero_primary_cta"
+                       class="w-full sm:w-auto px-7 py-3.5 rounded-xl text-white font-extrabold text-sm text-decoration-none shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 text-center inline-flex items-center justify-center gap-2"
+                       style="background-color: #2E8B83;">
                         <span>ابدأ مجاناً الآن</span>
                         <i class="fas fa-arrow-left text-xs rtl:rotate-0 ltr:rotate-180"></i>
                     </a>
-
-                    <button
-                        type="button"
-                        @click="$dispatch('open-demo-modal')"
-                        class="w-full sm:w-auto px-6 py-3.5 rounded-xl border border-slate-200 bg-white text-slate-800 font-bold text-sm sm:text-base hover:bg-slate-50 transition-all text-center flex items-center justify-center gap-2 shadow-2xs"
-                    >
+                    <button type="button"
+                            @click="$dispatch('open-demo-modal')"
+                            class="w-full sm:w-auto px-6 py-3.5 rounded-xl border border-slate-200 bg-white text-slate-700 font-bold text-sm hover:bg-slate-50 transition-all text-center inline-flex items-center justify-center gap-2">
                         <i class="far fa-calendar-alt" style="color: #2E8B83;"></i>
                         <span>احجز عرض توضيحي</span>
                     </button>
                 </div>
 
-                <!-- Three Trust Points Bar -->
-                <div class="flex flex-wrap items-center justify-center lg:justify-start gap-y-2 gap-x-6 text-xs font-bold text-slate-500">
-                    <div class="flex items-center gap-2">
+                {{-- Trust Points --}}
+                <div class="flex flex-wrap items-center justify-center lg:justify-start gap-x-5 gap-y-2 text-xs font-semibold text-slate-400">
+                    <div class="flex items-center gap-1.5">
                         <i class="fas fa-credit-card" style="color: #2E8B83;"></i>
                         <span>بدون بطاقة ائتمان</span>
                     </div>
-                    <div class="flex items-center gap-2">
+                    <span class="text-slate-200 hidden sm:inline">|</span>
+                    <div class="flex items-center gap-1.5">
                         <i class="fas fa-headset" style="color: #2E8B83;"></i>
                         <span>دعم فني 24/7</span>
                     </div>
-                    <div class="flex items-center gap-2">
+                    <span class="text-slate-200 hidden sm:inline">|</span>
+                    <div class="flex items-center gap-1.5">
                         <i class="fas fa-bolt" style="color: #2E8B83;"></i>
                         <span>إعداد سريع خلال دقائق</span>
                     </div>
                 </div>
-
             </div>
 
-            <!-- Left Column: Realistic Sleek Laptop with Dashboard & Smartphone (Matching Image 2) -->
-            <div class="lg:col-span-6 relative" data-animate="scale-in">
-                
-                <!-- Realistic Laptop Hardware Container -->
-                <div class="relative mx-auto max-w-lg lg:max-w-none">
-                    
-                    <!-- Screen Frame -->
-                    <div class="bg-slate-900 rounded-t-2xl p-2.5 shadow-[0_25px_60px_-15px_rgba(15,23,42,0.18)] border border-slate-800">
-                        <!-- Top Camera Notch -->
-                        <div class="flex items-center justify-center pb-1.5">
-                            <span class="w-1.5 h-1.5 rounded-full bg-slate-700"></span>
+            {{-- Left Column (RTL): Laptop + Phone Mockup --}}
+            <div class="order-1 lg:order-2 relative" data-animate="scale-in">
+                <div class="relative mx-auto max-w-[540px] lg:max-w-none">
+
+                    {{-- Laptop Frame --}}
+                    <div class="relative">
+                        {{-- Screen bezel --}}
+                        <div class="bg-[#1e293b] rounded-t-2xl pt-3 pb-2 px-3 shadow-[0_20px_60px_-15px_rgba(15,23,42,0.25)]">
+                            {{-- Camera dot --}}
+                            <div class="flex justify-center mb-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-slate-600"></span>
+                            </div>
+                            {{-- Dashboard Screenshot --}}
+                            <div class="bg-white rounded-lg overflow-hidden">
+                                <img src="{{ asset('images/hero-dashboard.webp') }}"
+                                     alt="لوحة تحكم Taalimu"
+                                     class="w-full h-auto block"
+                                     loading="eager"
+                                     width="900" height="520">
+                            </div>
                         </div>
+                        {{-- Keyboard base --}}
+                        <div class="relative mx-auto" style="width: 108%; margin-inline-start: -4%;">
+                            <div class="h-3 bg-gradient-to-b from-[#cbd5e1] to-[#94a3b8] rounded-b-xl"></div>
+                            <div class="h-1 bg-[#94a3b8] rounded-b-lg mx-auto" style="width: 30%;"></div>
+                        </div>
+                    </div>
 
-                        <!-- Real Dashboard Interface Window -->
-                        <div class="bg-white rounded-lg overflow-hidden p-3 border border-slate-100 text-slate-800 text-xs select-none">
-                            
-                            <!-- Dashboard Header -->
-                            <div class="flex items-center justify-between pb-2 mb-2.5 border-b border-slate-100">
-                                <div class="flex items-center gap-2">
-                                    <span class="font-extrabold text-xs text-slate-900">مرحباً بك في Taalimu 👋</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <span class="w-6 h-6 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-[10px] font-bold">
-                                        <i class="fas fa-user"></i>
-                                    </span>
+                    {{-- Phone Mockup (overlapping bottom-right in RTL = bottom-left visually) --}}
+                    <div class="absolute -bottom-6 -start-4 sm:start-auto sm:-end-4 lg:-end-8 w-[120px] sm:w-[140px] lg:w-[160px] z-20">
+                        <div class="bg-white rounded-[20px] shadow-[0_15px_40px_-10px_rgba(15,23,42,0.2)] border border-slate-200 overflow-hidden p-1.5">
+                            {{-- Phone notch --}}
+                            <div class="bg-slate-900 rounded-t-[14px] pt-2 pb-1">
+                                <div class="flex justify-center">
+                                    <span class="w-8 h-1 rounded-full bg-slate-700"></span>
                                 </div>
                             </div>
-
-                            <!-- Top 4 Stats Metric Cards -->
-                            <div class="grid grid-cols-4 gap-2 mb-2.5">
-                                <div class="bg-slate-50 p-2 rounded-lg border border-slate-100 text-center">
-                                    <span class="text-[9px] text-slate-400 block mb-0.5">إجمالي الطلاب</span>
-                                    <span class="text-xs font-black text-slate-900 block leading-none">1,250</span>
-                                    <span class="text-[8px] font-bold text-emerald-600">+12%</span>
-                                </div>
-                                <div class="bg-slate-50 p-2 rounded-lg border border-slate-100 text-center">
-                                    <span class="text-[9px] text-slate-400 block mb-0.5">المعلمون</span>
-                                    <span class="text-xs font-black text-slate-900 block leading-none">320</span>
-                                    <span class="text-[8px] font-bold text-emerald-600">+8%</span>
-                                </div>
-                                <div class="bg-slate-50 p-2 rounded-lg border border-slate-100 text-center">
-                                    <span class="text-[9px] text-slate-400 block mb-0.5">الفصول</span>
-                                    <span class="text-xs font-black text-slate-900 block leading-none">26</span>
-                                    <span class="text-[8px] font-bold text-emerald-600">+5%</span>
-                                </div>
-                                <div class="bg-slate-50 p-2 rounded-lg border border-slate-100 text-center">
-                                    <span class="text-[9px] text-slate-400 block mb-0.5">إجمالي المدفوعات</span>
-                                    <span class="text-xs font-black text-slate-900 block leading-none">8,450</span>
-                                    <span class="text-[8px] font-bold text-emerald-600">+16%</span>
-                                </div>
-                            </div>
-
-                            <!-- Charts Row -->
-                            <div class="grid grid-cols-12 gap-2 mb-2.5">
-                                <!-- Attendance Chart -->
-                                <div class="col-span-8 bg-slate-50 p-2.5 rounded-lg border border-slate-100">
-                                    <div class="flex items-center justify-between mb-1.5">
-                                        <span class="text-[10px] font-bold text-slate-800">نسبة الحضور</span>
-                                        <span class="text-[8px] text-slate-400 font-bold">هذا الأسبوع</span>
-                                    </div>
-                                    <!-- Wave Graph Simulation -->
-                                    <svg viewBox="0 0 200 45" class="w-full h-10 fill-emerald-50/50" style="stroke: #2E8B83;">
-                                         <path d="M0,35 Q25,10 50,22 T100,15 T150,25 T200,8 L200,45 L0,45 Z" />
-                                         <path d="M0,35 Q25,10 50,22 T100,15 T150,25 T200,8" fill="none" stroke-width="2" />
-                                    </svg>
-                                    <div class="flex justify-between text-[7px] text-slate-400 pt-1 font-mono">
-                                        <span>يناير</span><span>فبراير</span><span>مارس</span><span>أبريل</span><span>مايو</span><span>يونيو</span>
-                                    </div>
-                                </div>
-
-                                <!-- Student Distribution Donut Chart -->
-                                <div class="col-span-4 bg-slate-50 p-2.5 rounded-lg border border-slate-100 flex flex-col justify-between">
-                                    <span class="text-[10px] font-bold text-slate-800 text-center">توزيع الطلاب</span>
-                                    <div class="relative w-12 h-12 mx-auto my-1">
-                                        <svg viewBox="0 0 36 36" class="w-full h-full transform -rotate-90">
-                                            <circle cx="18" cy="18" r="14" fill="transparent" stroke="#E2E8F0" stroke-width="4"></circle>
-                                            <circle cx="18" cy="18" r="14" fill="transparent" stroke="#2E8B83" stroke-width="4" stroke-dasharray="60 100"></circle>
-                                            <circle cx="18" cy="18" r="14" fill="transparent" stroke="#38BDF8" stroke-width="4" stroke-dasharray="25 100" stroke-dashoffset="-60"></circle>
+                            {{-- Phone screen content: Mini dashboard --}}
+                            <div class="bg-white rounded-b-[14px] p-2 text-[6px] leading-tight text-slate-600 space-y-1.5">
+                                {{-- Circular progress --}}
+                                <div class="flex items-center justify-center py-2">
+                                    <div class="relative w-14 h-14">
+                                        <svg viewBox="0 0 36 36" class="w-full h-full -rotate-90">
+                                            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                                  fill="none" stroke="#e2e8f0" stroke-width="3"/>
+                                            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                                  fill="none" stroke="#2E8B83" stroke-width="3" stroke-dasharray="90, 100" stroke-linecap="round"/>
                                         </svg>
-                                    </div>
-                                    <div class="flex justify-around text-[7px] text-slate-500 font-bold">
-                                        <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full" style="background-color: #2E8B83;"></span>ابتدائي</span>
-                                        <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span>متوسط</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Bottom Row: Recent Students & Daily Schedule -->
-                            <div class="grid grid-cols-2 gap-2">
-                                <div class="bg-slate-50 p-2 rounded-lg border border-slate-100">
-                                    <span class="text-[9px] font-bold text-slate-800 block mb-1.5">الطلاب الجدد</span>
-                                    <div class="space-y-1 text-[8px]">
-                                        <div class="flex items-center justify-between">
-                                            <span class="font-bold text-slate-700">محمد أحمد</span>
-                                            <span class="text-slate-400">الصف الرابع</span>
-                                        </div>
-                                        <div class="flex items-center justify-between">
-                                            <span class="font-bold text-slate-700">سارة علي</span>
-                                            <span class="text-slate-400">الصف الثاني</span>
+                                        <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                            <span class="text-[10px] font-black text-slate-900">90%</span>
+                                            <span class="text-[5px] text-emerald-600 font-bold">+12%</span>
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="bg-slate-50 p-2 rounded-lg border border-slate-100">
-                                    <span class="text-[9px] font-bold text-slate-800 block mb-1.5">الجدول اليومي</span>
-                                    <div class="space-y-1 text-[8px]">
-                                        <div class="flex items-center justify-between">
-                                            <span class="font-bold text-slate-700">اللغة العربية</span>
-                                            <span class="text-slate-400 font-mono">08:00 - 09:00</span>
-                                        </div>
-                                        <div class="flex items-center justify-between">
-                                            <span class="font-bold text-slate-700">رياضيات</span>
-                                            <span class="text-slate-400 font-mono">09:15 - 10:15</span>
-                                        </div>
+                                {{-- Stats rows --}}
+                                <div class="space-y-1 px-0.5">
+                                    <div class="flex items-center justify-between bg-slate-50 rounded px-1.5 py-1">
+                                        <span class="text-slate-500">الحضور</span>
+                                        <span class="font-bold text-slate-800">95%</span>
+                                    </div>
+                                    <div class="flex items-center justify-between bg-slate-50 rounded px-1.5 py-1">
+                                        <span class="text-slate-500">الطلاب</span>
+                                        <span class="font-bold text-slate-800">1,250</span>
+                                    </div>
+                                    <div class="flex items-center justify-between bg-slate-50 rounded px-1.5 py-1">
+                                        <span class="text-slate-500">المدرسين</span>
+                                        <span class="font-bold text-slate-800">48</span>
                                     </div>
                                 </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <!-- Laptop Base Chin -->
-                    <div class="h-3 bg-gradient-to-b from-slate-300 to-slate-400 rounded-b-xl max-w-[104%] -ms-[2%] shadow-md flex items-center justify-center">
-                        <div class="w-20 h-1 bg-slate-500/40 rounded-full"></div>
-                    </div>
-
-                    <!-- Smartphone Overlay in Front (Matching Image 2) -->
-                    <div class="absolute -bottom-6 -start-4 sm:-start-6 w-44 sm:w-48 bg-slate-900 p-2.5 rounded-3xl shadow-[0_25px_50px_rgba(15,23,42,0.28)] border-2 border-slate-800 hidden sm:block transform rotate-1 hover:rotate-0 transition-transform">
-                        <div class="bg-white rounded-2xl overflow-hidden p-3 border border-slate-100">
-                            <!-- Phone Top Attendance Card -->
-                            <div class="bg-slate-50 rounded-xl p-2.5 border border-slate-100 mb-2">
-                                <div class="flex items-center justify-between mb-1">
-                                    <span class="text-[9px] font-bold text-slate-700">نسبة الحضور اليوم</span>
-                                    <span class="text-[8px] font-bold text-emerald-600 bg-emerald-50 px-1 py-0.5 rounded">+12%</span>
+                                {{-- Bottom bar --}}
+                                <div class="flex items-center justify-around pt-1.5 border-t border-slate-100">
+                                    <i class="fas fa-home text-[8px]" style="color: #2E8B83;"></i>
+                                    <i class="fas fa-chart-bar text-[8px] text-slate-300"></i>
+                                    <i class="fas fa-users text-[8px] text-slate-300"></i>
+                                    <i class="fas fa-cog text-[8px] text-slate-300"></i>
                                 </div>
-                                <div class="flex items-center justify-between">
-                                    <span class="text-base font-black text-slate-900">90%</span>
-                                    <div class="w-5 h-5 rounded-full border-2 border-t-transparent animate-spin" style="border-color: #2E8B83; border-top-color: transparent;"></div>
-                                </div>
-                            </div>
-
-                            <!-- 4 Mini Quick Action Buttons -->
-                            <div class="grid grid-cols-2 gap-1.5 mb-2">
-                                <div class="bg-emerald-50/70 p-1.5 rounded-lg text-center border border-emerald-100">
-                                    <i class="fas fa-qrcode text-[10px] mb-0.5" style="color: #2E8B83;"></i>
-                                    <span class="text-[7px] font-bold text-slate-800 block">تسجيل حضور</span>
-                                </div>
-                                <div class="bg-slate-50 p-1.5 rounded-lg text-center border border-slate-100">
-                                    <i class="fas fa-wallet text-slate-600 text-[10px] mb-0.5"></i>
-                                    <span class="text-[7px] font-bold text-slate-800 block">شحن الرصيد</span>
-                                </div>
-                                <div class="bg-slate-50 p-1.5 rounded-lg text-center border border-slate-100">
-                                    <i class="fas fa-calendar-alt text-slate-600 text-[10px] mb-0.5"></i>
-                                    <span class="text-[7px] font-bold text-slate-800 block">جدول الحضور</span>
-                                </div>
-                                <div class="bg-slate-50 p-1.5 rounded-lg text-center border border-slate-100">
-                                    <i class="fas fa-bell text-slate-600 text-[10px] mb-0.5"></i>
-                                    <span class="text-[7px] font-bold text-slate-800 block">إشعارات</span>
-                                </div>
-                            </div>
-
-                            <!-- Bottom Mini Bar -->
-                            <div class="flex justify-around pt-1 border-t border-slate-100 text-[8px] text-slate-400 font-bold">
-                                <span style="color: #2E8B83;">الرئيسية</span>
-                                <span>الطلاب</span>
-                                <span>الحصص</span>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
 
