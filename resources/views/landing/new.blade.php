@@ -4,18 +4,15 @@
     {{-- 1. Hero Section --}}
     @include('landing.partials.hero')
 
-    {{-- 2. User Portals Section (Teacher, Student, Parent) --}}
+    {{-- 2. User Portals Section (3 Cards: Teacher, Student, Parent) --}}
     @include('landing.partials.audience')
 
-    {{-- 3. Smart Attendance with QR Code --}}
+    {{-- 3. Dual Split Feature Cards (QR Code Attendance & WhatsApp Notifications) --}}
     @include('landing.partials.qr-registration')
 
-    {{-- 4. WhatsApp Notifications --}}
-    @include('landing.partials.whatsapp-notifications')
-
-    {{-- 5. Key Capabilities (6 Essential Pillars) --}}
+    {{-- 4. Key Capabilities (6 All-in-one Tools) --}}
     @include('landing.partials.feature-bento')
 
-    {{-- 6. Final Call to Action --}}
+    {{-- 5. Final Call to Action --}}
     @include('landing.partials.cta')
 @endsection
