@@ -1,4 +1,4 @@
-{{-- Hero Section matching user reference specification --}}
+{{-- Hero Section matching C:\Users\new\Downloads\Taalimu_Landing_Page_HTML_CSS_Fixed --}}
 <section class="hero">
   <div class="container hero-grid">
     <div class="hero-copy">
@@ -18,7 +18,7 @@
 
     <div class="hero-visual">
       <div class="glow"></div>
-      <img src="{{ asset('images/hero-dashboard.webp') }}" alt="لوحة تحكم Taalimu" loading="eager">
+      <img src="{{ asset('images/landing_fixed/hero-dashboard.png') }}" alt="لوحة تحكم Taalimu" loading="eager">
     </div>
   </div>
 </section>
