@@ -1,131 +1,121 @@
-<section class="relative pt-32 pb-20 lg:pt-40 lg:pb-32 overflow-hidden bg-gradient-to-b from-slate-50 via-white to-slate-50">
-    <!-- Subtle Background Glows -->
-    <div class="absolute -top-40 start-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-tr from-emerald-100/40 via-teal-100/30 to-transparent blur-3xl pointer-events-none rounded-full"></div>
-    <div class="absolute top-1/3 end-0 w-[400px] h-[400px] bg-teal-500/5 blur-3xl pointer-events-none rounded-full"></div>
+{{-- Section 2: Spacious Minimal Premium Hero --}}
+<section id="hero" class="relative pt-32 pb-20 lg:pt-44 lg:pb-36 overflow-hidden bg-gradient-to-b from-[#FAFBFB] via-white to-white">
+    <!-- Extremely subtle warm ambient light -->
+    <div class="absolute -top-40 start-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-gradient-to-tr from-teal-500/4 via-emerald-500/3 to-transparent blur-3xl pointer-events-none rounded-full"></div>
 
-    <div class="container mx-auto px-4 lg:px-8 max-w-7xl relative z-10">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+    <div class="container mx-auto px-6 lg:px-12 max-w-7xl relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
             
-            <!-- Hero Content Column -->
+            <!-- Right Column: Confident Arabic Typography & Clean CTAs -->
             <div class="lg:col-span-6 text-center lg:text-start" data-animate="fade-in">
+                
                 <!-- Eyebrow Badge -->
-                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200/80 text-[#2E8B83] text-xs font-bold mb-6 shadow-sm">
-                    <span class="flex h-2 w-2 rounded-full bg-[#2E8B83] animate-pulse"></span>
-                    <span>{{ __('landing.hero.eyebrow') }}</span>
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200/60 text-[#2E8B83] text-xs font-bold mb-6 shadow-2xs">
+                    <span class="w-2 h-2 rounded-full bg-[#2E8B83]"></span>
+                    <span>منصة إدارة التعليم المتكاملة</span>
                 </div>
 
-                <!-- Main Headline -->
-                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 leading-[1.2] tracking-tight mb-6">
-                    {{ __('landing.hero.headline') }}
+                <!-- Main Large Headline -->
+                <h1 class="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black text-slate-900 leading-[1.25] tracking-tight mb-6">
+                    كل ما تحتاجه لإدارة<br>
+                    <span class="text-[#2E8B83] inline-block">مؤسستك التعليمية</span><br>
+                    في منصة واحدة
                 </h1>
 
-                <!-- Subheadline -->
-                <p class="text-base sm:text-lg text-slate-600 font-medium leading-relaxed mb-8 max-w-2xl mx-auto lg:mx-0">
-                    {{ __('landing.hero.subheadline') }}
+                <!-- Supporting Copy -->
+                <p class="text-base sm:text-lg text-slate-600 font-medium leading-relaxed mb-8 max-w-xl mx-auto lg:mx-0">
+                    إدارة الطلاب والمعلمين والفصول والمدفوعات والتقارير والتواصل من مكان واحد.
                 </p>
 
-                <!-- Call-to-Action Buttons -->
-                <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-8">
-                    <a href="{{ route('register') }}" data-track="landing_hero_cta_clicked" class="w-full sm:w-auto px-8 py-4 rounded-xl text-white font-extrabold text-base text-decoration-none shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 text-center flex items-center justify-center gap-2" style="background: linear-gradient(135deg, #2E8B83 0%, #10b981 100%);">
-                        <span>{{ __('landing.hero.cta_primary') }}</span>
-                        <i class="fas fa-arrow-left text-sm rtl:rotate-0 ltr:rotate-180"></i>
+                <!-- Two Action Buttons -->
+                <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-10">
+                    <a href="{{ route('register') }}" data-track="hero_primary_cta" class="w-full sm:w-auto px-8 py-4 rounded-xl text-white font-extrabold text-base text-decoration-none shadow-sm hover:shadow-md transition-all transform hover:-translate-y-0.5 bg-[#2E8B83] hover:bg-[#25746D] text-center flex items-center justify-center gap-2">
+                        <span>ابدأ مجانًا</span>
+                        <i class="fas fa-arrow-left text-xs rtl:rotate-0 ltr:rotate-180"></i>
                     </a>
 
                     <button
                         type="button"
                         @click="$dispatch('open-demo-modal')"
-                        class="w-full sm:w-auto px-7 py-4 rounded-xl border border-slate-300 bg-white text-slate-800 font-bold text-base hover:bg-slate-50 hover:border-slate-400 transition-all text-center flex items-center justify-center gap-2.5 shadow-sm group"
+                        class="w-full sm:w-auto px-7 py-4 rounded-xl border border-slate-200 bg-white text-slate-800 font-bold text-base hover:bg-slate-50 hover:border-slate-300 transition-all text-center flex items-center justify-center gap-2.5 shadow-2xs group"
                     >
-                        <i class="fas fa-play-circle text-[#2E8B83] text-xl group-hover:scale-110 transition-transform"></i>
-                        <span>{{ __('landing.hero.cta_secondary') }}</span>
+                        <i class="fas fa-play-circle text-[#2E8B83] text-lg group-hover:scale-105 transition-transform"></i>
+                        <span>احجز عرضًا توضيحيًا</span>
                     </button>
                 </div>
 
-                <!-- Trust Badges Checkmarks -->
-                <div class="flex flex-wrap items-center justify-center lg:justify-start gap-y-2 gap-x-6 text-xs font-semibold text-slate-500">
+                <!-- Three Small Trust Points -->
+                <div class="flex flex-wrap items-center justify-center lg:justify-start gap-y-2 gap-x-8 text-xs font-bold text-slate-500">
                     <div class="flex items-center gap-2">
-                        <i class="fas fa-check-circle text-emerald-500"></i>
-                        <span>{{ __('landing.hero.check_nocard') }}</span>
+                        <i class="fas fa-check-circle text-emerald-600 text-sm"></i>
+                        <span>بدون بطاقة ائتمان</span>
                     </div>
                     <div class="flex items-center gap-2">
-                        <i class="fas fa-check-circle text-emerald-500"></i>
-                        <span>{{ __('landing.hero.check_setup') }}</span>
+                        <i class="fas fa-bolt text-emerald-600 text-sm"></i>
+                        <span>دعم سريع</span>
                     </div>
                     <div class="flex items-center gap-2">
-                        <i class="fas fa-check-circle text-emerald-500"></i>
-                        <span>{{ __('landing.hero.check_trial') }}</span>
+                        <i class="fas fa-shield-alt text-emerald-600 text-sm"></i>
+                        <span>متاح 24/7</span>
                     </div>
                 </div>
+
             </div>
 
-            <!-- Hero Visual Column (Real UI + Micro Animation) -->
+            <!-- Left Column: Realistic Dual-Device Product Showcase -->
             <div class="lg:col-span-6" data-animate="scale-in">
                 <div class="relative mx-auto max-w-lg lg:max-w-none">
                     
-                    <!-- Main Platform Container Frame -->
-                    <div class="relative bg-white rounded-2xl shadow-2xl border border-slate-200/80 overflow-hidden p-2 sm:p-4">
-                        <!-- Top Window Controls -->
-                        <div class="flex items-center justify-between pb-3 px-2 border-b border-slate-100">
-                            <div class="flex items-center gap-1.5">
-                                <span class="w-3 h-3 rounded-full bg-red-400"></span>
-                                <span class="w-3 h-3 rounded-full bg-yellow-400"></span>
-                                <span class="w-3 h-3 rounded-full bg-emerald-400"></span>
-                            </div>
-                            <div class="flex items-center gap-2 bg-slate-100 px-3 py-1 rounded-md text-[11px] font-mono text-slate-500">
-                                <i class="fas fa-lock text-emerald-600"></i>
-                                <span>app.taalimu.com/center/dashboard</span>
-                            </div>
-                            <span class="text-xs text-slate-400"><i class="fas fa-signal"></i> Live</span>
+                    <!-- Laptop Hardware Frame -->
+                    <div class="relative bg-slate-900 rounded-t-2xl pt-3 px-3 pb-0 shadow-[0_25px_60px_-15px_rgba(15,23,42,0.18)] border border-slate-800">
+                        <!-- Top Camera & Notch Dot -->
+                        <div class="flex items-center justify-center pb-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-slate-700"></span>
                         </div>
 
-                        <!-- Real Dashboard Preview Content -->
-                        <div class="pt-3">
-                            <img src="{{ asset('images/hero-dashboard.webp') }}" alt="Taalimu Dashboard Preview" class="w-full h-auto rounded-xl border border-slate-100 shadow-sm object-cover">
+                        <!-- Real Dashboard Display Screen -->
+                        <div class="rounded-t-lg overflow-hidden bg-white border border-slate-100">
+                            <img src="{{ asset('images/hero-dashboard.webp') }}" alt="Taalimu Dashboard Platform" class="w-full h-auto object-cover block">
                         </div>
-
-                        <!-- Floating Live QR Card Widget -->
-                        <div class="absolute top-12 start-4 sm:start-8 bg-white/95 backdrop-blur-md rounded-xl p-3.5 shadow-xl border border-slate-100 max-w-[210px] hidden sm:block transform -rotate-1 hover:rotate-0 transition-transform">
-                            <div class="flex items-center gap-2.5 mb-2">
-                                <div class="w-8 h-8 rounded-lg bg-teal-50 border border-teal-100 flex items-center justify-center text-[#2E8B83]">
-                                    <i class="fas fa-qrcode"></i>
-                                </div>
-                                <div>
-                                    <h4 class="text-xs font-bold text-slate-900 leading-none">{{ __('landing.hero.card_qr_title') }}</h4>
-                                    <span class="text-[10px] text-slate-500">ID: ST-9042</span>
-                                </div>
-                            </div>
-                            <!-- Simulated Scanner Animation Box -->
-                            <div class="relative bg-slate-900 p-2 rounded-lg text-center overflow-hidden">
-                                <div class="w-16 h-16 mx-auto bg-white rounded p-1 flex items-center justify-center relative">
-                                    <i class="fas fa-qrcode text-3xl text-slate-900"></i>
-                                    <!-- Scan Line Animation -->
-                                    <div class="absolute inset-x-0 h-0.5 bg-emerald-500 shadow-[0_0_8px_#10b981] animate-pulse top-1/2"></div>
-                                </div>
-                                <span class="text-[10px] text-emerald-400 font-mono mt-1.5 block">Scanner Active</span>
-                            </div>
-                        </div>
-
-                        <!-- Floating Live WhatsApp Badge Widget -->
-                        <div class="absolute bottom-6 end-4 sm:end-8 bg-white/95 backdrop-blur-md rounded-xl p-3.5 shadow-xl border border-emerald-100 max-w-[260px] transform rotate-1 hover:rotate-0 transition-transform">
-                            <div class="flex items-center gap-2.5 mb-1.5">
-                                <div class="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center text-sm shadow-md">
-                                    <i class="fab fa-whatsapp"></i>
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <div class="flex items-center justify-between">
-                                        <h4 class="text-xs font-bold text-slate-900 truncate">{{ __('landing.hero.card_whatsapp_title') }}</h4>
-                                        <span class="text-[9px] text-emerald-600 font-bold bg-emerald-50 px-1.5 py-0.5 rounded">{{ __('landing.hero.card_now') }}</span>
-                                    </div>
-                                    <p class="text-[10px] text-slate-500 truncate">{{ __('landing.hero.card_whatsapp_sub') }}</p>
-                                </div>
-                            </div>
-                            <div class="bg-emerald-50/80 rounded-lg p-2 border border-emerald-100 text-[10px] text-slate-700 font-medium">
-                                <i class="fas fa-check-double text-emerald-600 me-1"></i>
-                                <span>{{ __('landing.hero.card_whatsapp_msg') }}</span>
-                            </div>
-                        </div>
-
                     </div>
+                    <!-- Laptop Base Chin -->
+                    <div class="h-3 bg-gradient-to-b from-slate-300 to-slate-400 rounded-b-xl max-w-[104%] -ms-[2%] shadow-md flex items-center justify-center">
+                        <div class="w-20 h-1 bg-slate-500/40 rounded-full"></div>
+                    </div>
+
+                    <!-- Realistic Smartphone in Front (Subtle Depth & Reflection) -->
+                    <div class="absolute -bottom-6 -start-4 sm:-start-8 w-44 sm:w-52 bg-slate-900 p-2.5 rounded-3xl shadow-[0_20px_40px_rgba(15,23,42,0.25)] border-2 border-slate-800 hidden sm:block transform rotate-1 hover:rotate-0 transition-transform">
+                        <!-- Phone Screen Content -->
+                        <div class="bg-white rounded-2xl overflow-hidden p-3 border border-slate-100">
+                            <!-- Mini Header -->
+                            <div class="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
+                                <div class="flex items-center gap-1.5">
+                                    <div class="w-5 h-5 rounded-full bg-[#2E8B83] text-white flex items-center justify-center text-[9px] font-bold">
+                                        <i class="fas fa-qrcode"></i>
+                                    </div>
+                                    <span class="text-[10px] font-black text-slate-800">حضور سريع</span>
+                                </div>
+                                <span class="text-[8px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-full">مباشر</span>
+                            </div>
+                            
+                            <!-- Scanner Card -->
+                            <div class="bg-slate-50 rounded-xl p-2.5 text-center mb-2 border border-slate-100">
+                                <i class="fas fa-qrcode text-3xl text-slate-800 mb-1"></i>
+                                <p class="text-[9px] font-bold text-slate-700 leading-tight">مسح كود الطالب</p>
+                                <span class="text-[8px] text-slate-400 font-mono">ID: ST-9042</span>
+                            </div>
+
+                            <!-- Success Toast Notification -->
+                            <div class="bg-emerald-50 rounded-lg p-1.5 border border-emerald-100 flex items-center gap-1.5 text-start">
+                                <i class="fas fa-check-circle text-emerald-600 text-[10px]"></i>
+                                <div class="leading-none">
+                                    <p class="text-[9px] font-bold text-emerald-800 mb-0.5">تم رصد الحضور</p>
+                                    <span class="text-[7px] text-emerald-600">إشعار WhatsApp تم إرساله</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 

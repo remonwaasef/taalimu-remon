@@ -1,41 +1,47 @@
-<section class="py-20 lg:py-28 bg-white relative overflow-hidden">
-    <div class="container mx-auto px-4 lg:px-8 max-w-7xl">
+{{-- Section 7: Final CTA (Spacious Soft Mint Background) --}}
+<section class="py-24 lg:py-36 bg-[#E6F4F3]/60 relative overflow-hidden border-t border-[#B2DDD9]/40">
+    <!-- Subtle Ambient Glow -->
+    <div class="absolute -bottom-24 start-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-emerald-500/10 blur-3xl pointer-events-none rounded-full"></div>
+
+    <div class="container mx-auto px-6 lg:px-12 max-w-4xl text-center relative z-10" data-animate="fade-in">
         
-        <div class="rounded-3xl p-10 sm:p-16 text-white text-center relative overflow-hidden shadow-2xl" style="background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);" data-animate="scale-in">
-            <!-- Background Glow Effects -->
-            <div class="absolute -top-24 start-1/2 -translate-x-1/2 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none"></div>
-            <div class="absolute -bottom-24 end-10 w-96 h-96 bg-teal-500/20 rounded-full blur-3xl pointer-events-none"></div>
-
-            <div class="relative z-10 max-w-3xl mx-auto">
-                <div class="w-16 h-16 mx-auto rounded-3xl bg-emerald-500/20 border border-emerald-400/30 text-emerald-400 flex items-center justify-center text-3xl mb-6 shadow-lg">
-                    <i class="fas fa-rocket text-[#2E8B83]"></i>
-                </div>
-
-                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-tight mb-6">
-                    {{ __('landing.cta.title') }}
-                </h2>
-
-                <p class="text-slate-300 text-base sm:text-lg font-medium leading-relaxed mb-8 max-w-2xl mx-auto">
-                    {{ __('landing.cta.subtitle') }}
-                </p>
-
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
-                    <a href="{{ route('register') }}" data-track="landing_final_cta_clicked" class="w-full sm:w-auto px-8 py-4 rounded-xl text-white font-extrabold text-base text-decoration-none shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-0.5 text-center flex items-center justify-center gap-2" style="background: linear-gradient(135deg, #2E8B83 0%, #10b981 100%);">
-                        <span>{{ __('landing.cta.primary_btn') }}</span>
-                        <i class="fas fa-arrow-left text-sm"></i>
-                    </a>
-
-                    <a href="#solutions" class="w-full sm:w-auto px-7 py-4 rounded-xl border border-slate-700 bg-slate-800/80 text-white font-bold text-base hover:bg-slate-800 transition-all text-decoration-none text-center">
-                        {{ __('landing.cta.secondary_btn') }}
-                    </a>
-                </div>
-
-                <p class="text-xs text-slate-400 font-medium">
-                    <i class="fas fa-shield-alt text-emerald-400 me-1"></i>
-                    {{ __('landing.cta.note') }}
-                </p>
-            </div>
+        <!-- Eyebrow Badge -->
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#B2DDD9] text-[#25746D] text-xs font-bold mb-6 shadow-2xs">
+            <i class="fas fa-sparkles text-xs"></i>
+            <span>انضم لأكثر من 500+ مركز تعليمي ومدرس</span>
         </div>
+
+        <!-- Main Headline -->
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 leading-tight mb-6">
+            جاهز للارتقاء<br>
+            بإدارة مؤسستك التعليمية؟
+        </h2>
+
+        <!-- Supporting Copy -->
+        <p class="text-base sm:text-lg text-slate-700 font-medium leading-relaxed mb-10 max-w-2xl mx-auto">
+            ابدأ رحلتك الآن واكتشف كيف يمكن لـ Taalimu تبسيط عملياتك اليومية وتوفير وقتك.
+        </p>
+
+        <!-- Two Action Buttons -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
+            <a href="{{ route('register') }}" data-track="final_cta_primary" class="w-full sm:w-auto px-8 py-4 rounded-xl text-white font-extrabold text-base text-decoration-none shadow-sm hover:shadow-md transition-all transform hover:-translate-y-0.5 bg-[#2E8B83] hover:bg-[#25746D] text-center flex items-center justify-center gap-2">
+                <span>ابدأ مجانًا</span>
+                <i class="fas fa-arrow-left text-xs rtl:rotate-0 ltr:rotate-180"></i>
+            </a>
+
+            <button
+                type="button"
+                @click="$dispatch('open-demo-modal')"
+                class="w-full sm:w-auto px-7 py-4 rounded-xl border border-slate-300 bg-white text-slate-800 font-bold text-base hover:bg-slate-50 transition-all text-center flex items-center justify-center gap-2 shadow-2xs"
+            >
+                <i class="fas fa-play-circle text-[#2E8B83] text-lg"></i>
+                <span>احجز عرضًا توضيحيًا</span>
+            </button>
+        </div>
+
+        <p class="text-xs font-semibold text-slate-500">
+            إعداد سريع في دقائق • بدون بطاقة ائتمان • تجربة كاملة 14 يوماً
+        </p>
 
     </div>
 </section>
