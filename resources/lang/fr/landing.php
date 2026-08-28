@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 return [
     'seo' => [
@@ -446,4 +446,31 @@ return [
         'terms' => 'Conditions d’utilisation',
         'copyright' => 'Tous droits réservés Taalimu © ' . date('Y'),
     ],
+    'roi_calculator' => [
+        'badge' => 'Calculateur de rentabilité',
+        'title' => 'Calculez vos gains mensuels en temps et en budget',
+        'subtitle' => 'Déplacez le curseur selon votre effectif d’élèves et découvrez le ROI immédiat de l’automatisation.',
+        'slider_label' => 'Nombre d’élèves actifs dans votre centre / vos groupes :',
+        'students_unit' => 'Élèves',
+        'metric_hours_title' => 'Heures de travail économisées par mois',
+        'metric_hours_desc' => 'Gain sur l’appel manuel, la saisie des absences et les registres papier',
+        'metric_leak_title' => 'Frais impayés et coûts récupérés',
+        'metric_leak_desc' => 'Élimination des oublis grâce aux rappels de paiement automatiques',
+        'metric_satisfaction_title' => 'Satisfaction et sérénité des parents',
+        'metric_satisfaction_desc' => 'Alertes WhatsApp instantanées éliminant les appels quotidiens',
+        'cta_text' => 'Démarrez votre essai gratuit dès aujourd’hui et gagnez du temps',
+        'cta_btn' => 'Commencer à économiser',
+    ],
+    'demo_modal' => [
+        'badge' => 'Aperçu en direct',
+        'title' => 'Découvrez comment Taalimu gère votre centre éducatif',
+        'subtitle' => 'Un aperçu rapide du tableau de bord, du scanner QR et du portail parents.',
+        'features_title' => 'Points forts à découvrir :',
+        'feature_1' => 'Scanner le QR de l’élève et envoyer une notification WhatsApp en moins d’une seconde.',
+        'feature_2' => 'Système POS complet, gestion des règlements et reçus instantanés.',
+        'feature_3' => 'Rapports financiers automatiques et calculs des parts enseignants en 1 clic.',
+        'start_trial_btn' => 'Démarrer l’essai gratuit (14 jours)',
+        'close_btn' => 'Fermer',
+    ],
+    'excel_template_btn' => 'Télécharger un modèle Excel prêt à l’emploi',
 ];

@@ -10,6 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Enhanced Landing Page UI/UX, Brand Identity & Interactive Conversions (2026-08-28)**:
+  - Added interactive **Smart ROI & Time Savings Calculator** (`resources/views/landing/partials/roi-calculator.blade.php`) calculating operational hours and recovered leakages based on real-time student count slider.
+  - Added interactive **Demo Walkthrough Video Modal** (`resources/views/layouts/landing-new.blade.php`) triggered seamlessly by the Hero secondary CTA.
+  - Added **FAQ Schema JSON-LD Structured Data** for enhanced Google search rich results and SEO ranking.
+  - Added **Sample Excel Template Download Action** in the Excel migration section.
+  - Optimized typography & web fonts (clean `Cairo` & `Inter` imports) and aligned brand tokens (`#2E8B83`).
+  - Synchronized trilingual translations (`ar`, `en`, `fr`) across all new landing page components.
 - **Rebuilt Taalimu Ultimate Premium SaaS Landing Page (2026-08-24)**:
   - Re-architected landing page with Arabic-first, RTL-first modern SaaS aesthetics in `resources/views/landing/new.blade.php`.
   - Added dedicated **QR Code Registration Spotlight** section (`qr-registration.blade.php`) demonstrating instant student ID generation, smartphone scanner, and real-time profile lookup.

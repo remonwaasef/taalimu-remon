@@ -83,8 +83,8 @@
             </div>
         </div>
 
-        {{-- CTA Button --}}
-        <div class="text-center">
+        {{-- CTA Buttons --}}
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 text-center">
             <a href="{{ route('register') }}" data-track="landing_migration_cta_clicked" style="
                 display: inline-flex;
                 align-items: center;
@@ -101,6 +101,11 @@
             " onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
                 <span>{{ __('landing.excel_migration.cta') }}</span>
                 <i class="fas fa-arrow-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}"></i>
+            </a>
+
+            <a href="{{ asset('templates/students_import_template.xlsx') }}" download class="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-slate-300 bg-white text-slate-700 font-bold text-xs hover:bg-slate-50 transition-colors text-decoration-none shadow-sm">
+                <i class="fas fa-file-download text-emerald-600"></i>
+                <span>{{ __('landing.excel_template_btn') }}</span>
             </a>
         </div>
 

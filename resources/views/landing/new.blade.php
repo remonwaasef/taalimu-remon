@@ -31,7 +31,10 @@
     {{-- 10. Seamless Excel Student Import Migration --}}
     @include('landing.partials.excel-migration')
 
-    {{-- 11. How It Works (4 Steps) --}}
+    {{-- 11. Interactive ROI & Time Savings Calculator --}}
+    @include('landing.partials.roi-calculator')
+
+    {{-- 12. How It Works (4 Steps) --}}
     @include('landing.partials.how-it-works')
 
     {{-- 12. Security & Trust Section --}}

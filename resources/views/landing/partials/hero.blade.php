@@ -31,10 +31,14 @@
                         <i class="fas fa-arrow-left text-sm rtl:rotate-0 ltr:rotate-180"></i>
                     </a>
 
-                    <a href="#how-it-works" class="w-full sm:w-auto px-7 py-4 rounded-xl border border-slate-300 bg-white text-slate-800 font-bold text-base hover:bg-slate-50 transition-all text-decoration-none text-center flex items-center justify-center gap-2 shadow-sm">
-                        <i class="fas fa-play-circle text-[#2E8B83] text-lg"></i>
+                    <button
+                        type="button"
+                        @click="$dispatch('open-demo-modal')"
+                        class="w-full sm:w-auto px-7 py-4 rounded-xl border border-slate-300 bg-white text-slate-800 font-bold text-base hover:bg-slate-50 hover:border-slate-400 transition-all text-center flex items-center justify-center gap-2.5 shadow-sm group"
+                    >
+                        <i class="fas fa-play-circle text-[#2E8B83] text-xl group-hover:scale-110 transition-transform"></i>
                         <span>{{ __('landing.hero.cta_secondary') }}</span>
-                    </a>
+                    </button>
                 </div>
 
                 <!-- Trust Badges Checkmarks -->
