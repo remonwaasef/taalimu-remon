@@ -4,10 +4,10 @@
     {{-- 1. Hero Section --}}
     @include('landing.partials.hero')
 
-    {{-- 2. User Portals Section (3 Cards: Teacher, Student, Parent) --}}
+    {{-- 2. User Portals Section (3 Cards: Parent, Student, Teacher) --}}
     @include('landing.partials.audience')
 
-    {{-- 3. Dual Split Feature Cards (QR Code Attendance & WhatsApp Notifications) --}}
+    {{-- 3. Visual Features Section (WhatsApp & QR Code Artwork Cards) --}}
     @include('landing.partials.qr-registration')
 
     {{-- 4. Key Capabilities (6 All-in-one Tools) --}}
