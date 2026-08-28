@@ -15,8 +15,8 @@
                     <thead>
                         <tr class="bg-[color:var(--color-secondary-50)] dark:bg-[#0b1312] border-b border-[color:var(--color-border)] dark:border-[#1f3936]">
                             <th class="p-4 lg:p-6 text-start font-extrabold text-[color:var(--color-text-main)]">المعيار</th>
-                            <th class="p-4 lg:p-6 text-center font-extrabold text-red-600 dark:text-red-400">{{ __('landing-v3.comparison.without') }}</th>
-                            <th class="p-4 lg:p-6 text-center font-extrabold text-emerald-600 dark:text-emerald-400">{{ __('landing-v3.comparison.with') }}</th>
+                            <th class="p-4 lg:p-6 text-center font-extrabold text-red-600 dark:text-red-400">{{ __('landing-v3.comparison.without_title') }}</th>
+                            <th class="p-4 lg:p-6 text-center font-extrabold text-emerald-600 dark:text-emerald-400">{{ __('landing-v3.comparison.with_title') }}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-[color:var(--color-border-subtle)] dark:divide-[#182e2c]">

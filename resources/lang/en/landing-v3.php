@@ -369,6 +369,8 @@ return [
     'comparison' => [
         'badge' => 'Before & After',
         'title' => 'The difference isn\'t features — it\'s the outcome.',
+        'without_title' => 'Without Taalimu',
+        'with_title' => 'With Taalimu',
         'without' => [
             'Excel and paper ledgers',
             'Manual roll call every session',

@@ -369,6 +369,8 @@ return [
     'comparison' => [
         'badge' => 'Avant / Après',
         'title' => 'La différence n\'est pas dans les fonctionnalités — c\'est le résultat.',
+        'without_title' => 'Sans Taalimu',
+        'with_title' => 'Avec Taalimu',
         'without' => [
             'Excel et registres papier',
             'Appel nominal manuel chaque séance',

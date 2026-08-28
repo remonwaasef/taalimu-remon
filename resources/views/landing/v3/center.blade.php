@@ -72,7 +72,7 @@
                             ] as [$name, $group, $schedule, $status])
                                 <div class="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-[#142524] border border-[color:var(--color-border)] dark:border-[#1f3936]">
                                     <div class="flex items-center gap-3">
-                                        <x-ui.avatar :name="{{ $name }}" size="sm" />
+                                        <x-ui.avatar :name="$name" size="sm" />
                                         <div>
                                             <p class="font-bold text-[color:var(--color-text-main)] text-sm truncate max-w-[150px]">{{ $name }}</p>
                                             <p class="text-xs text-[color:var(--color-text-muted)]">{{ $group }}</p>
