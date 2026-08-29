@@ -1,5 +1,5 @@
-{{-- Pricing — Dynamic from DB — Redesigned Reference --}}
-<section class="section pricing" id="pricing"
+{{-- Pricing — Dynamic from DB with Billing Cycle Switcher --}}
+<section class="section pricing bg-slate-50 border-t border-slate-200" id="pricing"
          x-data="{
             billingCycle: 'monthly',
             selectedCurrency: '{{ session('suggested_currency', 'EGP') }}',
@@ -21,10 +21,36 @@
             }
          }">
   <div class="container">
-    <div class="section-head center">
+    <div class="section-head center" data-animate="fade-in">
       <span class="kicker">{{ __('landing.pricing.badge') }}</span>
-      <h2>اختر الخطة التي <span>تناسب حجم مركزك</span></h2>
-      <p>ابدأ بتجربة مجانية لمدة 30 يومًا، ثم اختر ما يناسب عدد طلابك واحتياجاتك دون التزامات.</p>
+      <h2>{{ __('landing.pricing.title') !== 'landing.pricing.title' ? __('landing.pricing.title') : 'اختر الخطة التي' }} <span>{{ __('landing.pricing.title_highlight') !== 'landing.pricing.title_highlight' ? __('landing.pricing.title_highlight') : 'تناسب حجم مركزك' }}</span></h2>
+      <p>{{ __('landing.pricing.subtitle') !== 'landing.pricing.subtitle' ? __('landing.pricing.subtitle') : 'ابدأ بتجربة مجانية لمدة 30 يومًا، ثم اختر ما يناسب عدد طلابك واحتياجاتك دون التزامات.' }}</p>
+    </div>
+
+    {{-- Billing Cycle Selector Toggle --}}
+    <div class="billing-toggle flex justify-center mb-10" data-animate="fade-in">
+      <div class="inline-flex p-1.5 rounded-2xl bg-slate-200/70 border border-slate-300/70 shadow-inner">
+        <button type="button" 
+                @click="billingCycle = 'monthly'"
+                :class="billingCycle === 'monthly' ? 'bg-[#2E8B83] text-white shadow-md' : 'text-slate-700 hover:text-slate-900'"
+                class="px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200">
+          {{ __('landing.pricing.monthly') !== 'landing.pricing.monthly' ? __('landing.pricing.monthly') : 'اشتراك شهري' }}
+        </button>
+        <button type="button" 
+                @click="billingCycle = 'term'"
+                :class="billingCycle === 'term' ? 'bg-[#2E8B83] text-white shadow-md' : 'text-slate-700 hover:text-slate-900'"
+                class="px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 flex items-center gap-1.5">
+          <span>{{ __('landing.pricing.term') !== 'landing.pricing.term' ? __('landing.pricing.term') : 'اشتراك ترم (4 أشهر)' }}</span>
+          <span class="text-[10px] bg-amber-400 text-slate-900 font-extrabold px-1.5 py-0.5 rounded-md">توفير 15%</span>
+        </button>
+        <button type="button" 
+                @click="billingCycle = 'yearly'"
+                :class="billingCycle === 'yearly' ? 'bg-[#2E8B83] text-white shadow-md' : 'text-slate-700 hover:text-slate-900'"
+                class="px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 flex items-center gap-1.5">
+          <span>{{ __('landing.pricing.yearly') !== 'landing.pricing.yearly' ? __('landing.pricing.yearly') : 'اشتراك سنوي' }}</span>
+          <span class="text-[10px] bg-emerald-400 text-slate-900 font-extrabold px-1.5 py-0.5 rounded-md">شهرين مجاناً</span>
+        </button>
+      </div>
     </div>
 
     @php
@@ -36,7 +62,7 @@
       $noteLabel     = __('landing.pricing.bottom_note') !== 'landing.pricing.bottom_note' ? __('landing.pricing.bottom_note') : 'الأسعار بعملتك المحلية عند توفرها. قد تُطبَّق الضرائب.';
     @endphp
 
-    <div class="pricing-grid">
+    <div class="pricing-grid" data-animate="fade-in">
       @foreach($packages as $index => $package)
         @php
           $isFeatured = $package->is_featured;
@@ -79,21 +105,22 @@
           </div>
 
           <ul>
-            @foreach(array_slice($pFeatures, 0, 5) as $feature)
+            @foreach(array_slice($pFeatures, 0, 6) as $feature)
               <li>{{ $feature }}</li>
             @endforeach
           </ul>
 
-          <a class="btn {{ $isFeatured ? 'btn-primary' : 'btn-dark' }}"
+          <a class="btn {{ $isFeatured ? 'btn-primary font-black shadow-lg shadow-teal-700/20' : 'btn-dark' }}"
              :href="'{{ route('register') }}?plan={{ $package->slug }}&cycle=' + billingCycle + '&currency=' + selectedCurrency"
              data-track="landing_pricing_cta_clicked">
-            {{ $ctaFreeLabel }}
+            {{ $ctaFreeLabel }} ←
           </a>
         </article>
       @endforeach
     </div>
 
-    <p class="pricing-note">{{ $noteLabel }} • <b>بدون بطاقة بنكية • إلغاء في أي وقت</b></p>
+    <p class="pricing-note text-center mt-8 text-xs text-slate-500 font-bold">
+      {{ $noteLabel }} • <span class="text-[#2E8B83]">بدون بطاقة بنكية • إلغاء في أي وقت</span>
+    </p>
   </div>
 </section>
-
