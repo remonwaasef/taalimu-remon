@@ -22,10 +22,19 @@
          }">
   <div class="container">
     <div class="section-head center">
-      <span class="kicker">خطط بسيطة وواضحة</span>
+      <span class="kicker">{{ __('landing.pricing.badge') }}</span>
       <h2>اختر الخطة التي <span>تناسب حجم مركزك</span></h2>
-      <p>ابدأ بتجربة مجانية ثم اختر ما يناسب عدد طلابك واحتياجاتك.</p>
+      <p>ابدأ بتجربة مجانية لمدة 30 يومًا، ثم اختر ما يناسب عدد طلابك واحتياجاتك دون التزامات.</p>
     </div>
+
+    @php
+      $featuredLabel = __('landing.pricing.featured') !== 'landing.pricing.featured' ? __('landing.pricing.featured') : 'الأكثر شيوعًا';
+      $perMonthLabel = __('landing.pricing.per_month') !== 'landing.pricing.per_month' ? __('landing.pricing.per_month') : '/ شهرياً';
+      $perTermLabel  = __('landing.pricing.per_term') !== 'landing.pricing.per_term' ? __('landing.pricing.per_term') : '/ للترم';
+      $perYearLabel  = __('landing.pricing.per_year') !== 'landing.pricing.per_year' ? __('landing.pricing.per_year') : '/ سنوياً';
+      $ctaFreeLabel  = __('landing.pricing.cta_free') !== 'landing.pricing.cta_free' ? __('landing.pricing.cta_free') : 'ابدأ التجربة المجانية';
+      $noteLabel     = __('landing.pricing.bottom_note') !== 'landing.pricing.bottom_note' ? __('landing.pricing.bottom_note') : 'الأسعار بعملتك المحلية عند توفرها. قد تُطبَّق الضرائب.';
+    @endphp
 
     <div class="pricing-grid">
       @foreach($packages as $index => $package)
@@ -48,7 +57,7 @@
               if ($feat->type === 'limit' && $val === '0') continue;
               $transKey = 'features.' . $feat->code;
               $label = __($transKey) !== $transKey ? __($transKey) : (app()->getLocale() === 'en' && $feat->name_en ? $feat->name_en : $feat->name);
-              $unlimitedText = __('features.unlimited');
+              $unlimitedText = __('features.unlimited') !== 'features.unlimited' ? __('features.unlimited') : 'غير محدود';
               $pFeatures[] = ($val === '-1') ? ($label . ': ' . $unlimitedText) : (($feat->type === 'boolean') ? $label : ($label . ': ' . $val));
           }
         @endphp
@@ -58,7 +67,7 @@
                  x-effect="lp = getRegionalPrice({{ json_encode($package->regional_prices) }}, {{ $package->price }}, {{ $package->term_price }}, {{ $package->yearly_price }})">
 
           @if($isFeatured)
-            <span class="popular-badge">{{ __('landing.pricing.featured') }}</span>
+            <span class="popular-badge">{{ $featuredLabel }}</span>
           @endif
 
           <span class="plan-name">{{ $packageName }}</span>
@@ -66,7 +75,7 @@
 
           <div class="price">
             <strong x-text="billingCycle === 'monthly' ? lp.amount : (billingCycle === 'term' ? lp.term_price : lp.yearly_price)"></strong>
-            <small x-text="lp.currency + ' / ' + (billingCycle === 'monthly' ? '{{ __('landing.pricing.per_month') }}' : (billingCycle === 'term' ? '{{ __('landing.pricing.per_term') }}' : '{{ __('landing.pricing.per_year') }}'))"></small>
+            <small x-text="lp.currency + ' ' + (billingCycle === 'monthly' ? '{{ $perMonthLabel }}' : (billingCycle === 'term' ? '{{ $perTermLabel }}' : '{{ $perYearLabel }}'))"></small>
           </div>
 
           <ul>
@@ -78,12 +87,13 @@
           <a class="btn {{ $isFeatured ? 'btn-primary' : 'btn-dark' }}"
              :href="'{{ route('register') }}?plan={{ $package->slug }}&cycle=' + billingCycle + '&currency=' + selectedCurrency"
              data-track="landing_pricing_cta_clicked">
-            {{ __('landing.pricing.cta_free') }}
+            {{ $ctaFreeLabel }}
           </a>
         </article>
       @endforeach
     </div>
 
-    <p class="pricing-note">{{ __('landing.pricing.bottom_note') }}</p>
+    <p class="pricing-note">{{ $noteLabel }} • <b>بدون بطاقة بنكية • إلغاء في أي وقت</b></p>
   </div>
 </section>
+

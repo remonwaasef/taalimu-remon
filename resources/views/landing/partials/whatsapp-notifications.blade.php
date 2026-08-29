@@ -1,5 +1,5 @@
-{{-- Section 5: WhatsApp Notifications Dedicated Premium Feature --}}
-<section id="whatsapp" class="py-24 lg:py-36 bg-white relative overflow-hidden">
+{{-- Section: WhatsApp Notifications Dedicated Premium Feature --}}
+<section id="whatsapp" class="py-24 lg:py-32 bg-slate-50 relative overflow-hidden border-y border-slate-200/80">
     <div class="container mx-auto px-6 lg:px-12 max-w-7xl">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
             
@@ -7,12 +7,11 @@
             <div class="lg:col-span-6 flex justify-center order-2 lg:order-1" data-animate="scale-in">
                 <div class="relative w-full max-w-sm">
                     
-                    <!-- Floating WhatsApp Brand Icon with Red Badge -->
+                    <!-- Floating WhatsApp Brand Icon with Badge -->
                     <div class="absolute -top-4 -start-4 z-30 bg-emerald-500 text-white w-14 h-14 rounded-2xl shadow-xl flex items-center justify-center text-2xl border-2 border-white transform -rotate-6 hover:rotate-0 transition-transform">
                         <i class="fab fa-whatsapp"></i>
-                        <!-- Red Notification Badge -->
                         <span class="absolute -top-1 -end-1 w-5 h-5 bg-rose-500 text-white rounded-full text-[10px] font-black flex items-center justify-center shadow-md border-2 border-white">
-                            3
+                            4
                         </span>
                     </div>
 
@@ -44,33 +43,33 @@
                             <!-- Notification Card 1: Attendance Confirmation -->
                             <div class="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-200/80 mb-3 text-start transform hover:-translate-y-0.5 transition-transform">
                                 <div class="flex items-center justify-between mb-1.5">
-                                    <span class="text-[10px] font-extrabold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">إشعار حضور فوري</span>
+                                    <span class="text-[10px] font-extrabold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">حضر الطالب؟ WhatsApp ✓</span>
                                     <span class="text-[9px] text-slate-400 font-mono">10:15 ص</span>
                                 </div>
                                 <p class="text-xs font-bold text-slate-800 leading-snug">
-                                    مرحبًا ولي الأمر، تم تسجيل حضور الطالب <span class="text-[#2E8B83]">أحمد</span> لحصة مادة الرياضيات اليوم بنجاح.
+                                    مرحباً ولي أمر الطالب أحمد عمر، نحيطكم علماً بحضور أحمد الآن حصة الفيزياء. 📚
                                 </p>
                             </div>
 
-                            <!-- Notification Card 2: Quiz Reminder -->
+                            <!-- Notification Card 2: Payment Receipt -->
                             <div class="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-200/80 mb-3 text-start transform hover:-translate-y-0.5 transition-transform">
                                 <div class="flex items-center justify-between mb-1.5">
-                                    <span class="text-[10px] font-extrabold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md">تذكير بالاختبار</span>
-                                    <span class="text-[9px] text-slate-400 font-mono">أمس</span>
-                                </div>
-                                <p class="text-xs font-bold text-slate-800 leading-snug">
-                                    تذكير: يوجد اختبار دوري غدًا الساعة 10:00 صباحًا في القاعة الرئيسية.
-                                </p>
-                            </div>
-
-                            <!-- Notification Card 3: Payment Receipt -->
-                            <div class="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-200/80 text-start transform hover:-translate-y-0.5 transition-transform">
-                                <div class="flex items-center justify-between mb-1.5">
-                                    <span class="text-[10px] font-extrabold text-teal-700 bg-teal-50 px-2 py-0.5 rounded-md">إيصال سداد</span>
+                                    <span class="text-[10px] font-extrabold text-teal-700 bg-teal-50 px-2 py-0.5 rounded-md">دفع القسط؟ WhatsApp ✓</span>
                                     <span class="text-[9px] text-slate-400 font-mono">12:30 م</span>
                                 </div>
                                 <p class="text-xs font-bold text-slate-800 leading-snug">
-                                    تم استلام القسط الدراسي بنجاح وإصدار الفاتورة الإلكترونية برقم #INV-804.
+                                    تم استلام مبلغ 500 ج.م لحساب اشتراك الطالبة سلمى. الرصيد المتبقي: 0 ج.م. 💳
+                                </p>
+                            </div>
+
+                            <!-- Notification Card 3: Debt Reminder -->
+                            <div class="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-200/80 text-start transform hover:-translate-y-0.5 transition-transform">
+                                <div class="flex items-center justify-between mb-1.5">
+                                    <span class="text-[10px] font-extrabold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md">عليه قسط مستحق؟ WhatsApp ✓</span>
+                                    <span class="text-[9px] text-slate-400 font-mono">أمس</span>
+                                </div>
+                                <p class="text-xs font-bold text-slate-800 leading-snug">
+                                    تذكير لطيف: نود إعلامكم بوجود قسط مستحق قدره 350 ج.م لحساب الطالب يوسف. 📋
                                 </p>
                             </div>
 
@@ -81,37 +80,45 @@
                 </div>
             </div>
 
-            <!-- Right Column on RTL: Minimal Confident Messaging -->
+            <!-- Right Column on RTL: Strong High-Converting Messaging -->
             <div class="lg:col-span-6 text-center lg:text-start order-1 lg:order-2" data-animate="fade-in">
                 
-                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200/60 text-[#2E8B83] text-xs font-bold mb-6 shadow-2xs">
-                    <i class="fab fa-whatsapp text-xs"></i>
-                    <span>تواصل لحظي موثق</span>
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-100/70 border border-emerald-300/60 text-[#2E8B83] text-xs font-extrabold mb-6 shadow-2xs">
+                    <i class="fab fa-whatsapp text-sm text-emerald-600"></i>
+                    <span>إشعارات WhatsApp الرسمية تلقائيًا</span>
                 </div>
 
                 <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 leading-tight mb-6">
-                    ابقَ على تواصل<br>
-                    مع إشعارات WhatsApp
+                    ولي الأمر يعرف…<br>
+                    <span class="text-[#2E8B83]">قبل أن يسألك.</span>
                 </h2>
 
                 <p class="text-base sm:text-lg text-slate-600 font-medium leading-relaxed mb-8 max-w-xl mx-auto lg:mx-0">
-                    أرسل إشعارات مهمة للطلاب وأولياء الأمور بسهولة وتلقائية عبر الربط السحابي الرسمي.
+                    اربط مركزك بخدمة إشعارات Meta Cloud API الرسمية، لتوثيق كل حدث مهم في هاتف ولي الأمر فور حدوثه بدون اتصالات يدويّة لا تنتهي.
                 </p>
 
-                <div class="space-y-4 max-w-lg mx-auto lg:mx-0 text-start mb-8">
-                    <div class="flex items-start gap-3 p-3.5 rounded-2xl bg-[#FAFBFB] border border-slate-100">
-                        <i class="fas fa-check-circle text-emerald-600 mt-1"></i>
+                <div class="space-y-3.5 max-w-lg mx-auto lg:mx-0 text-start mb-8">
+                    <div class="flex items-center gap-3 p-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs">
+                        <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-sm shrink-0">✓</div>
                         <div>
-                            <h4 class="text-sm font-bold text-slate-900 mb-0.5">تنبيهات الحضور والغياب</h4>
-                            <p class="text-xs text-slate-500 font-medium">رسالة فورية لولي الأمر فور مسح كود الطالب بالمركز.</p>
+                            <h4 class="text-sm font-bold text-slate-900">حضر الطالب؟ <span class="text-emerald-600 font-extrabold">WhatsApp ✓</span></h4>
+                            <p class="text-xs text-slate-500">وصول رسالة فوريّة لرقم الوالد فور مسح كود QR بباب القاعة.</p>
                         </div>
                     </div>
 
-                    <div class="flex items-start gap-3 p-3.5 rounded-2xl bg-[#FAFBFB] border border-slate-100">
-                        <i class="fas fa-check-circle text-emerald-600 mt-1"></i>
+                    <div class="flex items-center gap-3 p-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs">
+                        <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-sm shrink-0">✓</div>
                         <div>
-                            <h4 class="text-sm font-bold text-slate-900 mb-0.5">متابعة الرسوم والأقساط</h4>
-                            <p class="text-xs text-slate-500 font-medium">إرسال إيصالات الدفع وتذكيرات الاستحقاق بضغطة زر.</p>
+                            <h4 class="text-sm font-bold text-slate-900">دفع القسط؟ <span class="text-emerald-600 font-extrabold">WhatsApp ✓</span></h4>
+                            <p class="text-xs text-slate-500">إيصال مالي إلكتروني شفاف يوضح المبلغ المدفوع والمتبقي.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-3 p-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs">
+                        <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-sm shrink-0">✓</div>
+                        <div>
+                            <h4 class="text-sm font-bold text-slate-900">ظهرت نتيجة اختبار؟ <span class="text-emerald-600 font-extrabold">WhatsApp ✓</span></h4>
+                            <p class="text-xs text-slate-500">إرسال التقييمات الشهرية ودرجات الامتحانات بآلية تضمن المتابعة.</p>
                         </div>
                     </div>
                 </div>

@@ -1,33 +1,43 @@
 @extends('layouts.landing-new')
 
 @section('content')
-    {{-- 1. Hero --}}
+    {{-- 1. Outcome-Driven Hero --}}
     @include('landing.partials.hero')
 
-    {{-- 2. Proof Bar + Problem (Before/After) + Workflow (4 Steps) --}}
+    {{-- 2. Social Proof & Readiness Strip --}}
     @include('landing.partials.trust')
 
-    {{-- 3. Product Showcase (Tabs: Dashboard / QR / WhatsApp) --}}
+    {{-- 3. Problem vs Solution Comparison Matrix --}}
+    @include('landing.partials.problem')
+
+    {{-- 4. Central Aha Moment: Student Lifecycle Automation (Scan QR -> Attendance -> Finance -> WhatsApp) --}}
+    @include('landing.partials.qr-whatsapp-flow')
+
+    {{-- 5. Product Interactive Showcase --}}
     @include('landing.partials.showcase')
 
-    {{-- 4. QR & WhatsApp Artwork Cards --}}
-    @include('landing.partials.qr-registration')
+    {{-- 6. WhatsApp Power Feature ("ولي الأمر يعرف قبل أن يسألك") --}}
+    @include('landing.partials.whatsapp-notifications')
 
-    {{-- 5. Features (6 Cards Grid) --}}
-    @include('landing.partials.feature-bento')
-
-    {{-- 6. Portals (4 Cards: Admin, Teacher, Student, Parent) --}}
+    {{-- 7. Audience Switcher (Independent Tutor vs Center Owner) --}}
     @include('landing.partials.audience')
 
-    {{-- 7. Pricing (Dynamic from DB) --}}
+    {{-- 8. Condensed 6-Feature Bento Grid --}}
+    @include('landing.partials.feature-bento')
+
+    {{-- 9. Smart Interactive ROI Calculator --}}
+    @include('landing.partials.roi-calculator')
+
+    {{-- 10. Dynamic Pricing Plans --}}
     @include('landing.partials.pricing')
 
-    {{-- 8. Security + FAQ --}}
+    {{-- 11. Security Infrastructure & FAQ --}}
     @include('landing.partials.security-faq')
 
-    {{-- 9. Final CTA --}}
+    {{-- 12. Final High-Conversion CTA --}}
     @include('landing.partials.cta')
 @endsection
+
 
 @push('scripts')
 <script>
