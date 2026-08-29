@@ -1,12 +1,16 @@
-{{-- Proof Bar — Redesigned Reference --}}
+{{-- Proof Bar — Redesigned Reference with Early Access Social Proof --}}
 <section class="proof">
   <div class="container proof-inner">
-    <div class="proof-title">كل ما يحتاجه مركزك في نظام واحد</div>
+    <div class="proof-title">
+      <span class="badge" style="background: #E6F4F3; color: #2E8B83; font-weight: 800; padding: 4px 10px; border-radius: 99px; margin-left: 8px;">🚀 برنامج الانضمام المبكر</span>
+      انضم للمراكز والمدرسين الجدد الذين يعتمدون على Taalimu
+    </div>
     <div class="proof-items">
-      <span>الطلاب</span><b>•</b><span>الحضور</span><b>•</b><span>المالية</span><b>•</b><span>WhatsApp</span><b>•</b><span>التقارير</span>
+      <span>تجربة كاملة 30 يومًا مجانًا</span><b>•</b><span>بدون بطاقة بنكية</span><b>•</b><span>إعداد في دقائق</span><b>•</b><span>دعم فني مباشر</span>
     </div>
   </div>
 </section>
+
 
 {{-- Problem Section — Before/After --}}
 <section class="section problem">

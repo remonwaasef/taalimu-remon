@@ -469,7 +469,7 @@ return [
         'feature_1' => 'Scan student QR and send instant WhatsApp confirmation in under 1 second.',
         'feature_2' => 'Full POS system, student installments, and instant receipt generation.',
         'feature_3' => 'Automated revenue reports and teacher payout calculations in 1 click.',
-        'start_trial_btn' => 'Start Free 14-Day Trial',
+        'start_trial_btn' => 'Start Free 30-Day Trial',
         'close_btn' => 'Close',
     ],
     'excel_template_btn' => 'Download Ready-to-use Excel Template',

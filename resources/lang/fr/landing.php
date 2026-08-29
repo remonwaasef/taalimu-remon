@@ -469,7 +469,7 @@ return [
         'feature_1' => 'Scanner le QR de l’élève et envoyer une notification WhatsApp en moins d’une seconde.',
         'feature_2' => 'Système POS complet, gestion des règlements et reçus instantanés.',
         'feature_3' => 'Rapports financiers automatiques et calculs des parts enseignants en 1 clic.',
-        'start_trial_btn' => 'Démarrer l’essai gratuit (14 jours)',
+        'start_trial_btn' => 'Démarrer l’essai gratuit (30 jours)',
         'close_btn' => 'Fermer',
     ],
     'excel_template_btn' => 'Télécharger un modèle Excel prêt à l’emploi',

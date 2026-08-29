@@ -16,7 +16,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - **Audience Choice Segmentation**: Added explicit dual audience switcher for Independent Tutors (مدرس مستقل) vs Educational Center Owners (صاحب مركز) with targeted registration parameters (`audience.blade.php`).
   - **Enhanced WhatsApp Value Positioning**: Re-framed WhatsApp notifications around `"ولي الأمر يعرف قبل أن يسألك"` featuring realistic alert triggers (`whatsapp-notifications.blade.php`).
   - **Condensed 6-Feature Bento Grid**: Streamlined features grid to 6 focused cards (`feature-bento.blade.php`).
-  - **Removed Product Showcase Tabbed Section**: Removed `@include('landing.partials.showcase')` and `#product` navbar references per explicit request to further streamline the page length and focus.
+  - **Landing Page CRO Fine-Tuning & 5 Strategic Fixes**:
+    - **Standardized Trial Duration**: Standardized 30-day free trial across all sections (Hero, ROI Calculator, FAQ, Demo Modal, Pricing).
+    - **Sharpened Hero Copy**: Refined subheadline: `"Taalimu تجمع طلابك وحضورك وأموالك وWhatsApp في نظام واحد. سجّل الطلاب بـ QR، سجّل الحضور في ثوانٍ، واطمئن أولياء الأمور تلقائيًا."`
+    - **Refined Copy Claims**: Replaced absolute time claims (`15-20 min`) with realistic phrases (`تضييع وقت الحصة في تسجيل الحضور يدويًا`).
+    - **Localized SaaS Terminology**: Replaced generic POS/Tenant Isolation terms with `"المالية والتحصيل"` and `"عزل كامل وحماية لبيانات كل مركز"`.
+    - **Added Early Access Social Proof**: Added `🚀 برنامج الانضمام المبكر` banner in the proof bar to establish early-stage credibility.
 
 - **Enhanced Landing Page UI/UX, Brand Identity & Interactive Conversions (2026-08-28)**:
   - Added interactive **Smart ROI & Time Savings Calculator** (`resources/views/landing/partials/roi-calculator.blade.php`) calculating operational hours and recovered leakages based on real-time student count slider.
