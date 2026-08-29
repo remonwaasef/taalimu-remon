@@ -59,10 +59,7 @@
 
             <div class="hero-visual reveal">
                 <div class="photo-card">
-                    <div class="photo-placeholder">
-                        <div class="person-silhouette">مدرس</div>
-                        <div class="photo-caption">صورة حقيقية لمدرس داخل بيئة عمل طبيعية</div>
-                    </div>
+                    <img src="{{ asset('images/landing/hero-realistic.webp') }}" alt="مدرس Taalimu" class="photo-img">
                 </div>
 
                 <div class="floating-card attendance">
@@ -111,7 +108,7 @@
             <div class="solution-copy reveal">
                 <span class="eyebrow">مع Taalimu</span>
                 <h2>كل شيء في مكان واحد.</h2>
-                <p>ببساطة، وضوح في الإدارة، تواصل أفضل، ووقت أكبر للتعليم.</p>
+                <p>ببساطة، ووضوح في الإدارة، تواصل أفضل، ووقت أكبر للتعليم.</p>
 
                 <ul class="benefit-list">
                     <li><span>✓</span><div><strong>حضور بالـQR في ثوانٍ</strong><small>بدون دفاتر وبدون وقت ضائع.</small></div></li>
@@ -166,11 +163,46 @@
             </div>
 
             <div class="feature-grid">
-                <article class="feature-card reveal"><div class="feature-shot shot-dashboard"></div><h3>لوحة التحكم</h3><p>نظرة سريعة على مركزك في أي وقت.</p><a href="#">عرض التفاصيل ←</a></article>
-                <article class="feature-card reveal"><div class="feature-shot shot-finance"></div><h3>إدارة مالية متكاملة</h3><p>الأقساط، المدفوعات ومستحقات المدرسين.</p><a href="#">عرض التفاصيل ←</a></article>
-                <article class="feature-card reveal"><div class="feature-shot shot-whatsapp"></div><h3>التواصل عبر WhatsApp</h3><p>إشعارات تلقائية بكل ما يهم أولياء الأمور.</p><a href="#">عرض التفاصيل ←</a></article>
-                <article class="feature-card reveal"><div class="feature-shot shot-qr"></div><h3>الحضور بالـQR</h3><p>حضور سريع بدون تسجيل يدوي.</p><a href="#">عرض التفاصيل ←</a></article>
-                <article class="feature-card reveal"><div class="feature-shot shot-students"></div><h3>إدارة الطلاب</h3><p>بيانات الطلاب والمجموعات والمستحقات في مكان واحد.</p><a href="#">عرض التفاصيل ←</a></article>
+                <article class="feature-card reveal">
+                    <div class="feature-shot">
+                        <img src="{{ asset('images/landing_fixed/hero-dashboard.png') }}" alt="لوحة التحكم" class="feature-img">
+                    </div>
+                    <h3>لوحة التحكم</h3>
+                    <p>نظرة سريعة على مركزك في أي وقت.</p>
+                    <a href="{{ route('register') }}">عرض التفاصيل ←</a>
+                </article>
+                <article class="feature-card reveal">
+                    <div class="feature-shot">
+                        <img src="{{ asset('images/landing_fixed/roles.png') }}" alt="إدارة مالية متكاملة" class="feature-img">
+                    </div>
+                    <h3>إدارة مالية متكاملة</h3>
+                    <p>الأقساط، المدفوعات ومستحقات المدرسين.</p>
+                    <a href="{{ route('register') }}">عرض التفاصيل ←</a>
+                </article>
+                <article class="feature-card reveal">
+                    <div class="feature-shot">
+                        <img src="{{ asset('images/landing_fixed/whatsapp.png') }}" alt="التواصل عبر WhatsApp" class="feature-img">
+                    </div>
+                    <h3>التواصل عبر WhatsApp</h3>
+                    <p>إشعارات تلقائية بكل ما يهم أولياء الأمور.</p>
+                    <a href="{{ route('register') }}">عرض التفاصيل ←</a>
+                </article>
+                <article class="feature-card reveal">
+                    <div class="feature-shot">
+                        <img src="{{ asset('images/landing_fixed/attendance.png') }}" alt="الحضور بالـQR" class="feature-img">
+                    </div>
+                    <h3>الحضور بالـQR</h3>
+                    <p>حضور سريع بدون تسجيل يدوي.</p>
+                    <a href="{{ route('register') }}">عرض التفاصيل ←</a>
+                </article>
+                <article class="feature-card reveal">
+                    <div class="feature-shot">
+                        <img src="{{ asset('images/automation/step1.webp') }}" alt="إدارة الطلاب" class="feature-img">
+                    </div>
+                    <h3>إدارة الطلاب</h3>
+                    <p>بيانات الطلاب والمجموعات والمستحقات في مكان واحد.</p>
+                    <a href="{{ route('register') }}">عرض التفاصيل ←</a>
+                </article>
             </div>
         </div>
     </section>
@@ -178,7 +210,9 @@
     {{-- TESTIMONIAL --}}
     <section class="testimonial section">
         <div class="container testimonial-box reveal">
-            <div class="testimonial-photo"><div class="photo-placeholder small"><span>صورة مدرس حقيقية</span></div></div>
+            <div class="testimonial-photo">
+                <img src="{{ asset('images/portals/teacher.jpg') }}" alt="أ. أحمد محمود" class="testimonial-img">
+            </div>
             <div>
                 <span class="eyebrow">تجربة من الواقع</span>
                 <blockquote>«من أول يوم في Taalimu، بقي عندي وقت أكتر لطلابي، ونظام المركز كله بقى تحت السيطرة.»</blockquote>

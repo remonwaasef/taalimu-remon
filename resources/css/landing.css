@@ -52,14 +52,8 @@ h1 span{color:var(--green)}
 .hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin:28px 0 18px}
 .trust-points{display:flex;gap:20px;flex-wrap:wrap;color:#63716f;font-size:11px}
 .hero-visual{position:relative;min-height:470px}
-.photo-card{height:470px;border-radius:30px;overflow:hidden;background:linear-gradient(135deg,#dce8e4,#f8f1e7);box-shadow:var(--shadow)}
-.photo-placeholder{height:100%;display:flex;align-items:flex-end;justify-content:center;position:relative;background:
-radial-gradient(circle at 50% 38%,#d4aa8c 0 8%,transparent 8.5%),
-radial-gradient(ellipse at 50% 56%,#8c624b 0 13%,transparent 13.5%),
-linear-gradient(145deg,#e9f0ed,#f4e7d8 70%)}
-.photo-placeholder:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(12,30,39,.25))}
-.person-silhouette{position:relative;z-index:2;font-size:30px;font-weight:800;color:#fff;margin-bottom:65px}
-.photo-caption{position:absolute;z-index:3;bottom:18px;right:20px;color:#fff;font-size:10px;background:rgba(13,26,43,.5);padding:6px 10px;border-radius:8px}
+.photo-card{height:470px;border-radius:30px;overflow:hidden;background:linear-gradient(135deg,#dce8e4,#f8f1e7);box-shadow:var(--shadow);position:relative}
+.photo-img{width:100%;height:100%;object-fit:cover;object-position:center 15%;display:block}
 .floating-card{position:absolute;display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e8eeeb;border-radius:14px;padding:13px 15px;box-shadow:0 14px 35px rgba(16,32,51,.14);font-size:11px}
 .floating-card strong,.floating-card small{display:block}
 .floating-card small{color:var(--muted);font-size:10px}
@@ -115,22 +109,19 @@ linear-gradient(145deg,#e9f0ed,#f4e7d8 70%)}
 
 .features{background:#f7faf8}
 .feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.feature-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px;box-shadow:0 7px 25px rgba(16,32,51,.04)}
-.feature-shot{height:185px;border-radius:14px;background:linear-gradient(145deg,#eff7f4,#e7edf0);position:relative;overflow:hidden;border:1px solid #e4ebe8}
-.feature-shot:before{content:"";position:absolute;top:14px;right:14px;left:14px;height:16px;border-radius:6px;background:#0f2435}
-.feature-shot:after{content:"";position:absolute;right:14px;left:14px;top:47px;height:95px;border-radius:8px;background:repeating-linear-gradient(0deg,#fff 0 17px,#edf3f0 18px 19px)}
-.shot-qr{background:linear-gradient(145deg,#e8f6f2,#eef2f3)}
-.shot-qr:after{content:"▦";display:grid;place-items:center;font-size:72px;color:#0f2435;background:#fff;position:absolute;inset:65px 45px 28px;border-radius:12px}
-.shot-whatsapp:after{background:linear-gradient(135deg,#e9f7f2,#fff)}
-.shot-finance:after{background:linear-gradient(180deg,#fff 0 40%,#dff0eb 41% 43%,#fff 44% 62%,#dff0eb 63% 65%,#fff 66%)}
+.feature-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px;box-shadow:0 7px 25px rgba(16,32,51,.04);transition:transform .2s,box-shadow .2s}
+.feature-card:hover{transform:translateY(-3px);box-shadow:0 12px 35px rgba(16,32,51,.08)}
+.feature-shot{height:185px;border-radius:14px;background:#f0f5f3;position:relative;overflow:hidden;border:1px solid #e4ebe8;display:flex;align-items:center;justify-content:center}
+.feature-img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block;transition:transform .35s ease}
+.feature-card:hover .feature-img{transform:scale(1.05)}
 .feature-card h3{font-size:15px;margin:14px 4px 4px}
 .feature-card p{font-size:11px;color:var(--muted);margin:0 4px 10px}
 .feature-card a{font-size:10px;color:var(--green);font-weight:800;margin:0 4px}
 
 .testimonial{background:#fff}
 .testimonial-box{max-width:1050px;background:#f6f1e8;border-radius:26px;display:grid;grid-template-columns:1fr 1fr;overflow:hidden;align-items:stretch}
-.testimonial-photo{min-height:350px}
-.photo-placeholder.small{height:100%;display:grid;place-items:center;background:linear-gradient(145deg,#e1e9e5,#e9d7c5);color:#52625e;font-size:14px}
+.testimonial-photo{min-height:350px;position:relative;overflow:hidden;background:#e9dfd1}
+.testimonial-img{width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block}
 .testimonial-box>div:last-child{padding:60px 55px}
 blockquote{font-size:23px;line-height:1.7;font-weight:700;margin:15px 0 20px}
 .testimonial-box strong,.testimonial-box small{display:block}
