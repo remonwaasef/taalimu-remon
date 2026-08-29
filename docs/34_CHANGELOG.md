@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Fixed 500 Server Error occurring when accessing `/login` (`login.portal`) and `/register` (`register`).
 
 ### Added & Optimized
+- **Adopted Taalimu Brand Identity & UI Color System v1.0 (2026-08-29)**:
+  - Updated global design tokens in `resources/css/design-tokens.css` with official palette: Primary Green (`#168F7C`), Primary Dark (`#0D7465`), Primary Soft (`#E8F5F1`), Ink (`#102033`), Navy (`#0D1A2B`), Muted (`#65717F`), Cream (`#FBFAF6`), and Border (`#E5ECE9`).
+  - Synchronized `.agents/DESIGN_SYSTEM.md`, `docs/design-system/DESIGN_TOKENS_REFERENCE.md`, and `docs/23_UI_GUIDE.md` to reflect Brand Identity v1.0 guidelines.
 - **Replaced Landing Page with Dedicated Clean Arabic Design (2026-08-29)**:
   - Imported and integrated new landing page (`resources/views/landing.blade.php`, `resources/css/landing.css`, `resources/js/landing.js`).
   - Integrated dynamic route actions (`login.portal`, `register`, `home`, `privacy`, `terms`, `cookies`).
