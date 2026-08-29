@@ -36,30 +36,30 @@
 
       {{-- Main Headline --}}
       <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 leading-tight mb-4 tracking-tight">
-        {{ __('landing.hero.title_line1') !== 'landing.hero.title_line1' ? __('landing.hero.title_line1') : 'ودّع الدفاتر وExcel' }}<br>
-        <span class="text-[#2E8B83]">{{ __('landing.hero.title_line2') !== 'landing.hero.title_line2' ? __('landing.hero.title_line2') : 'ومتابعة أولياء الأمور يدويًا.' }}</span>
+        {{ __('landing.hero.title_line1') !== 'landing.hero.title_line1' ? __('landing.hero.title_line1') : 'ادخل حصتك في ميعادها..' }}<br>
+        <span class="text-[#2E8B83]">{{ __('landing.hero.title_line2') !== 'landing.hero.title_line2' ? __('landing.hero.title_line2') : 'وسيب الحضور والفلوس ومتابعة الأهالي لـ تعليمو.' }}</span>
       </h1>
 
       {{-- Subheading --}}
       <p class="hero-lead text-base sm:text-lg text-slate-600 font-medium leading-relaxed max-w-xl mb-6">
-        {{ __('landing.hero.subtitle') !== 'landing.hero.subtitle' ? __('landing.hero.subtitle') : 'Taalimu تمنحك السيطرة الكاملة على مركزك التعليمي: تسجيل الطلاب بكود QR في ثوانٍ، رصد الحضور لحظياً، تنظيم الأقساط والمدفوعات، وإشعار أولياء الأمور تلقائياً عبر WhatsApp.' }}
+        {{ __('landing.hero.subtitle') !== 'landing.hero.subtitle' ? __('landing.hero.subtitle') : 'المنظومة الأسهل للمراكز التعليمية والمدرسين: مسح كود QR في ثانية، رسالة WhatsApp تطمئن ولي الأمر فوراً، وتصفية الخزينة ونسب المدرسين بضغطة زر.' }}
       </p>
 
       {{-- Action Buttons --}}
       <div class="hero-actions flex flex-wrap items-center gap-3 mb-6">
-        <a class="btn btn-primary btn-xl font-bold shadow-lg shadow-teal-700/20" href="{{ route('register') }}" data-track="hero_primary_cta">
-          {{ __('landing.pricing.cta_free') }} <span class="ms-1 font-bold">←</span>
+        <a class="btn btn-primary btn-xl font-extrabold shadow-lg shadow-teal-700/25 px-7 py-3.5 rounded-xl hover:-translate-y-0.5 transition-all" href="{{ route('register') }}" data-track="hero_primary_cta">
+          {{ __('landing.hero.cta_primary') !== 'landing.hero.cta_primary' ? __('landing.hero.cta_primary') : 'ابدأ تجربة مركزك مجاناً (30 يوماً)' }} <span class="ms-1 font-bold rtl:inline-block ltr:hidden">←</span><span class="ms-1 font-bold rtl:hidden ltr:inline-block">→</span>
         </a>
-        <button type="button" class="btn btn-outline btn-xl font-bold" onclick="window.dispatchEvent(new CustomEvent('open-demo-modal'))">
-          <span class="play text-teal-600 ms-1">▶</span> {{ __('landing.hero.cta_secondary') }}
+        <button type="button" class="btn btn-outline btn-xl font-bold px-5 py-3.5 rounded-xl hover:bg-slate-100 transition-all text-slate-700" onclick="window.dispatchEvent(new CustomEvent('open-demo-modal'))">
+          <span class="play text-[#2E8B83] ms-1">▶</span> {{ __('landing.hero.cta_secondary') !== 'landing.hero.cta_secondary' ? __('landing.hero.cta_secondary') : 'شاهد النظام أثناء العمل (90 ثانية)' }}
         </button>
       </div>
 
       {{-- Trust Checkmarks --}}
-      <div class="trust-row flex flex-wrap gap-4 text-xs font-semibold text-slate-600 pt-3 border-t border-slate-200/70">
+      <div class="trust-row flex flex-wrap gap-4 text-xs font-bold text-slate-600 pt-3 border-t border-slate-200/70">
         <span class="inline-flex items-center gap-1.5"><i class="fas fa-check-circle text-[#2E8B83]"></i> {{ __('landing.hero.check_nocard') }}</span>
         <span class="inline-flex items-center gap-1.5"><i class="fas fa-check-circle text-[#2E8B83]"></i> {{ __('landing.hero.check_setup') }}</span>
-        <span class="inline-flex items-center gap-1.5"><i class="fas fa-check-circle text-[#2E8B83]"></i> {{ __('landing.hero.check_import') !== 'landing.hero.check_import' ? __('landing.hero.check_import') : 'استيراد مجاني لبياناتك من Excel' }}</span>
+        <span class="inline-flex items-center gap-1.5"><i class="fas fa-check-circle text-[#2E8B83]"></i> {{ __('landing.hero.check_import') !== 'landing.hero.check_import' ? __('landing.hero.check_import') : 'مساعدة مجانية في نقل شيتاتك من Excel' }}</span>
       </div>
 
       {{-- Micro Testimonial --}}
