@@ -36,6 +36,9 @@
 
     {{-- 12. Final High-Conversion CTA --}}
     @include('landing.partials.cta')
+
+    {{-- 13. Mobile Floating Sticky Conversion Bar --}}
+    @include('landing.partials.mobile-sticky-cta')
 @endsection
 
 
