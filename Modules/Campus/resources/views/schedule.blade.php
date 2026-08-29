@@ -116,8 +116,8 @@
     :root {
         --calendar-bg: #f8fafc;
         --card-bg: #ffffff;
-        --accent-color: #4f46e5;
-        --today-bg: rgba(79, 70, 229, 0.03);
+        --accent-color: #168F7C;
+        --today-bg: rgba(22, 143, 124, 0.03);
     }
 
     .schedule-calendar-wrapper {
@@ -175,7 +175,7 @@
         padding: 2px 10px;
         border-radius: 50px;
         font-weight: 700;
-        box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
+        box-shadow: 0 4px 10px rgba(22, 143, 124, 0.3);
     }
 
     .day-content {

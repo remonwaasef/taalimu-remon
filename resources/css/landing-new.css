@@ -12,7 +12,7 @@
 /* =========================================================
    TAALIMU LANDING PAGE — Professional Redesign
    =========================================================
-   Brand Color: #2E8B83 (Teal)
+   Brand Color: #168F7C (Teal)
    Typography: Cairo (Arabic) + Inter (English)
    ========================================================= */
 
@@ -20,8 +20,8 @@
    1. DESIGN TOKENS (Landing-specific)
    --------------------------------------------------------- */
 :root {
-    /* Brand — unified to #2E8B83 */
-    --green: #2E8B83;
+    /* Brand — unified to #168F7C */
+    --green: #168F7C;
     --green-2: #25746D;
     --green-3: #1E5E58;
     --green-soft: #E6F4F3;
@@ -41,9 +41,9 @@
     --dark: #0F1720;
 
     /* Gradients */
-    --gradient-brand: linear-gradient(135deg, #2E8B83 0%, #10b981 100%);
+    --gradient-brand: linear-gradient(135deg, #168F7C 0%, #10b981 100%);
     --gradient-hero-bg: radial-gradient(ellipse 80% 60% at 70% 30%, #E6F4F3 0%, rgba(230, 244, 243, 0) 60%);
-    --gradient-cta: linear-gradient(135deg, #0F172A 0%, #1E293B 40%, #2E8B83 100%);
+    --gradient-cta: linear-gradient(135deg, #0F172A 0%, #1E293B 40%, #168F7C 100%);
     --gradient-dark-section: linear-gradient(165deg, #0F172A 0%, #17202B 50%, #1D2935 100%);
 
     /* Shadows */

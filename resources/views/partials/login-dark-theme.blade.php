@@ -12,7 +12,7 @@
     html.dark .login-page-wrap {
         background:
             radial-gradient(1200px 600px at 15% -10%, rgba(16,185,129,.07), transparent 55%),
-            radial-gradient(900px 500px at 90% 100%, rgba(79,70,229,.06), transparent 55%),
+            radial-gradient(900px 500px at 90% 100%, rgba(22,143,124,.06), transparent 55%),
             #020617 !important;
     }
 
@@ -68,7 +68,7 @@
 
     /* Admin submit + logo chip (was slate-900) — lift with brand indigo on dark */
     html.dark .login-card .bg-slate-900,
-    html.dark .login-card .bg-slate-900:hover { background-color: #4F46E5 !important; }
+    html.dark .login-card .bg-slate-900:hover { background-color: #168F7C !important; }
 
     /* Fixed toggle button (corner; RTL/LTR aware) */
     #taalimu-theme-toggle {

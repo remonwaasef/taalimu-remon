@@ -21,10 +21,10 @@
                 extend: {
                     colors: {
                         brand: {
-                            primary: '#4F46E5',
-                            50: '#EEF2FF',
-                            100: '#E0E7FF',
-                            900: '#312E81',
+                            primary: '#168F7C',
+                            50: '#F2FBF8',
+                            100: '#E8F5F1',
+                            900: '#0A5F54',
                         }
                     }
                 }

@@ -8,10 +8,10 @@
         width: 56px;
         height: 56px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #4F46E5 0%, #4338CA 100%);
+        background: linear-gradient(135deg, #168F7C 0%, #0D7465 100%);
         color: white;
         border: none;
-        box-shadow: 0 4px 20px rgba(79, 70, 229, 0.4);
+        box-shadow: 0 4px 20px rgba(22, 143, 124, 0.4);
         cursor: pointer;
         display: flex;
         align-items: center;
@@ -23,13 +23,13 @@
 
     .bug-report-fab:hover {
         transform: scale(1.1);
-        box-shadow: 0 6px 28px rgba(79, 70, 229, 0.5);
+        box-shadow: 0 6px 28px rgba(22, 143, 124, 0.5);
         animation: none;
     }
 
     @keyframes bug-fab-pulse {
-        0%, 100% { box-shadow: 0 4px 20px rgba(79, 70, 229, 0.4); }
-        50% { box-shadow: 0 4px 28px rgba(79, 70, 229, 0.6); }
+        0%, 100% { box-shadow: 0 4px 20px rgba(22, 143, 124, 0.4); }
+        50% { box-shadow: 0 4px 28px rgba(22, 143, 124, 0.6); }
     }
 
     .bug-report-fab .fab-tooltip {
@@ -102,7 +102,7 @@
     }
 
     #bugReportModal .modal-header {
-        background: linear-gradient(135deg, #4F46E5 0%, #4338CA 100%);
+        background: linear-gradient(135deg, #168F7C 0%, #0D7465 100%);
         color: white;
         border: none;
         padding: 20px 24px;
@@ -122,8 +122,8 @@
 
     #bugReportModal .form-control:focus,
     #bugReportModal .form-select:focus {
-        border-color: #4F46E5;
-        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        border-color: #168F7C;
+        box-shadow: 0 0 0 3px rgba(22, 143, 124, 0.1);
     }
 
     .bug-report-success {
@@ -152,7 +152,7 @@
     }
 
     .screenshot-box.has-image {
-        border-color: #4F46E5;
+        border-color: #168F7C;
     }
 
     .screenshot-box .screenshot-img {
@@ -189,9 +189,9 @@
     }
 
     .bug-info-badge {
-        background: #EEF2FF;
-        border: 1px solid #C7D2FE;
-        color: #3730A3;
+        background: #E8F5F1;
+        border: 1px solid #D3EBE5;
+        color: #0D7465;
         border-radius: 10px;
         padding: 10px 14px;
         font-size: 12px;

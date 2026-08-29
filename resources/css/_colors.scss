@@ -1,9 +1,9 @@
 // Global Color Palette — Taalimu Design System 1.0
 
 // SCSS Variables (for usage in Sass files)
-$primary: #4F46E5;
+$primary: #168F7C;
 $secondary: #0f172a;
-$accent: #818CF8;
+$accent: #62BDAE;
 $success: #22c55e;
 $warning: #F59E0B;
 $danger: #EF4444;
@@ -28,6 +28,6 @@ $white: #FFFFFF;
     --bg-white: #{$white};
 
     // Gradients
-    --primary-gradient: linear-gradient(135deg, #{$primary} 0%, #4338CA 100%);
-    --accent-gradient: linear-gradient(135deg, #{$accent} 0%, #6366F1 100%);
+    --primary-gradient: linear-gradient(135deg, #{$primary} 0%, #0D7465 100%);
+    --accent-gradient: linear-gradient(135deg, #{$accent} 0%, #A9D9D0 100%);
 }

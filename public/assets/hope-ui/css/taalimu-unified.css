@@ -1,17 +1,17 @@
-/* ===== Global Emerald & Teal Theme (Matching Unified Brand Identity) ===== */
+/* ===== Global Taalimu Green Theme (Matching Brand Identity v1.0) ===== */
 :root {
-    --bs-primary: var(--color-primary, #2E8B83) !important;
-    --bs-primary-rgb: 46, 139, 131 !important;
-    --bs-link-color: var(--color-primary, #2E8B83) !important;
-    --bs-link-hover-color: var(--color-primary-hover, #25746D) !important;
-    --primary-color: var(--color-primary, #2E8B83) !important;
-    --primary-gradient: linear-gradient(135deg, var(--color-primary, #2E8B83) 0%, var(--color-accent, #69B7C8) 100%);
+    --bs-primary: var(--color-primary, #168F7C) !important;
+    --bs-primary-rgb: 22, 143, 124 !important;
+    --bs-link-color: var(--color-primary, #168F7C) !important;
+    --bs-link-hover-color: var(--color-primary-hover, #0D7465) !important;
+    --primary-color: var(--color-primary, #168F7C) !important;
+    --primary-gradient: linear-gradient(135deg, var(--color-primary, #168F7C) 0%, var(--color-primary-dark, #0D7465) 100%);
 }
 
 body {
-    font-family: 'Inter', 'Cairo', sans-serif;
-    background-color: #f8fafc !important;
-    color: #1e293b;
+    font-family: 'Cairo', 'Inter', sans-serif;
+    background-color: #F7FAF8 !important;
+    color: #102033;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
@@ -96,7 +96,7 @@ body {
 
 /* Premium Buttons in Header */
 .iq-navbar-header .btn-primary {
-    background: linear-gradient(to right, #2E8B83, #69B7C8) !important;
+    background: linear-gradient(to right, #168F7C, #69B7C8) !important;
     color: #ffffff !important;
     border: none;
     box-shadow: 0 4px 12px rgba(46, 139, 131, 0.2) !important;
@@ -359,7 +359,7 @@ body {
 }
 
 a {
-    color: #2E8B83;
+    color: #168F7C;
     transition: all 0.2s ease;
 }
 
@@ -372,7 +372,7 @@ a:hover {
 .sidebar-default .sidebar-list .nav-item li>.nav-link.active {
     background: linear-gradient(to right, rgba(46, 139, 131, 0.1), rgba(20, 184, 166, 0.1)) !important;
     /* Soft Emerald/Teal Gradient */
-    color: #2E8B83 !important;
+    color: #168F7C !important;
     /* Deep Emerald */
     box-shadow: none !important;
     border-radius: 10px !important;
@@ -381,7 +381,7 @@ a:hover {
 
 .sidebar .nav-item .nav-link.active i,
 .sidebar-default .sidebar-list .nav-item li>.nav-link.active i {
-    color: #2E8B83 !important;
+    color: #168F7C !important;
 }
 
 .sidebar .nav-item .nav-link {
@@ -393,7 +393,7 @@ a:hover {
 .sidebar .nav-item .nav-link:hover:not(.active) {
     background: rgba(46, 139, 131, 0.05);
     /* Very light emerald tint on hover */
-    color: #2E8B83 !important;
+    color: #168F7C !important;
 }
 
 /* Header banner */
@@ -441,7 +441,7 @@ a:hover {
 
 .form-control:focus,
 .form-select:focus {
-    border-color: #2E8B83 !important;
+    border-color: #168F7C !important;
     box-shadow: 0 0 0 0.25rem rgba(46, 139, 131, 0.1) !important;
     background-color: #ffffff !important;
 }
@@ -459,8 +459,8 @@ label:not(.form-floating > label):not(.custom-form-floating > label) {
 }
 
 .form-check-input:checked {
-    background-color: #2E8B83 !important;
-    border-color: #2E8B83 !important;
+    background-color: #168F7C !important;
+    border-color: #168F7C !important;
 }
 
 .input-group-text {
@@ -493,13 +493,13 @@ label:not(.form-floating > label):not(.custom-form-floating > label) {
 }
 
 .nav-tabs .nav-link:hover:not(.active) {
-    color: #2E8B83 !important;
+    color: #168F7C !important;
     background: rgba(46, 139, 131, 0.05) !important;
 }
 
 .nav-tabs .nav-link.active {
     background: #ffffff !important;
-    color: #2E8B83 !important;
+    color: #168F7C !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
 }
 
@@ -513,7 +513,7 @@ label:not(.form-floating > label):not(.custom-form-floating > label) {
 }
 
 .nav-pills .nav-link.active {
-    background: linear-gradient(to right, #2E8B83, #69B7C8) !important;
+    background: linear-gradient(to right, #168F7C, #69B7C8) !important;
     color: #ffffff !important;
     box-shadow: 0 4px 12px rgba(46, 139, 131, 0.25) !important;
 }
@@ -533,7 +533,7 @@ label:not(.form-floating > label):not(.custom-form-floating > label) {
 }
 
 .breadcrumb-item a:hover {
-    color: #2E8B83 !important;
+    color: #168F7C !important;
 }
 
 .breadcrumb-item.active {
@@ -603,7 +603,7 @@ label:not(.form-floating > label):not(.custom-form-floating > label) {
 .badge.bg-success,
 .badge.bg-primary {
     background: #E6F4F3 !important;
-    color: #2E8B83 !important;
+    color: #168F7C !important;
 }
 
 .badge.bg-danger {
@@ -726,7 +726,7 @@ label:not(.form-floating > label):not(.custom-form-floating > label) {
 .dropdown-item:hover,
 .dropdown-item:focus {
     background: #f0fdf4 !important;
-    color: #2E8B83 !important;
+    color: #168F7C !important;
 }
 
 @keyframes fadeInDown {
@@ -935,7 +935,7 @@ h6 {
 .content-inner>.d-flex:first-child .btn-primary:hover,
 .content-inner>.mb-4:first-child .btn-primary:hover {
     background-color: #f8fafc !important;
-    color: #2E8B83 !important;
+    color: #168F7C !important;
     transform: translateY(-1px);
 }
 
@@ -1034,8 +1034,8 @@ h6 {
 
 .dropdown-item:hover,
 .dropdown-item:focus {
-    color: #2E8B83 !important;
-    -webkit-text-fill-color: #2E8B83 !important;
+    color: #168F7C !important;
+    -webkit-text-fill-color: #168F7C !important;
 }
 
 .dropdown-item.text-danger {
@@ -1049,8 +1049,8 @@ h6 {
 }
 
 .dropdown-item.text-success {
-    color: #2E8B83 !important;
-    -webkit-text-fill-color: #2E8B83 !important;
+    color: #168F7C !important;
+    -webkit-text-fill-color: #168F7C !important;
 }
 
 .dropdown-item.text-primary {
@@ -1553,7 +1553,7 @@ label {
 
 .sidebar .sub-nav .nav-link.active {
     background: #f0fdf4 !important;
-    color: #2E8B83 !important;
+    color: #168F7C !important;
     font-weight: 600 !important;
 }
 

@@ -25,10 +25,10 @@
                 extend: {
                     colors: {
                         brand: {
-                            primary: '#4F46E5',
-                            50: '#EEF2FF',
-                            100: '#E0E7FF',
-                            900: '#312E81',
+                            primary: '#168F7C',
+                            50: '#F2FBF8',
+                            100: '#E8F5F1',
+                            900: '#0A5F54',
                         }
                     }
                 }
@@ -49,7 +49,7 @@
                     @if($tenant->settings['appearance']['logo'] ?? null)
                         <img src="{{ asset('storage/' . $tenant->settings['appearance']['logo']) }}" alt="{{ $tenant->name }}" class="h-10 w-10 rounded-lg object-cover">
                     @else
-                        <div class="h-10 w-10 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold text-lg">
+                        <div class="h-10 w-10 rounded-lg bg-[#168F7C] flex items-center justify-center text-white font-bold text-lg">
                             {{ substr($tenant->name, 0, 1) }}
                         </div>
                     @endif
@@ -58,7 +58,7 @@
                         <p class="text-sm text-gray-500">الدورات المتاحة</p>
                     </div>
                 </div>
-                <a href="{{ url('/') }}" class="text-sm text-indigo-600 hover:text-indigo-800">
+                <a href="{{ url('/') }}" class="text-sm text-[#168F7C] hover:text-[#0D7465]">
                     الرئيسية
                 </a>
             </div>
@@ -84,7 +84,7 @@
                                 <img src="{{ asset('storage/' . $course->image) }}" alt="{{ $course->title }}" class="w-full h-full object-cover">
                             </div>
                         @else
-                            <div class="h-48 bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                            <div class="h-48 bg-gradient-to-br from-[#168F7C] to-[#0D7465] flex items-center justify-center">
                                 <svg class="w-16 h-16 text-white opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
                                 </svg>
@@ -98,9 +98,9 @@
                             {{-- Instructor --}}
                             @if($course->instructor)
                                 <div class="flex items-center gap-2 mb-3">
-                                    <div class="h-6 w-6 rounded-full bg-indigo-100 flex items-center justify-center">
-                                        <span class="text-xs font-medium text-indigo-600">{{ substr($course->instructor->name, 0, 1) }}</span>
-                                    </div>
+<div class="h-6 w-6 rounded-full bg-[#E8F5F1] flex items-center justify-center">
+    <span class="text-xs font-medium text-[#168F7C]">{{ substr($course->instructor->name, 0, 1) }}</span>
+</div>
                                     <span class="text-sm text-gray-600">{{ $course->instructor->name }}</span>
                                 </div>
                             @endif
@@ -123,14 +123,14 @@
                             <div class="flex items-center justify-between">
                                 <div>
                                     @if($course->price > 0)
-                                        <span class="text-xl font-bold text-indigo-600">{{ number_format($course->price, 2) }}</span>
+                                        <span class="text-xl font-bold text-[#168F7C]">{{ number_format($course->price, 2) }}</span>
                                         <span class="text-sm text-gray-500">ج.م</span>
                                     @else
                                         <span class="text-lg font-bold text-green-600">مجاني</span>
                                     @endif
                                 </div>
                                 <a href="{{ route('center.public.courses.show', ['tenant' => $tenant->domain, 'course' => $course->id]) }}"
-                                   class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors">
+                                   class="inline-flex items-center px-4 py-2 bg-[#168F7C] text-white text-sm font-medium rounded-lg hover:bg-[#0D7465] transition-colors">
                                     التفاصيل
                                     <svg class="w-4 h-4 mr-1 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>

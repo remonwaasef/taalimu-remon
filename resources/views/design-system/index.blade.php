@@ -52,7 +52,7 @@
         <div class="flex-1 flex flex-col min-h-0 overflow-y-auto scrollbar-none p-4">
             <!-- Brand Logo -->
             <div class="flex items-center gap-3 px-2 py-3 mb-4">
-                <div class="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white text-lg shadow-lg shadow-indigo-600/30 shrink-0">
+                <div class="w-9 h-9 rounded-xl bg-[#168F7C] flex items-center justify-center text-white text-lg shadow-lg shadow-[#168F7C]/30 shrink-0">
                     <i class="fas fa-graduation-cap"></i>
                 </div>
                 <div>
@@ -63,7 +63,7 @@
 
             <!-- Overview Active Pill -->
             <div class="mb-4">
-                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-indigo-600 text-white font-bold text-xs shadow-md shadow-indigo-600/30 transition-all">
+                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-[#168F7C] text-white font-bold text-xs shadow-md shadow-[#168F7C]/30 transition-all">
                     <i class="fas fa-th-large w-4 text-center"></i>
                     <span>Overview</span>
                 </a>
@@ -144,7 +144,7 @@
             </div>
 
             <!-- Promo Gradient Card -->
-            <div class="mt-auto mb-3 p-4 rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-700 text-white relative overflow-hidden shadow-lg">
+            <div class="mt-auto mb-3 p-4 rounded-2xl bg-gradient-to-br from-[#168F7C] to-[#0D7465] text-white relative overflow-hidden shadow-lg">
                 <div class="relative z-10">
                     <h5 class="text-xs font-bold leading-tight">Empowering education centers to achieve more.</h5>
                     <a href="/" class="mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 bg-white text-indigo-700 rounded-xl text-[11px] font-bold shadow-xs hover:bg-slate-100 transition-colors">
@@ -161,7 +161,7 @@
         <!-- User Profile Footer -->
         <div class="p-3 border-t border-slate-800 bg-[#070A10] flex items-center justify-between">
             <div class="flex items-center gap-2.5 min-w-0">
-                <div class="w-8 h-8 rounded-full bg-indigo-500/20 text-indigo-400 font-bold flex items-center justify-center text-xs border border-indigo-500/30 shrink-0">
+                <div class="w-8 h-8 rounded-full bg-[#168F7C]/20 text-[#168F7C] font-bold flex items-center justify-center text-xs border border-[#168F7C]/30 shrink-0">
                     RW
                 </div>
                 <div class="min-w-0">
@@ -316,7 +316,7 @@
                 <p class="text-[11px] font-tajawal text-slate-400 dark:text-slate-500 mb-3">Core design tokens</p>
 
                 <div class="space-y-1 text-slate-600 dark:text-slate-400">
-                    <div class="flex justify-between"><span class="text-indigo-600 dark:text-indigo-400">color.primary.500</span><span class="text-slate-800 dark:text-slate-200 font-bold">#4F46E5</span></div>
+                    <div class="flex justify-between"><span class="text-[#168F7C] dark:text-[#62BDAE]">color.primary.500</span><span class="text-slate-800 dark:text-slate-200 font-bold">#168F7C</span></div>
                     <div class="flex justify-between"><span class="text-emerald-600 dark:text-emerald-400">color.success.500</span><span class="text-slate-800 dark:text-slate-200 font-bold">#22C55E</span></div>
                     <div class="flex justify-between"><span class="text-amber-600 dark:text-amber-400">color.warning.500</span><span class="text-slate-800 dark:text-slate-200 font-bold">#F59E0B</span></div>
                     <div class="flex justify-between"><span class="text-red-600 dark:text-red-400">color.error.500</span><span class="text-slate-800 dark:text-slate-200 font-bold">#EF4444</span></div>
@@ -355,7 +355,7 @@
                 <div class="space-y-2.5">
                     <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-2">Inputs</span>
                     <x-ui.input placeholder="أدخل النص" size="sm" />
-                    <x-ui.input placeholder="حالة التركيز" size="sm" class="border-indigo-500 ring-2 ring-indigo-500/20" />
+                    <x-ui.input placeholder="حالة التركيز" size="sm" class="border-[#168F7C] ring-2 ring-[#168F7C]/20" />
                     <x-ui.input value="نص مدخل مسبقاً" size="sm" />
                     <x-ui.input placeholder="حقل به خطأ" size="sm" :error="true" />
                     <x-ui.input placeholder="ابحث عن طالب..." icon="fas fa-search" size="sm" />
@@ -464,10 +464,10 @@
                         <div class="h-44 w-full relative">
                             <svg class="w-full h-full overflow-visible" viewBox="0 0 500 150">
                                 <defs>
-                                    <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="0%" stop-color="#4F46E5" stop-opacity="0.25" />
-                                        <stop offset="100%" stop-color="#4F46E5" stop-opacity="0.0" />
-                                    </linearGradient>
+<linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#168F7C" stop-opacity="0.25" />
+    <stop offset="100%" stop-color="#168F7C" stop-opacity="0.0" />
+</linearGradient>
                                 </defs>
                                 <!-- Grid Lines -->
                                 <line x1="0" y1="30" x2="500" y2="30" stroke="#e2e8f0" stroke-dasharray="3 3" opacity="0.4" />
@@ -478,13 +478,13 @@
                                 <path d="M 0 130 Q 80 110, 150 70 T 300 80 T 420 40 T 500 60 L 500 150 L 0 150 Z" fill="url(#chartGrad)" />
 
                                 <!-- Main Line -->
-                                <path d="M 0 130 Q 80 110, 150 70 T 300 80 T 420 40 T 500 60" fill="none" stroke="#4F46E5" stroke-width="3.5" stroke-linecap="round" />
+<path d="M 0 130 Q 80 110, 150 70 T 300 80 T 420 40 T 500 60" fill="none" stroke="#168F7C" stroke-width="3.5" stroke-linecap="round" />
 
-                                <!-- Data Dots -->
-                                <circle cx="150" cy="70" r="4.5" fill="#4F46E5" stroke="#ffffff" stroke-width="2" />
-                                <circle cx="300" cy="80" r="4.5" fill="#4F46E5" stroke="#ffffff" stroke-width="2" />
-                                <circle cx="420" cy="40" r="4.5" fill="#4F46E5" stroke="#ffffff" stroke-width="2" />
-                                <circle cx="500" cy="60" r="4.5" fill="#4F46E5" stroke="#ffffff" stroke-width="2" />
+<!-- Data Dots -->
+<circle cx="150" cy="70" r="4.5" fill="#168F7C" stroke="#ffffff" stroke-width="2" />
+<circle cx="300" cy="80" r="4.5" fill="#168F7C" stroke="#ffffff" stroke-width="2" />
+<circle cx="420" cy="40" r="4.5" fill="#168F7C" stroke="#ffffff" stroke-width="2" />
+<circle cx="500" cy="60" r="4.5" fill="#168F7C" stroke="#ffffff" stroke-width="2" />
                             </svg>
                         </div>
                         <div class="flex justify-between text-[10px] text-slate-400 font-mono mt-2">
@@ -506,7 +506,7 @@
                     <!-- Dark Mode Mini Card Preview -->
                     <div class="p-4 rounded-2xl bg-[#0B0F19] text-white border border-slate-800 shadow-xl font-tajawal">
                         <div class="flex items-center gap-2 mb-3">
-                            <div class="w-6 h-6 rounded-lg bg-indigo-600 flex items-center justify-center text-xs">
+                            <div class="w-6 h-6 rounded-lg bg-[#168F7C] flex items-center justify-center text-xs">
                                 <i class="fas fa-graduation-cap"></i>
                             </div>
                             <span class="text-xs font-bold">Taalimu Dark Preview</span>
@@ -532,7 +532,7 @@
              ===================================================================== -->
         <div class="pt-8 border-t border-slate-200 dark:border-slate-800 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 text-center font-tajawal">
             <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">
-                <div class="w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-sm mx-auto mb-2">
+                <div class="w-8 h-8 rounded-xl bg-[#E8F5F1] dark:bg-[#0D7465]/20 text-[#168F7C] dark:text-[#62BDAE] flex items-center justify-center text-sm mx-auto mb-2">
                     <i class="fas fa-globe"></i>
                 </div>
                 <h5 class="text-xs font-bold text-slate-900 dark:text-slate-100">RTL First</h5>
@@ -540,7 +540,7 @@
             </div>
 
             <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">
-                <div class="w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-sm mx-auto mb-2">
+                <div class="w-8 h-8 rounded-xl bg-[#E8F5F1] dark:bg-[#0D7465]/20 text-[#168F7C] dark:text-[#62BDAE] flex items-center justify-center text-sm mx-auto mb-2">
                     <i class="fas fa-universal-access"></i>
                 </div>
                 <h5 class="text-xs font-bold text-slate-900 dark:text-slate-100">Accessible</h5>
@@ -548,7 +548,7 @@
             </div>
 
             <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">
-                <div class="w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-sm mx-auto mb-2">
+                <div class="w-8 h-8 rounded-xl bg-[#E8F5F1] dark:bg-[#0D7465]/20 text-[#168F7C] dark:text-[#62BDAE] flex items-center justify-center text-sm mx-auto mb-2">
                     <i class="fas fa-mobile-alt"></i>
                 </div>
                 <h5 class="text-xs font-bold text-slate-900 dark:text-slate-100">Responsive</h5>
@@ -556,7 +556,7 @@
             </div>
 
             <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">
-                <div class="w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-sm mx-auto mb-2">
+                <div class="w-8 h-8 rounded-xl bg-[#E8F5F1] dark:bg-[#0D7465]/20 text-[#168F7C] dark:text-[#62BDAE] flex items-center justify-center text-sm mx-auto mb-2">
                     <i class="fas fa-layer-group"></i>
                 </div>
                 <h5 class="text-xs font-bold text-slate-900 dark:text-slate-100">Consistent</h5>
@@ -564,7 +564,7 @@
             </div>
 
             <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">
-                <div class="w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-sm mx-auto mb-2">
+                <div class="w-8 h-8 rounded-xl bg-[#E8F5F1] dark:bg-[#0D7465]/20 text-[#168F7C] dark:text-[#62BDAE] flex items-center justify-center text-sm mx-auto mb-2">
                     <i class="fas fa-expand-arrows-alt"></i>
                 </div>
                 <h5 class="text-xs font-bold text-slate-900 dark:text-slate-100">Scalable</h5>
@@ -572,7 +572,7 @@
             </div>
 
             <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">
-                <div class="w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-sm mx-auto mb-2">
+                <div class="w-8 h-8 rounded-xl bg-[#E8F5F1] dark:bg-[#0D7465]/20 text-[#168F7C] dark:text-[#62BDAE] flex items-center justify-center text-sm mx-auto mb-2">
                     <i class="fas fa-sparkles"></i>
                 </div>
                 <h5 class="text-xs font-bold text-slate-900 dark:text-slate-100">Modern</h5>

@@ -168,12 +168,12 @@ html[dir="rtl"] .sidebar-base .nav-link:hover {
     transform: translateX(-4px);
 }
 .sidebar-base .nav-link.active {
-    background: var(--color-primary-light, rgba(79, 70, 229, 0.1)) !important;
-    color: var(--color-primary, #4F46E5) !important;
-    box-shadow: inset 3px 0 0 var(--color-primary, #4F46E5);
+    background: var(--color-primary-light, rgba(22, 143, 124, 0.1)) !important;
+    color: var(--color-primary, #168F7C) !important;
+    box-shadow: inset 3px 0 0 var(--color-primary, #168F7C);
 }
 html[dir="rtl"] .sidebar-base .nav-link.active {
-    box-shadow: inset -3px 0 0 var(--color-primary, #4F46E5);
+    box-shadow: inset -3px 0 0 var(--color-primary, #168F7C);
 }
 .sidebar-base .nav-link i, .sidebar-base .nav-link svg {
     color: var(--color-text-muted) !important;
@@ -183,7 +183,7 @@ html[dir="rtl"] .sidebar-base .nav-link.active {
     color: var(--color-text-secondary) !important;
 }
 .sidebar-base .nav-link.active i {
-    color: var(--color-primary, #4F46E5) !important;
+    color: var(--color-primary, #168F7C) !important;
 }
 .sidebar-base .sub-nav .nav-link {
     font-size: 0.9rem !important;
@@ -225,9 +225,9 @@ html[dir="rtl"] .sidebar-base .sub-nav .nav-link {
     box-shadow: var(--shadow-xs);
 }
 .brand-logo-fallback {
-    background: linear-gradient(135deg, var(--color-primary, #4F46E5) 0%, var(--color-primary-hover, #4338CA) 100%) !important;
+    background: linear-gradient(135deg, var(--color-primary, #168F7C) 0%, var(--color-primary-hover, #0D7465) 100%) !important;
     color: white !important;
-    box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2);
+    box-shadow: 0 4px 10px rgba(22, 143, 124, 0.2);
 }
 .sidebar-toggle .icon svg {
     color: var(--color-text-secondary);
@@ -284,11 +284,11 @@ html[dir="rtl"] .sidebar-base .sub-nav .nav-link {
     border: none;
 }
 .btn-accept {
-    background-color: var(--color-primary, #4F46E5);
+    background-color: var(--color-primary, #168F7C);
     color: white;
 }
 .btn-accept:hover {
-    background-color: var(--color-primary-hover, #4338CA);
+    background-color: var(--color-primary-hover, #0D7465);
 }
 .btn-decline {
     background-color: transparent;
@@ -315,22 +315,22 @@ html[dir="rtl"] .sidebar-base .sub-nav .nav-link {
    -------------------------------------------------------------------------- */
 .hover-shadow-sm:hover, .custom-checkbox-card:hover { 
     transform: translateY(-3px);
-    border-color: var(--color-primary, #4F46E5) !important;
+    border-color: var(--color-primary, #168F7C) !important;
     box-shadow: var(--shadow-md) !important;
-    background-color: var(--color-primary-light, #EEF2FF) !important;
+    background-color: var(--color-primary-light, #E8F5F1) !important;
 }
 .custom-checkbox-card:has(input:checked) {
-    border: 2px solid var(--color-primary, #4F46E5) !important;
-    background-color: var(--color-primary-light, #EEF2FF) !important;
+    border: 2px solid var(--color-primary, #168F7C) !important;
+    background-color: var(--color-primary-light, #E8F5F1) !important;
     transform: translateY(-3px);
     box-shadow: var(--shadow-md) !important;
 }
 .grade-card.active {
-    border-color: var(--color-primary, #4F46E5) !important;
-    background-color: var(--color-primary-light, #EEF2FF);
+    border-color: var(--color-primary, #168F7C) !important;
+    background-color: var(--color-primary-light, #E8F5F1);
 }
 .grade-card.active .grade-icon {
-    background-color: var(--color-primary, #4F46E5) !important;
+    background-color: var(--color-primary, #168F7C) !important;
 }
 .grade-card.active i {
     color: white !important;
@@ -341,9 +341,9 @@ html[dir="rtl"] .sidebar-base .sub-nav .nav-link {
 }
 
 @keyframes pulse-primary {
-    0% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4); }
-    70% { box-shadow: 0 0 0 10px rgba(79, 70, 229, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0); }
+    0% { box-shadow: 0 0 0 0 rgba(22, 143, 124, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(22, 143, 124, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(22, 143, 124, 0); }
 }
 
 /* --------------------------------------------------------------------------
@@ -384,11 +384,11 @@ html[dir="rtl"] .sidebar-base .sub-nav .nav-link {
     bottom: 4px;
     left: 4px;
     width: calc(33.33% - 5px);
-    background: var(--color-primary, #4F46E5);
+    background: var(--color-primary, #168F7C);
     border-radius: var(--radius-full, 999px);
-    transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 0;
-    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+    box-shadow: 0 4px 12px rgba(22, 143, 124, 0.3);
 }
 .dual-toggle .toggle-slider {
     width: calc(50% - 6px);
@@ -642,8 +642,8 @@ html.dark .table tbody tr:hover td {
     color: var(--color-text-main) !important;
 }
 .nav-tabs .nav-link.active {
-    color: var(--color-primary, #4F46E5) !important;
-    border-bottom: 2px solid var(--color-primary, #4F46E5) !important;
+    color: var(--color-primary, #168F7C) !important;
+    border-bottom: 2px solid var(--color-primary, #168F7C) !important;
     background: transparent !important;
     font-weight: 700;
 }
@@ -657,6 +657,6 @@ html.dark .nav-tabs .nav-link:hover {
     color: var(--color-text-main, #f8fafc) !important;
 }
 html.dark .nav-tabs .nav-link.active {
-    color: var(--color-primary-light, #A5B4FC) !important;
-    border-bottom-color: var(--color-primary, #4F46E5) !important;
+    color: var(--color-primary-light, #A9D9D0) !important;
+    border-bottom-color: var(--color-primary, #168F7C) !important;
 }

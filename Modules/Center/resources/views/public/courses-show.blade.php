@@ -25,10 +25,10 @@
                 extend: {
                     colors: {
                         brand: {
-                            primary: '#4F46E5',
-                            50: '#EEF2FF',
-                            100: '#E0E7FF',
-                            900: '#312E81',
+                            primary: '#168F7C',
+                            50: '#F2FBF8',
+                            100: '#E8F5F1',
+                            900: '#0A5F54',
                         }
                     }
                 }
@@ -49,7 +49,7 @@
                     @if($tenant->settings['appearance']['logo'] ?? null)
                         <img src="{{ asset('storage/' . $tenant->settings['appearance']['logo']) }}" alt="{{ $tenant->name }}" class="h-10 w-10 rounded-lg object-cover">
                     @else
-                        <div class="h-10 w-10 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold text-lg">
+                        <div class="h-10 w-10 rounded-lg bg-[#168F7C] flex items-center justify-center text-white font-bold text-lg">
                             {{ substr($tenant->name, 0, 1) }}
                         </div>
                     @endif
@@ -58,7 +58,7 @@
                         <p class="text-sm text-gray-500">{{ $course->title }}</p>
                     </div>
                 </div>
-                <a href="{{ route('center.public.courses.index', ['tenant' => $tenant->domain]) }}" class="text-sm text-indigo-600 hover:text-indigo-800">
+                <a href="{{ route('center.public.courses.index', ['tenant' => $tenant->domain]) }}" class="text-sm text-[#168F7C] hover:text-[#0D7465]">
                     العودة للدورات
                 </a>
             </div>
@@ -76,7 +76,7 @@
                         <img src="{{ asset('storage/' . $course->image) }}" alt="{{ $course->title }}" class="w-full h-64 object-cover">
                     </div>
                 @else
-                    <div class="rounded-xl overflow-hidden mb-6 h-64 bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                    <div class="rounded-xl overflow-hidden mb-6 h-64 bg-gradient-to-br from-[#168F7C] to-[#0D7465] flex items-center justify-center">
                         <svg class="w-24 h-24 text-white opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
                         </svg>
@@ -90,9 +90,9 @@
                 <div class="flex flex-wrap items-center gap-4 mb-6 text-sm text-gray-500">
                     @if($course->instructor)
                         <div class="flex items-center gap-2">
-                            <div class="h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center">
-                                <span class="text-sm font-medium text-indigo-600">{{ substr($course->instructor->name, 0, 1) }}</span>
-                            </div>
+<div class="h-8 w-8 rounded-full bg-[#E8F5F1] flex items-center justify-center">
+    <span class="text-sm font-medium text-[#168F7C]">{{ substr($course->instructor->name, 0, 1) }}</span>
+</div>
                             <span>{{ $course->instructor->name }}</span>
                         </div>
                     @endif
@@ -158,12 +158,12 @@
                     {{-- CTA Button --}}
                     @if($course->registration_token)
                         <a href="{{ route('group.register', ['tenant' => $tenant->domain, 'token' => $course->registration_token]) }}"
-                           class="block w-full py-3 px-4 bg-indigo-600 text-white text-center font-medium rounded-lg hover:bg-indigo-700 transition-colors">
+                           class="block w-full py-3 px-4 bg-[#168F7C] text-white text-center font-medium rounded-lg hover:bg-[#0D7465] transition-colors">
                             سجّل الآن
                         </a>
                     @else
                         <a href="tel:{{ $tenant->phone ?? '' }}"
-                           class="block w-full py-3 px-4 bg-indigo-600 text-white text-center font-medium rounded-lg hover:bg-indigo-700 transition-colors">
+                           class="block w-full py-3 px-4 bg-[#168F7C] text-white text-center font-medium rounded-lg hover:bg-[#0D7465] transition-colors">
                             تواصل معنا
                         </a>
                     @endif
@@ -194,7 +194,7 @@
                     @if($tenant->phone)
                         <div class="mt-6 pt-6 border-t">
                             <p class="text-sm text-gray-500 text-center mb-3">للاستفسار</p>
-                            <a href="tel:{{ $tenant->phone }}" class="flex items-center justify-center gap-2 text-indigo-600 font-medium">
+                            <a href="tel:{{ $tenant->phone }}" class="flex items-center justify-center gap-2 text-[#168F7C] font-medium">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
                                 </svg>

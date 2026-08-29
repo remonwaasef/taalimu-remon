@@ -43,13 +43,13 @@
 <style>
     body { background: #f0f2f5 !important; }
     .rounded-5 { border-radius: 1.75rem !important; }
-    .text-primary { color: #4f46e5 !important; }
-    .btn-primary { background-color: #4f46e5 !important; }
+    .text-primary { color: #168F7C !important; }
+    .btn-primary { background-color: #168F7C !important; }
     
     .magic-icon-bg {
         width: 70px;
         height: 70px;
-        background: rgba(79, 70, 229, 0.1);
+        background: rgba(22, 143, 124, 0.1);
         border-radius: 20px;
         display: flex;
         align-items: center;

@@ -9,7 +9,7 @@
     :root {
         --font-outfit: 'Outfit', sans-serif;
         --font-cairo: 'Cairo', sans-serif;
-        --brand-indigo: #4F46E5;
+        --brand-indigo: #168F7C;
         --panel-dark: #0F172A;
         --bg-field: #F8FAFC;
     }
@@ -33,7 +33,7 @@
     .input-compact:focus {
         border-color: var(--brand-indigo);
         background: #FFFFFF;
-        box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.08);
+        box-shadow: 0 0 0 4px rgba(22, 143, 124, 0.08);
         transform: translateY(-1px);
         outline: none;
     }
@@ -41,7 +41,7 @@
     .btn-submit-compact {
         border-radius: 50px;
         transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+        box-shadow: 0 4px 12px rgba(22, 143, 124, 0.2);
         background-color: var(--brand-indigo);
         color: white;
         border: none;
@@ -49,8 +49,8 @@
 
     .btn-submit-compact:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
-        background-color: #4338CA;
+        box-shadow: 0 8px 20px rgba(22, 143, 124, 0.3);
+        background-color: #0D7465;
     }
 
     .btn-submit-compact:active {

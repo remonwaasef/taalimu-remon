@@ -127,8 +127,8 @@
 
 <style>
     :root {
-        --premium-primary: #4f46e5;
-        --premium-secondary: #7c3aed;
+        --premium-primary: #168F7C;
+        --premium-secondary: #0D7465;
         --glass-white: rgba(255, 255, 255, 0.7);
     }
 
@@ -195,15 +195,15 @@
     }
 
     .btn-glass {
-        background: rgba(79, 70, 229, 0.05);
+        background: rgba(22, 143, 124, 0.05);
         color: var(--premium-primary);
-        border: 1px solid rgba(79, 70, 229, 0.1);
+        border: 1px solid rgba(22, 143, 124, 0.1);
     }
 
     .btn-glass:hover {
         background: var(--premium-primary);
         color: white;
-        box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.4);
+        box-shadow: 0 10px 15px -3px rgba(22, 143, 124, 0.4);
     }
 
     .line-clamp-2 {
