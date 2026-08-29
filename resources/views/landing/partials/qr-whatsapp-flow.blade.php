@@ -1,4 +1,4 @@
-<section class="py-20 lg:py-28 bg-slate-900 text-white relative overflow-hidden">
+<section id="workflow" class="py-20 lg:py-28 bg-slate-900 text-white relative overflow-hidden">
     <!-- Gradient Accents -->
     <div class="absolute top-0 start-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
     <div class="absolute bottom-0 end-1/4 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>

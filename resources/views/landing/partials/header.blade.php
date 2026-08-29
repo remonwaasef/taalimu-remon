@@ -10,11 +10,10 @@
 
     {{-- Desktop Navigation Links --}}
     <nav class="desktop-nav hidden lg:flex items-center gap-8 text-xs font-bold text-slate-600" aria-label="التنقل الرئيسي">
-      <a href="#problem" class="hover:text-[#2E8B83] transition-colors">الحلول والمشاكل</a>
-      <a href="#whatsapp" class="hover:text-[#2E8B83] transition-colors">إشعارات WhatsApp</a>
-      <a href="#audience" class="hover:text-[#2E8B83] transition-colors">لمن المنصة</a>
+      <a href="#problem" class="hover:text-[#2E8B83] transition-colors">الحلول والفوائد</a>
+      <a href="#workflow" class="hover:text-[#2E8B83] transition-colors">كيف يعمل النظام</a>
+      <a href="#whatsapp" class="hover:text-[#2E8B83] transition-colors">تنبيهات WhatsApp</a>
       <a href="#features" class="hover:text-[#2E8B83] transition-colors">المميزات</a>
-      <a href="#roi-calculator" class="hover:text-[#2E8B83] transition-colors">حاسبة التوفير</a>
       <a href="#pricing" class="hover:text-[#2E8B83] transition-colors">الأسعار</a>
       <a href="#faq" class="hover:text-[#2E8B83] transition-colors">الأسئلة الشائعة</a>
     </nav>
@@ -25,7 +24,7 @@
         <i class="fas fa-sign-in-alt text-slate-500 ms-1"></i> تسجيل الدخول
       </a>
       <a class="btn btn-primary font-bold text-xs shadow-md shadow-teal-700/20" href="{{ route('register') }}">
-        <span>ابدأ مجانًا</span>
+        <span>ابدأ تجربة 30 يوم مجانًا</span>
         <i class="fas fa-arrow-left text-[10px]"></i>
       </a>
 
@@ -38,16 +37,15 @@
 
   {{-- Mobile Slide-Down Menu --}}
   <div class="mobile-menu hidden bg-white border-b border-slate-200 px-5 py-4 space-y-2 lg:hidden text-xs font-bold text-slate-700 shadow-xl" id="mobileMenu">
-    <a href="#problem" class="block py-2 hover:text-[#2E8B83]">الحلول والمشاكل</a>
-    <a href="#whatsapp" class="block py-2 hover:text-[#2E8B83]">إشعارات WhatsApp</a>
-    <a href="#audience" class="block py-2 hover:text-[#2E8B83]">لمن المنصة</a>
+    <a href="#problem" class="block py-2 hover:text-[#2E8B83]">الحلول والفوائد</a>
+    <a href="#workflow" class="block py-2 hover:text-[#2E8B83]">كيف يعمل النظام</a>
+    <a href="#whatsapp" class="block py-2 hover:text-[#2E8B83]">تنبيهات WhatsApp</a>
     <a href="#features" class="block py-2 hover:text-[#2E8B83]">المميزات</a>
-    <a href="#roi-calculator" class="block py-2 hover:text-[#2E8B83]">حاسبة التوفير</a>
     <a href="#pricing" class="block py-2 hover:text-[#2E8B83]">الأسعار</a>
     <a href="#faq" class="block py-2 hover:text-[#2E8B83]">الأسئلة الشائعة</a>
     <div class="pt-3 border-t border-slate-100 flex flex-col gap-2">
       <a class="btn btn-outline text-center py-2" href="{{ route('login.portal') }}">تسجيل الدخول</a>
-      <a class="btn btn-primary text-center py-2" href="{{ route('register') }}">ابدأ التجربة المجانية</a>
+      <a class="btn btn-primary text-center py-2" href="{{ route('register') }}">ابدأ التجربة المجانية (30 يومًا)</a>
     </div>
   </div>
 </header>
