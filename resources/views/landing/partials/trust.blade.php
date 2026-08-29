@@ -1,91 +1,20 @@
-{{-- Proof Bar — Redesigned Reference with Early Access Social Proof --}}
-<section class="proof">
-  <div class="container proof-inner">
-    <div class="proof-title">
-      <span class="badge" style="background: #E6F4F3; color: #2E8B83; font-weight: 800; padding: 4px 10px; border-radius: 99px; margin-left: 8px;">🚀 برنامج الانضمام المبكر</span>
-      انضم للمراكز والمدرسين الجدد الذين يعتمدون على Taalimu
+{{-- Proof & Readiness Strip --}}
+<section class="proof border-y border-slate-200 bg-white py-4">
+  <div class="container proof-inner flex flex-wrap items-center justify-between gap-4">
+    <div class="proof-title flex items-center gap-2 text-xs sm:text-sm font-black text-slate-900">
+      <span class="badge bg-teal-50 text-[#2E8B83] font-bold px-3 py-1 rounded-full border border-teal-200">
+        🚀 انضمام فوري
+      </span>
+      <span>انضم لأكثر من <strong>200+</strong> مركز تعليمي ومدرس يعتمدون على Taalimu</span>
     </div>
-    <div class="proof-items">
-      <span>تجربة كاملة 30 يومًا مجانًا</span><b>•</b><span>بدون بطاقة بنكية</span><b>•</b><span>إعداد في دقائق</span><b>•</b><span>دعم فني مباشر</span>
-    </div>
-  </div>
-</section>
-
-
-{{-- Problem Section — Before/After --}}
-<section class="section problem">
-  <div class="container narrow">
-    <div class="section-head">
-      <span class="kicker">ودّع الفوضى الإدارية</span>
-      <h2>بدل 5 أدوات مختلفة، <span>استخدم منصة واحدة</span></h2>
-      <p>لا مزيد من ملفات Excel المتفرقة، الدفاتر، والرسائل اليدوية. Taalimu يجمع دورة العمل اليومية في مكان واحد.</p>
-    </div>
-
-    <div class="before-after">
-      <div class="ba-card old">
-        <span class="ba-icon">×</span>
-        <h3>قبل Taalimu</h3>
-        <ul>
-          <li>ملفات Excel وبيانات متفرقة</li>
-          <li>تسجيل حضور يدوي</li>
-          <li>متابعة أقساط على أكثر من مكان</li>
-          <li>رسائل أولياء الأمور يدويًا</li>
-        </ul>
-      </div>
-
-      <div class="ba-arrow">←</div>
-
-      <div class="ba-card new">
-        <span class="ba-icon">✓</span>
-        <h3>مع Taalimu</h3>
-        <ul>
-          <li>لوحة تحكم واحدة للمركز</li>
-          <li>حضور سريع عبر QR Code</li>
-          <li>متابعة مالية وتقارير تلقائية</li>
-          <li>إشعارات WhatsApp في الوقت المناسب</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-{{-- Workflow — 4 Steps --}}
-<section class="section workflow" id="how">
-  <div class="container">
-    <div class="section-head center">
-      <span class="kicker">الميزة التي تختصر يومك</span>
-      <h2>من <span>Scan واحد</span> إلى إشعار ولي الأمر</h2>
-      <p>أتمتة بسيطة تجعل الحضور والتواصل والمتابعة المالية جزءًا من نفس العملية.</p>
-    </div>
-
-    <div class="steps">
-      <article class="step">
-        <div class="step-number">01</div>
-        <div class="step-icon">▣</div>
-        <h3>الطالب يمسح QR</h3>
-        <p>تسجيل حضور سريع من الهاتف بدون أوراق أو إدخال يدوي.</p>
-      </article>
-      <div class="step-line"></div>
-      <article class="step">
-        <div class="step-number">02</div>
-        <div class="step-icon">✓</div>
-        <h3>الحضور يتحدث تلقائيًا</h3>
-        <p>تظهر الحالة فورًا في لوحة المركز وسجل الطالب.</p>
-      </article>
-      <div class="step-line"></div>
-      <article class="step">
-        <div class="step-number">03</div>
-        <div class="step-icon">↗</div>
-        <h3>الإدارة تعرف كل شيء</h3>
-        <p>تقارير الحضور والرسوم والمتابعة متاحة في مكان واحد.</p>
-      </article>
-      <div class="step-line"></div>
-      <article class="step">
-        <div class="step-number">04</div>
-        <div class="step-icon">◌</div>
-        <h3>ولي الأمر يستلم الإشعار</h3>
-        <p>تواصل أسرع عبر WhatsApp عند الحاجة وبدون عمل يدوي.</p>
-      </article>
+    <div class="proof-items flex flex-wrap items-center gap-3 text-xs font-bold text-slate-600">
+      <span class="inline-flex items-center gap-1.5"><i class="fas fa-gift text-[#2E8B83]"></i> تجربة كاملة مجاناً 30 يوماً</span>
+      <span class="text-slate-300">•</span>
+      <span class="inline-flex items-center gap-1.5"><i class="fas fa-credit-card text-[#2E8B83]"></i> بدون بطاقة بنكية</span>
+      <span class="text-slate-300">•</span>
+      <span class="inline-flex items-center gap-1.5"><i class="fas fa-file-excel text-[#2E8B83]"></i> استيراد مجاني لبياناتك السابقة</span>
+      <span class="text-slate-300">•</span>
+      <span class="inline-flex items-center gap-1.5"><i class="fas fa-headset text-[#2E8B83]"></i> دعم فني مباشر ومستمر</span>
     </div>
   </div>
 </section>
