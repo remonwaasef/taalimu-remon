@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - **Audience Choice Segmentation**: Added explicit dual audience switcher for Independent Tutors (مدرس مستقل) vs Educational Center Owners (صاحب مركز) with targeted registration parameters (`audience.blade.php`).
   - **Enhanced WhatsApp Value Positioning**: Re-framed WhatsApp notifications around `"ولي الأمر يعرف قبل أن يسألك"` featuring realistic alert triggers (`whatsapp-notifications.blade.php`).
   - **Condensed 6-Feature Bento Grid**: Streamlined features grid to 6 focused cards (`feature-bento.blade.php`).
-  - **Localization & Key Cleanup**: Added bulletproof fallbacks across Arabic, English, and French translation files to ensure zero raw translation key leakages (e.g. `landing.pricing.per_month`, `landing.pricing.trial_days`, `landing.pricing.featured`, `landing.pricing.cta_free`).
+  - **Removed Product Showcase Tabbed Section**: Removed `@include('landing.partials.showcase')` and `#product` navbar references per explicit request to further streamline the page length and focus.
 
 - **Enhanced Landing Page UI/UX, Brand Identity & Interactive Conversions (2026-08-28)**:
   - Added interactive **Smart ROI & Time Savings Calculator** (`resources/views/landing/partials/roi-calculator.blade.php`) calculating operational hours and recovered leakages based on real-time student count slider.

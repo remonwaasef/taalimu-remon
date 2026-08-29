@@ -8,7 +8,7 @@
 
     <nav class="desktop-nav" aria-label="التنقل الرئيسي">
       <a href="#how">كيف تعمل</a>
-      <a href="#product">المنصة</a>
+      <a href="#audience">لمن المنصة</a>
       <a href="#features">المميزات</a>
       <a href="#pricing">الأسعار</a>
       <a href="#faq">الأسئلة الشائعة</a>
@@ -24,7 +24,7 @@
 
   <div class="mobile-menu" id="mobileMenu">
     <a href="#how">كيف تعمل</a>
-    <a href="#product">المنصة</a>
+    <a href="#audience">لمن المنصة</a>
     <a href="#features">المميزات</a>
     <a href="#pricing">الأسعار</a>
     <a href="#faq">الأسئلة الشائعة</a>

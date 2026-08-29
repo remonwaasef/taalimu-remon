@@ -13,8 +13,6 @@
     {{-- 4. Central Aha Moment: Student Lifecycle Automation (Scan QR -> Attendance -> Finance -> WhatsApp) --}}
     @include('landing.partials.qr-whatsapp-flow')
 
-    {{-- 5. Product Interactive Showcase --}}
-    @include('landing.partials.showcase')
 
     {{-- 6. WhatsApp Power Feature ("ولي الأمر يعرف قبل أن يسألك") --}}
     @include('landing.partials.whatsapp-notifications')
