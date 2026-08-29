@@ -63,6 +63,6 @@ class LandingController extends Controller
             ->get()
             ->groupBy('category');
 
-        return view('landing.new', compact('packages', 'featuresByCategory'));
+        return view('landing', compact('packages', 'featuresByCategory'));
     }
 }

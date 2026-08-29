@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added & Optimized
+- **Replaced Landing Page with Dedicated Clean Arabic Design (2026-08-29)**:
+  - Imported and integrated new landing page (`resources/views/landing.blade.php`, `resources/css/landing.css`, `resources/js/landing.js`).
+  - Integrated dynamic route actions (`login.portal`, `register`, `home`, `privacy`, `terms`, `cookies`).
+  - Removed outdated landing components in `resources/views/landing/` and updated `LandingController.php` and `vite.config.js`.
+
 - **Complete Taalimu Landing Page Restructuring & Conversion Optimization (2026-08-29)**:
   - **Outcome-Driven Hero Section**: Rebuilt hero with headline `"ودّع الدفاتر وExcel ومتابعة أولياء الأمور يدويًا"`, subheadline, 30-day free trial primary CTA, demo modal trigger, and trust badges (`resources/views/landing/partials/hero.blade.php`).
   - **Single Student Lifecycle Story (Aha Moment)**: Elevated the core workflow into a prominent visual timeline (`Scan QR → Attendance -> Balance Update -> Parent WhatsApp`) (`qr-whatsapp-flow.blade.php`).

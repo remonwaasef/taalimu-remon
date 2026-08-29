@@ -12,7 +12,9 @@ export default defineConfig({
                 'resources/js/app.js',
                 'resources/js/app.jsx',
                 'resources/js/taalimu-global.js',
-                'resources/css/landing-new.css'
+                'resources/css/landing-new.css',
+                'resources/css/landing.css',
+                'resources/js/landing.js'
             ],
             refresh: true,
         }),
