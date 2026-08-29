@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **Resolved 500 Server Error on Login and Register Pages (2026-08-29)**:
+  - Replaced strict `@include` statements with safe `@includeIf` for missing header, sticky CTA, and footer partials in `resources/views/layouts/landing-new.blade.php`.
+  - Fixed 500 Server Error occurring when accessing `/login` (`login.portal`) and `/register` (`register`).
+
 ### Added & Optimized
 - **Replaced Landing Page with Dedicated Clean Arabic Design (2026-08-29)**:
   - Imported and integrated new landing page (`resources/views/landing.blade.php`, `resources/css/landing.css`, `resources/js/landing.js`).

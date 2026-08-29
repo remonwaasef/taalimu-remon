@@ -105,17 +105,17 @@
 </head>
 <body class="font-sans antialiased landing-page bg-white text-slate-900">
     <div class="min-h-screen flex flex-col">
-        @include('landing.partials.header')
+        @includeIf('landing.partials.header')
 
         <main class="flex-grow">
             @yield('content')
         </main>
 
-        @include('landing.partials.mobile-sticky-cta')
+        @includeIf('landing.partials.mobile-sticky-cta')
 
         <x-pwa-install />
 
-        @include('landing.partials.footer')
+        @includeIf('landing.partials.footer')
     </div>
     
     <!-- Interactive Demo Walkthrough Modal -->
