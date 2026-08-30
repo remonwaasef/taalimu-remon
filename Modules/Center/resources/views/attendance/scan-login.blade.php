@@ -36,21 +36,21 @@
             margin-bottom: 1.25rem;
         }
         .icon-badge {
-            width: 60px;
-            height: 60px;
+            width: 64px;
+            height: 64px;
             border-radius: 20px;
             background: #E8F5F1;
             color: #168F7C;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.6rem;
+            font-size: 1.75rem;
             margin-bottom: 0.75rem;
             box-shadow: 0 4px 14px rgba(22, 143, 124, 0.15);
         }
         .title {
-            font-size: 1.35rem;
-            font-weight: 800;
+            font-size: 1.4rem;
+            font-weight: 900;
             color: #0f172a;
             margin-bottom: 0.25rem;
         }
@@ -59,10 +59,10 @@
             align-items: center;
             gap: 6px;
             background: #f1f5f9;
-            padding: 4px 14px;
+            padding: 5px 16px;
             border-radius: 999px;
-            font-size: 0.8rem;
-            font-weight: 600;
+            font-size: 0.82rem;
+            font-weight: 700;
             color: #475569;
             margin-top: 0.25rem;
         }
@@ -78,7 +78,7 @@
             border: 1px solid #bbf0e3;
             border-radius: 14px;
             padding: 12px 14px;
-            font-size: 0.78rem;
+            font-size: 0.8rem;
             font-weight: 600;
             color: #0f6c5e;
             margin-bottom: 1.25rem;
@@ -88,7 +88,7 @@
             line-height: 1.5;
         }
         .smart-note i {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             color: #168F7C;
             flex-shrink: 0;
         }
@@ -115,15 +115,15 @@
             color: #991b1b;
         }
         .form-group {
-            margin-bottom: 1rem;
+            margin-bottom: 1.25rem;
             text-align: start;
         }
         .label {
             display: block;
-            font-size: 0.8rem;
+            font-size: 0.82rem;
             font-weight: 700;
             color: #334155;
-            margin-bottom: 0.4rem;
+            margin-bottom: 0.5rem;
         }
         .input-wrapper {
             position: relative;
@@ -134,7 +134,7 @@
             position: absolute;
             right: 14px;
             color: #94a3b8;
-            font-size: 0.9rem;
+            font-size: 1rem;
             pointer-events: none;
         }
         html[dir="ltr"] .input-icon {
@@ -143,19 +143,19 @@
         }
         .input-control {
             width: 100%;
-            height: 48px;
-            padding: 0 42px 0 14px;
+            height: 52px;
+            padding: 0 44px 0 14px;
             background: #f8fafc;
             border: 1px solid #cbd5e1;
             border-radius: 14px;
-            font-size: 0.875rem;
-            font-weight: 600;
+            font-size: 0.92rem;
+            font-weight: 700;
             color: #0f172a;
             outline: none;
             transition: all 0.2s ease;
         }
         html[dir="ltr"] .input-control {
-            padding: 0 14px 0 42px;
+            padding: 0 14px 0 44px;
         }
         .input-control:focus {
             background: #ffffff;
@@ -164,12 +164,12 @@
         }
         .btn-submit {
             width: 100%;
-            height: 50px;
+            height: 52px;
             background: #168F7C;
             color: #ffffff;
             border: none;
             border-radius: 14px;
-            font-size: 0.92rem;
+            font-size: 0.95rem;
             font-weight: 800;
             cursor: pointer;
             display: flex;
@@ -178,7 +178,6 @@
             gap: 8px;
             box-shadow: 0 4px 14px rgba(22, 143, 124, 0.25);
             transition: all 0.2s ease;
-            margin-top: 0.75rem;
         }
         .btn-submit:hover, .btn-submit:active {
             background: #0f6c5e;
@@ -216,8 +215,8 @@
     <div class="card">
         <!-- Smart Info Banner -->
         <div class="smart-note">
-            <i class="fas fa-magic"></i>
-            <span>سجّل دخولك لمرة واحدة فقط على هذا الهاتف، وفي جميع الحصص القادمة سيتم تسجيل حضورك فوراً بلمسة واحدة بمجرد مسح الرمز!</span>
+            <i class="fas fa-mobile-alt"></i>
+            <span>أدخل رقم هاتفك المسجل لتأكيد حضورك فوراً وربط جهازك لتسجيل الحضور السريع تلقائياً في الحصص القادمة!</span>
         </div>
 
         @if(isset($message))
@@ -237,21 +236,21 @@
             </div>
         @endif
 
-        <!-- Secure Student Login Form -->
+        <!-- Single Field Form: Phone Number or Student Code -->
         <form method="POST" action="{{ request()->fullUrl() }}">
             @csrf
             <input type="hidden" name="qr_url" value="{{ $qrUrl ?? request()->fullUrl() }}">
             
             <div class="form-group">
-                <label class="label" for="login">رقم الهاتف المسجل أو البريد الإلكتروني</label>
+                <label class="label" for="phone_or_code">رقم الهاتف المسجل أو كود الطالب</label>
                 <div class="input-wrapper">
                     <i class="fas fa-user-graduate input-icon"></i>
                     <input 
                         type="text" 
-                        id="login" 
-                        name="login" 
-                        value="{{ old('login') }}" 
-                        placeholder="رقم الهاتف (مثال: 01012345678) أو البريد"
+                        id="phone_or_code" 
+                        name="phone_or_code" 
+                        value="{{ old('phone_or_code') }}" 
+                        placeholder="أدخل رقم الهاتف (مثال: 01012345678)"
                         required 
                         autofocus
                         class="input-control"
@@ -259,24 +258,9 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="label" for="password">كلمة المرور الخاصة بحساب الطالب</label>
-                <div class="input-wrapper">
-                    <i class="fas fa-lock input-icon"></i>
-                    <input 
-                        type="password" 
-                        id="password" 
-                        name="password" 
-                        placeholder="••••••••"
-                        required 
-                        class="input-control"
-                    >
-                </div>
-            </div>
-
             <button type="submit" class="btn-submit">
                 <i class="fas fa-check-circle"></i>
-                <span>تسجيل الدخول وتأكيد الحضور</span>
+                <span>تأكيد تسجيل الحضور فوراً</span>
             </button>
         </form>
     </div>

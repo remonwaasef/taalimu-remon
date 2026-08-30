@@ -290,41 +290,33 @@ class AttendanceController extends Controller
         $this->assertTenantSchedule($schedule);
         $deviceCookieName = 'taalimu_dev_lock_'.$this->tenant->id;
 
-        // If submitted via POST (Login & Lock Device)
+        // If submitted via POST (Phone Verification & Lock Device)
         if ($request->isMethod('post')) {
             $request->validate([
-                'login' => 'required|string',
-                'password' => 'required|string',
+                'phone_or_code' => 'required|string',
             ]);
 
-            $loginInput = trim($request->login);
-            $loginField = filter_var($loginInput, FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
+            $input = trim($request->phone_or_code);
 
-            $credentials = [
-                $loginField => $loginInput,
-                'password' => $request->password,
-                'tenant_id' => $this->tenant->id,
-            ];
+            // Find student by phone, parent phone, student code, or national ID
+            $student = Student::where('tenant_id', $this->tenant->id)
+                ->where(function ($q) use ($input) {
+                    $q->where('phone', $input)
+                      ->orWhere('parent_phone', $input)
+                      ->orWhere('code', $input)
+                      ->orWhere('national_id', $input);
+                })
+                ->first();
 
-            // Attempt login with persistent remember token (Stay logged in for future 1-tap scans)
-            if (! auth()->attempt($credentials, true)) {
-                return back()->withErrors(['login' => 'بيانات الدخول غير صحيحة. تأكد من رقم الهاتف/البريد وكلمة المرور.'])->withInput();
-            }
-
-            $student = auth()->user()->student;
             if (! $student) {
-                auth()->logout();
-
-                return back()->withErrors(['login' => 'هذا الحساب ليس حساب طالب. يرجى تسجيل الدخول بحساب طالب.'])->withInput();
+                return back()->withErrors(['phone_or_code' => 'لم يتم العثور على طالب مسجل برقم الهاتف أو الكود المدخل في هذا المركز.'])->withInput();
             }
 
             if (! $this->assertStudentTenant($student)) {
-                auth()->logout();
-
-                return back()->withErrors(['login' => 'هذا الحساب لا ينتمي إلى هذا المركز.'])->withInput();
+                return back()->withErrors(['phone_or_code' => 'هذا الحساب لا ينتمي إلى هذا المركز.'])->withInput();
             }
 
-            // Anti-Fraud Device Lock Check
+            // Anti-Fraud Device Lock Check: Prevents proxy attendance from the same device
             $lockedStudentId = $request->cookie($deviceCookieName);
             if ($lockedStudentId && (int) $lockedStudentId !== (int) $student->id) {
                 $otherAttended = Attendance::where('schedule_id', $schedule->id)
@@ -333,12 +325,15 @@ class AttendanceController extends Controller
                     ->exists();
 
                 if ($otherAttended) {
-                    auth()->logout();
-
                     return back()->withErrors([
-                        'login' => 'عذراً، هذا الهاتف تم استخدامه اليوم لتسجيل حضور طالب آخر في هذه الحصة لمنع التحضير بالنيابة.',
+                        'phone_or_code' => 'عذراً، هذا الهاتف تم استخدامه اليوم لتسجيل حضور طالب آخر في هذه الحصة لمنع التحضير بالنيابة.',
                     ])->withInput();
                 }
+            }
+
+            // Log user in permanently if linked to a user account (for future 1-tap auto-scans)
+            if ($student->user) {
+                auth()->login($student->user, true);
             }
 
             // Process attendance & attach persistent device lock cookie
