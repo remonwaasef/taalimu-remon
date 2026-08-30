@@ -397,7 +397,14 @@
                             } else if (data.status === 'available') {
                                 feedback.innerHTML = '<i class="fas fa-check-circle me-1"></i> الرقم متاح';
                                 feedback.className = 'mt-1 small text-success fw-bold';
+                            } else {
+                                feedback.innerHTML = '';
                             }
+                        })
+                        .catch(err => {
+                            console.error('Phone check error:', err);
+                            feedback.innerHTML = '<i class="fas fa-info-circle me-1"></i> تعذّر التحقق';
+                            feedback.className = 'mt-1 small text-muted';
                         });
                 } else {
                     feedback.innerHTML = '';

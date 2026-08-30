@@ -410,9 +410,23 @@ class StudentController extends Controller
     public function checkPhone(Request $request)
     {
         $phone = $request->query('phone');
-        $exists = Student::where('phone', $phone)->exists();
 
-        return response()->json(['exists' => $exists]);
+        if (empty($phone)) {
+            return response()->json(['status' => 'available']);
+        }
+
+        $student = Student::where('tenant_id', $this->tenant->id)
+            ->where('phone', $phone)
+            ->first();
+
+        if ($student) {
+            return response()->json([
+                'status' => 'exists',
+                'name'   => $student->name,
+            ]);
+        }
+
+        return response()->json(['status' => 'available']);
     }
 
     /**

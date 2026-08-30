@@ -400,8 +400,13 @@ class StudentController extends Controller
             $userQuery->where('tenant_id', app('tenant')->id);
         }
 
-        if ($userQuery->exists()) {
-            return response()->json(['status' => 'exists']);
+        $user = $userQuery->first();
+
+        if ($user) {
+            return response()->json([
+                'status' => 'exists',
+                'name'   => $user->name,
+            ]);
         }
 
         return response()->json(['status' => 'available']);

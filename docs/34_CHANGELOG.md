@@ -10,14 +10,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
-- **Adopted Luxury Slate-Mist Canvas (#EEF2F6) & Framed Students Interface (2026-08-30)**:
-  - Upgraded dashboard body background to luxury slate mist `#EEF2F6` for visual depth and premium contrast.
-  - Framed Students Management interface (`Modules/Center/resources/views/students/index.blade.php`) inside a main card container with clear search input borders, modernized stage filter tabs, and separated table header.
-  - Reinforced card borders (`border-slate-200` / `#E2E8F0`) and subtle shadows across all UI cards (`x-ui.card`, `.card`, Launchpad, Quick Actions).
-  - Modernized `x-ui.table` component with highlighted, separated header backgrounds (`bg-slate-50/95`), horizontal row dividers (`divide-slate-100`), and smooth hover states.
-  - Re-framed Attendance (`Modules/Center/resources/views/attendance/index.blade.php`) and Schedule screens (`schedules/index.blade.php`) inside structured cards with clear headers.
-  - Restructured Student Creation Form (`components/student-form.blade.php`, `students/create.blade.php`) into distinct, framed sub-sections (Student Info, Parent Info, Academic Stage, Courses) with sharp bordered inputs.
+- **Ultra-Clean White Premium Canvas (#FAFAFA) with Layered Luxury Shadows (2026-08-30)**:
+  - Upgraded dashboard body background from slate-mist `#EEF2F6` to ultra-clean white `#FAFAFA` for a pristine, Apple/Notion-grade aesthetic.
+  - Introduced multi-layered luxury shadow system (`shadow-xs` → `shadow-xl`) with soft negative offsets for floating card depth.
+  - Updated border token from `#E2E8F0` to crisp `#EAEFF2` across `design-tokens.css`, `tailwind.css`, `x-ui.card`, and `x-ui.table`.
+  - Framed Students Management interface inside a luxury main card container with bordered search inputs, modernized filter tabs, and separated table header.
+  - Re-framed Attendance and Schedule screens inside structured cards with clear headers.
+  - Restructured Student Creation Form into distinct, framed sub-sections with sharp bordered inputs.
 
+- **Fixed Phone Number Verification Stuck on "جاري التحقق" (2026-08-30)**:
+  - Center `StudentController::checkPhone()` was returning `{exists: bool}` but JS expected `{status: 'exists'|'available'}` — fixed response format with tenant isolation and student name.
+  - Instructor `StudentController::checkPhone()` updated to also return student `name` on match.
+  - Added `.catch()` error handler to frontend fetch call so UI never freezes on network errors.
 - **Aligned All Dashboards & UI Components with Taalimu Brand Green Identity (2026-08-30)**:
   - Fixed blue/indigo color dominance across Center, Admin, and Instructor dashboards.
   - Updated Launchpad onboarding banner (`Modules/Center/resources/views/partials/launchpad.blade.php`), progress bars, active step badges, buttons, and setup modals to use the official Taalimu green palette (`#168F7C`, `brand-primary`, `brand-50`, `brand-600`).
