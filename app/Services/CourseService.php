@@ -205,12 +205,11 @@ class CourseService
             $dayInput = $scheduleData['day_of_week'];
             $dayValue = $dayMapping[$dayInput] ?? $dayInput;
 
-            // Prevent internal duplicates within same batch (same day + same time)
-            $key = $dayValue.'_'.$scheduleData['start_time'].'_'.$scheduleData['end_time'];
-            if (isset($seen[$key])) {
+            // Strict Rule: Maximum 1 schedule per course per day
+            if (isset($seen[$dayValue])) {
                 continue;
             }
-            $seen[$key] = true;
+            $seen[$dayValue] = true;
 
             $schedules[] = new Schedule([
                 'tenant_id' => \Modules\Tenancy\Services\TenantResolver::get()->id,

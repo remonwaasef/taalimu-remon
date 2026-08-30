@@ -18,9 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Re-framed Attendance and Schedule screens inside structured cards with clear headers.
   - Restructured Student Creation Form into distinct, framed sub-sections with sharp bordered inputs.
 
-- **Fixed Duplicate Schedule Creation Bug (2026-08-30)**:
-  - Added same-course duplicate detection in `ScheduleController::getConflictError()` — now prevents creating overlapping schedules for the same course on the same day.
-  - Added internal batch deduplication in `CourseService::syncSchedules()` to skip duplicate entries within the same save operation.
+- **Strict 1-Session Per Course Per Day & Centralized Schedule Sync (2026-08-30)**:
+  - Enforced strict business rule in `ScheduleController::getConflictError()` forbidding more than 1 schedule session per course on the same day.
+  - Added day-level deduplication in `CourseService::syncSchedules()`.
+  - Improved weekly schedule board query to show full weekly schedule grouped accurately by day and start time without pagination truncation.
 
 - **Smart 1-Tap QR Attendance & Anti-Fraud Device Lock (2026-08-30)**:
   - Implemented persistent remember-session on mobile devices for seamless one-tap attendance on future QR scans without re-entering credentials.

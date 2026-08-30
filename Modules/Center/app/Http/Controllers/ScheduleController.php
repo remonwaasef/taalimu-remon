@@ -22,13 +22,14 @@ class ScheduleController extends Controller
 
         $query = Schedule::with(['course', 'classroom', 'instructor', 'bookings'])
             ->whereHas('course', fn ($q) => $q->whereNull('deleted_at'))
-            ->latest();
+            ->orderBy('day_of_week')
+            ->orderBy('start_time');
 
         if ($user->hasRole('instructor') && ! $user->hasRole('center_admin')) {
             $query->where('instructor_id', $user->instructor->id ?? 0);
         }
 
-        $schedules = $query->paginate(10);
+        $schedules = $query->get();
 
         return view('center::schedules.index', compact('schedules'));
     }
@@ -171,11 +172,15 @@ class ScheduleController extends Controller
             $query->where('id', '!=', $excludeId);
         }
 
-        // Same-course duplicate detection (prevents creating identical schedules)
-        if (! empty($data['course_id'])) {
-            $duplicateSchedule = (clone $query)->where('course_id', $data['course_id'])->first();
-            if ($duplicateSchedule) {
-                return 'يوجد بالفعل حصة لهذا الكورس في نفس اليوم ونفس الوقت. يرجى اختيار يوم أو وقت مختلف.';
+        // Same-course duplicate prevention (Strict Rule: Maximum 1 session per course per day)
+        if (! empty($data['course_id']) && isset($data['day_of_week'])) {
+            $existingSameDay = Schedule::where('course_id', $data['course_id'])
+                ->where('day_of_week', $data['day_of_week'])
+                ->when($excludeId, fn ($q) => $q->where('id', '!=', $excludeId))
+                ->first();
+
+            if ($existingSameDay) {
+                return 'توجد بالفعل حصة مسجلة لهذه المادة في هذا اليوم. لا يمكن إضافة أكثر من موعد لنفس المادة في نفس اليوم.';
             }
         }
 
