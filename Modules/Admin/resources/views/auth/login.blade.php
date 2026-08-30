@@ -1,4 +1,4 @@
-﻿@extends('layouts.landing-new')
+@extends('layouts.landing-new')
 
 @section('content')
 @include('partials.login-dark-theme')
@@ -118,13 +118,13 @@
             <div class="space-y-1.5">
                 <div class="flex justify-between items-center px-1">
                     <label class="text-[11px] font-bold text-slate-500 font-arabic uppercase tracking-wider">{{ __('كلمة المرور') }}</label>
-                    <button type="button" @click="showPassword = !showPassword" class="text-[11px] font-black text-indigo-500 hover:text-indigo-600 transition-colors uppercase tracking-widest">
+                    <button type="button" @click="showPassword = !showPassword" class="text-[11px] font-black text-brand-primary hover:text-brand-600 transition-colors uppercase tracking-widest">
                         <span x-text="showPassword ? 'إخفاء' : 'إظهار'"></span>
                     </button>
                 </div>
                 <input :type="showPassword ? 'text' : 'password'" name="password" 
                     class="w-full h-12 input-compact px-4 text-sm font-medium text-slate-900 placeholder:text-slate-400"
-                    placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required>
+                    placeholder="••••••••" required>
             </div>
 
             <div class="pt-4">
@@ -139,7 +139,7 @@
         </form>
 
         <div class="mt-8 pt-6 border-t border-slate-100 flex justify-center">
-            <a href="{{ route('home') }}" class="group flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-indigo-600 transition-colors">
+            <a href="{{ route('home') }}" class="group flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-brand-primary transition-colors">
                 <svg class="w-3.5 h-3.5 group-hover:-translate-y-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
                 </svg>

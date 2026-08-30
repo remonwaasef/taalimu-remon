@@ -42,16 +42,20 @@
     --color-muted: #65717F;
     --color-cream: #FBFAF6;
     --color-white: #FFFFFF;
-    --color-border: #E5ECE9;
+    --color-border: #E2E8F0;
 
     --color-bg-main: #FBFAF6;
-    --color-dashboard-bg: #F7FAF8;
+    --color-dashboard-bg: #EFF3F6;
     --color-surface: #FFFFFF;
     --color-surface-elevated: #FFFFFF;
-    --color-surface-hover: #F2FBF8;
+    --color-surface-hover: #F8FAFC;
     --color-bg-sidebar: #0D1A2B;
     --color-bg-header: #FFFFFF;
-    --color-divider: #E5ECE9;
+    --color-divider: #E2E8F0;
+
+    --card-bg: #FFFFFF;
+    --card-border: #E2E8F0;
+    --card-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
 
     /* Text Hierarchy */
     --color-text-main: #102033;

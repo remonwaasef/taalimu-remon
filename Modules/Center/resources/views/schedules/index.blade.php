@@ -46,7 +46,7 @@
                                 $statusColor = $occupancyRate >= 100 ? 'danger' : ($occupancyRate > 80 ? 'warning' : 'success');
                             @endphp
                             <div class="col-md-6 col-xl-4">
-                                <div class="card border-0 shadow-sm rounded-4 h-100 session-card">
+                                <div class="card border border-slate-200 dark:border-slate-800 shadow-xs rounded-2xl h-100 session-card bg-white dark:bg-slate-900">
                                     <div class="card-body p-4">
                                         <div class="d-flex justify-content-between align-items-start mb-3">
                                             <div>
@@ -107,16 +107,16 @@
 
         @if($groupedSchedules->isEmpty())
             <div class="col-12">
-                <div class="card border-0 shadow-sm rounded-4 text-center p-5">
+                <div class="card border border-slate-200 dark:border-slate-800 shadow-xs rounded-2xl text-center p-5 bg-white dark:bg-slate-900">
                     <div class="mb-4">
-                        <div class="d-inline-flex p-4 rounded-circle mb-3" style="background: rgba(16, 185, 129, 0.05);">
-                            <i class="fas fa-calendar-alt text-primary" style="font-size: 3rem; opacity: 0.5;"></i>
+                        <div class="d-inline-flex p-4 rounded-circle mb-3 bg-brand-50 text-brand-primary dark:bg-brand-900/30 dark:text-brand-300">
+                            <i class="fas fa-calendar-alt text-3xl"></i>
                         </div>
                     </div>
-                    <h5 class="text-muted fw-bold">{{ __('center::schedules.no_schedules_found') }}</h5>
-                    <div class="mt-3">
-                        <a href="{{ route('center.schedules.create') }}" class="btn btn-primary rounded-pill px-4">
-                            {{ __('center::schedules.add_your_first') }}
+                    <h5 class="text-slate-700 dark:text-slate-300 font-bold text-base">{{ __('center::schedules.no_schedules_found') }}</h5>
+                    <div class="mt-4">
+                        <a href="{{ route('center.schedules.create') }}" class="btn btn-primary rounded-xl px-5 py-2.5 font-bold shadow-xs">
+                            <i class="fas fa-plus me-2"></i> {{ __('center::schedules.add_your_first') }}
                         </a>
                     </div>
                 </div>

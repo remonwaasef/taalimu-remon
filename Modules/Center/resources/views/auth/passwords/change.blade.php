@@ -5,7 +5,7 @@
     <div class="w-full max-w-md bg-white rounded-[40px] shadow-2xl shadow-slate-200/60 p-8 lg:p-10 border border-slate-100 animate-fade-in-up">
         
         <div class="text-center mb-8">
-            <div class="d-inline-flex justify-center items-center rounded-full bg-indigo-50 text-indigo-600 w-20 h-20 mb-4 mx-auto text-3xl font-bold shadow-sm">
+            <div class="d-inline-flex justify-center items-center rounded-full bg-brand-50 text-brand-primary w-20 h-20 mb-4 mx-auto text-3xl font-bold shadow-sm">
                 <i class="fas fa-key"></i>
             </div>
             <h1 class="text-2xl font-bold text-slate-900 mb-2 font-arabic tracking-tight">
@@ -60,7 +60,7 @@
 
             <div class="pt-4">
                 <button type="submit" 
-                    class="w-full h-14 btn-submit-compact bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-base flex justify-center items-center gap-2 group rounded-full transition-all">
+                    class="w-full h-14 btn-submit-compact bg-brand-primary hover:bg-brand-600 text-white font-bold text-base flex justify-center items-center gap-2 group rounded-full transition-all">
                     <span class="font-arabic">{{ __('Update Password') }}</span>
                     <i class="fas fa-arrow-right"></i>
                 </button>

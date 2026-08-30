@@ -9,10 +9,10 @@
 
 /* ===== Taalimu Design System CSS Variables (HSL) ===== */
 :root {
-    --border: 154 16% 91%;              /* #E5ECE9 */
-    --input: 154 16% 91%;               /* #E5ECE9 */
+    --border: 214 32% 91%;              /* #E2E8F0 Slate-200 */
+    --input: 214 32% 91%;               /* #E2E8F0 */
     --ring: 168 73% 32%;                /* #168F7C Taalimu Green */
-    --background: 140 18% 97%;          /* #F7FAF8 Dashboard BG */
+    --background: 206 20% 95%;          /* #EFF3F6 Dashboard BG */
     --foreground: 213 52% 13%;          /* #102033 Ink */
     --primary: 168 73% 32%;             /* #168F7C Taalimu Green */
     --primary-foreground: 0 0% 100%;
@@ -32,7 +32,7 @@
     --card: 0 0% 100%;
     --card-foreground: 213 52% 13%;
     --radius: 0.75rem;
-    --divider: 154 16% 91%;             /* #E5ECE9 */
+    --divider: 214 32% 91%;             /* #E2E8F0 */
     --sidebar-background: 214 54% 11%;  /* #0D1A2B Navy Sidebar */
     --sidebar-foreground: 48 45% 97%;   /* #FBFAF6 Cream */
     --sidebar-primary: 168 73% 32%;     /* #168F7C */

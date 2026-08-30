@@ -1,7 +1,7 @@
     <style>
         :root {
-            --elite-shadow: 0 20px 50px -15px rgba(58, 12, 163, 0.15);
-            --indigo-accent: #6366f1;
+            --elite-shadow: 0 20px 50px -15px rgba(22, 143, 124, 0.15);
+            --indigo-accent: #168F7C;
         }
         
         body { background-color: #f8fafc; }
@@ -159,7 +159,7 @@
                 right: 0;
                 height: 35%;
                 background: var(--bs-primary);
-                background: linear-gradient(135deg, var(--bs-primary) 0%, #4f46e5 100%);
+                background: linear-gradient(135deg, var(--bs-primary) 0%, #0D7465 100%);
                 clip-path: polygon(0 0, 100% 0, 100% 70%, 0 100%);
                 z-index: 0;
             }

@@ -1,26 +1,28 @@
 @extends('center::layouts.app-next')
 
 @section('panel-content')
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-dark">{{ __('center::students.form.add_new_student') }}</h2>
-        <a href="{{ route('center.students.index') }}" class="btn btn-outline-secondary rounded-pill px-4">{{ __('center::students.form.back_to_list') }}</a>
-    </div>
+    <x-ui.page-header
+        title="{{ __('center::students.form.add_new_student') }}"
+        subtitle="{{ __('center::students.quick_enroll_desc', ['name' => '']) }}"
+    >
+        <x-slot name="actions">
+            <x-ui.button variant="outline" size="sm" icon="fas fa-arrow-right" href="{{ route('center.students.index') }}">
+                {{ __('center::students.form.back_to_list') }}
+            </x-ui.button>
+        </x-slot>
+    </x-ui.page-header>
 
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card border-0 shadow-sm rounded-4">
-                <div class="card-body p-5">
-                    <x-student-form 
-                        actionUrl="{{ route('center.students.store') }}"
-                        :courses="$courses"
-                        :stages="$stages"
-                        :showGrade="true"
-                        backUrl="{{ route('center.students.index') }}"
-                        checkPhoneUrl="{{ route('center.students.check-phone') }}"
-                        lookupGuardianUrl="{{ route('center.guardians.lookup') }}"
-                    />
-                </div>
-            </div>
-        </div>
+    <div class="max-w-4xl mx-auto">
+        <x-ui.card>
+            <x-student-form 
+                actionUrl="{{ route('center.students.store') }}"
+                :courses="$courses"
+                :stages="$stages"
+                :showGrade="true"
+                backUrl="{{ route('center.students.index') }}"
+                checkPhoneUrl="{{ route('center.students.check-phone') }}"
+                lookupGuardianUrl="{{ route('center.guardians.lookup') }}"
+            />
+        </x-ui.card>
     </div>
 @endsection

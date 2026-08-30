@@ -19,7 +19,7 @@
     $hasDemoData = \App\Models\Instructor::where('tenant_id', app('tenant')->id)->where('email', 'like', '%.demo@%')->exists();
 @endphp
 
-<div class="mb-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs relative overflow-hidden font-inter transition-all duration-200">
+<div class="mb-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs relative overflow-hidden font-inter transition-all duration-200">
     <!-- Top Progress Gradient Bar -->
     <div class="h-1 w-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
         <div class="h-full bg-gradient-to-r from-brand-600 via-brand-primary to-brand-400 rounded-full transition-all duration-700 ease-out" style="width: {{ $launchpadProgress }}%;"></div>

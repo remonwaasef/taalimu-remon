@@ -13,9 +13,9 @@
         <div class="flex items-center gap-3">
             <div class="relative">
                 @if($avatar)
-                    <img src="{{ $avatar }}" alt="{{ $name }}" class="w-12 h-12 rounded-full object-cover ring-2 ring-indigo-50 dark:ring-indigo-950">
+                    <img src="{{ $avatar }}" alt="{{ $name }}" class="w-12 h-12 rounded-full object-cover ring-2 ring-brand-50 dark:ring-brand-900/30">
                 @else
-                    <div class="w-12 h-12 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 font-bold flex items-center justify-center text-base ring-2 ring-indigo-100 dark:ring-indigo-900/40">
+                    <div class="w-12 h-12 rounded-full bg-brand-50 dark:bg-brand-900/30 text-brand-primary dark:text-brand-300 font-bold flex items-center justify-center text-base ring-2 ring-brand-100 dark:ring-brand-900/40">
                         {{ mb_substr($name, 0, 2) }}
                     </div>
                 @endif

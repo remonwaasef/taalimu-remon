@@ -147,7 +147,7 @@
                 <div class="bg-white rounded-xl shadow-sm p-6 sticky top-4">
                     <div class="text-center mb-6">
                         @if($course->price > 0)
-                            <div class="text-3xl font-bold text-indigo-600 mb-1">{{ number_format($course->price, 2) }}</div>
+                            <div class="text-3xl font-bold text-brand-primary mb-1">{{ number_format($course->price, 2) }}</div>
                             <div class="text-sm text-gray-500">جنيه مصري / كورس</div>
                         @else
                             <div class="text-3xl font-bold text-green-600 mb-1">مجاني</div>

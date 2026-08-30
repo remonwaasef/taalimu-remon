@@ -3,7 +3,7 @@
     'activities' => [
         ['icon' => 'fas fa-clipboard-check', 'color' => 'bg-sky-50 text-sky-600 dark:bg-sky-950/50 dark:text-sky-400', 'text' => 'تم تسجيل حضور 32 طالب', 'time' => 'منذ 10 دقائق'],
         ['icon' => 'fas fa-receipt', 'color' => 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/50 dark:text-emerald-400', 'text' => 'تم استلام دفعة جديدة', 'time' => 'منذ 25 دقيقة'],
-        ['icon' => 'fas fa-book', 'color' => 'bg-indigo-50 text-indigo-600 dark:bg-indigo-950/50 dark:text-indigo-400', 'text' => 'تم إضافة واجب جديد في الرياضيات', 'time' => 'منذ ساعة'],
+        ['icon' => 'fas fa-book', 'color' => 'bg-brand-50 text-brand-primary dark:bg-brand-900/30 dark:text-brand-300', 'text' => 'تم إضافة واجب جديد في الرياضيات', 'time' => 'منذ ساعة'],
         ['icon' => 'fas fa-certificate', 'color' => 'bg-amber-50 text-amber-600 dark:bg-amber-950/50 dark:text-amber-400', 'text' => 'تم إصدار شهادة لأحمد محمد', 'time' => 'منذ 3 ساعات'],
     ]
 ])
@@ -11,7 +11,7 @@
 <div {{ $attributes->merge(['class' => 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs hover:shadow-md transition-all duration-200 font-tajawal']) }}>
     <div class="flex items-center justify-between mb-4">
         <h4 class="text-sm font-bold text-slate-900 dark:text-slate-100">{{ $title }}</h4>
-        <button class="text-xs text-indigo-600 dark:text-indigo-400 font-bold hover:underline">{{ __('عرض الكل') }}</button>
+        <button class="text-xs text-brand-primary dark:text-brand-300 font-bold hover:underline">{{ __('عرض الكل') }}</button>
     </div>
 
     <div class="space-y-3.5">

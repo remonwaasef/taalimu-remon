@@ -3,7 +3,7 @@
     'academicYear' => '2024/2025',
     'overallProgress' => 75,
     'subjects' => [
-        ['name' => 'الرياضيات', 'progress' => 80, 'color' => 'bg-indigo-600'],
+        ['name' => 'الرياضيات', 'progress' => 80, 'color' => 'bg-brand-primary'],
         ['name' => 'العلوم', 'progress' => 70, 'color' => 'bg-sky-500'],
         ['name' => 'اللغة الإنجليزية', 'progress' => 65, 'color' => 'bg-amber-500'],
         ['name' => 'اللغة العربية', 'progress' => 90, 'color' => 'bg-emerald-500'],
@@ -18,7 +18,7 @@
         </div>
 
         <div class="flex items-center gap-2">
-            <div class="w-10 h-10 rounded-full border-2 border-indigo-600 text-indigo-600 dark:text-indigo-400 font-bold flex items-center justify-center text-xs">
+            <div class="w-10 h-10 rounded-full border-2 border-brand-primary text-brand-primary dark:text-brand-300 font-bold flex items-center justify-center text-xs">
                 {{ $overallProgress }}%
             </div>
         </div>

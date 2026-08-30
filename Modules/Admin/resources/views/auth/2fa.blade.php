@@ -144,7 +144,7 @@
         </form>
 
         <div class="mt-8 pt-6 border-t border-slate-100 flex justify-center">
-            <a href="{{ route('admin.login') }}" class="group flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-indigo-600 transition-colors">
+            <a href="{{ route('admin.login') }}" class="group flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-brand-primary transition-colors">
                 <svg class="w-3.5 h-3.5 group-hover:-translate-y-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
                 </svg>

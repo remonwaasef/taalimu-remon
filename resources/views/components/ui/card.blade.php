@@ -12,9 +12,9 @@
 
 @php
     $variants = [
-        'default' => 'bg-white dark:bg-slate-900 border border-brand-border dark:border-slate-800 shadow-sm hover:shadow-md',
-        'flat' => 'bg-slate-50 dark:bg-slate-900/60 border border-transparent',
-        'bordered' => 'bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800',
+        'default' => 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs hover:shadow-sm',
+        'flat' => 'bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800',
+        'bordered' => 'bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700',
         'ghost' => 'bg-transparent border border-dashed border-slate-200 dark:border-slate-800',
     ];
 
@@ -27,7 +27,7 @@
     {{ $attributes->merge(['class' => $cardClass]) }}
 >
     @if($title || isset($header) || $action || $collapsible)
-        <div class="px-6 py-4 border-b border-brand-border dark:border-slate-800 flex items-center justify-between gap-4">
+        <div class="px-6 py-4 bg-slate-50/50 dark:bg-slate-800/40 border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between gap-4">
             @if(isset($header))
                 {{ $header }}
             @else

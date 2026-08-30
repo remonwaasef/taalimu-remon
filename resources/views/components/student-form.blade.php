@@ -27,149 +27,169 @@
 
     <div class="tab-content" id="studentWizardContent">
         <!-- STEP 1: Basic Information -->
-        <div class="tab-pane fade show active" id="step1" role="tabpanel" aria-labelledby="step1-tab">
+        <div class="tab-pane fade show active space-y-6" id="step1" role="tabpanel" aria-labelledby="step1-tab">
             
             {{-- 1. Student Info --}}
-            <div class="row mb-4">
-                <h5 class="text-secondary mb-3"><i class="bi bi-person me-2"></i>{{ __('center::students.form.basic_info') }}</h5>
-                
-                <div class="col-md-6 mb-3">
-                    <label class="form-label fw-bold">{{ __('center::students.form.full_name') ?? __('instructor::students.student') }} <span class="text-danger">*</span></label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-white"><i class="fas fa-user" style="color: var(--bs-primary);"></i></span>
-                        <input type="text" name="name" value="{{ old('name') }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::students.form.name_placeholder') }}" required>
+            <div class="bg-slate-50/70 dark:bg-slate-800/40 p-5 rounded-2xl border border-slate-200/90 dark:border-slate-700/80">
+                <div class="flex items-center gap-2 mb-4 pb-3 border-b border-slate-200/80 dark:border-slate-700/70">
+                    <div class="w-7 h-7 rounded-lg bg-brand-50 text-brand-primary dark:bg-brand-900/40 dark:text-brand-300 flex items-center justify-center text-xs">
+                        <i class="fas fa-user"></i>
                     </div>
-                    @error('name')
-                        <div class="text-danger small mt-1">{{ $message }}</div>
-                    @enderror
+                    <h5 class="font-bold text-slate-800 dark:text-slate-200 text-sm m-0">{{ __('center::students.form.basic_info') }}</h5>
                 </div>
                 
-                <div class="col-md-6 mb-3">
-                    <label class="form-label fw-bold">{{ __('center::students.form.phone_number') ?? __('instructor::students.phone') }} <span class="text-danger">*</span></label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-white"><i class="fas fa-phone" style="color: var(--bs-primary);"></i></span>
-                        <input type="tel" name="phone" id="phone_input" value="{{ old('phone') }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::students.form.phone_placeholder') }}" pattern="[0-9\+\-\s\(\)]*" title="{{ __('center::students.numbers_only') }}" required>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold text-slate-700 dark:text-slate-300 small">{{ __('center::students.form.full_name') ?? __('instructor::students.student') }} <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700"><i class="fas fa-user text-brand-primary"></i></span>
+                            <input type="text" name="name" value="{{ old('name') }}" class="form-control form-control-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100" placeholder="{{ __('center::students.form.name_placeholder') }}" required>
+                        </div>
+                        @error('name')
+                            <div class="text-danger small mt-1">{{ $message }}</div>
+                        @enderror
                     </div>
-                    <div id="phone-feedback" class="mt-1 small"></div>
-                    @error('phone')
-                        <div class="text-danger small mt-1">{{ $message }}</div>
-                    @enderror
-                </div>
-                
-                <div class="col-md-6 mb-3">
-                    <label class="form-label fw-bold">{{ __('center::students.form.email_optional') ?? __('instructor::students.email') }}</label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-white"><i class="fas fa-envelope" style="color: var(--bs-primary);"></i></span>
-                        <input type="email" name="email" value="{{ old('email') }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::students.form.email_placeholder') }}">
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold text-slate-700 dark:text-slate-300 small">{{ __('center::students.form.phone_number') ?? __('instructor::students.phone') }} <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700"><i class="fas fa-phone text-brand-primary"></i></span>
+                            <input type="tel" name="phone" id="phone_input" value="{{ old('phone') }}" class="form-control form-control-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100" placeholder="{{ __('center::students.form.phone_placeholder') }}" pattern="[0-9\+\-\s\(\)]*" title="{{ __('center::students.numbers_only') }}" required>
+                        </div>
+                        <div id="phone-feedback" class="mt-1 small"></div>
+                        @error('phone')
+                            <div class="text-danger small mt-1">{{ $message }}</div>
+                        @enderror
                     </div>
-                    @error('email')
-                        <div class="text-danger small mt-1">{{ $message }}</div>
-                    @enderror
+                    
+                    <div class="col-md-12">
+                        <label class="form-label fw-bold text-slate-700 dark:text-slate-300 small">{{ __('center::students.form.email_optional') ?? __('instructor::students.email') }}</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700"><i class="fas fa-envelope text-brand-primary"></i></span>
+                            <input type="email" name="email" value="{{ old('email') }}" class="form-control form-control-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100" placeholder="{{ __('center::students.form.email_placeholder') }}">
+                        </div>
+                        @error('email')
+                            <div class="text-danger small mt-1">{{ $message }}</div>
+                        @enderror
+                    </div>
                 </div>
             </div>
 
-            <hr class="my-4">
-
             {{-- 2. Parent Info --}}
-            <div class="row mb-4">
-                <h5 class="text-secondary mb-3"><i class="bi bi-people me-2"></i>{{ __('center::students.form.parent_info') }}</h5>
-                
-                <div class="col-md-6 mb-3">
-                    <label class="form-label fw-bold">{{ __('center::students.form.parent_name') }}</label>
-                    <input type="text" name="parent_name" value="{{ old('parent_name') }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::students.form.parent_name_placeholder') }}">
-                    @error('parent_name')
-                        <div class="text-danger small mt-1">{{ $message }}</div>
-                    @enderror
-                </div>
-                
-                <div class="col-md-6 mb-3">
-                    <label class="form-label fw-bold">{{ __('center::students.form.parent_phone') ?? __('instructor::students.parent_phone') }}</label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-white"><i class="fas fa-users" style="color: var(--bs-primary);"></i></span>
-                        <input type="tel" name="parent_phone" id="parent_phone" value="{{ old('parent_phone') }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::students.form.parent_phone_placeholder') }}" pattern="[0-9\+\-\s\(\)]*" title="{{ __('center::students.numbers_only') }}">
-                        <span class="input-group-text bg-light border-0 d-none" id="guardian-found-badge">
-                            <span class="badge bg-success rounded-pill"><i class="bi bi-check-circle-fill"></i> {{ __('center::students.form.guardian_found') }}</span>
-                        </span>
+            <div class="bg-slate-50/70 dark:bg-slate-800/40 p-5 rounded-2xl border border-slate-200/90 dark:border-slate-700/80">
+                <div class="flex items-center gap-2 mb-4 pb-3 border-b border-slate-200/80 dark:border-slate-700/70">
+                    <div class="w-7 h-7 rounded-lg bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-300 flex items-center justify-center text-xs">
+                        <i class="fas fa-user-friends"></i>
                     </div>
-                    <div id="guardian-info-alert" class="alert alert-success border-0 rounded-4 small mt-2 d-none">
-                        <i class="bi bi-info-circle-fill me-1"></i> {{ __('center::students.form.guardian_recognized', ['name' => '<span id="found-guardian-name"></span>']) }}</div>
-                    @error('parent_phone')
-                        <div class="text-danger small mt-1">{{ $message }}</div>
-                    @enderror
+                    <h5 class="font-bold text-slate-800 dark:text-slate-200 text-sm m-0">{{ __('center::students.form.parent_info') }}</h5>
                 </div>
                 
-                <div class="col-md-6 mb-3">
-                    <label class="form-label fw-bold"><i class="fas fa-envelope me-1 text-info opacity-50"></i> {{ __('center::students.parent_email') ?? __('instructor::students.parent_email') }}</label>
-                    <input type="email" name="parent_email" value="{{ old('parent_email') }}" class="form-control form-control-lg bg-light border-0" placeholder="parent@email.com">
-                    @error('parent_email')
-                        <div class="text-danger small mt-1">{{ $message }}</div>
-                    @enderror
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold text-slate-700 dark:text-slate-300 small">{{ __('center::students.form.parent_name') }}</label>
+                        <input type="text" name="parent_name" value="{{ old('parent_name') }}" class="form-control form-control-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100" placeholder="{{ __('center::students.form.parent_name_placeholder') }}">
+                        @error('parent_name')
+                            <div class="text-danger small mt-1">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold text-slate-700 dark:text-slate-300 small">{{ __('center::students.form.parent_phone') ?? __('instructor::students.parent_phone') }}</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700"><i class="fas fa-users text-brand-primary"></i></span>
+                            <input type="tel" name="parent_phone" id="parent_phone" value="{{ old('parent_phone') }}" class="form-control form-control-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100" placeholder="{{ __('center::students.form.parent_phone_placeholder') }}" pattern="[0-9\+\-\s\(\)]*" title="{{ __('center::students.numbers_only') }}">
+                            <span class="input-group-text bg-light border border-slate-200 d-none" id="guardian-found-badge">
+                                <span class="badge bg-success rounded-pill"><i class="bi bi-check-circle-fill"></i> {{ __('center::students.form.guardian_found') }}</span>
+                            </span>
+                        </div>
+                        <div id="guardian-info-alert" class="alert alert-success border border-success/20 rounded-xl small mt-2 d-none">
+                            <i class="bi bi-info-circle-fill me-1"></i> {{ __('center::students.form.guardian_recognized', ['name' => '<span id="found-guardian-name"></span>']) }}</div>
+                        @error('parent_phone')
+                            <div class="text-danger small mt-1">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    
+                    <div class="col-md-12">
+                        <label class="form-label fw-bold text-slate-700 dark:text-slate-300 small">{{ __('center::students.parent_email') ?? __('instructor::students.parent_email') }}</label>
+                        <input type="email" name="parent_email" value="{{ old('parent_email') }}" class="form-control form-control-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100" placeholder="parent@email.com">
+                        @error('parent_email')
+                            <div class="text-danger small mt-1">{{ $message }}</div>
+                        @enderror
+                    </div>
                 </div>
-                
             </div>
 
             @if($showGrade)
-            <hr class="my-4">
             {{-- 3. Academic Info --}}
-            <div class="row mb-4">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="text-secondary mb-0"><i class="bi bi-mortarboard me-2"></i>{{ __('center::students.form.academic_stage') }}</h5>
+            <div class="bg-slate-50/70 dark:bg-slate-800/40 p-5 rounded-2xl border border-slate-200/90 dark:border-slate-700/80">
+                <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-200/80 dark:border-slate-700/70">
+                    <div class="flex items-center gap-2">
+                        <div class="w-7 h-7 rounded-lg bg-purple-50 text-purple-600 dark:bg-purple-950/40 dark:text-purple-300 flex items-center justify-center text-xs">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h5 class="font-bold text-slate-800 dark:text-slate-200 text-sm m-0">{{ __('center::students.form.academic_stage') }}</h5>
+                    </div>
                     <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'gradePickerModal' }))" id="gradePickerTrigger">
                         <i class="bi bi-grid-3x3-gap me-1"></i> {{ __('center::students.choose_from_list') }}
                     </button>
                 </div>
                 
-                <div class="col-md-12 mb-3">
-                    <label class="form-label fw-bold">{{ __('center::students.form.grade_level') }} <span class="text-danger">*</span></label>
-                    <div class="position-relative">
-                        <select name="grade_id" id="main_grade_select" class="form-select form-select-lg bg-light border-0 shadow-none">
-                            <option value="">{{ __('center::students.form.choose_grade') }}</option>
-                            @foreach($stages as $stage)
-                                <optgroup label="📂 {{ $stage->name }}">
-                                    @foreach($stage->grades as $grade)
-                                        <option value="{{ $grade->id }}" {{ old('grade_id') == $grade->id ? 'selected' : '' }} data-stage="{{ $stage->name }}">{{ $grade->name }}</option>
-                                    @endforeach
-                                </optgroup>
-                            @endforeach
-                        </select>
-                        <div id="selected-grade-chip" class="mt-2 d-none">
-                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-2">
-                                <i class="bi bi-journal-check me-1"></i> <span id="chip-text"></span>
-                            </span>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="form-label fw-bold text-slate-700 dark:text-slate-300 small">{{ __('center::students.form.grade_level') }} <span class="text-danger">*</span></label>
+                        <div class="position-relative">
+                            <select name="grade_id" id="main_grade_select" class="form-select form-select-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 shadow-none">
+                                <option value="">{{ __('center::students.form.choose_grade') }}</option>
+                                @foreach($stages as $stage)
+                                    <optgroup label="📂 {{ $stage->name }}">
+                                        @foreach($stage->grades as $grade)
+                                            <option value="{{ $grade->id }}" {{ old('grade_id') == $grade->id ? 'selected' : '' }} data-stage="{{ $stage->name }}">{{ $grade->name }}</option>
+                                        @endforeach
+                                    </optgroup>
+                                @endforeach
+                            </select>
+                            <div id="selected-grade-chip" class="mt-2 d-none">
+                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-2">
+                                    <i class="bi bi-journal-check me-1"></i> <span id="chip-text"></span>
+                                </span>
+                            </div>
                         </div>
+                        @error('grade_id')
+                            <div class="text-danger small mt-1">{{ $message }}</div>
+                        @enderror
                     </div>
-                    @error('grade_id')
-                        <div class="text-danger small mt-1">{{ $message }}</div>
-                    @enderror
                 </div>
             </div>
             @endif
 
-            <div class="d-flex justify-content-end mt-4 pt-3 border-top">
-                <button type="button" class="btn btn-primary btn-lg rounded-pill px-5 shadow-sm btn-next-step">
+            <div class="flex justify-end pt-4 border-t border-slate-200 dark:border-slate-800">
+                <button type="button" class="btn btn-primary btn-lg rounded-xl px-5 shadow-xs btn-next-step font-bold">
                     التالي <i class="fas fa-arrow-left ms-2"></i>
                 </button>
             </div>
         </div> <!-- End Step 1 -->
 
         <!-- STEP 2: Courses & Confirmation -->
-        <div class="tab-pane fade" id="step2" role="tabpanel" aria-labelledby="step2-tab">
+        <div class="tab-pane fade space-y-6" id="step2" role="tabpanel" aria-labelledby="step2-tab">
             
             {{-- 4. Course Enrollment --}}
-            <div class="row mb-4">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="text-secondary mb-0"><i class="bi bi-collection-play me-2"></i>اختيار المجموعة الدراسية <span class="text-danger">*</span></h5>
+            <div class="bg-slate-50/70 dark:bg-slate-800/40 p-5 rounded-2xl border border-slate-200/90 dark:border-slate-700/80">
+                <div class="flex items-center gap-2 mb-4 pb-3 border-b border-slate-200/80 dark:border-slate-700/70">
+                    <div class="w-7 h-7 rounded-lg bg-brand-50 text-brand-primary dark:bg-brand-900/40 dark:text-brand-300 flex items-center justify-center text-xs">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <h5 class="font-bold text-slate-800 dark:text-slate-200 text-sm m-0">اختيار المجموعة الدراسية <span class="text-danger">*</span></h5>
                 </div>
                 
-                <div class="col-md-12 mb-3">
-                    <label class="form-label fw-bold mb-3">اختر المجموعات أو الدورات المراد تسجيل الطالب بها <span class="text-danger">*</span> <span class="text-muted fw-normal">(يمكن اختيار أكثر من مجموعة)</span></label>
+                <div>
+                    <label class="form-label fw-bold text-slate-700 dark:text-slate-300 small mb-3">اختر المجموعات أو الدورات المراد تسجيل الطالب بها <span class="text-danger">*</span> <span class="text-slate-400 font-normal">(يمكن اختيار أكثر من مجموعة)</span></label>
                     @if($courses->count() > 0)
                         <div class="row g-3">
                             @foreach($courses as $course)
                                 <div class="col-md-6 col-lg-4">
-                                    <div class="form-check custom-checkbox-card bg-light border-0 rounded-4 p-3 h-100 d-flex align-items-center transition-all cursor-pointer" onclick="document.getElementById('course_{{ $course->id }}').click();">
-                                        <input class="form-check-input ms-0 me-3 course-checkbox-item" style="transform: scale(1.3);" type="checkbox" name="course_ids[]" value="{{ $course->id }}" id="course_{{ $course->id }}" {{ (is_array(old('course_ids')) && in_array($course->id, old('course_ids'))) ? 'checked' : '' }} onclick="event.stopPropagation();">
-                                        <label class="form-check-label w-100 cursor-pointer fw-bold text-dark m-0" for="course_{{ $course->id }}" onclick="event.stopPropagation();">
+                                    <div class="form-check custom-checkbox-card bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-3.5 h-100 d-flex align-items-center transition-all cursor-pointer hover:border-brand-primary/40 shadow-2xs" onclick="document.getElementById('course_{{ $course->id }}').click();">
+                                        <input class="form-check-input ms-0 me-3 course-checkbox-item" style="transform: scale(1.2);" type="checkbox" name="course_ids[]" value="{{ $course->id }}" id="course_{{ $course->id }}" {{ (is_array(old('course_ids')) && in_array($course->id, old('course_ids'))) ? 'checked' : '' }} onclick="event.stopPropagation();">
+                                        <label class="form-check-label w-100 cursor-pointer fw-bold text-slate-800 dark:text-slate-200 m-0 text-sm" for="course_{{ $course->id }}" onclick="event.stopPropagation();">
                                             {{ $course->title }}
                                         </label>
                                     </div>
@@ -177,7 +197,7 @@
                             @endforeach
                         </div>
                     @else
-                        <div class="alert alert-warning border-0 rounded-4 p-4 shadow-sm">
+                        <div class="alert alert-warning border border-warning/30 rounded-2xl p-4 shadow-2xs">
                             <div class="d-flex align-items-center gap-3">
                                 <div class="rounded-circle bg-warning bg-opacity-20 text-warning p-3">
                                     <i class="fas fa-exclamation-triangle fs-3"></i>
@@ -188,7 +208,7 @@
                                 </div>
                             </div>
                             <div class="mt-3 pt-3 border-top border-warning border-opacity-20 d-flex justify-content-end">
-                                <a href="{{ route('center.courses.create') }}" class="btn btn-warning rounded-pill px-4 font-bold shadow-sm">
+                                <a href="{{ route('center.courses.create') }}" class="btn btn-warning rounded-xl px-4 font-bold shadow-2xs">
                                     <i class="fas fa-plus-circle me-1"></i> إنشاء مجموعة دراسية جديدة الآن
                                 </a>
                             </div>
@@ -203,11 +223,11 @@
                 </div>
             </div>
 
-            <div class="d-flex justify-content-between mt-5 pt-3 border-top">
-                <button type="button" class="btn btn-light btn-lg rounded-pill px-4 text-secondary btn-prev-step">
+            <div class="flex justify-between pt-4 border-t border-slate-200 dark:border-slate-800">
+                <button type="button" class="btn btn-light btn-lg rounded-xl px-4 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 btn-prev-step font-bold">
                     <i class="fas fa-arrow-right me-2"></i> السابق
                 </button>
-                <button type="submit" class="btn btn-primary btn-lg rounded-pill px-5 shadow-sm" id="btnSubmitStudent">
+                <button type="submit" class="btn btn-primary btn-lg rounded-xl px-5 shadow-xs font-bold" id="btnSubmitStudent">
                     <i class="fas fa-check-circle me-2"></i> {{ __('center::students.form.save_student') ?? __('instructor::students.save_and_register') }}
                 </button>
             </div>

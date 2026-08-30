@@ -11,7 +11,7 @@
     <div class="flex items-center justify-between mb-4">
         <div class="flex items-center gap-3">
             <div class="relative">
-                <div class="w-12 h-12 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 font-extrabold flex items-center justify-center text-base ring-2 ring-indigo-100 dark:ring-indigo-900/40">
+                <div class="w-12 h-12 rounded-full bg-brand-50 dark:bg-brand-900/30 text-brand-primary dark:text-brand-300 font-extrabold flex items-center justify-center text-base ring-2 ring-brand-100 dark:ring-brand-900/40">
                     {{ mb_substr($name, 0, 2) }}
                 </div>
             </div>
@@ -49,7 +49,7 @@
 
     <!-- Student Quick Subtabs -->
     <div class="flex items-center justify-between pt-3 text-xs font-semibold text-slate-500 dark:text-slate-400">
-        <button class="text-indigo-600 dark:text-indigo-400 font-bold flex items-center gap-1.5 hover:underline">
+        <button class="text-brand-primary dark:text-brand-300 font-bold flex items-center gap-1.5 hover:underline">
             <i class="fas fa-user text-[11px]"></i>
             <span>{{ __('الملف الشخصي') }}</span>
         </button>

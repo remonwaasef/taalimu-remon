@@ -10,6 +10,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
+- **Enhanced Visual Contrast, Table Separation & Card Framing across Dashboards (2026-08-30)**:
+  - Adjusted dashboard canvas background to a soft slate-tinted canvas `#EFF3F6` to make white cards, tables, and metric containers stand out with clear visual depth.
+  - Reinforced card borders (`border-slate-200` / `#E2E8F0`) and subtle shadows across all UI cards (`x-ui.card`, `.card`, Launchpad, Quick Actions).
+  - Modernized `x-ui.table` component with highlighted, separated header backgrounds (`bg-slate-50/95`), horizontal row dividers (`divide-slate-100`), and smooth hover states.
+  - Re-framed Attendance (`Modules/Center/resources/views/attendance/index.blade.php`) and Schedule screens (`schedules/index.blade.php`) inside structured cards with clear headers.
+  - Restructured Student Creation Form (`components/student-form.blade.php`, `students/create.blade.php`) into distinct, framed sub-sections (Student Info, Parent Info, Academic Stage, Courses) with sharp bordered inputs.
+
+- **Aligned All Dashboards & UI Components with Taalimu Brand Green Identity (2026-08-30)**:
+  - Fixed blue/indigo color dominance across Center, Admin, and Instructor dashboards.
+  - Updated Launchpad onboarding banner (`Modules/Center/resources/views/partials/launchpad.blade.php`), progress bars, active step badges, buttons, and setup modals to use the official Taalimu green palette (`#168F7C`, `brand-primary`, `brand-50`, `brand-600`).
+  - Updated Stats Cards, Quick Action cards, and table links in `Modules/Center/resources/views/index.blade.php`.
+  - Updated global `x-ui.stats-card` component to display positive trends in emerald/brand green rather than indigo.
+  - Replaced legacy indigo colors in `student-profile-card`, `class-card`, `teacher-card`, `recent-activity-card`, and `class-progress-card`.
+  - Rebuilt assets via Vite successfully.
+
 - **Resolved 500 Server Error on Login and Register Pages (2026-08-29)**:
   - Replaced strict `@include` statements with safe `@includeIf` for missing header, sticky CTA, and footer partials in `resources/views/layouts/landing-new.blade.php`.
   - Fixed 500 Server Error occurring when accessing `/login` (`login.portal`) and `/register` (`register`).
