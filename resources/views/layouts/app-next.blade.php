@@ -346,6 +346,8 @@
     <script src="{{ asset('assets/hope-ui/js/libs.min.js') }}"></script>
     <script src="{{ asset('assets/hope-ui/js/hope-ui.js') }}"></script>
 
+    @stack('modals')
+
     @stack('scripts')
 </body>
 </html>

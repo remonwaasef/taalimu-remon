@@ -179,6 +179,7 @@
 </div>
 @endpush
 
+@push('styles')
 <style>
     .bg-danger-soft { background-color: rgba(220, 53, 69, 0.1); }
     .bg-success-soft { background-color: rgba(25, 135, 84, 0.1); }
@@ -186,25 +187,54 @@
     #billingTable thead th { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: #64748b; letter-spacing: 0.025em; }
     #resultCount { transition: transform 0.2s ease; }
 </style>
+@endpush
 
+@push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Modal data handling (page-specific, cannot be generalized)
-    const collectModal = document.getElementById('collectModal');
-    if (collectModal) {
-        collectModal.addEventListener('show.bs.modal', function(event) {
-            const button = event.relatedTarget;
-            const id = button.getAttribute('data-id');
-            const name = button.getAttribute('data-name');
-            const balance = button.getAttribute('data-balance');
+    const collectModalEl = document.getElementById('collectModal');
+    
+    function populateModal(btn) {
+        const id = btn.getAttribute('data-id');
+        const name = btn.getAttribute('data-name');
+        const balance = btn.getAttribute('data-balance');
 
-            document.getElementById('modal_student_id').value = id;
-            document.getElementById('modal_student_name').textContent = name;
-            document.getElementById('modal_amount').value = balance;
-            document.getElementById('modal_amount').max = balance;
-            document.getElementById('modal_balance_hint').textContent = '{{ __("center::sales.current_balance_hint") }}' + new Intl.NumberFormat().format(balance);
+        const idInput = document.getElementById('modal_student_id');
+        const nameEl = document.getElementById('modal_student_name');
+        const amountInput = document.getElementById('modal_amount');
+        const hintEl = document.getElementById('modal_balance_hint');
+
+        if (idInput) idInput.value = id;
+        if (nameEl) nameEl.textContent = name;
+        if (amountInput) {
+            amountInput.value = balance;
+            amountInput.max = balance;
+        }
+        if (hintEl) {
+            hintEl.textContent = '{{ __("center::sales.current_balance_hint") }} ' + new Intl.NumberFormat().format(balance);
+        }
+    }
+
+    if (collectModalEl) {
+        // Bootstrap standard modal event
+        collectModalEl.addEventListener('show.bs.modal', function(event) {
+            if (event.relatedTarget) {
+                populateModal(event.relatedTarget);
+            }
         });
     }
+
+    // Fallback explicit click listener for collect buttons
+    document.querySelectorAll('[data-bs-target="#collectModal"]').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            populateModal(this);
+            if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                const modalInstance = bootstrap.Modal.getOrCreateInstance(collectModalEl);
+                modalInstance.show();
+            }
+        });
+    });
 });
 </script>
+@endpush
 @endsection
