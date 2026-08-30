@@ -29,10 +29,10 @@
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('center::schedules.course') }}</label>
-                                <select name="course_id" class="form-select @error('course_id') is-invalid @enderror">
+                                <select name="course_id" id="course_select" class="form-select @error('course_id') is-invalid @enderror">
                                     <option value="">{{ __('center::schedules.choose_course') }}</option>
                                     @foreach($courses as $course)
-                                        <option value="{{ $course->id }}" {{ old('course_id', $schedule->course_id ?? request()->course_id) == $course->id ? 'selected' : '' }}>
+                                        <option value="{{ $course->id }}" data-instructor-id="{{ $course->instructor_id }}" {{ old('course_id', $schedule->course_id ?? request()->course_id) == $course->id ? 'selected' : '' }}>
                                             {{ $course->title }}
                                         </option>
                                     @endforeach
@@ -42,7 +42,7 @@
 
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('center::schedules.classroom') }}</label>
-                                <select name="classroom_id" class="form-select @error('classroom_id') is-invalid @enderror">
+                                <select name="classroom_id" id="classroom_select" class="form-select @error('classroom_id') is-invalid @enderror">
                                     <option value="">{{ __('center::schedules.choose_classroom') }}</option>
                                     @foreach($classrooms as $classroom)
                                         <option value="{{ $classroom->id }}" {{ old('classroom_id', $schedule->classroom_id ?? '') == $classroom->id ? 'selected' : '' }}>
@@ -55,7 +55,7 @@
 
                             <div class="col-md-12">
                                 <label class="form-label fw-bold">{{ __('center::schedules.instructor') }}</label>
-                                <select name="instructor_id" class="form-select @error('instructor_id') is-invalid @enderror">
+                                <select name="instructor_id" id="instructor_select" class="form-select @error('instructor_id') is-invalid @enderror">
                                     <option value="">{{ __('center::schedules.choose_instructor') }}</option>
                                     @foreach($instructors as $instructor)
                                         <option value="{{ $instructor->id }}" {{ old('instructor_id', $schedule->instructor_id ?? '') == $instructor->id ? 'selected' : '' }}>
@@ -164,8 +164,16 @@
     @push('scripts')
         <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
         <script>
+            const courseInstructors = {
+                @foreach($courses as $course)
+                    "{{ $course->id }}": "{{ $course->instructor_id }}",
+                @endforeach
+            };
+
+            const tomSelectInstances = {};
+
             document.querySelectorAll('select').forEach((el) => {
-                new TomSelect(el, {
+                const ts = new TomSelect(el, {
                     plugins: ['dropdown_input'],
                     dropdownParent: 'body',
                     sortField: {
@@ -178,7 +186,32 @@
                         }
                     }
                 });
+
+                if (el.id) {
+                    tomSelectInstances[el.id] = ts;
+                }
             });
+
+            // Automatically select the assigned course instructor when a course is chosen
+            const courseTs = tomSelectInstances['course_select'];
+            const instructorTs = tomSelectInstances['instructor_select'];
+
+            if (courseTs && instructorTs) {
+                courseTs.on('change', function(courseId) {
+                    const assignedInstructorId = courseInstructors[courseId];
+                    if (assignedInstructorId) {
+                        instructorTs.setValue(assignedInstructorId);
+                    }
+                });
+
+                // Auto-trigger if course is already pre-selected
+                if (courseTs.getValue() && !instructorTs.getValue()) {
+                    const initialInstructorId = courseInstructors[courseTs.getValue()];
+                    if (initialInstructorId) {
+                        instructorTs.setValue(initialInstructorId);
+                    }
+                }
+            }
         </script>
     @endpush
 @endsection

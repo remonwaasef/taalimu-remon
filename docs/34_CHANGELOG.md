@@ -18,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Re-framed Attendance and Schedule screens inside structured cards with clear headers.
   - Restructured Student Creation Form into distinct, framed sub-sections with sharp bordered inputs.
 
+- **Automatic Course Instructor Binding in Schedule Forms (2026-08-30)**:
+  - When choosing a course in [schedules/create.blade.php](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/Modules/Center/resources/views/schedules/create.blade.php) or [schedules/edit.blade.php](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/Modules/Center/resources/views/schedules/edit.blade.php), the assigned instructor is automatically selected via real-time JavaScript binding.
+  - In `ScheduleController@store` and `@update`, if `instructor_id` is omitted, the course's designated instructor is automatically assigned as fallback.
+
 - **Strict 1-Session Per Course Per Day & Centralized Schedule Sync (2026-08-30)**:
   - Enforced strict business rule in `ScheduleController::getConflictError()` forbidding more than 1 schedule session per course on the same day.
   - Added day-level deduplication in `CourseService::syncSchedules()`.

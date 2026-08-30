@@ -84,6 +84,14 @@ class ScheduleController extends Controller
             'max_students' => 'nullable|integer|min:1',
         ]);
 
+        // Auto-link instructor from course if not manually selected
+        if (empty($validated['instructor_id']) && ! empty($validated['course_id'])) {
+            $course = Course::find($validated['course_id']);
+            if ($course && $course->instructor_id) {
+                $validated['instructor_id'] = $course->instructor_id;
+            }
+        }
+
         // Conflict Detection
         $conflictError = $this->getConflictError($validated);
         if ($conflictError) {
@@ -129,6 +137,14 @@ class ScheduleController extends Controller
 
             'max_students' => 'nullable|integer|min:1',
         ]);
+
+        // Auto-link instructor from course if not manually selected
+        if (empty($validated['instructor_id']) && ! empty($validated['course_id'])) {
+            $course = Course::find($validated['course_id']);
+            if ($course && $course->instructor_id) {
+                $validated['instructor_id'] = $course->instructor_id;
+            }
+        }
 
         // Conflict Detection (excluding current schedule)
         $conflictError = $this->getConflictError($validated, $schedule->id);
