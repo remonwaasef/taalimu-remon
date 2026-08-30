@@ -18,9 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Re-framed Attendance and Schedule screens inside structured cards with clear headers.
   - Restructured Student Creation Form into distinct, framed sub-sections with sharp bordered inputs.
 
-- **Fix Billing Collection Modal Trigger in Sales Management (2026-08-30)**:
-  - Added missing `@stack('modals')` to [app-next.blade.php](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/resources/views/layouts/app-next.blade.php) ensuring modals pushed from module views are correctly mounted into the DOM.
-  - Enhanced [sales/account.blade.php](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/Modules/Center/resources/views/sales/account.blade.php) with dual modal triggers (Bootstrap standard + direct JS event binding) and wrapped assets in `@push('styles')` and `@push('scripts')`.
+- **Migrate Billing Collection Modal to `<x-ui.modal>` (2026-08-30)**:
+  - Replaced legacy Bootstrap modal in [sales/account.blade.php](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/Modules/Center/resources/views/sales/account.blade.php) with Alpine-based `<x-ui.modal>`.
+  - Fixed issue where invisible fixed modal wrapper was intercepting page clicks and making buttons/inputs unresponsive.
+  - Bound custom event `open-modal` to seamlessly populate student balance and name instantly upon click.
 
 - **On-The-Fly Quick Entity Creation (Instructors & Classrooms) (2026-08-30)**:
   - Added seamless inline Quick Creator buttons (`+ إضافة معلم جديد`, `+ إضافة قاعة جديدة`) across all Course and Schedule creation/edit forms.

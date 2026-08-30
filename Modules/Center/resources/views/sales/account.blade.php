@@ -98,9 +98,9 @@
                                 <td class="px-4 text-end">
                                     <div class="d-flex gap-2 justify-content-end">
                                         @if($balance > 0)
-                                            <button type="button" class="btn btn-primary btn-sm rounded-pill px-3" 
-                                                data-bs-toggle="modal" data-bs-target="#collectModal" 
-                                                data-id="{{ $student->id }}" data-name="{{ $student->name }}" data-balance="{{ $balance }}">
+                                            <button type="button" 
+                                                class="btn btn-primary btn-sm rounded-pill px-3 shadow-sm"
+                                                onclick="openCollectionModal({{ $student->id }}, '{{ addslashes($student->name) }}', {{ $balance }})">
                                                 <i class="fas fa-hand-holding-usd me-1"></i> {{ __('center::sales.collect') }}
                                             </button>
                                             @php
@@ -136,48 +136,37 @@
     </div>
 </div>
 
-@push('modals')
-<!-- Collection Modal -->
-<div class="modal fade" id="collectModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow-lg rounded-4">
-            <div class="modal-header border-0 pb-0">
-                <h5 class="modal-title fw-bold">{{ __('center::sales.record_payment') }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <form action="{{ route('center.sales.mark-paid') }}" method="POST">
-                @csrf
-                <div class="modal-body p-4">
-                    <input type="hidden" name="student_id" id="modal_student_id">
-                    
-                    <div class="mb-4 text-center">
-                        <p class="text-muted mb-1">{{ __('center::sales.collect_from') }}</p>
-                        <h4 class="fw-bold mb-0" id="modal_student_name"></h4>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold text-muted">{{ __('center::sales.amount_received') }}</label>
-                        <div class="input-group">
-                            <input type="number" name="amount" id="modal_amount" class="form-control bg-white border py-2" required>
-                            <span class="input-group-text bg-white border">{{ get_currency_symbol() }}</span>
-                        </div>
-                        <div class="form-text text-danger" id="modal_balance_hint"></div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold text-muted">{{ __('center::sales.notes') }}</label>
-                        <textarea name="notes" class="form-control bg-white border" rows="3" placeholder="{{ __('center::sales.notes_placeholder_alt') }}"></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer border-0 pt-0 p-4">
-                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">{{ __('center::sales.cancel') }}</button>
-                    <button type="submit" class="btn btn-primary rounded-pill px-4">{{ __('center::sales.confirm_collection') }}</button>
-                </div>
-            </form>
+{{-- Modern Tailwind Collection Modal --}}
+<x-ui.modal id="collectModal" title="{{ __('center::sales.record_payment') }}" size="md">
+    <form action="{{ route('center.sales.mark-paid') }}" method="POST">
+        @csrf
+        <input type="hidden" name="student_id" id="modal_student_id">
+        
+        <div class="mb-4 text-center py-2">
+            <p class="text-muted mb-1 small">{{ __('center::sales.collect_from') }}</p>
+            <h4 class="fw-bold mb-0 text-slate-800 dark:text-slate-100" id="modal_student_name"></h4>
         </div>
-    </div>
-</div>
-@endpush
+
+        <div class="mb-3">
+            <label class="form-label small fw-bold text-muted">{{ __('center::sales.amount_received') }}</label>
+            <div class="input-group">
+                <input type="number" name="amount" id="modal_amount" class="form-control bg-white dark:bg-slate-800 border py-2" required>
+                <span class="input-group-text bg-light border">{{ get_currency_symbol() }}</span>
+            </div>
+            <div class="form-text text-danger" id="modal_balance_hint"></div>
+        </div>
+
+        <div class="mb-4">
+            <label class="form-label small fw-bold text-muted">{{ __('center::sales.notes') }}</label>
+            <textarea name="notes" class="form-control bg-white dark:bg-slate-800 border" rows="3" placeholder="{{ __('center::sales.notes_placeholder_alt') }}"></textarea>
+        </div>
+
+        <div class="d-flex align-items-center justify-content-end gap-2 pt-3 border-top">
+            <button type="button" class="btn btn-light rounded-pill px-4" @click="show = false">{{ __('center::sales.cancel') }}</button>
+            <button type="submit" class="btn btn-primary rounded-pill px-4">{{ __('center::sales.confirm_collection') }}</button>
+        </div>
+    </form>
+</x-ui.modal>
 
 @push('styles')
 <style>
@@ -191,50 +180,24 @@
 
 @push('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const collectModalEl = document.getElementById('collectModal');
-    
-    function populateModal(btn) {
-        const id = btn.getAttribute('data-id');
-        const name = btn.getAttribute('data-name');
-        const balance = btn.getAttribute('data-balance');
+window.openCollectionModal = function(id, name, balance) {
+    const idInput = document.getElementById('modal_student_id');
+    const nameEl = document.getElementById('modal_student_name');
+    const amountInput = document.getElementById('modal_amount');
+    const hintEl = document.getElementById('modal_balance_hint');
 
-        const idInput = document.getElementById('modal_student_id');
-        const nameEl = document.getElementById('modal_student_name');
-        const amountInput = document.getElementById('modal_amount');
-        const hintEl = document.getElementById('modal_balance_hint');
-
-        if (idInput) idInput.value = id;
-        if (nameEl) nameEl.textContent = name;
-        if (amountInput) {
-            amountInput.value = balance;
-            amountInput.max = balance;
-        }
-        if (hintEl) {
-            hintEl.textContent = '{{ __("center::sales.current_balance_hint") }} ' + new Intl.NumberFormat().format(balance);
-        }
+    if (idInput) idInput.value = id;
+    if (nameEl) nameEl.textContent = name;
+    if (amountInput) {
+        amountInput.value = balance;
+        amountInput.max = balance;
+    }
+    if (hintEl) {
+        hintEl.textContent = '{{ __("center::sales.current_balance_hint") }} ' + new Intl.NumberFormat().format(balance);
     }
 
-    if (collectModalEl) {
-        // Bootstrap standard modal event
-        collectModalEl.addEventListener('show.bs.modal', function(event) {
-            if (event.relatedTarget) {
-                populateModal(event.relatedTarget);
-            }
-        });
-    }
-
-    // Fallback explicit click listener for collect buttons
-    document.querySelectorAll('[data-bs-target="#collectModal"]').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-            populateModal(this);
-            if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
-                const modalInstance = bootstrap.Modal.getOrCreateInstance(collectModalEl);
-                modalInstance.show();
-            }
-        });
-    });
-});
+    window.dispatchEvent(new CustomEvent('open-modal', { detail: 'collectModal' }));
+};
 </script>
 @endpush
 @endsection
