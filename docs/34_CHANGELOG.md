@@ -18,6 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Re-framed Attendance and Schedule screens inside structured cards with clear headers.
   - Restructured Student Creation Form into distinct, framed sub-sections with sharp bordered inputs.
 
+- **Fixed 500 Error on QR Attendance Scan Page (2026-08-30)**:
+  - Resolved fatal `Call to a member function can() on null` when unauthenticated students scanned QR codes on mobile.
+  - Previously, `scan-login.blade.php` and `success.blade.php` inherited the center admin layout (`_sidebar-next`), which assumed an authenticated admin user.
+  - Migrated both views to standalone `layouts.auth-minimal` with a responsive mobile-first login and confirmation interface.
+
 - **Redesigned Interactive QR Code Attendance Screen & Projector Mode (2026-08-30)**:
   - Transformed the static QR page into an interactive live presentation center (`Modules/Center/resources/views/attendance/qr.blade.php`).
   - Added dynamic 60s countdown timer with an animated progress bar and seamless client-side AJAX refresh without page reloads.
