@@ -113,13 +113,9 @@ class IdentifyTenant
             ]);
 
             // Set timezone dynamically for multi-region support
-            if ($tenant->timezone) {
-                config(['app.timezone' => $tenant->timezone]);
-                // If using Carbon, set its default timezone dynamically for the current request context
-                if (class_exists(\Carbon\Carbon::class)) {
-                    \Carbon\Carbon::setTestNow(); // Reset any test time and let it use the current config
-                }
-            }
+            $tenantTimezone = $tenant->timezone ?: config('app.timezone', 'Africa/Cairo');
+            date_default_timezone_set($tenantTimezone);
+            config(['app.timezone' => $tenantTimezone]);
 
             // Dynamically set log file for this tenant
             config(['logging.channels.single.path' => storage_path("logs/tenant_{$tenant->id}.log")]);

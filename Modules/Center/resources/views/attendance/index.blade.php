@@ -74,14 +74,15 @@
                         <tbody class="divide-y divide-slate-100 dark:divide-slate-800/80 font-inter">
                             @forelse($todaySessions as $session)
                                 @php
-                                    $todayDate = now()->format('Y-m-d');
-                                    $startDateTime = \Carbon\Carbon::parse($todayDate . ' ' . $session->start_time);
-                                    $endDateTime = \Carbon\Carbon::parse($todayDate . ' ' . $session->end_time);
-                                    $now = now();
+                                    $tz = config('app.timezone', 'Africa/Cairo');
+                                    $now = now($tz);
+                                    $todayDate = $now->format('Y-m-d');
+                                    $startDateTime = \Carbon\Carbon::parse($todayDate . ' ' . $session->start_time, $tz);
+                                    $endDateTime = \Carbon\Carbon::parse($todayDate . ' ' . $session->end_time, $tz);
 
-                                    if ($now->isAfter($endDateTime)) {
+                                    if ($now->gte($endDateTime)) {
                                         $sessionStatus = 'ended';
-                                    } elseif ($now->between($startDateTime, $endDateTime)) {
+                                    } elseif ($now->betweenIncluded($startDateTime, $endDateTime)) {
                                         $sessionStatus = 'live';
                                     } else {
                                         $sessionStatus = 'upcoming';

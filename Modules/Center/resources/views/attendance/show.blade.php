@@ -38,7 +38,8 @@
                         </button>
 
                         @php
-                            $isEnded = now()->isAfter(\Carbon\Carbon::parse($schedule->end_time));
+                            $tz = config('app.timezone', 'Africa/Cairo');
+                            $isEnded = now($tz)->gte(\Carbon\Carbon::parse(today($tz)->format('Y-m-d') . ' ' . $schedule->end_time, $tz));
                             $hasUnrecorded = $schedule->course->enrollments->count() > $attendances->count();
                         @endphp
                         @if($isEnded && $hasUnrecorded)

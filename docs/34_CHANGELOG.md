@@ -18,6 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Re-framed Attendance and Schedule screens inside structured cards with clear headers.
   - Restructured Student Creation Form into distinct, framed sub-sections with sharp bordered inputs.
 
+- **Fixed Application Timezone and Accurate Session Status Calculation (2026-08-30)**:
+  - Corrected `APP_TIMEZONE` in `.env` and `config/app.php` from `UTC` to `Africa/Cairo` (matching local time UTC+3).
+  - Previously, `now()` was 3 hours behind local time in UTC, causing past morning sessions (e.g. 10:00 AM - 11:00 AM) to be erroneously calculated as upcoming.
+  - Updated `IdentifyTenant` middleware and views to parse session times with explicit timezone awareness.
+
 - **Fixed Manual Attendance Action Buttons Hover Contrast (2026-08-30)**:
   - Replaced ambiguous outline button styles on "حاضر / متأخر / غائب" with dedicated high-contrast solid and soft states.
   - On hover, buttons smoothly transition with clear colored backgrounds and white text, completely eliminating the white-on-white text disappearance.
