@@ -18,6 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Re-framed Attendance and Schedule screens inside structured cards with clear headers.
   - Restructured Student Creation Form into distinct, framed sub-sections with sharp bordered inputs.
 
+- **Smart 1-Tap QR Attendance & Anti-Fraud Device Lock (2026-08-30)**:
+  - Implemented persistent remember-session on mobile devices for seamless one-tap attendance on future QR scans without re-entering credentials.
+  - Added anti-fraud Device Lock (`taalimu_dev_lock`) binding each physical phone to a single student profile, preventing proxies and attendance fraud.
+  - Enhanced attendance success view with student name, course title, and live check-in timestamps.
+
 - **Fixed 403 Forbidden on Mobile QR Scan Form Submission (2026-08-30)**:
   - Fixed HMAC signature mismatch when submitting the scan-login form to a distinct POST endpoint.
   - Configured `center.attendance.markByQr` to handle both `GET` and `POST` directly on `request()->fullUrl()`, ensuring the signed URL signature passes with 100% validity.

@@ -127,6 +127,18 @@
         <p class="message">{{ $message ?? 'تم تسجيل بيانات حضورك لهذه الحصة بنجاح.' }}</p>
 
         <div class="details-box">
+            @if(isset($student))
+                <div class="details-row">
+                    <span>اسم الطالب:</span>
+                    <span class="details-val">{{ $student->name }}</span>
+                </div>
+            @endif
+            @if(isset($schedule) && $schedule->course)
+                <div class="details-row">
+                    <span>المادة / الدورة:</span>
+                    <span class="details-val">{{ $schedule->course->title }}</span>
+                </div>
+            @endif
             <div class="details-row">
                 <span>تاريخ اليوم:</span>
                 <span class="details-val" dir="ltr">{{ today()->format('Y-m-d') }}</span>

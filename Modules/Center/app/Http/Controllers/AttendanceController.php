@@ -288,63 +288,91 @@ class AttendanceController extends Controller
         }
 
         $this->assertTenantSchedule($schedule);
+        $deviceCookieName = 'taalimu_dev_lock_'.$this->tenant->id;
 
-        // If submitted via POST (Phone verification or Email/Password login)
+        // If submitted via POST (Login & Lock Device)
         if ($request->isMethod('post')) {
-            // Case 1: Phone / Code quick attendance verification (No password required in classroom)
-            if ($request->filled('phone_or_code')) {
-                $input = trim($request->phone_or_code);
-                $student = Student::where('tenant_id', $this->tenant->id)
-                    ->where(function ($q) use ($input) {
-                        $q->where('phone', $input)
-                          ->orWhere('parent_phone', $input)
-                          ->orWhere('code', $input)
-                          ->orWhere('national_id', $input);
-                    })
-                    ->first();
-
-                if (! $student) {
-                    return back()->withErrors(['phone_or_code' => 'لم يتم العثور على طالب مسجل برقم الهاتف أو الكود المدخل في هذا المركز.'])->withInput();
-                }
-
-                if (! $this->assertStudentTenant($student)) {
-                    return back()->withErrors(['phone_or_code' => 'هذا الحساب لا ينتمي إلى هذا المركز.'])->withInput();
-                }
-
-                return $this->processQrAttendance($student, $schedule);
-            }
-
-            // Case 2: Email & Password authentication
             $request->validate([
-                'email' => 'required',
-                'password' => 'required',
+                'login' => 'required|string',
+                'password' => 'required|string',
             ]);
 
-            if (! auth()->attempt(['email' => $request->email, 'password' => $request->password, 'tenant_id' => $this->tenant->id])) {
-                return back()->withErrors(['email' => 'بيانات الدخول غير صحيحة.'])->withInput();
+            $loginInput = trim($request->login);
+            $loginField = filter_var($loginInput, FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
+
+            $credentials = [
+                $loginField => $loginInput,
+                'password' => $request->password,
+                'tenant_id' => $this->tenant->id,
+            ];
+
+            // Attempt login with persistent remember token (Stay logged in for future 1-tap scans)
+            if (! auth()->attempt($credentials, true)) {
+                return back()->withErrors(['login' => 'بيانات الدخول غير صحيحة. تأكد من رقم الهاتف/البريد وكلمة المرور.'])->withInput();
             }
 
             $student = auth()->user()->student;
             if (! $student) {
                 auth()->logout();
 
-                return back()->with('message', __('center::messages.msg_014'));
+                return back()->withErrors(['login' => 'هذا الحساب ليس حساب طالب. يرجى تسجيل الدخول بحساب طالب.'])->withInput();
             }
 
             if (! $this->assertStudentTenant($student)) {
                 auth()->logout();
 
-                return back()->with('message', 'هذا الحساب لا ينتمي إلى هذا المركز.');
+                return back()->withErrors(['login' => 'هذا الحساب لا ينتمي إلى هذا المركز.'])->withInput();
             }
 
-            return $this->processQrAttendance($student, $schedule);
+            // Anti-Fraud Device Lock Check
+            $lockedStudentId = $request->cookie($deviceCookieName);
+            if ($lockedStudentId && (int) $lockedStudentId !== (int) $student->id) {
+                $otherAttended = Attendance::where('schedule_id', $schedule->id)
+                    ->where('student_id', $lockedStudentId)
+                    ->whereDate('session_date', today())
+                    ->exists();
+
+                if ($otherAttended) {
+                    auth()->logout();
+
+                    return back()->withErrors([
+                        'login' => 'عذراً، هذا الهاتف تم استخدامه اليوم لتسجيل حضور طالب آخر في هذه الحصة لمنع التحضير بالنيابة.',
+                    ])->withInput();
+                }
+            }
+
+            // Process attendance & attach persistent device lock cookie
+            $response = $this->processQrAttendance($student, $schedule);
+
+            return response($response)->withCookie(cookie()->forever($deviceCookieName, $student->id));
         }
 
-        // If visited via GET and user is already logged in as a student
+        // If visited via GET (Smart 1-Tap Attendance if student already logged in)
         if (auth()->check()) {
             $student = auth()->user()->student;
             if ($student && $this->assertStudentTenant($student)) {
-                return $this->processQrAttendance($student, $schedule);
+                // Anti-Fraud Device Lock Check
+                $lockedStudentId = $request->cookie($deviceCookieName);
+                if ($lockedStudentId && (int) $lockedStudentId !== (int) $student->id) {
+                    $otherAttended = Attendance::where('schedule_id', $schedule->id)
+                        ->where('student_id', $lockedStudentId)
+                        ->whereDate('session_date', today())
+                        ->exists();
+
+                    if ($otherAttended) {
+                        auth()->logout();
+
+                        return view('center::attendance.scan-login', [
+                            'schedule' => $schedule,
+                            'qrUrl' => $request->fullUrl(),
+                            'message' => 'عذراً، هذا الجهاز تم استخدامه اليوم لتسجيل حضور طالب آخر في هذه الحصة.',
+                        ]);
+                    }
+                }
+
+                $response = $this->processQrAttendance($student, $schedule);
+
+                return response($response)->withCookie(cookie()->forever($deviceCookieName, $student->id));
             }
         }
 
@@ -392,11 +420,19 @@ class AttendanceController extends Controller
     private function processQrAttendance(Student $student, Schedule $schedule)
     {
         if ($this->attendanceService->hasAttendedToday($student->id, $schedule->id)) {
-            return view('center::attendance.success', ['message' => 'تم تسجيل حضورك بالفعل لهذه الحصة اليوم!']);
+            return view('center::attendance.success', [
+                'student' => $student,
+                'schedule' => $schedule,
+                'message' => "مرحباً يا {$student->name}، تم تسجيل حضورك بالفعل لهذه الحصة اليوم! 🎉",
+            ]);
         }
 
         if (now()->isAfter(Carbon::parse($schedule->end_time))) {
-            return view('center::attendance.success', ['message' => 'عذراً، انتهى وقت تسجيل الحضور لهذه الحصة.']);
+            return view('center::attendance.success', [
+                'student' => $student,
+                'schedule' => $schedule,
+                'message' => 'عذراً، انتهى وقت تسجيل الحضور لهذه الحصة.',
+            ]);
         }
 
         $lateData = $this->attendanceService->determineStatus($schedule);
@@ -412,12 +448,16 @@ class AttendanceController extends Controller
             'late_label' => $lateData['late_label'],
         ]);
 
-        $successMsg = 'تم تسجيل حضورك بنجاح! 🎉';
+        $successMsg = "مرحباً يا {$student->name}، تم تسجيل حضورك بنجاح! 🎉";
         if ($lateData['status'] === 'late') {
-            $successMsg = "تم تسجيل حضورك بنجاح (تأخير: {$lateData['late_minutes']} دقيقة - {$lateData['late_label']})";
+            $successMsg = "مرحباً يا {$student->name}، تم تسجيل حضورك (تأخير: {$lateData['late_minutes']} دقيقة - {$lateData['late_label']})";
         }
 
-        return view('center::attendance.success', ['message' => $successMsg]);
+        return view('center::attendance.success', [
+            'student' => $student,
+            'schedule' => $schedule,
+            'message' => $successMsg,
+        ]);
     }
 
     /**

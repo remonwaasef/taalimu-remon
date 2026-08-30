@@ -33,12 +33,12 @@
         }
         .header-box {
             text-align: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.25rem;
         }
         .icon-badge {
             width: 60px;
             height: 60px;
-            border-radius: 18px;
+            border-radius: 20px;
             background: #E8F5F1;
             color: #168F7C;
             display: inline-flex;
@@ -46,7 +46,7 @@
             justify-content: center;
             font-size: 1.6rem;
             margin-bottom: 0.75rem;
-            box-shadow: 0 4px 12px rgba(22, 143, 124, 0.12);
+            box-shadow: 0 4px 14px rgba(22, 143, 124, 0.15);
         }
         .title {
             font-size: 1.35rem;
@@ -73,31 +73,24 @@
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.04), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
             padding: 1.75rem 1.5rem;
         }
-        .tabs {
-            display: flex;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            padding: 4px;
+        .smart-note {
+            background: #E8F5F1;
+            border: 1px solid #bbf0e3;
             border-radius: 14px;
-            margin-bottom: 1.5rem;
-            gap: 4px;
-        }
-        .tab-btn {
-            flex: 1;
-            padding: 8px 12px;
-            border-radius: 10px;
-            border: none;
-            background: transparent;
+            padding: 12px 14px;
             font-size: 0.78rem;
-            font-weight: 700;
-            color: #64748b;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            font-weight: 600;
+            color: #0f6c5e;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            line-height: 1.5;
         }
-        .tab-btn.active {
-            background: #ffffff;
+        .smart-note i {
+            font-size: 1.1rem;
             color: #168F7C;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            flex-shrink: 0;
         }
         .alert {
             padding: 12px 14px;
@@ -110,11 +103,6 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-        }
-        .alert-info {
-            background: #E8F5F1;
-            border: 1px solid #bbf0e3;
-            color: #168F7C;
         }
         .alert-warning {
             background: #fef3c7;
@@ -156,7 +144,7 @@
         .input-control {
             width: 100%;
             height: 48px;
-            padding: 0 40px 0 14px;
+            padding: 0 42px 0 14px;
             background: #f8fafc;
             border: 1px solid #cbd5e1;
             border-radius: 14px;
@@ -167,7 +155,7 @@
             transition: all 0.2s ease;
         }
         html[dir="ltr"] .input-control {
-            padding: 0 14px 0 40px;
+            padding: 0 14px 0 42px;
         }
         .input-control:focus {
             background: #ffffff;
@@ -190,7 +178,7 @@
             gap: 8px;
             box-shadow: 0 4px 14px rgba(22, 143, 124, 0.25);
             transition: all 0.2s ease;
-            margin-top: 0.5rem;
+            margin-top: 0.75rem;
         }
         .btn-submit:hover, .btn-submit:active {
             background: #0f6c5e;
@@ -226,14 +214,10 @@
 
     <!-- Main Card -->
     <div class="card">
-        <!-- Mode Switcher Tabs -->
-        <div class="tabs">
-            <button type="button" class="tab-btn active" id="tabPhoneBtn" onclick="switchTab('phone')">
-                <i class="fas fa-mobile-alt me-1"></i> رقم الهاتف / الكود
-            </button>
-            <button type="button" class="tab-btn" id="tabLoginBtn" onclick="switchTab('login')">
-                <i class="fas fa-key me-1"></i> البريد وكلمة المرور
-            </button>
+        <!-- Smart Info Banner -->
+        <div class="smart-note">
+            <i class="fas fa-magic"></i>
+            <span>سجّل دخولك لمرة واحدة فقط على هذا الهاتف، وفي جميع الحصص القادمة سيتم تسجيل حضورك فوراً بلمسة واحدة بمجرد مسح الرمز!</span>
         </div>
 
         @if(isset($message))
@@ -253,21 +237,21 @@
             </div>
         @endif
 
-        <!-- Form 1: Quick Phone / Code Attendance (Default - No Password Needed) -->
-        <form id="phoneForm" method="POST" action="{{ request()->fullUrl() }}">
+        <!-- Secure Student Login Form -->
+        <form method="POST" action="{{ request()->fullUrl() }}">
             @csrf
             <input type="hidden" name="qr_url" value="{{ $qrUrl ?? request()->fullUrl() }}">
             
             <div class="form-group">
-                <label class="label" for="phone_or_code">رقم الهاتف المسجل أو كود الطالب</label>
+                <label class="label" for="login">رقم الهاتف المسجل أو البريد الإلكتروني</label>
                 <div class="input-wrapper">
-                    <i class="fas fa-phone input-icon"></i>
+                    <i class="fas fa-user-graduate input-icon"></i>
                     <input 
                         type="text" 
-                        id="phone_or_code" 
-                        name="phone_or_code" 
-                        value="{{ old('phone_or_code') }}" 
-                        placeholder="أدخل رقم الهاتف (مثال: 01012345678)"
+                        id="login" 
+                        name="login" 
+                        value="{{ old('login') }}" 
+                        placeholder="رقم الهاتف (مثال: 01012345678) أو البريد"
                         required 
                         autofocus
                         class="input-control"
@@ -275,34 +259,8 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn-submit">
-                <i class="fas fa-check-circle"></i>
-                <span>تأكيد تسجيل الحضور فوراً</span>
-            </button>
-        </form>
-
-        <!-- Form 2: Email & Password (Alternative) -->
-        <form id="loginForm" method="POST" action="{{ request()->fullUrl() }}" style="display: none;">
-            @csrf
-            <input type="hidden" name="qr_url" value="{{ $qrUrl ?? request()->fullUrl() }}">
-            
             <div class="form-group">
-                <label class="label" for="email">البريد الإلكتروني</label>
-                <div class="input-wrapper">
-                    <i class="fas fa-envelope input-icon"></i>
-                    <input 
-                        type="email" 
-                        id="email" 
-                        name="email" 
-                        value="{{ old('email') }}" 
-                        placeholder="student@example.com"
-                        class="input-control"
-                    >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="label" for="password">كلمة المرور</label>
+                <label class="label" for="password">كلمة المرور الخاصة بحساب الطالب</label>
                 <div class="input-wrapper">
                     <i class="fas fa-lock input-icon"></i>
                     <input 
@@ -310,14 +268,15 @@
                         id="password" 
                         name="password" 
                         placeholder="••••••••"
+                        required 
                         class="input-control"
                     >
                 </div>
             </div>
 
             <button type="submit" class="btn-submit">
-                <i class="fas fa-sign-in-alt"></i>
-                <span>تسجيل الدخول والحضور</span>
+                <i class="fas fa-check-circle"></i>
+                <span>تسجيل الدخول وتأكيد الحضور</span>
             </button>
         </form>
     </div>
@@ -328,35 +287,6 @@
         <span>نظام الحضور الذكي والآمن — Taalimu</span>
     </div>
 </div>
-
-<script>
-    function switchTab(mode) {
-        const phoneForm = document.getElementById('phoneForm');
-        const loginForm = document.getElementById('loginForm');
-        const tabPhoneBtn = document.getElementById('tabPhoneBtn');
-        const tabLoginBtn = document.getElementById('tabLoginBtn');
-        const phoneInput = document.getElementById('phone_or_code');
-        const emailInput = document.getElementById('email');
-
-        if (mode === 'phone') {
-            phoneForm.style.display = 'block';
-            loginForm.style.display = 'none';
-            tabPhoneBtn.classList.add('active');
-            tabLoginBtn.classList.remove('active');
-            if (phoneInput) phoneInput.focus();
-        } else {
-            phoneForm.style.display = 'none';
-            loginForm.style.display = 'block';
-            tabPhoneBtn.classList.remove('active');
-            tabLoginBtn.classList.add('active');
-            if (emailInput) emailInput.focus();
-        }
-    }
-
-    @if($errors->has('email') || old('email'))
-        switchTab('login');
-    @endif
-</script>
 
 </body>
 </html>
