@@ -15,7 +15,7 @@
     $thPadding = $compact ? 'px-4 py-2.5' : 'px-6 py-3.5';
 @endphp
 
-<div class="w-full overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs relative" role="region" aria-label="{{ $label }}" tabindex="0" data-mobile-cards>
+<div class="w-full overflow-x-auto rounded-2xl border border-[#EAEFF2] dark:border-slate-800 bg-white dark:bg-slate-900 shadow-[0_4px_25px_-4px_rgba(16,32,51,0.05),0_2px_6px_-1px_rgba(16,32,51,0.02)] relative" role="region" aria-label="{{ $label }}" tabindex="0" data-mobile-cards>
     <table {{ $attributes->merge(['class' => 'w-full text-start text-sm text-slate-600 dark:text-slate-300 border-collapse']) }}>
         @if(count($headers) > 0 || isset($thead))
             <thead class="bg-slate-50/95 dark:bg-slate-800/95 border-b border-slate-200 dark:border-slate-700 text-[11px] uppercase font-bold text-slate-600 dark:text-slate-300 tracking-wider font-inter {{ $stickyHeader ? 'sticky top-0 z-10 backdrop-blur-xs' : '' }}">

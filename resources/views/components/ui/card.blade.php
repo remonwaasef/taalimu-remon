@@ -12,10 +12,10 @@
 
 @php
     $variants = [
-        'default' => 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs hover:shadow-sm',
-        'flat' => 'bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800',
-        'bordered' => 'bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700',
-        'ghost' => 'bg-transparent border border-dashed border-slate-200 dark:border-slate-800',
+        'default' => 'bg-white dark:bg-slate-900 border border-[#EAEFF2] dark:border-slate-800 shadow-[0_4px_25px_-4px_rgba(16,32,51,0.05),0_2px_6px_-1px_rgba(16,32,51,0.02)] hover:shadow-[0_8px_35px_-6px_rgba(16,32,51,0.08),0_3px_10px_-2px_rgba(16,32,51,0.03)]',
+        'flat' => 'bg-slate-50/60 dark:bg-slate-900/60 border border-[#EAEFF2]/60 dark:border-slate-800',
+        'bordered' => 'bg-white dark:bg-slate-900 border-2 border-[#EAEFF2] dark:border-slate-700 shadow-[0_2px_10px_-2px_rgba(16,32,51,0.03)]',
+        'ghost' => 'bg-transparent border border-dashed border-[#EAEFF2] dark:border-slate-800',
     ];
 
     $glassClass = $glass ? 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-md' : '';
