@@ -42,20 +42,20 @@
     --color-muted: #65717F;
     --color-cream: #FBFAF6;
     --color-white: #FFFFFF;
-    --color-border: #E2E8F0;
+    --color-border: #EAEFF2;
 
-    --color-bg-main: #FBFAF6;
-    --color-dashboard-bg: #EEF2F6;
+    --color-bg-main: #FAFAFA;
+    --color-dashboard-bg: #FAFAFA;
     --color-surface: #FFFFFF;
     --color-surface-elevated: #FFFFFF;
     --color-surface-hover: #F8FAFC;
     --color-bg-sidebar: #0D1A2B;
     --color-bg-header: #FFFFFF;
-    --color-divider: #E2E8F0;
+    --color-divider: #EAEFF2;
 
     --card-bg: #FFFFFF;
-    --card-border: #E2E8F0;
-    --card-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
+    --card-border: #EAEFF2;
+    --card-shadow: 0 4px 25px -4px rgba(16, 32, 51, 0.05), 0 2px 6px -1px rgba(16, 32, 51, 0.02);
 
     /* Text Hierarchy */
     --color-text-main: #102033;
@@ -135,11 +135,11 @@
     /* ----------------------------------------------------------------------
        6. Shadows / Elevation System
        ---------------------------------------------------------------------- */
-    --shadow-sm: 0 4px 15px rgba(16, 32, 51, .05);
-    --shadow-md: 0 10px 30px rgba(16, 32, 51, .07);
-    --shadow-lg: 0 16px 45px rgba(16, 32, 51, .08);
-    --shadow-xs: 0 2px 8px rgba(16, 32, 51, .04);
-    --shadow-xl: 0 20px 50px rgba(16, 32, 51, .10);
+    --shadow-xs: 0 2px 8px -1px rgba(16, 32, 51, .03);
+    --shadow-sm: 0 4px 20px -4px rgba(16, 32, 51, .05);
+    --shadow-md: 0 10px 30px -4px rgba(16, 32, 51, .07);
+    --shadow-lg: 0 18px 45px -6px rgba(16, 32, 51, .09);
+    --shadow-xl: 0 24px 60px -8px rgba(16, 32, 51, .11);
 
     /* ----------------------------------------------------------------------
        7. Button & Form Tokens
