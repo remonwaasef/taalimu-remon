@@ -18,6 +18,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Re-framed Attendance and Schedule screens inside structured cards with clear headers.
   - Restructured Student Creation Form into distinct, framed sub-sections with sharp bordered inputs.
 
+- **Redesigned Interactive QR Code Attendance Screen & Projector Mode (2026-08-30)**:
+  - Transformed the static QR page into an interactive live presentation center (`Modules/Center/resources/views/attendance/qr.blade.php`).
+  - Added dynamic 60s countdown timer with an animated progress bar and seamless client-side AJAX refresh without page reloads.
+  - Added Fullscreen Projector Mode (`وضع العرض للبروجيكتور والشاشات الذكية`) for crystal-clear classroom smart board presentation.
+  - Added Real-time Live Attendance Counter & Feed polling every 5s with audio scan chimes and recent attendee avatars.
+  - Added quick copy link and manual refresh controls.
+
 - **Fixed Application Timezone and Accurate Session Status Calculation (2026-08-30)**:
   - Corrected `APP_TIMEZONE` in `.env` and `config/app.php` from `UTC` to `Africa/Cairo` (matching local time UTC+3).
   - Previously, `now()` was 3 hours behind local time in UTC, causing past morning sessions (e.g. 10:00 AM - 11:00 AM) to be erroneously calculated as upcoming.

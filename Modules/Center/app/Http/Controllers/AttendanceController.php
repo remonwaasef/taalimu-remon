@@ -220,9 +220,62 @@ class AttendanceController extends Controller
     public function showQr(Request $request, Schedule $schedule)
     {
         $this->authorize('viewAny', Attendance::class);
+        $this->assertTenantSchedule($schedule);
+
+        $schedule->load(['course.enrollments.user.student', 'classroom', 'instructor']);
+
         $url = $this->attendanceService->generateQrUrl($schedule->id, $this->tenant->domain);
 
-        return view('center::attendance.qr', compact('schedule', 'url'));
+        $today = today();
+        $totalEnrolled = $schedule->course ? $schedule->course->enrollments()->count() : 0;
+        $attendances = Attendance::where('schedule_id', $schedule->id)
+            ->whereDate('session_date', $today)
+            ->with('student')
+            ->latest('check_in_time')
+            ->get();
+
+        $attendedCount = $attendances->whereIn('status', ['present', 'late'])->count();
+
+        return view('center::attendance.qr', compact('schedule', 'url', 'totalEnrolled', 'attendedCount', 'attendances'));
+    }
+
+    /**
+     * Get live attendance status and refreshed QR URL for polling.
+     */
+    public function qrLiveStatus(Schedule $schedule)
+    {
+        $this->authorize('viewAny', Attendance::class);
+        $this->assertTenantSchedule($schedule);
+
+        $today = today();
+        $attendances = Attendance::where('schedule_id', $schedule->id)
+            ->whereDate('session_date', $today)
+            ->with('student:id,name,phone')
+            ->latest('check_in_time')
+            ->take(15)
+            ->get(['id', 'student_id', 'status', 'check_in_time', 'late_minutes']);
+
+        $totalEnrolled = $schedule->course ? $schedule->course->enrollments()->count() : 0;
+        $attendedCount = Attendance::where('schedule_id', $schedule->id)
+            ->whereDate('session_date', $today)
+            ->whereIn('status', ['present', 'late'])
+            ->count();
+
+        $freshUrl = $this->attendanceService->generateQrUrl($schedule->id, $this->tenant->domain);
+
+        return response()->json([
+            'total_enrolled' => $totalEnrolled,
+            'attended_count' => $attendedCount,
+            'qr_url' => $freshUrl,
+            'attendees' => $attendances->map(fn ($a) => [
+                'id' => $a->id,
+                'name' => $a->student->name ?? 'طالب',
+                'status' => $a->status,
+                'status_label' => $a->status === 'present' ? 'حاضر' : ($a->status === 'late' ? 'متأخر' : 'غائب'),
+                'late_minutes' => $a->late_minutes ?? 0,
+                'time' => $a->check_in_time ? $a->check_in_time->format('h:i A') : '',
+            ]),
+        ]);
     }
 
     /**

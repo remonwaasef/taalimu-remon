@@ -410,6 +410,7 @@ $tenantRoutes = function () {
 
             // QR Attendance (showQr is for teachers only, markByQr moved to public routes above)
             Route::get('attendance/qr/{schedule}', [AttendanceController::class, 'showQr'])->name('center.attendance.qr');
+            Route::get('attendance/qr/{schedule}/live-status', [AttendanceController::class, 'qrLiveStatus'])->name('center.attendance.qr.live-status');
             Route::post('attendance/bulk-absent/{schedule}', [AttendanceController::class, 'bulkAbsent'])->name('center.attendance.bulkAbsent');
             Route::post('attendance/offline-sync', [AttendanceController::class, 'offlineSync'])
                 ->middleware('feature:offline_attendance')
