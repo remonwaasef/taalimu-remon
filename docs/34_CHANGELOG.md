@@ -18,10 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Re-framed Attendance and Schedule screens inside structured cards with clear headers.
   - Restructured Student Creation Form into distinct, framed sub-sections with sharp bordered inputs.
 
-- **Fixed Phone Number Verification Stuck on "جاري التحقق" (2026-08-30)**:
+- **Fixed Student Creation Form Submission & Phone Verification (2026-08-30)**:
   - Center `StudentController::checkPhone()` was returning `{exists: bool}` but JS expected `{status: 'exists'|'available'}` — fixed response format with tenant isolation and student name.
-  - Instructor `StudentController::checkPhone()` updated to also return student `name` on match.
-  - Added `.catch()` error handler to frontend fetch call so UI never freezes on network errors.
+  - Fixed course selection checkboxes where container click events conflicted with `<label for>` clicks causing double-toggle and validation failure.
+  - Added `defaultPrevented` check to global submit listeners and status indicators so validation failures do not freeze the submit button on "جاري التنفيذ...".
+  - Added pre-step validation on Wizard Next button and auto-reset safety timeout for form buttons.
 - **Aligned All Dashboards & UI Components with Taalimu Brand Green Identity (2026-08-30)**:
   - Fixed blue/indigo color dominance across Center, Admin, and Instructor dashboards.
   - Updated Launchpad onboarding banner (`Modules/Center/resources/views/partials/launchpad.blade.php`), progress bars, active step badges, buttons, and setup modals to use the official Taalimu green palette (`#168F7C`, `brand-primary`, `brand-50`, `brand-600`).

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * ============================================================
  * Taalimu Status Indicators — Clear Visual Feedback
  * ============================================================
@@ -144,17 +144,23 @@
          */
         interceptFormSubmissions() {
             document.addEventListener('submit', (e) => {
+                if (e.defaultPrevented) return;
                 const form = e.target;
                 if (!form || form.tagName !== 'FORM') return;
 
                 // Skip delete forms and search forms
                 if (form.classList.contains('delete-student-form')) return;
                 if (form.method?.toLowerCase() === 'get') return;
+                if (!form.checkValidity()) return;
 
-                this.show('saving', 0);
-
-                // Listen for page navigation (form submitted successfully)
-                // The "saved" will show on the next page via session flash
+                setTimeout(() => {
+                    if (e.defaultPrevented) return;
+                    this.show('saving', 0);
+                    // Hide after 6s if page did not navigate away
+                    setTimeout(() => {
+                        this.hide();
+                    }, 6000);
+                }, 100);
             });
         }
 

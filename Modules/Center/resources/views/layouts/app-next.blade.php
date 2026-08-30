@@ -29,17 +29,28 @@
     @include('center::partials.bug-report-widget')
     <script>
         document.addEventListener('submit', function(e) {
+            if (e.defaultPrevented) return;
             if (e.target && e.target.tagName === 'FORM') {
                 const submitBtn = e.target.querySelector('button[type="submit"]');
                 if (submitBtn && !submitBtn.disabled) {
                     if (!e.target.checkValidity()) return;
                     setTimeout(() => {
+                        if (e.defaultPrevented) return;
+                        const originalHTML = submitBtn.innerHTML;
                         submitBtn.disabled = true;
                         const isDelete = e.target.querySelector('input[name="_method"][value="DELETE"]') != null;
                         const loadingText = isDelete ? 'جاري الحذف...' : 'جاري التنفيذ...';
                         submitBtn.style.minWidth = submitBtn.offsetWidth + 'px';
                         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mx-1"></i> ' + loadingText;
-                    }, 0);
+
+                        // Safety net timeout to re-enable button if page does not unload
+                        setTimeout(() => {
+                            if (submitBtn && submitBtn.disabled) {
+                                submitBtn.disabled = false;
+                                submitBtn.innerHTML = originalHTML;
+                            }
+                        }, 8000);
+                    }, 50);
                 }
             }
         });

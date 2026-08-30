@@ -187,12 +187,12 @@
                         <div class="row g-3">
                             @foreach($courses as $course)
                                 <div class="col-md-6 col-lg-4">
-                                    <div class="form-check custom-checkbox-card bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-3.5 h-100 d-flex align-items-center transition-all cursor-pointer hover:border-brand-primary/40 shadow-2xs" onclick="document.getElementById('course_{{ $course->id }}').click();">
-                                        <input class="form-check-input ms-0 me-3 course-checkbox-item" style="transform: scale(1.2);" type="checkbox" name="course_ids[]" value="{{ $course->id }}" id="course_{{ $course->id }}" {{ (is_array(old('course_ids')) && in_array($course->id, old('course_ids'))) ? 'checked' : '' }} onclick="event.stopPropagation();">
-                                        <label class="form-check-label w-100 cursor-pointer fw-bold text-slate-800 dark:text-slate-200 m-0 text-sm" for="course_{{ $course->id }}" onclick="event.stopPropagation();">
+                                    <label class="form-check custom-checkbox-card bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-3.5 h-100 d-flex align-items-center transition-all cursor-pointer hover:border-brand-primary/50 shadow-2xs m-0 select-none">
+                                        <input class="form-check-input ms-0 me-3 course-checkbox-item" style="transform: scale(1.2);" type="checkbox" name="course_ids[]" value="{{ $course->id }}" id="course_{{ $course->id }}" {{ (is_array(old('course_ids')) && in_array($course->id, old('course_ids'))) ? 'checked' : '' }}>
+                                        <span class="form-check-label w-100 cursor-pointer fw-bold text-slate-800 dark:text-slate-200 m-0 text-sm">
                                             {{ $course->title }}
-                                        </label>
-                                    </div>
+                                        </span>
+                                    </label>
                                 </div>
                             @endforeach
                         </div>
@@ -290,8 +290,32 @@
         
         if(nextBtn) {
             nextBtn.addEventListener('click', function() {
-                showWizardStep(2);
-                window.scrollTo(0, 0);
+                const nameInput = document.querySelector('input[name="name"]');
+                const phoneInput = document.getElementById('phone_input');
+                const gradeSelect = document.getElementById('main_grade_select');
+
+                let hasError = false;
+
+                if (nameInput && !nameInput.value.trim()) {
+                    showWarning(nameInput, "يرجى إدخال اسم الطالب");
+                    nameInput.focus();
+                    hasError = true;
+                } else if (phoneInput && phoneInput.value.trim().length < 10) {
+                    showWarning(phoneInput, "يرجى إدخال رقم هاتف صحيح (10 أرقام على الأقل)");
+                    phoneInput.focus();
+                    hasError = true;
+                } else if (gradeSelect && !gradeSelect.value) {
+                    const triggerBtn = document.getElementById('gradePickerTrigger');
+                    if (triggerBtn) {
+                        showWarning(triggerBtn, "يرجى اختيار المرحلة والصف الدراسي");
+                    }
+                    hasError = true;
+                }
+
+                if (!hasError) {
+                    showWizardStep(2);
+                    window.scrollTo(0, 0);
+                }
             });
         }
         
@@ -315,7 +339,7 @@
             setTimeout(() => {
                 warning.style.opacity = '0';
                 setTimeout(() => warning.remove(), 500);
-            }, 2000);
+            }, 2500);
         }
 
         const phoneInputs = document.querySelectorAll('input[type="tel"]');
@@ -381,31 +405,35 @@
         const phoneInput = document.getElementById('phone_input');
         const feedback = document.getElementById('phone-feedback');
         if (phoneInput && '{{ $checkPhoneUrl }}') {
+            let phoneTimer = null;
             phoneInput.addEventListener('input', function() {
+                clearTimeout(phoneTimer);
                 const phone = this.value.trim();
                 if (phone.length >= 10) {
                     feedback.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> جاري التحقق...';
                     feedback.className = 'mt-1 small text-primary';
 
-                    fetch(`{{ $checkPhoneUrl }}?phone=${phone}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.status === 'exists') {
-                                const studentName = data.name ? data.name : '';
-                                feedback.innerHTML = `<i class="fas fa-exclamation-triangle me-1"></i> مسجل مسبقاً باسم: ${studentName}`;
-                                feedback.className = 'mt-1 small text-danger fw-bold';
-                            } else if (data.status === 'available') {
-                                feedback.innerHTML = '<i class="fas fa-check-circle me-1"></i> الرقم متاح';
-                                feedback.className = 'mt-1 small text-success fw-bold';
-                            } else {
-                                feedback.innerHTML = '';
-                            }
-                        })
-                        .catch(err => {
-                            console.error('Phone check error:', err);
-                            feedback.innerHTML = '<i class="fas fa-info-circle me-1"></i> تعذّر التحقق';
-                            feedback.className = 'mt-1 small text-muted';
-                        });
+                    phoneTimer = setTimeout(() => {
+                        fetch(`{{ $checkPhoneUrl }}?phone=${phone}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.status === 'exists') {
+                                    const studentName = data.name ? data.name : '';
+                                    feedback.innerHTML = `<i class="fas fa-exclamation-triangle me-1"></i> مسجل مسبقاً باسم: ${studentName}`;
+                                    feedback.className = 'mt-1 small text-danger fw-bold';
+                                } else if (data.status === 'available') {
+                                    feedback.innerHTML = '<i class="fas fa-check-circle me-1"></i> الرقم متاح';
+                                    feedback.className = 'mt-1 small text-success fw-bold';
+                                } else {
+                                    feedback.innerHTML = '';
+                                }
+                            })
+                            .catch(err => {
+                                console.error('Phone check error:', err);
+                                feedback.innerHTML = '<i class="fas fa-info-circle me-1"></i> تعذّر التحقق';
+                                feedback.className = 'mt-1 small text-muted';
+                            });
+                    }, 400);
                 } else {
                     feedback.innerHTML = '';
                 }
@@ -463,6 +491,17 @@
         // Ensure course selection is required on form submit
         const formEl = document.querySelector('form[action="{{ $actionUrl }}"]');
         const courseErr = document.getElementById('course-selection-error');
+        const submitBtn = document.getElementById('btnSubmitStudent');
+
+        // Hide course error when user selects any course
+        document.querySelectorAll('.course-checkbox-item').forEach(function(cb) {
+            cb.addEventListener('change', function() {
+                if (document.querySelectorAll('.course-checkbox-item:checked').length > 0) {
+                    if (courseErr) courseErr.classList.add('d-none');
+                }
+            });
+        });
+
         if (formEl) {
             formEl.addEventListener('submit', function(e) {
                 const checkedCourses = document.querySelectorAll('.course-checkbox-item:checked');
@@ -472,6 +511,13 @@
                     showWizardStep(2);
                     const step2El = document.getElementById('step2');
                     if (step2El) step2El.scrollIntoView({ behavior: 'smooth' });
+
+                    // Reset submit button if disabled
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<i class="fas fa-check-circle me-2"></i> {{ __("center::students.form.save_student") ?? "حفظ الطالب وتسجيله" }}';
+                    }
+                    return false;
                 } else {
                     if (courseErr) courseErr.classList.add('d-none');
                 }
