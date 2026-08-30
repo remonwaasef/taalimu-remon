@@ -289,95 +289,77 @@ class AttendanceController extends Controller
 
         $this->assertTenantSchedule($schedule);
 
-        if (! auth()->check()) {
-            return view('center::attendance.scan-login', [
-                'schedule' => $schedule,
-                'qrUrl' => $request->fullUrl(),
+        // If submitted via POST (Phone verification or Email/Password login)
+        if ($request->isMethod('post')) {
+            // Case 1: Phone / Code quick attendance verification (No password required in classroom)
+            if ($request->filled('phone_or_code')) {
+                $input = trim($request->phone_or_code);
+                $student = Student::where('tenant_id', $this->tenant->id)
+                    ->where(function ($q) use ($input) {
+                        $q->where('phone', $input)
+                          ->orWhere('parent_phone', $input)
+                          ->orWhere('code', $input)
+                          ->orWhere('national_id', $input);
+                    })
+                    ->first();
+
+                if (! $student) {
+                    return back()->withErrors(['phone_or_code' => 'لم يتم العثور على طالب مسجل برقم الهاتف أو الكود المدخل في هذا المركز.'])->withInput();
+                }
+
+                if (! $this->assertStudentTenant($student)) {
+                    return back()->withErrors(['phone_or_code' => 'هذا الحساب لا ينتمي إلى هذا المركز.'])->withInput();
+                }
+
+                return $this->processQrAttendance($student, $schedule);
+            }
+
+            // Case 2: Email & Password authentication
+            $request->validate([
+                'email' => 'required',
+                'password' => 'required',
             ]);
-        }
 
-        $student = auth()->user()->student;
-        if (! $student) {
-            auth()->logout();
+            if (! auth()->attempt(['email' => $request->email, 'password' => $request->password, 'tenant_id' => $this->tenant->id])) {
+                return back()->withErrors(['email' => 'بيانات الدخول غير صحيحة.'])->withInput();
+            }
 
-            return view('center::attendance.scan-login', [
-                'schedule' => $schedule,
-                'qrUrl' => $request->fullUrl(),
-                'message' => 'هذا الحساب ليس حساب طالب. يرجى تسجيل الدخول بحساب طالب.',
-            ]);
-        }
-
-        if (! $this->assertStudentTenant($student)) {
-            return view('center::attendance.scan-login', [
-                'schedule' => $schedule,
-                'qrUrl' => $request->fullUrl(),
-                'message' => 'هذا الحساب لا ينتمي إلى هذا المركز.',
-            ]);
-        }
-
-        return $this->processQrAttendance($student, $schedule);
-    }
-
-    /**
-     * Handle login + attendance from scan-login form.
-     */
-    public function loginAndMark(Request $request, Schedule $schedule)
-    {
-        // TEN-4: signed-URL protection & schedule tenant validation
-        if (! $request->hasValidSignature()) {
-            abort(403, 'انتهت صلاحية رمز QR أو أنه غير صالح. يرجى مسح الرمز مرة أخرى.');
-        }
-
-        $this->assertTenantSchedule($schedule);
-
-        // Case 1: Phone / Code quick attendance verification (No password required in classroom)
-        if ($request->filled('phone_or_code')) {
-            $input = trim($request->phone_or_code);
-            $student = Student::where('tenant_id', $this->tenant->id)
-                ->where(function ($q) use ($input) {
-                    $q->where('phone', $input)
-                      ->orWhere('parent_phone', $input)
-                      ->orWhere('code', $input)
-                      ->orWhere('national_id', $input);
-                })
-                ->first();
-
+            $student = auth()->user()->student;
             if (! $student) {
-                return back()->withErrors(['phone_or_code' => 'لم يتم العثور على طالب مسجل برقم الهاتف أو الكود المدخل في هذا المركز.'])->withInput();
+                auth()->logout();
+
+                return back()->with('message', __('center::messages.msg_014'));
             }
 
             if (! $this->assertStudentTenant($student)) {
-                return back()->withErrors(['phone_or_code' => 'هذا الحساب لا ينتمي إلى هذا المركز.'])->withInput();
+                auth()->logout();
+
+                return back()->with('message', 'هذا الحساب لا ينتمي إلى هذا المركز.');
             }
 
             return $this->processQrAttendance($student, $schedule);
         }
 
-        // Case 2: Email & Password authentication
-        $request->validate([
-            'email' => 'required',
-            'password' => 'required',
-            'qr_url' => 'nullable|string',
+        // If visited via GET and user is already logged in as a student
+        if (auth()->check()) {
+            $student = auth()->user()->student;
+            if ($student && $this->assertStudentTenant($student)) {
+                return $this->processQrAttendance($student, $schedule);
+            }
+        }
+
+        return view('center::attendance.scan-login', [
+            'schedule' => $schedule,
+            'qrUrl' => $request->fullUrl(),
         ]);
+    }
 
-        if (! auth()->attempt(['email' => $request->email, 'password' => $request->password, 'tenant_id' => $this->tenant->id])) {
-            return back()->withErrors(['email' => 'بيانات الدخول غير صحيحة.'])->withInput();
-        }
-
-        $student = auth()->user()->student;
-        if (! $student) {
-            auth()->logout();
-
-            return back()->with('message', __('center::messages.msg_014'));
-        }
-
-        if (! $this->assertStudentTenant($student)) {
-            auth()->logout();
-
-            return back()->with('message', 'هذا الحساب لا ينتمي إلى هذا المركز.');
-        }
-
-        return $this->processQrAttendance($student, $schedule);
+    /**
+     * Handle login + attendance from scan-login form (Legacy / Direct POST fallback).
+     */
+    public function loginAndMark(Request $request, Schedule $schedule)
+    {
+        return $this->markByQr($request, $schedule);
     }
 
     /**

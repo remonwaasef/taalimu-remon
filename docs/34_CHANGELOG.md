@@ -18,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Re-framed Attendance and Schedule screens inside structured cards with clear headers.
   - Restructured Student Creation Form into distinct, framed sub-sections with sharp bordered inputs.
 
+- **Fixed 403 Forbidden on Mobile QR Scan Form Submission (2026-08-30)**:
+  - Fixed HMAC signature mismatch when submitting the scan-login form to a distinct POST endpoint.
+  - Configured `center.attendance.markByQr` to handle both `GET` and `POST` directly on `request()->fullUrl()`, ensuring the signed URL signature passes with 100% validity.
+
 - **Instant Student Phone/Code Verification on Mobile QR Scan (2026-08-30)**:
   - Enabled quick attendance verification by registered **Phone Number** or **Student Code** without requiring passwords in physical classrooms.
   - Provided tab switching between quick phone verification and full email/password authentication.

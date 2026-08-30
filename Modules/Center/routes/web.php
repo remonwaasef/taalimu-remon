@@ -104,7 +104,7 @@ $tenantRoutes = function () {
 
     // QR Attendance Mark - Public route (protected by signed URL, NOT by auth middleware)
     // Students scan this from their phone and may not be logged in
-    Route::get('attendance/mark/{schedule}', [AttendanceController::class, 'markByQr'])
+    Route::match(['get', 'post'], 'attendance/mark/{schedule}', [AttendanceController::class, 'markByQr'])
         ->middleware('throttle:scanner')
         ->name('center.attendance.markByQr');
     Route::post('attendance/mark/{schedule}/login', [AttendanceController::class, 'loginAndMark'])

@@ -254,7 +254,7 @@
         @endif
 
         <!-- Form 1: Quick Phone / Code Attendance (Default - No Password Needed) -->
-        <form id="phoneForm" method="POST" action="{{ route('center.attendance.loginAndMark', array_merge(['schedule' => $schedule], request()->query())) }}">
+        <form id="phoneForm" method="POST" action="{{ request()->fullUrl() }}">
             @csrf
             <input type="hidden" name="qr_url" value="{{ $qrUrl ?? request()->fullUrl() }}">
             
@@ -282,7 +282,7 @@
         </form>
 
         <!-- Form 2: Email & Password (Alternative) -->
-        <form id="loginForm" method="POST" action="{{ route('center.attendance.loginAndMark', array_merge(['schedule' => $schedule], request()->query())) }}" style="display: none;">
+        <form id="loginForm" method="POST" action="{{ request()->fullUrl() }}" style="display: none;">
             @csrf
             <input type="hidden" name="qr_url" value="{{ $qrUrl ?? request()->fullUrl() }}">
             
