@@ -198,11 +198,19 @@ class CourseService
             throw new \Exception(implode("\n", $allConflicts));
         }
 
-        // No conflicts, proceed to save schedules
+        // No conflicts, proceed to save schedules (with internal deduplication)
         $schedules = [];
+        $seen = [];
         foreach ($schedulesData as $scheduleData) {
             $dayInput = $scheduleData['day_of_week'];
             $dayValue = $dayMapping[$dayInput] ?? $dayInput;
+
+            // Prevent internal duplicates within same batch (same day + same time)
+            $key = $dayValue.'_'.$scheduleData['start_time'].'_'.$scheduleData['end_time'];
+            if (isset($seen[$key])) {
+                continue;
+            }
+            $seen[$key] = true;
 
             $schedules[] = new Schedule([
                 'tenant_id' => \Modules\Tenancy\Services\TenantResolver::get()->id,

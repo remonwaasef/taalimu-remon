@@ -171,6 +171,14 @@ class ScheduleController extends Controller
             $query->where('id', '!=', $excludeId);
         }
 
+        // Same-course duplicate detection (prevents creating identical schedules)
+        if (! empty($data['course_id'])) {
+            $duplicateSchedule = (clone $query)->where('course_id', $data['course_id'])->first();
+            if ($duplicateSchedule) {
+                return 'يوجد بالفعل حصة لهذا الكورس في نفس اليوم ونفس الوقت. يرجى اختيار يوم أو وقت مختلف.';
+            }
+        }
+
         // Classroom conflict
         if (! empty($data['classroom_id'])) {
             $classroomConflict = (clone $query)->where('classroom_id', $data['classroom_id'])->with('course')->first();
