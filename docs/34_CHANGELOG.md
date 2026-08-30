@@ -18,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Re-framed Attendance and Schedule screens inside structured cards with clear headers.
   - Restructured Student Creation Form into distinct, framed sub-sections with sharp bordered inputs.
 
+- **Fixed Duplicate Schedule Creation Bug (2026-08-30)**:
+  - Added same-course duplicate detection in `ScheduleController::getConflictError()` — now prevents creating overlapping schedules for the same course on the same day.
+  - Added internal batch deduplication in `CourseService::syncSchedules()` to skip duplicate entries within the same save operation.
+
 - **Smart 1-Tap QR Attendance & Anti-Fraud Device Lock (2026-08-30)**:
   - Implemented persistent remember-session on mobile devices for seamless one-tap attendance on future QR scans without re-entering credentials.
   - Added anti-fraud Device Lock (`taalimu_dev_lock`) binding each physical phone to a single student profile, preventing proxies and attendance fraud.
