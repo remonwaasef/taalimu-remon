@@ -62,9 +62,14 @@
 
                     <!-- Instructor Selection -->
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
-                            {{ __('center::courses.instructor') }} <span class="text-xs font-medium text-slate-400 normal-case">(اختياري)</span>
-                        </label>
+                        <div class="flex items-center justify-between mb-2">
+                            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                                {{ __('center::courses.instructor') }} <span class="text-rose-500">*</span>
+                            </label>
+                            <button type="button" data-quick-instructor-trigger class="text-xs text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 font-bold flex items-center gap-1">
+                                <i class="fas fa-plus-circle"></i> + إضافة معلم جديد
+                            </button>
+                        </div>
 
                         @if($instructors->isEmpty())
                             <div data-empty-instructors-notice class="p-4 mb-3 rounded-xl border border-amber-200 dark:border-amber-800/40 bg-amber-50 dark:bg-amber-950/30 text-amber-800 dark:text-amber-300 text-xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
@@ -72,7 +77,7 @@
                                     <i class="fas fa-info-circle mt-0.5 text-base"></i>
                                     <div>
                                         <div class="font-bold mb-1">لا يوجد مدرسون بعد</div>
-                                        <p class="text-amber-700 dark:text-amber-400 leading-relaxed">يمكنك حفظ الدورة الآن بدون مدرس وتعيينه لاحقاً، أو إضافة مدرس جديد بسرعة.</p>
+                                        <p class="text-amber-700 dark:text-amber-400 leading-relaxed">يمكنك إضافة مدرس جديد بسرعة من الزر أدناه دون مغادرة الصفحة.</p>
                                     </div>
                                 </div>
                                 <button type="button" data-quick-instructor-trigger class="btn btn-primary btn-sm shrink-0">
@@ -83,14 +88,11 @@
 
                         <select name="instructor_id" 
                                 class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all text-sm @error('instructor_id') border-rose-500 focus:ring-rose-500/20 @enderror">
-                            <option value="">{{ $instructors->isEmpty() && !$course->instructor_id ? 'بدون مدرس' : __('center::courses.choose_instructor') }}</option>
+                            <option value="">{{ $instructors->isEmpty() && !$course->instructor_id ? 'اختر المعلم' : __('center::courses.choose_instructor') }}</option>
                             @foreach($instructors as $instructor)
                                 <option value="{{ $instructor->id }}" {{ old('instructor_id', $course->instructor_id) == $instructor->id ? 'selected' : '' }}>{{ $instructor->name }}</option>
                             @endforeach
                         </select>
-                        <p class="text-xs text-slate-400 mt-1.5 flex items-center gap-1">
-                            <i class="fas fa-info-circle"></i> اختياري — يمكنك ترك الحقل فارغاً وتعيين المدرس لاحقاً
-                        </p>
                         @error('instructor_id')
                             <p class="text-rose-500 text-xs mt-1.5 flex items-center gap-1"><i class="fas fa-exclamation-circle"></i>{{ $message }}</p>
                         @enderror
@@ -280,7 +282,10 @@
                                 </div>
 
                                 <div>
-                                    <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">{{ __('center::schedules.classroom') }}</label>
+                                    <div class="flex items-center justify-between mb-1">
+                                        <label class="block text-xs font-medium text-slate-500 dark:text-slate-400">{{ __('center::schedules.classroom') }}</label>
+                                        <button type="button" data-quick-classroom-trigger class="text-[11px] text-emerald-600 hover:underline font-bold">+ قاعة جديدة</button>
+                                    </div>
                                     <select name="schedules[INDEX][classroom_id]" class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-xs">
                                         <option value="">{{ __('center::schedules.choose_classroom') }}</option>
                                         @foreach($classrooms as $classroom)
@@ -316,6 +321,7 @@
     </div>
 
     @include('center::partials._quick-instructor-modal')
+    @include('center::partials._quick-classroom-modal')
 @endsection
 
 @push('scripts')

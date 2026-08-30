@@ -18,6 +18,32 @@
         </div>
     @endif
 
+    @if($courses->isEmpty() || $classrooms->isEmpty())
+        <div class="alert alert-warning border-0 shadow-sm rounded-4 mb-4 d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3">
+            <div class="d-flex align-items-center gap-2">
+                <i class="fas fa-exclamation-circle text-warning fs-5"></i>
+                <div class="small">
+                    <strong>تنبيه المتطلبات:</strong>
+                    @if($courses->isEmpty() && $classrooms->isEmpty())
+                        يجب إضافة دورة تدريبية وقاعة دراسية أولاً قبل إنشاء مواعيد الحصص.
+                    @elseif($courses->isEmpty())
+                        يجب إضافة دورة تدريبية أولاً قبل إنشاء موعد الحصة.
+                    @elseif($classrooms->isEmpty())
+                        يجب إضافة قاعة دراسية أولاً لتسكين الحصة بها.
+                    @endif
+                </div>
+            </div>
+            <div class="d-flex gap-2 flex-shrink-0">
+                @if($courses->isEmpty())
+                    <a href="{{ route('center.courses.create') }}" class="btn btn-sm btn-dark rounded-pill px-3">إضافة دورة الآن</a>
+                @endif
+                @if($classrooms->isEmpty())
+                    <a href="{{ route('center.classrooms.create') }}" class="btn btn-sm btn-dark rounded-pill px-3">إضافة قاعة الآن</a>
+                @endif
+            </div>
+        </div>
+    @endif
+
     <div class="row">
         <div class="col-md-8">
             <div class="card border-0 shadow-sm rounded-4">
@@ -28,7 +54,10 @@
 
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label class="form-label fw-bold">{{ __('center::schedules.course') }}</label>
+                                <div class="d-flex align-items-center justify-content-between mb-1">
+                                    <label class="form-label fw-bold mb-0">{{ __('center::schedules.course') }} <span class="text-danger">*</span></label>
+                                    <a href="{{ route('center.courses.create') }}" class="small text-primary fw-bold text-decoration-none">+ دورة جديدة</a>
+                                </div>
                                 <select name="course_id" id="course_select" class="form-select @error('course_id') is-invalid @enderror">
                                     <option value="">{{ __('center::schedules.choose_course') }}</option>
                                     @foreach($courses as $course)
@@ -41,7 +70,10 @@
                             </div>
 
                             <div class="col-md-6">
-                                <label class="form-label fw-bold">{{ __('center::schedules.classroom') }}</label>
+                                <div class="d-flex align-items-center justify-content-between mb-1">
+                                    <label class="form-label fw-bold mb-0">{{ __('center::schedules.classroom') }} <span class="text-danger">*</span></label>
+                                    <button type="button" data-quick-classroom-trigger class="btn btn-link btn-sm p-0 small text-primary fw-bold text-decoration-none">+ قاعة جديدة</button>
+                                </div>
                                 <select name="classroom_id" id="classroom_select" class="form-select @error('classroom_id') is-invalid @enderror">
                                     <option value="">{{ __('center::schedules.choose_classroom') }}</option>
                                     @foreach($classrooms as $classroom)
@@ -54,7 +86,10 @@
                             </div>
 
                             <div class="col-md-12">
-                                <label class="form-label fw-bold">{{ __('center::schedules.instructor') }}</label>
+                                <div class="d-flex align-items-center justify-content-between mb-1">
+                                    <label class="form-label fw-bold mb-0">{{ __('center::schedules.instructor') }}</label>
+                                    <button type="button" data-quick-instructor-trigger class="btn btn-link btn-sm p-0 small text-primary fw-bold text-decoration-none">+ معلم جديد</button>
+                                </div>
                                 <select name="instructor_id" id="instructor_select" class="form-select @error('instructor_id') is-invalid @enderror">
                                     <option value="">{{ __('center::schedules.choose_instructor') }}</option>
                                     @foreach($instructors as $instructor)
@@ -131,6 +166,9 @@
             </div>
         </div>
     </div>
+
+    @include('center::partials._quick-instructor-modal')
+    @include('center::partials._quick-classroom-modal')
 
     @push('styles')
         <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">

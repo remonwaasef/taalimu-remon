@@ -38,6 +38,10 @@ class ClassroomController extends Controller
     {
         $this->authorize('create', Classroom::class);
         if (! app('tenant')->hasFeature('max_classrooms')) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => __('center::messages.msg_021')], 422);
+            }
+
             return redirect()->back()->with('error', __('center::messages.msg_021'));
         }
 
@@ -60,6 +64,18 @@ class ClassroomController extends Controller
                     'status' => 'active',
                 ]);
             }
+        }
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => __('center::messages.msg_022'),
+                'classroom' => [
+                    'id' => $classroom->id,
+                    'name' => $classroom->name,
+                    'capacity' => $classroom->capacity,
+                ],
+            ]);
         }
 
         return redirect()->route('center.classrooms.index')

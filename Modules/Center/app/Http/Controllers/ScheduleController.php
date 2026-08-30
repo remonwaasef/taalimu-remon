@@ -70,16 +70,16 @@ class ScheduleController extends Controller
     {
         $this->authorize('create', Schedule::class);
         $validated = $request->validate([
-            'course_id' => 'nullable|exists:courses,id',
+            'course_id' => 'required|exists:courses,id',
 
-            'classroom_id' => 'nullable|exists:classrooms,id',
+            'classroom_id' => 'required|exists:classrooms,id',
 
             'instructor_id' => 'nullable|exists:instructors,id',
-            'day_of_week' => 'nullable|integer|between:0,6',
+            'day_of_week' => 'required|integer|between:0,6',
 
-            'start_time' => 'nullable',
+            'start_time' => 'required',
 
-            'end_time' => 'nullable|after:start_time',
+            'end_time' => 'required|after:start_time',
 
             'max_students' => 'nullable|integer|min:1',
         ]);
@@ -124,16 +124,16 @@ class ScheduleController extends Controller
     {
         $this->authorize('update', $schedule);
         $validated = $request->validate([
-            'course_id' => 'nullable|exists:courses,id',
+            'course_id' => 'required|exists:courses,id',
 
-            'classroom_id' => 'nullable|exists:classrooms,id',
+            'classroom_id' => 'required|exists:classrooms,id',
 
             'instructor_id' => 'nullable|exists:instructors,id',
-            'day_of_week' => 'nullable|integer|between:0,6',
+            'day_of_week' => 'required|integer|between:0,6',
 
-            'start_time' => 'nullable',
+            'start_time' => 'required',
 
-            'end_time' => 'nullable|after:start_time',
+            'end_time' => 'required|after:start_time',
 
             'max_students' => 'nullable|integer|min:1',
         ]);

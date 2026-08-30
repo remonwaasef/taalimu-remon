@@ -18,6 +18,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Re-framed Attendance and Schedule screens inside structured cards with clear headers.
   - Restructured Student Creation Form into distinct, framed sub-sections with sharp bordered inputs.
 
+- **On-The-Fly Quick Entity Creation (Instructors & Classrooms) (2026-08-30)**:
+  - Added seamless inline Quick Creator buttons (`+ إضافة معلم جديد`, `+ إضافة قاعة جديدة`) across all Course and Schedule creation/edit forms.
+  - Implemented [_quick-classroom-modal.blade.php](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/Modules/Center/resources/views/partials/_quick-classroom-modal.blade.php) and enhanced [_quick-instructor-modal.blade.php](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/Modules/Center/resources/views/partials/_quick-instructor-modal.blade.php) with instant AJAX submission.
+  - Newly created instructors and classrooms are immediately added and auto-selected in dropdowns without losing page state or filled form data.
+
+- **Strict Relational Prerequisites & Mandatory Foreign Dependencies (2026-08-30)**:
+  - Enforced strict `required` validation on `course_id`, `classroom_id`, `day_of_week`, `start_time`, and `end_time` in [ScheduleController.php](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/Modules/Center/app/Http/Controllers/ScheduleController.php) and [StoreCourseRequest.php](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/app/Http/Requests/Center/StoreCourseRequest.php), preventing orphaned or incomplete records.
+  - Added smart prerequisite guidance banner on [schedules/create.blade.php](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/Modules/Center/resources/views/schedules/create.blade.php) when courses or classrooms are missing.
+
 - **Automatic Course Instructor Binding in Schedule Forms (2026-08-30)**:
   - When choosing a course in [schedules/create.blade.php](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/Modules/Center/resources/views/schedules/create.blade.php) or [schedules/edit.blade.php](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/Modules/Center/resources/views/schedules/edit.blade.php), the assigned instructor is automatically selected via real-time JavaScript binding.
   - In `ScheduleController@store` and `@update`, if `instructor_id` is omitted, the course's designated instructor is automatically assigned as fallback.

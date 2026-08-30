@@ -1,45 +1,25 @@
-<x-ui.modal id="quick-instructor-modal" title="إضافة مدرس جديد" size="md">
-    <form id="quick-instructor-form" class="space-y-4">
+<x-ui.modal id="quick-classroom-modal" title="إضافة قاعة دراسية جديدة" size="md">
+    <form id="quick-classroom-form" class="space-y-4">
         @csrf
-        <input type="hidden" name="status" value="active">
-        <input type="hidden" name="commission_type" value="percentage">
-        <input type="hidden" name="commission_rate" value="0">
-
         <div>
             <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
-                {{ __('center::instructors.name') }} <span class="text-rose-500">*</span>
+                اسم القاعة <span class="text-rose-500">*</span>
             </label>
-            <input type="text" name="name" required
+            <input type="text" name="name" required placeholder="مثال: قاعة 1، معمل أ"
                    class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all text-sm">
         </div>
 
         <div>
             <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
-                {{ __('center::instructors.specialization') }} <span class="text-rose-500">*</span>
+                السعة القصوى للطلاب (الاستيعاب)
             </label>
-            <input type="text" name="specialization" required
-                   class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all text-sm">
-        </div>
-
-        <div>
-            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
-                {{ __('center::instructors.phone') }} <span class="text-rose-500">*</span>
-            </label>
-            <input type="tel" name="phone" required
-                   class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all text-sm">
-        </div>
-
-        <div>
-            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
-                {{ __('center::instructors.email') }}
-            </label>
-            <input type="email" name="email"
+            <input type="number" name="capacity" min="1" placeholder="مثال: 30"
                    class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all text-sm">
         </div>
 
         <div class="flex items-center gap-3 pt-2">
             <button type="submit" class="btn btn-primary">
-                <i class="fas fa-user-plus me-1"></i> {{ __('center::instructors.save_instructor') }}
+                <i class="fas fa-plus-circle me-1"></i> حفظ القاعة فوراً
             </button>
             <button type="button" @click="show = false" class="btn btn-outline-secondary">
                 {{ __('center::instructors.cancel') }}
@@ -51,13 +31,13 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const form = document.getElementById('quick-instructor-form');
+        const form = document.getElementById('quick-classroom-form');
         if (!form) return;
 
         // Open modal from any trigger element
-        document.querySelectorAll('[data-quick-instructor-trigger]').forEach(function (btn) {
+        document.querySelectorAll('[data-quick-classroom-trigger]').forEach(function (btn) {
             btn.addEventListener('click', function () {
-                window.dispatchEvent(new CustomEvent('open-modal', { detail: 'quick-instructor-modal' }));
+                window.dispatchEvent(new CustomEvent('open-modal', { detail: 'quick-classroom-modal' }));
             });
         });
 
@@ -83,7 +63,7 @@
 
             let data = {};
             try {
-                const response = await fetch('{{ route('center.instructors.store') }}', {
+                const response = await fetch('{{ route('center.classrooms.store') }}', {
                     method: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -111,39 +91,33 @@
                             input.parentNode.appendChild(err);
                         }
                     }
-                    if (!Object.keys(errors).length && data.message && typeof Swal !== 'undefined') {
-                        Swal.fire({ icon: 'error', title: data.message, timer: 2500, showConfirmButton: false });
-                    }
                     submitBtn.disabled = false;
                     submitBtn.innerHTML = originalText;
                     return;
                 }
 
-                // Add the new instructor to all instructor selects on the page
-                const selects = document.querySelectorAll('select[name="instructor_id"], #instructor_select');
+                // Add the new classroom to all classroom selects on the page
+                const selects = document.querySelectorAll('select[name*="classroom_id"]');
                 selects.forEach(function(select) {
+                    const label = data.classroom.name + (data.classroom.capacity ? ' (سعة: ' + data.classroom.capacity + ')' : '');
                     if (select.tomselect) {
-                        select.tomselect.addOption({ value: data.instructor.id, text: data.instructor.name });
-                        select.tomselect.setValue(data.instructor.id);
+                        select.tomselect.addOption({ value: data.classroom.id, text: label });
+                        select.tomselect.setValue(data.classroom.id);
                     } else {
-                        select.appendChild(new Option(data.instructor.name, data.instructor.id, true, true));
-                        select.value = data.instructor.id;
+                        select.appendChild(new Option(label, data.classroom.id, true, true));
+                        select.value = data.classroom.id;
                         select.dispatchEvent(new Event('change'));
                     }
                 });
 
-                // Hide the empty-state notice
-                const notice = document.querySelector('[data-empty-instructors-notice]');
-                if (notice) notice.style.display = 'none';
-
                 // Close modal and reset
-                window.dispatchEvent(new CustomEvent('close-modal', { detail: 'quick-instructor-modal' }));
+                window.dispatchEvent(new CustomEvent('close-modal', { detail: 'quick-classroom-modal' }));
                 form.reset();
 
                 if (typeof Swal !== 'undefined') {
                     Swal.fire({
                         icon: 'success',
-                        title: 'تمت إضافة المدرس',
+                        title: 'تمت إضافة القاعة',
                         text: data.message || '',
                         toast: true,
                         position: 'top-end',
@@ -152,10 +126,8 @@
                     });
                 }
             } catch (error) {
-                console.error('Quick instructor error:', error);
-                if (typeof Swal !== 'undefined') {
-                    Swal.fire({ icon: 'error', title: 'حدث خطأ غير متوقع، حاول مرة أخرى.', timer: 2500, showConfirmButton: false });
-                }
+                console.error('Quick classroom error:', error);
+            } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = originalText;
             }

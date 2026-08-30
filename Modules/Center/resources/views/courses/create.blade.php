@@ -62,9 +62,14 @@
 
                     <!-- Instructor Selection -->
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
-                            {{ __('center::courses.instructor') }} <span class="text-xs font-medium text-slate-400 normal-case">(اختياري)</span>
-                        </label>
+                        <div class="flex items-center justify-between mb-2">
+                            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                                {{ __('center::courses.instructor') }} <span class="text-rose-500">*</span>
+                            </label>
+                            <button type="button" data-quick-instructor-trigger class="text-xs text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 font-bold flex items-center gap-1">
+                                <i class="fas fa-plus-circle"></i> + إضافة معلم جديد
+                            </button>
+                        </div>
 
                         @if($instructors->isEmpty())
                             <div data-empty-instructors-notice class="p-4 mb-3 rounded-xl border border-amber-200 dark:border-amber-800/40 bg-amber-50 dark:bg-amber-950/30 text-amber-800 dark:text-amber-300 text-xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
@@ -72,7 +77,7 @@
                                     <i class="fas fa-info-circle mt-0.5 text-base"></i>
                                     <div>
                                         <div class="font-bold mb-1">لا يوجد مدرسون بعد</div>
-                                        <p class="text-amber-700 dark:text-amber-400 leading-relaxed">يمكنك إنشاء الدورة الآن بدون مدرس وتعيينه لاحقاً من صفحة تعديل الدورة، أو إضافة مدرس جديد بسرعة.</p>
+                                        <p class="text-amber-700 dark:text-amber-400 leading-relaxed">يمكنك إضافة مدرس جديد بسرعة من الزر أدناه دون مغادرة الصفحة.</p>
                                     </div>
                                 </div>
                                 <button type="button" data-quick-instructor-trigger class="btn btn-primary btn-sm shrink-0">
@@ -83,14 +88,11 @@
 
                         <select name="instructor_id" 
                                 class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all text-sm @error('instructor_id') border-rose-500 focus:ring-rose-500/20 @enderror">
-                            <option value="">{{ $instructors->isEmpty() ? 'بدون مدرس' : __('center::courses.choose_instructor') }}</option>
+                            <option value="">{{ $instructors->isEmpty() ? 'اختر المعلم' : __('center::courses.choose_instructor') }}</option>
                             @foreach($instructors as $instructor)
                                 <option value="{{ $instructor->id }}" {{ old('instructor_id') == $instructor->id ? 'selected' : '' }}>{{ $instructor->name }}</option>
                             @endforeach
                         </select>
-                        <p class="text-xs text-slate-400 mt-1.5 flex items-center gap-1">
-                            <i class="fas fa-info-circle"></i> اختياري — يمكنك تعيين المدرس لاحقاً من صفحة تعديل الدورة
-                        </p>
                         @error('instructor_id')
                             <p class="text-rose-500 text-xs mt-1.5 flex items-center gap-1"><i class="fas fa-exclamation-circle"></i>{{ $message }}</p>
                         @enderror
@@ -116,7 +118,7 @@
                             <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
                                 {{ __('center::courses.sessions_count') }}
                             </label>
-                            <input type="number" name="sessions_count" value="{{ old('sessions_count', 0) }}" 
+                            <input type="number" name="sessions_count" id="sessions-count-input" value="{{ old('sessions_count', 0) }}" 
                                    class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all text-sm @error('sessions_count') border-rose-500 @enderror" 
                                    min="0">
                             @error('sessions_count')
@@ -124,30 +126,16 @@
                             @enderror
                         </div>
 
-                        <!-- Status Option -->
+                        <!-- Status -->
                         <div>
                             <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
-                                {{ __('center::courses.status_label') }}
+                                {{ __('center::courses.status') }}
                             </label>
-                            <div class="grid grid-cols-2 gap-2">
-                                <label class="cursor-pointer">
-                                    <input type="radio" name="status" id="status_draft" value="draft" class="peer hidden" {{ old('status', 'draft') == 'draft' ? 'checked' : '' }}>
-                                    <div class="px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 peer-checked:bg-slate-900 peer-checked:text-white peer-checked:border-slate-900 dark:peer-checked:bg-slate-100 dark:peer-checked:text-slate-900 transition-all text-center text-xs font-bold flex items-center justify-center gap-1.5">
-                                        <i class="fas fa-pencil-alt"></i>
-                                        <span>{{ __('center::courses.status_draft') }}</span>
-                                    </div>
-                                </label>
-                                <label class="cursor-pointer">
-                                    <input type="radio" name="status" id="status_published" value="published" class="peer hidden" {{ old('status') == 'published' ? 'checked' : '' }}>
-                                    <div class="px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 transition-all text-center text-xs font-bold flex items-center justify-center gap-1.5">
-                                        <i class="fas fa-check-circle"></i>
-                                        <span>{{ __('center::courses.status_published') }}</span>
-                                    </div>
-                                </label>
-                            </div>
-                            @error('status')
-                                <p class="text-rose-500 text-xs mt-1.5 flex items-center gap-1"><i class="fas fa-exclamation-circle"></i>{{ $message }}</p>
-                            @enderror
+                            <select name="status" 
+                                    class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all text-sm">
+                                <option value="published" {{ old('status', 'published') === 'published' ? 'selected' : '' }}>{{ __('center::courses.published') }}</option>
+                                <option value="draft" {{ old('status') === 'draft' ? 'selected' : '' }}>{{ __('center::courses.draft') }}</option>
+                            </select>
                         </div>
                     </div>
 
@@ -177,26 +165,22 @@
                         @enderror
                     </div>
 
-                    <!-- Schedule Section Header -->
-                    <div class="border-t border-brand-border dark:border-slate-800 pt-6 mt-6">
+                    <!-- Weekly Schedules Section -->
+                    <div class="pt-6 border-t border-brand-border dark:border-slate-800">
                         <div class="flex items-center justify-between mb-4">
-                            <div class="flex items-center gap-2">
-                                <div class="w-8 h-8 rounded-lg bg-sky-50 dark:bg-sky-950/40 text-sky-600 flex items-center justify-center text-sm font-bold">
-                                    <i class="fas fa-calendar-alt"></i>
-                                </div>
-                                <h3 class="text-base font-bold text-slate-900 dark:text-slate-100 font-inter">{{ __('center::courses.course_schedules') }}</h3>
+                            <div>
+                                <h4 class="text-sm font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider">
+                                    {{ __('center::courses.schedules_weekly') }}
+                                </h4>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                                    {{ __('center::courses.schedules_desc') }}
+                                </p>
                             </div>
-                            
-                            <button type="button" id="add-schedule-btn" class="px-4 py-2 rounded-xl bg-sky-50 dark:bg-sky-950/30 text-sky-600 dark:text-sky-400 hover:bg-sky-100 dark:hover:bg-sky-900/50 text-xs font-bold transition-all flex items-center gap-2 border border-sky-200 dark:border-sky-800/40">
+                            <button type="button" id="add-schedule-btn" 
+                                    class="py-2 px-3.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 font-bold text-xs transition-all flex items-center gap-1.5 border border-emerald-200 dark:border-emerald-800/50">
                                 <i class="fas fa-plus"></i>
                                 <span>{{ __('center::courses.add_schedule') }}</span>
                             </button>
-                        </div>
-
-                        <!-- Schedule Count Info Bar -->
-                        <div id="schedule-count-info" class="p-3.5 rounded-xl text-xs font-bold mb-4 flex items-center gap-2 transition-all" style="display:none;">
-                            <i class="fas fa-info-circle text-base"></i>
-                            <span id="schedule-count-text"></span>
                         </div>
                         
                         <!-- Schedules Container -->
@@ -233,7 +217,10 @@
                                 </div>
 
                                 <div>
-                                    <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">{{ __('center::schedules.classroom') }}</label>
+                                    <div class="flex items-center justify-between mb-1">
+                                        <label class="block text-xs font-medium text-slate-500 dark:text-slate-400">{{ __('center::schedules.classroom') }}</label>
+                                        <button type="button" data-quick-classroom-trigger class="text-[11px] text-emerald-600 hover:underline font-bold">+ قاعة جديدة</button>
+                                    </div>
                                     <select name="schedules[INDEX][classroom_id]" class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-xs">
                                         <option value="">{{ __('center::schedules.choose_classroom') }}</option>
                                         @foreach($classrooms as $classroom)
@@ -269,9 +256,9 @@
     </div>
 
     @include('center::partials._quick-instructor-modal')
+    @include('center::partials._quick-classroom-modal')
 @endsection
 
 @push('scripts')
 @include('center::courses.partials._create-scripts')
 @endpush
-
