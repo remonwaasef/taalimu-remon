@@ -51,4 +51,11 @@ return [
     'error' => 'Erreur',
     'recorded_success' => 'Présence enregistrée avec succès',
     'recorded_failed' => 'Échec de l\'enregistrement de la présence',
+    'status_live' => 'En cours',
+    'status_upcoming' => 'À venir',
+    'status_ended' => 'Terminée',
+    'filter_all' => 'Toutes les séances',
+    'filter_live' => 'En cours',
+    'filter_upcoming' => 'À venir',
+    'filter_ended' => 'Terminées',
 ];

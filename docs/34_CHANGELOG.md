@@ -18,6 +18,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Re-framed Attendance and Schedule screens inside structured cards with clear headers.
   - Restructured Student Creation Form into distinct, framed sub-sections with sharp bordered inputs.
 
+- **Enhanced Today's Attendance Sessions with Live, Upcoming & Ended Statuses (2026-08-30)**:
+  - Added live status indicators distinguishing between Live Now (🟢 جارية الآن with glowing pulse), Upcoming (🔵 قادمة), and Ended (⚪ منتهية).
+  - Added quick filter tabs (الكل, الجارية الآن, القادمة, المنتهية) to immediately switch between session states.
+  - Fixed time display directionality (LTR) preventing reversed clock text (`PM 01:00 - 02:00 PM`).
+  - Tailored action buttons per session state (e.g. view absentees for ended sessions, highlighted take attendance for live sessions).
+
 - **Fixed Student Creation Form Submission & Phone Verification (2026-08-30)**:
   - Center `StudentController::checkPhone()` was returning `{exists: bool}` but JS expected `{status: 'exists'|'available'}` — fixed response format with tenant isolation and student name.
   - Fixed course selection checkboxes where container click events conflicted with `<label for>` clicks causing double-toggle and validation failure.

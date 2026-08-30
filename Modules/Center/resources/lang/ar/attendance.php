@@ -51,4 +51,11 @@ return [
     'error' => 'حدث خطأ',
     'recorded_success' => 'تم تسجيل الحضور بنجاح',
     'recorded_failed' => 'فشل في تسجيل الحضور',
+    'status_live' => 'جارية الآن',
+    'status_upcoming' => 'قادمة',
+    'status_ended' => 'انتهت',
+    'filter_all' => 'كل الجلسات',
+    'filter_live' => 'الجارية الآن',
+    'filter_upcoming' => 'القادمة',
+    'filter_ended' => 'المنتهية',
 ];

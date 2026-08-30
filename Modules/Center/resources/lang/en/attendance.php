@@ -51,4 +51,11 @@ return [
     'error' => 'Error',
     'recorded_success' => 'Attendance recorded successfully',
     'recorded_failed' => 'Failed to record attendance',
+    'status_live' => 'Live Now',
+    'status_upcoming' => 'Upcoming',
+    'status_ended' => 'Ended',
+    'filter_all' => 'All Sessions',
+    'filter_live' => 'Live Now',
+    'filter_upcoming' => 'Upcoming',
+    'filter_ended' => 'Ended',
 ];

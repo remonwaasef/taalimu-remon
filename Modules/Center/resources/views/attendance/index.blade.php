@@ -7,17 +7,57 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Today's Sessions -->
-        <div class="lg:col-span-2">
+        <div class="lg:col-span-2" x-data="{ sessionFilter: 'all' }">
             <x-ui.card :noPadding="true">
                 <x-slot name="header">
-                    <div class="flex items-center justify-between w-full">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 w-full">
                         <div class="flex items-center gap-2.5">
                             <div class="w-8 h-8 rounded-lg bg-brand-50 dark:bg-brand-900/30 text-brand-primary dark:text-brand-300 flex items-center justify-center text-sm">
-                                <i class="fas fa-history"></i>
+                                <i class="fas fa-calendar-day"></i>
                             </div>
-                            <h3 class="text-base font-bold text-slate-900 dark:text-slate-100 m-0">
-                                {{ __('center::attendance.today_sessions') }} <span class="text-xs text-slate-400 font-normal">({{ now()->translatedFormat('Y-m-d') }})</span>
-                            </h3>
+                            <div>
+                                <h3 class="text-base font-bold text-slate-900 dark:text-slate-100 m-0">
+                                    {{ __('center::attendance.today_sessions') }}
+                                </h3>
+                                <span class="text-xs text-slate-400 font-normal">({{ now()->translatedFormat('l, d F Y') }})</span>
+                            </div>
+                        </div>
+
+                        <!-- Quick Status Filters -->
+                        <div class="inline-flex p-1 bg-slate-100 dark:bg-slate-800/80 rounded-xl border border-slate-200/80 dark:border-slate-700 text-xs font-semibold">
+                            <button 
+                                type="button"
+                                @click="sessionFilter = 'all'"
+                                :class="sessionFilter === 'all' ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 shadow-2xs' : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'"
+                                class="px-3 py-1.5 rounded-lg transition-all"
+                            >
+                                {{ __('center::attendance.filter_all') }}
+                            </button>
+                            <button 
+                                type="button"
+                                @click="sessionFilter = 'live'"
+                                :class="sessionFilter === 'live' ? 'bg-emerald-500 text-white shadow-2xs font-bold' : 'text-emerald-600 hover:text-emerald-700 dark:text-emerald-400'"
+                                class="px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5"
+                            >
+                                <span class="w-2 h-2 rounded-full bg-emerald-400" :class="sessionFilter !== 'live' && 'animate-pulse'"></span>
+                                {{ __('center::attendance.filter_live') }}
+                            </button>
+                            <button 
+                                type="button"
+                                @click="sessionFilter = 'upcoming'"
+                                :class="sessionFilter === 'upcoming' ? 'bg-blue-600 text-white shadow-2xs font-bold' : 'text-blue-600 hover:text-blue-700 dark:text-blue-400'"
+                                class="px-3 py-1.5 rounded-lg transition-all"
+                            >
+                                {{ __('center::attendance.filter_upcoming') }}
+                            </button>
+                            <button 
+                                type="button"
+                                @click="sessionFilter = 'ended'"
+                                :class="sessionFilter === 'ended' ? 'bg-slate-600 text-white shadow-2xs font-bold' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400'"
+                                class="px-3 py-1.5 rounded-lg transition-all"
+                            >
+                                {{ __('center::attendance.filter_ended') }}
+                            </button>
                         </div>
                     </div>
                 </x-slot>
@@ -33,12 +73,54 @@
                         </thead>
                         <tbody class="divide-y divide-slate-100 dark:divide-slate-800/80 font-inter">
                             @forelse($todaySessions as $session)
-                                <tr class="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors">
+                                @php
+                                    $todayDate = now()->format('Y-m-d');
+                                    $startDateTime = \Carbon\Carbon::parse($todayDate . ' ' . $session->start_time);
+                                    $endDateTime = \Carbon\Carbon::parse($todayDate . ' ' . $session->end_time);
+                                    $now = now();
+
+                                    if ($now->isAfter($endDateTime)) {
+                                        $sessionStatus = 'ended';
+                                    } elseif ($now->between($startDateTime, $endDateTime)) {
+                                        $sessionStatus = 'live';
+                                    } else {
+                                        $sessionStatus = 'upcoming';
+                                    }
+                                @endphp
+                                <tr 
+                                    x-show="sessionFilter === 'all' || sessionFilter === '{{ $sessionStatus }}'"
+                                    class="transition-colors {{ $sessionStatus === 'live' ? 'bg-emerald-50/40 dark:bg-emerald-950/20 hover:bg-emerald-50/70 border-s-4 border-s-emerald-500' : ($sessionStatus === 'ended' ? 'opacity-80 hover:bg-slate-50/60 dark:hover:bg-slate-800/40' : 'hover:bg-slate-50/60 dark:hover:bg-slate-800/40') }}"
+                                >
                                     <td class="px-6 py-4">
-                                        <div class="font-bold text-slate-900 dark:text-slate-100 text-sm">{{ $session->course->title }}</div>
-                                        <span class="inline-flex items-center gap-1 mt-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-50 text-brand-primary dark:bg-brand-900/30 dark:text-brand-300 border border-brand-200/50">
-                                            <i class="far fa-clock text-[10px]"></i>
-                                            {{ \Carbon\Carbon::parse($session->start_time)->format('h:i A') }} - {{ \Carbon\Carbon::parse($session->end_time)->format('h:i A') }}
+                                        <div class="flex items-center gap-2 mb-1.5">
+                                            <div class="font-bold text-slate-900 dark:text-slate-100 text-sm">{{ $session->course->title }}</div>
+                                            
+                                            {{-- Status Badge --}}
+                                            @if($sessionStatus === 'live')
+                                                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700/80 shadow-2xs">
+                                                    <span class="relative flex h-2 w-2">
+                                                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                                                    </span>
+                                                    {{ __('center::attendance.status_live') }}
+                                                </span>
+                                            @elseif($sessionStatus === 'upcoming')
+                                                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-blue-50 text-blue-700 dark:bg-blue-950/50 dark:text-blue-300 border border-blue-200 dark:border-blue-800/60">
+                                                    <i class="far fa-hourglass text-[10px]"></i>
+                                                    {{ __('center::attendance.status_upcoming') }}
+                                                </span>
+                                            @else
+                                                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
+                                                    <i class="fas fa-check text-[9px]"></i>
+                                                    {{ __('center::attendance.status_ended') }}
+                                                </span>
+                                            @endif
+                                        </div>
+
+                                        {{-- Time Badge (Forced LTR for correct reading order) --}}
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg text-xs font-semibold {{ $sessionStatus === 'live' ? 'bg-white dark:bg-slate-800 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700' }}">
+                                            <i class="far fa-clock text-[10px] text-slate-400"></i>
+                                            <span dir="ltr" class="font-mono">{{ $startDateTime->format('h:i A') }} - {{ $endDateTime->format('h:i A') }}</span>
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 text-xs text-slate-600 dark:text-slate-300">
@@ -52,15 +134,20 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 text-center">
-                                        @php
-                                            $sessionEnd = \Carbon\Carbon::parse($session->end_time);
-                                            $isEnded = now()->isAfter($sessionEnd);
-                                        @endphp
                                         <div class="flex items-center justify-center gap-2">
-                                            @if($isEnded)
-                                                <a href="{{ route('center.attendance.show', $session) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 transition-colors">
-                                                    <i class="fas fa-user-times text-xs"></i>
+                                            @if($sessionStatus === 'ended')
+                                                <a href="{{ route('center.attendance.show', $session) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 border border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 dark:border-slate-700 transition-colors">
+                                                    <i class="fas fa-clipboard-list text-xs"></i>
                                                     <span>{{ __('center::attendance.view_absentees') }}</span>
+                                                </a>
+                                            @elseif($sessionStatus === 'live')
+                                                <a href="{{ route('center.attendance.show', $session) }}" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 shadow-xs transition-colors">
+                                                    <i class="fas fa-clipboard-check text-xs"></i>
+                                                    <span>{{ __('center::attendance.mark_attendance') }}</span>
+                                                </a>
+                                                <a href="{{ route('center.attendance.qr', $session) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-emerald-700 bg-white hover:bg-emerald-50 border border-emerald-300 shadow-2xs transition-colors">
+                                                    <i class="fas fa-qrcode text-xs"></i>
+                                                    <span>{{ __('center::attendance.qr_code_btn') }}</span>
                                                 </a>
                                             @else
                                                 <a href="{{ route('center.attendance.show', $session) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-700 hover:text-brand-primary bg-white hover:bg-brand-50 border border-slate-200 hover:border-brand-primary/30 shadow-2xs transition-colors">
