@@ -323,23 +323,43 @@ class AttendanceController extends Controller
      */
     public function loginAndMark(Request $request, Schedule $schedule)
     {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-            'qr_url' => 'nullable|string',
-        ]);
-
-        // TEN-4: the POST route is equally public — it must carry the same
-        // signed-URL protection as markByQr, and the schedule must belong to
-        // the tenant serving the QR code.
+        // TEN-4: signed-URL protection & schedule tenant validation
         if (! $request->hasValidSignature()) {
             abort(403, 'انتهت صلاحية رمز QR أو أنه غير صالح. يرجى مسح الرمز مرة أخرى.');
         }
 
         $this->assertTenantSchedule($schedule);
 
-        // Only credentials of THIS tenant's users may be used here — never a
-        // platform-wide attempt with another center's account.
+        // Case 1: Phone / Code quick attendance verification (No password required in classroom)
+        if ($request->filled('phone_or_code')) {
+            $input = trim($request->phone_or_code);
+            $student = Student::where('tenant_id', $this->tenant->id)
+                ->where(function ($q) use ($input) {
+                    $q->where('phone', $input)
+                      ->orWhere('parent_phone', $input)
+                      ->orWhere('code', $input)
+                      ->orWhere('national_id', $input);
+                })
+                ->first();
+
+            if (! $student) {
+                return back()->withErrors(['phone_or_code' => 'لم يتم العثور على طالب مسجل برقم الهاتف أو الكود المدخل في هذا المركز.'])->withInput();
+            }
+
+            if (! $this->assertStudentTenant($student)) {
+                return back()->withErrors(['phone_or_code' => 'هذا الحساب لا ينتمي إلى هذا المركز.'])->withInput();
+            }
+
+            return $this->processQrAttendance($student, $schedule);
+        }
+
+        // Case 2: Email & Password authentication
+        $request->validate([
+            'email' => 'required',
+            'password' => 'required',
+            'qr_url' => 'nullable|string',
+        ]);
+
         if (! auth()->attempt(['email' => $request->email, 'password' => $request->password, 'tenant_id' => $this->tenant->id])) {
             return back()->withErrors(['email' => 'بيانات الدخول غير صحيحة.'])->withInput();
         }

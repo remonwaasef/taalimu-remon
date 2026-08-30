@@ -18,6 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Re-framed Attendance and Schedule screens inside structured cards with clear headers.
   - Restructured Student Creation Form into distinct, framed sub-sections with sharp bordered inputs.
 
+- **Instant Student Phone/Code Verification on Mobile QR Scan (2026-08-30)**:
+  - Enabled quick attendance verification by registered **Phone Number** or **Student Code** without requiring passwords in physical classrooms.
+  - Provided tab switching between quick phone verification and full email/password authentication.
+  - Inlined standalone responsive CSS with Cairo/Inter typography, completely eliminating mobile styling glitches.
+
 - **Fixed 500 Error on QR Attendance Scan Page (2026-08-30)**:
   - Resolved fatal `Call to a member function can() on null` when unauthenticated students scanned QR codes on mobile.
   - Previously, `scan-login.blade.php` and `success.blade.php` inherited the center admin layout (`_sidebar-next`), which assumed an authenticated admin user.

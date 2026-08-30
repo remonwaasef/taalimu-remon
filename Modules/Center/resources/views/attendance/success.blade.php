@@ -1,46 +1,149 @@
-@extends('layouts.auth-minimal')
+<!DOCTYPE html>
+<html lang="{{ app()->getLocale() }}" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <title>{{ __('center::attendance.attendance_recorded') ?? 'تم تسجيل الحضور' }} - {{ config('app.name', 'Taalimu') }}</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-@section('title', __('center::attendance.attendance_recorded') ?? 'تم تسجيل الحضور')
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', 'Inter', system-ui, -apple-system, sans-serif;
+        }
+        body {
+            background-color: #FAFAFA;
+            color: #1e293b;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem 1rem;
+        }
+        .container {
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+        }
+        .card {
+            background: #ffffff;
+            border: 1px solid #EAEFF2;
+            border-radius: 28px;
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+            padding: 2.25rem 1.75rem;
+        }
+        .success-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: #E8F5F1;
+            color: #168F7C;
+            border: 4px solid #bbf0e3;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.25rem;
+            animation: scaleIn 0.4s ease-out;
+        }
+        @keyframes scaleIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .title {
+            font-size: 1.35rem;
+            font-weight: 900;
+            color: #0f172a;
+            margin-bottom: 0.5rem;
+        }
+        .message {
+            font-size: 0.875rem;
+            color: #475569;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        .details-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 1rem 1.25rem;
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-bottom: 1.5rem;
+            text-align: start;
+        }
+        .details-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 4px 0;
+        }
+        .details-val {
+            font-weight: 800;
+            color: #0f172a;
+            font-family: 'Inter', 'Cairo', monospace;
+        }
+        .details-val.brand {
+            color: #168F7C;
+        }
+        .btn-close-window {
+            width: 100%;
+            height: 48px;
+            background: #f1f5f9;
+            color: #334155;
+            border: none;
+            border-radius: 14px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn-close-window:hover {
+            background: #e2e8f0;
+        }
+        .footer-note {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            margin-top: 1.25rem;
+        }
+    </style>
+</head>
+<body>
 
-@section('content')
-<div class="w-full max-w-md my-8 animate-fadeIn text-center">
-    <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-sm p-6 sm:p-8">
-        
-        <!-- Animated Success Icon -->
-        <div class="w-20 h-20 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-500 flex items-center justify-center text-3xl mx-auto mb-4 border-4 border-emerald-100 dark:border-emerald-900/60 shadow-xs animate-bounce">
+<div class="container">
+    <div class="card">
+        <div class="success-icon">
             <i class="fas fa-check"></i>
         </div>
 
-        <h2 class="text-xl font-black text-slate-900 dark:text-white mb-2">
-            تم تسجيل الحضور بنجاح! 🎉
-        </h2>
+        <h2 class="title">تم تسجيل الحضور بنجاح! 🎉</h2>
+        <p class="message">{{ $message ?? 'تم تسجيل بيانات حضورك لهذه الحصة بنجاح.' }}</p>
 
-        <p class="text-xs text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">
-            {{ $message ?? 'تم تسجيل بيانات حضورك للحصة بنجاح.' }}
-        </p>
-
-        <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700 text-xs text-slate-500 dark:text-slate-400 space-y-1.5 mb-6">
-            <div class="flex items-center justify-between">
+        <div class="details-box">
+            <div class="details-row">
                 <span>تاريخ اليوم:</span>
-                <span class="font-bold text-slate-700 dark:text-slate-200 font-mono" dir="ltr">{{ today()->format('Y-m-d') }}</span>
+                <span class="details-val" dir="ltr">{{ today()->format('Y-m-d') }}</span>
             </div>
-            <div class="flex items-center justify-between">
+            <div class="details-row">
                 <span>وقت التسجيل:</span>
-                <span class="font-bold text-brand-primary dark:text-brand-300 font-mono" dir="ltr">{{ now()->format('h:i A') }}</span>
+                <span class="details-val brand" dir="ltr">{{ now()->format('h:i A') }}</span>
             </div>
         </div>
 
-        <button 
-            type="button" 
-            onclick="window.close();" 
-            class="w-full py-3 px-4 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 transition-all"
-        >
+        <button type="button" class="btn-close-window" onclick="window.close();">
             إغلاق هذه الصفحة
         </button>
     </div>
 
-    <p class="text-[11px] text-slate-400 mt-4 m-0">
-        Taalimu — النظام التعليمي الذكي
-    </p>
+    <p class="footer-note">Taalimu — النظام التعليمي الذكي</p>
 </div>
-@endsection
+
+</body>
+</html>
