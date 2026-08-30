@@ -10,7 +10,7 @@
 
 body {
     font-family: 'Cairo', 'Inter', sans-serif;
-    background-color: #F7FAF8 !important;
+    background-color: #FBFAF6 !important;
     color: #102033;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -638,14 +638,14 @@ label:not(.form-floating > label):not(.custom-form-floating > label) {
 }
 
 .page-item .page-link:hover {
-    background: #f1f5f9 !important;
-    color: #10b981 !important;
+    background: var(--color-surface-hover, #F2FBF8) !important;
+    color: var(--color-primary, #168F7C) !important;
 }
 
 .page-item.active .page-link {
-    background: #10b981 !important;
-    color: #ffffff !important;
-    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
+    background: var(--color-primary, #168F7C) !important;
+    color: var(--color-primary-contrast, #FFFFFF) !important;
+    box-shadow: 0 2px 8px rgba(22, 143, 124, 0.25);
 }
 
 /* ===== Premium Modals ===== */
@@ -927,7 +927,7 @@ h6 {
 .content-inner>.d-flex:first-child .btn-primary,
 .content-inner>.mb-4:first-child .btn-primary {
     background-color: #ffffff !important;
-    color: #10b981 !important;
+    color: var(--color-primary, #168F7C) !important;
     border-color: #ffffff !important;
     font-weight: 700;
 }
@@ -1054,8 +1054,8 @@ h6 {
 }
 
 .dropdown-item.text-primary {
-    color: #10b981 !important;
-    -webkit-text-fill-color: #10b981 !important;
+    color: var(--color-primary, #168F7C) !important;
+    -webkit-text-fill-color: var(--color-primary, #168F7C) !important;
 }
 
 .dropdown-item.text-info {
@@ -1488,14 +1488,14 @@ label {
 
 /* Hover State */
 .sidebar .nav-item .nav-link:hover:not(.active) {
-    background: #f1f5f9 !important;
-    color: #10b981 !important;
+    background: var(--color-primary-50, #F2FBF8) !important;
+    color: var(--color-primary, #168F7C) !important;
 }
 
-/* Active State - Soft Purple Pill (Matching Mockup) */
+/* Active State - Soft Green Pill (Taalimu Brand) */
 .sidebar .nav-item .nav-link.active {
-    background: #f0f0ff !important; /* Soft Indigo Tint */
-    color: #6366f1 !important;
+    background: var(--color-primary-soft, #E8F5F1) !important;
+    color: var(--color-primary-dark, #0D7465) !important;
     font-weight: 700 !important;
     border-radius: 12px !important;
     border: none !important;
@@ -1506,7 +1506,7 @@ label {
 }
 
 .sidebar .nav-item .nav-link.active .icon {
-    color: #6366f1 !important;
+    color: var(--color-primary, #168F7C) !important;
 }
 
 /* Category/Static Labels */
@@ -1558,7 +1558,7 @@ label {
 }
 
 .sidebar .sub-nav .nav-link.active::before {
-    background: #10b981;
+    background: var(--color-primary, #168F7C);
     transform: scale(1.2);
 }
 
