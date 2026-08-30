@@ -13,16 +13,29 @@
 
     <div class="row">
         <div class="col-md-12">
-            <div class="card border-0 shadow-sm rounded-4">
-                <div class="card-header bg-white border-0 p-4 pb-0 d-flex justify-content-between align-items-center">
+            <div class="card border border-slate-200/90 dark:border-slate-800 shadow-xs rounded-3xl bg-white dark:bg-slate-900 overflow-hidden">
+                <div class="card-header bg-white dark:bg-slate-900 border-b border-slate-200/80 dark:border-slate-800 p-5 sm:p-6 d-flex justify-content-between align-items-center flex-wrap gap-3">
                     <div>
-                        <h5 class="fw-bold mb-1"><i class="bi bi-people me-2"></i>{{ __('center::attendance.enrolled_list') }}</h5>
-                        <p class="text-muted small mb-0">{{ __('center::attendance.session_at', ['time' => \Carbon\Carbon::parse($schedule->start_time)->format('h:i A')]) }} - {{ __('center::attendance.classroom_label') }} {{ $schedule->classroom->name ?? __('center::schedules.classroom') }}</p>
+                        <h5 class="fw-bold mb-1 text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                            <div class="w-7 h-7 rounded-lg bg-brand-50 text-brand-primary dark:bg-brand-900/40 dark:text-brand-300 flex items-center justify-center text-xs">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            {{ __('center::attendance.enrolled_list') }}
+                        </h5>
+                        <p class="text-muted small mb-0 flex items-center gap-2 mt-1">
+                            <span class="inline-flex items-center gap-1 font-semibold" dir="ltr">
+                                <i class="far fa-clock text-slate-400"></i>
+                                {{ \Carbon\Carbon::parse($schedule->start_time)->format('h:i A') }}
+                            </span>
+                            <span>•</span>
+                            <span>{{ __('center::attendance.classroom_label') }} {{ $schedule->classroom->name ?? __('center::schedules.classroom') }}</span>
+                        </p>
                     </div>
-                    <div class="text-end d-flex align-items-center gap-2">
+                    <div class="text-end d-flex align-items-center gap-2 flex-wrap">
                         <!-- Scan Button -->
-                        <button type="button" class="btn btn-success btn-sm rounded-pill px-3 shadow-sm" onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'scanQrModal' }))">
-                            <i class="bi bi-qr-code-scan me-1"></i>{{ __('center::attendance.scan_qr_btn') }}</button>
+                        <button type="button" class="btn btn-primary rounded-xl px-4 py-2 text-xs font-bold shadow-xs" onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'scanQrModal' }))">
+                            <i class="fas fa-qrcode me-1.5"></i> {{ __('center::attendance.scan_qr_btn') }}
+                        </button>
 
                         @php
                             $isEnded = now()->isAfter(\Carbon\Carbon::parse($schedule->end_time));
@@ -31,25 +44,28 @@
                         @if($isEnded && $hasUnrecorded)
                             <form action="{{ route('center.attendance.bulkAbsent', $schedule) }}" method="POST">
                                 @csrf
-                                <button type="submit" class="btn btn-danger btn-sm rounded-pill px-3 shadow-sm">
-                                    <i class="bi bi-person-x-fill me-1"></i>{{ __('center::attendance.mark_all_absent') }}</button>
+                                <button type="submit" class="btn btn-outline-danger rounded-xl px-4 py-2 text-xs font-bold">
+                                    <i class="fas fa-user-times me-1.5"></i> {{ __('center::attendance.mark_all_absent') }}
+                                </button>
                             </form>
                         @endif
-                        <span class="badge bg-primary px-3 rounded-pill">{{ today()->format('Y-m-d') }}</span>
+                        <span class="badge bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700 px-3 py-2 rounded-xl text-xs font-mono font-semibold" dir="ltr">
+                            {{ today()->format('Y-m-d') }}
+                        </span>
                     </div>
                 </div>
-                <div class="card-body p-4">
+                <div class="card-body p-0">
                     <div class="table-responsive" data-mobile-cards>
-                        <table class="table align-middle">
-                            <thead class="bg-light">
+                        <table class="table align-middle custom-table mb-0">
+                            <thead class="bg-slate-50/95 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-700 text-[11px] uppercase font-bold text-slate-600 dark:text-slate-300 tracking-wider">
                                 <tr>
-                                    <th class="border-0 rounded-start">{{ __('center::attendance.student_name') }}</th>
-                                    <th class="border-0">{{ __('center::attendance.student_code') }}</th>
-                                    <th class="border-0 text-center">{{ __('center::attendance.status') }}</th>
-                                    <th class="border-0 rounded-end text-center">{{ __('center::attendance.record_attendance') }}</th>
+                                    <th class="px-6 py-3.5 text-start">{{ __('center::attendance.student_name') }}</th>
+                                    <th class="px-6 py-3.5 text-start">{{ __('center::attendance.student_code') }}</th>
+                                    <th class="px-6 py-3.5 text-center">{{ __('center::attendance.status') }}</th>
+                                    <th class="px-6 py-3.5 text-center">{{ __('center::attendance.record_attendance') }}</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="divide-y divide-slate-100 dark:divide-slate-800/80 font-inter">
                                 @forelse($schedule->course->enrollments as $enrollment)
                                     @php
                                         $student = $enrollment->user->student ?? null;
@@ -62,51 +78,70 @@
                                         $lockLate = ($attendance && !$isAdmin) || ($isEnded && !$isAdmin && (!$attendance || $attendance->status !== 'late'));
                                         $lockAbsent = ($attendance && !$isAdmin) || ($isEnded && !$isAdmin && (!$attendance || $attendance->status !== 'absent'));
                                     @endphp
-                                    <tr>
-                                        <td>
-                                            <div class="fw-bold">{{ $student->name }}</div>
-                                            <small class="text-muted">{{ $enrollment->user->email }}</small>
+                                    <tr class="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors">
+                                        <td class="px-6 py-4">
+                                            <div class="fw-bold text-slate-900 dark:text-slate-100 text-sm mb-0.5">{{ $student->name }}</div>
+                                            <small class="text-slate-400 text-xs">{{ $enrollment->user->email }}</small>
                                         </td>
-                                        <td><code class="text-primary fw-bold">#{{ $student->id }}</code></td>
-                                        <td class="text-center">
+                                        <td class="px-6 py-4">
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-slate-100 dark:bg-slate-800 text-brand-primary dark:text-brand-300 border border-slate-200 dark:border-slate-700">
+                                                #{{ $student->id }}
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 text-center">
                                             @if($attendance)
-                                                <span class="badge bg-{{ $attendance->status == 'present' ? 'success' : ($attendance->status == 'late' ? 'warning' : 'danger') }} bg-opacity-10 text-{{ $attendance->status == 'present' ? 'success' : ($attendance->status == 'late' ? 'warning' : 'danger') }} rounded-pill px-3">
-                                                    @if($attendance->status == 'late')
-                                                    {{ __('center::attendance.late') }} ({{ $attendance->late_minutes }} {{ __('center::attendance.minutes') }})
-                                                    @else
-                                                        {{ $attendance->status == 'present' ? __('center::attendance.present') : __('center::attendance.absent') }}
-                                                    @endif
-                                                    <small class="d-block text-muted" style="font-size: 0.6rem;">{{ $attendance->check_in_time->format('h:i A') }}</small>
+                                                <span class="inline-flex flex-column align-items-center gap-0.5 px-3 py-1 rounded-full text-xs font-bold {{ $attendance->status == 'present' ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800' : ($attendance->status == 'late' ? 'bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300 border border-amber-200 dark:border-amber-800' : 'bg-red-50 text-red-700 dark:bg-red-950/40 dark:text-red-300 border border-red-200 dark:border-red-800') }}">
+                                                    <span>
+                                                        @if($attendance->status == 'late')
+                                                            {{ __('center::attendance.late') }} ({{ $attendance->late_minutes }} {{ __('center::attendance.minutes') }})
+                                                        @else
+                                                            {{ $attendance->status == 'present' ? __('center::attendance.present') : __('center::attendance.absent') }}
+                                                        @endif
+                                                    </span>
+                                                    <span class="text-slate-400 font-mono" style="font-size: 0.65rem;" dir="ltr">{{ $attendance->check_in_time->format('h:i A') }}</span>
                                                 </span>
                                             @elseif($isEnded)
-                                                <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3">{{ __('center::attendance.absent') }}</span>
+                                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-red-50 text-red-600 dark:bg-red-950/40 dark:text-red-300 border border-red-200 dark:border-red-800">{{ __('center::attendance.absent') }}</span>
                                             @else
-                                                <span class="text-muted small">{{ __('center::attendance.not_recorded') }}</span>
+                                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs text-slate-400 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">{{ __('center::attendance.not_recorded') }}</span>
                                             @endif
                                         </td>
-                                        <td class="text-center">
-                                            <div class="d-flex justify-content-center gap-1">
-                                                <form action="{{ route('center.attendance.store') }}" method="POST">
+                                        <td class="px-6 py-4 text-center">
+                                            <div class="d-inline-flex justify-content-center gap-1.5 flex-wrap">
+                                                <form action="{{ route('center.attendance.store') }}" method="POST" class="d-inline m-0">
                                                     @csrf
                                                     <input type="hidden" name="student_id" value="{{ $student->id }}">
                                                     <input type="hidden" name="course_id" value="{{ $schedule->course_id }}">
                                                     <input type="hidden" name="schedule_id" value="{{ $schedule->id }}">
                                                     <input type="hidden" name="session_date" value="{{ today()->format('Y-m-d') }}">
                                                     <input type="hidden" name="status" value="present">
-                                                    <button type="submit" class="btn btn-sm btn-{{ $attendance && $attendance->status == 'present' ? 'success' : 'outline-success' }} rounded-pill px-3" {{ $lockPresent ? 'disabled' : '' }}>{{ __('center::attendance.present') }}</button>
+                                                    <button type="submit" 
+                                                            class="inline-flex items-center justify-center px-3 py-1.5 rounded-xl text-xs font-bold transition-all shadow-2xs {{ $attendance && $attendance->status == 'present' ? 'bg-emerald-600 text-white border border-emerald-600 shadow-xs' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-600 hover:text-white border border-emerald-200 hover:border-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800 dark:hover:bg-emerald-600 dark:hover:text-white' }}" 
+                                                            {{ $lockPresent ? 'disabled' : '' }}>
+                                                        <i class="fas fa-check me-1"></i> {{ __('center::attendance.present') }}
+                                                    </button>
                                                 </form>
                                                 
                                                 <!-- Smart Late Button (Triggers Modal) -->
-                                                <button type="button" class="btn btn-sm btn-{{ $attendance && $attendance->status == 'late' ? 'warning' : 'outline-warning' }} rounded-pill px-3" onclick="openLateModal({{ $student->id }}, '{{ $schedule->course_id }}', '{{ $schedule->id }}', '{{ e($student->name) }}')" {{ $lockLate ? 'disabled' : '' }}>{{ __('center::attendance.late') }}</button>
+                                                <button type="button" 
+                                                        class="inline-flex items-center justify-center px-3 py-1.5 rounded-xl text-xs font-bold transition-all shadow-2xs {{ $attendance && $attendance->status == 'late' ? 'bg-amber-500 text-white border border-amber-500 shadow-xs' : 'bg-amber-50 text-amber-700 hover:bg-amber-500 hover:text-white border border-amber-200 hover:border-amber-500 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800 dark:hover:bg-amber-500 dark:hover:text-white' }}" 
+                                                        onclick="openLateModal({{ $student->id }}, '{{ $schedule->course_id }}', '{{ $schedule->id }}', '{{ e($student->name) }}')" 
+                                                        {{ $lockLate ? 'disabled' : '' }}>
+                                                    <i class="fas fa-clock me-1"></i> {{ __('center::attendance.late') }}
+                                                </button>
 
-                                                <form action="{{ route('center.attendance.store') }}" method="POST">
+                                                <form action="{{ route('center.attendance.store') }}" method="POST" class="d-inline m-0">
                                                     @csrf
                                                     <input type="hidden" name="student_id" value="{{ $student->id }}">
                                                     <input type="hidden" name="course_id" value="{{ $schedule->course_id }}">
                                                     <input type="hidden" name="schedule_id" value="{{ $schedule->id }}">
                                                     <input type="hidden" name="session_date" value="{{ today()->format('Y-m-d') }}">
                                                     <input type="hidden" name="status" value="absent">
-                                                    <button type="submit" class="btn btn-sm btn-{{ $attendance && $attendance->status == 'absent' ? 'danger' : 'outline-danger' }} rounded-pill px-3" {{ $lockAbsent ? 'disabled' : '' }}>{{ __('center::attendance.absent') }}</button>
+                                                    <button type="submit" 
+                                                            class="inline-flex items-center justify-center px-3 py-1.5 rounded-xl text-xs font-bold transition-all shadow-2xs {{ $attendance && $attendance->status == 'absent' ? 'bg-red-600 text-white border border-red-600 shadow-xs' : 'bg-red-50 text-red-700 hover:bg-red-600 hover:text-white border border-red-200 hover:border-red-600 dark:bg-red-950/40 dark:text-red-300 dark:border-red-800 dark:hover:bg-red-600 dark:hover:text-white' }}" 
+                                                            {{ $lockAbsent ? 'disabled' : '' }}>
+                                                        <i class="fas fa-times me-1"></i> {{ __('center::attendance.absent') }}
+                                                    </button>
                                                 </form>
                                             </div>
                                         </td>

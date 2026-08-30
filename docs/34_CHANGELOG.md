@@ -18,6 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Re-framed Attendance and Schedule screens inside structured cards with clear headers.
   - Restructured Student Creation Form into distinct, framed sub-sections with sharp bordered inputs.
 
+- **Fixed Manual Attendance Action Buttons Hover Contrast (2026-08-30)**:
+  - Replaced ambiguous outline button styles on "حاضر / متأخر / غائب" with dedicated high-contrast solid and soft states.
+  - On hover, buttons smoothly transition with clear colored backgrounds and white text, completely eliminating the white-on-white text disappearance.
+  - Enhanced Attendance Sheet page layout with crisp card borders, structured headers, and clean typography.
+
 - **Enhanced Today's Attendance Sessions with Live, Upcoming & Ended Statuses (2026-08-30)**:
   - Added live status indicators distinguishing between Live Now (🟢 جارية الآن with glowing pulse), Upcoming (🔵 قادمة), and Ended (⚪ منتهية).
   - Added quick filter tabs (الكل, الجارية الآن, القادمة, المنتهية) to immediately switch between session states.
