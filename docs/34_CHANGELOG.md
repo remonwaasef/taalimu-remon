@@ -10,8 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
-- **Enhanced Visual Contrast, Table Separation & Card Framing across Dashboards (2026-08-30)**:
-  - Adjusted dashboard canvas background to a soft slate-tinted canvas `#EFF3F6` to make white cards, tables, and metric containers stand out with clear visual depth.
+- **Adopted Luxury Slate-Mist Canvas (#EEF2F6) & Framed Students Interface (2026-08-30)**:
+  - Upgraded dashboard body background to luxury slate mist `#EEF2F6` for visual depth and premium contrast.
+  - Framed Students Management interface (`Modules/Center/resources/views/students/index.blade.php`) inside a main card container with clear search input borders, modernized stage filter tabs, and separated table header.
   - Reinforced card borders (`border-slate-200` / `#E2E8F0`) and subtle shadows across all UI cards (`x-ui.card`, `.card`, Launchpad, Quick Actions).
   - Modernized `x-ui.table` component with highlighted, separated header backgrounds (`bg-slate-50/95`), horizontal row dividers (`divide-slate-100`), and smooth hover states.
   - Re-framed Attendance (`Modules/Center/resources/views/attendance/index.blade.php`) and Schedule screens (`schedules/index.blade.php`) inside structured cards with clear headers.

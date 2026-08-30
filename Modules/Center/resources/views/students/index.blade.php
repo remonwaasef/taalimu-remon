@@ -188,8 +188,8 @@
         </style>
     @endif
 
-    <div class="card border-0 shadow-sm rounded-4">
-        <div class="card-body p-4">
+    <div class="card border border-slate-200/90 dark:border-slate-800 shadow-xs rounded-3xl bg-white dark:bg-slate-900 overflow-hidden">
+        <div class="card-body p-5 sm:p-6">
             <!-- Search & Filter -->
             <div class="row g-3 mb-4">
                 <div class="col-12">
@@ -200,11 +200,11 @@
                             data-smart-search=".custom-table"
                             data-search-fields="name,phone"
                             data-search-highlight="true"
-                            class="form-control ps-5 rounded-pill border-0 shadow-sm" 
+                            class="form-control ps-5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50/60 dark:bg-slate-800/60 text-slate-800 dark:text-slate-100 shadow-2xs focus:bg-white" 
                             placeholder="{{ __('center::students.search_placeholder') }}"
-                            style="background-color: var(--color-light); height: 48px;"
+                            style="height: 48px;"
                         >
-                        <span class="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted">
+                        <span class="position-absolute top-50 start-0 translate-middle-y ms-3 text-slate-400">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
@@ -214,27 +214,27 @@
             </div>
 
             <!-- Stage & Financial Filter Buttons -->
-            <div class="mb-3 d-flex flex-wrap gap-3 justify-content-between align-items-center">
+            <div class="mb-4 d-flex flex-wrap gap-3 justify-content-between align-items-center">
                 <div class="d-flex gap-2 flex-wrap">
-                    <button class="btn btn-outline-primary rounded-pill px-4 stage-btn active" data-stage="all">
+                    <button class="btn btn-outline-primary rounded-xl px-4 stage-btn active font-semibold text-xs" data-stage="all">
                         {{ __('center::students.all') }}
                     </button>
                     @foreach($stages as $stage)
-                        <button class="btn btn-outline-primary rounded-pill px-4 stage-btn" data-stage="stage-{{ $stage->id }}" data-grades="{{ $stage->grades->pluck('id')->implode(',') }}">
+                        <button class="btn btn-outline-primary rounded-xl px-4 stage-btn font-semibold text-xs" data-stage="stage-{{ $stage->id }}" data-grades="{{ $stage->grades->pluck('id')->implode(',') }}">
                             {{ $stage->name }}
                         </button>
                     @endforeach
                 </div>
 
-                <div class="btn-group p-1 bg-light rounded-pill" role="group" style="min-width: 250px;">
+                <div class="btn-group p-1 bg-slate-100 dark:bg-slate-800 rounded-xl border border-slate-200/80 dark:border-slate-700" role="group" style="min-width: 250px;">
                     <input type="radio" data-smart-filter=".custom-table" data-filter-key="fin-status" class="btn-check financial-filter" name="finFilter" id="finAll" value="all" checked>
-                    <label class="btn btn-sm btn-outline-primary border-0 rounded-pill px-3" for="finAll">{{ __('center::students.all') }}</label>
+                    <label class="btn btn-sm btn-outline-primary border-0 rounded-lg px-3 font-semibold text-xs" for="finAll">{{ __('center::students.all') }}</label>
                     
                     <input type="radio" data-smart-filter=".custom-table" data-filter-key="fin-status" class="btn-check financial-filter" name="finFilter" id="finDebt" value="debt">
-                    <label class="btn btn-sm btn-outline-danger border-0 rounded-pill px-3" for="finDebt">{{ __('center::students.debtor') }}</label>
+                    <label class="btn btn-sm btn-outline-danger border-0 rounded-lg px-3 font-semibold text-xs" for="finDebt">{{ __('center::students.debtor') }}</label>
                     
                     <input type="radio" data-smart-filter=".custom-table" data-filter-key="fin-status" class="btn-check financial-filter" name="finFilter" id="finPaid" value="paid">
-                    <label class="btn btn-sm btn-outline-success border-0 rounded-pill px-3" for="finPaid">{{ __('center::students.paid') }}</label>
+                    <label class="btn btn-sm btn-outline-success border-0 rounded-lg px-3 font-semibold text-xs" for="finPaid">{{ __('center::students.paid') }}</label>
                 </div>
                 <!-- Hidden input to link stage/grade buttons with smart search -->
                 <input type="hidden" id="smartGradeFilter" data-smart-filter=".custom-table" data-filter-key="grade" value="all">
@@ -246,7 +246,7 @@
                     <div id="stage-{{ $stage->id }}-grades" class="sub-grades-container" style="display: none;">
                         <div class="d-flex gap-2 flex-wrap">
                             @foreach($stage->grades as $grade)
-                                <button class="btn btn-sm btn-outline-secondary rounded-pill grade-btn" data-grade="{{ $grade->id }}">{{ $grade->name }}</button>
+                                <button class="btn btn-sm btn-outline-secondary rounded-xl grade-btn text-xs font-semibold" data-grade="{{ $grade->id }}">{{ $grade->name }}</button>
                             @endforeach
                         </div>
                     </div>
@@ -254,20 +254,20 @@
             </div>
 
             <!-- Bulk Actions Toolbar (Hidden by default) -->
-            <div id="bulk-actions-toolbar" class="bg-primary bg-opacity-10 p-3 rounded-4 mb-3 d-none animate__animated animate__fadeInDown">
+            <div id="bulk-actions-toolbar" class="bg-brand-50 dark:bg-brand-900/30 border border-brand-200/60 dark:border-brand-800/40 p-3 rounded-2xl mb-3 d-none animate__animated animate__fadeInDown">
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center">
-                        <span class="badge bg-primary rounded-pill me-3" id="selected-count">0</span>
-                        <span class="fw-bold text-primary">{{ __('center::students.selected_count') }}</span>
+                        <span class="badge bg-brand-primary rounded-pill me-3" id="selected-count">0</span>
+                        <span class="fw-bold text-brand-primary dark:text-brand-300 small">{{ __('center::students.selected_count') }}</span>
                     </div>
                     <div class="d-flex gap-2">
-                        <button class="btn btn-sm btn-outline-success rounded-pill px-3" onclick="bulkAction('activate')">
+                        <button class="btn btn-sm btn-outline-success rounded-xl px-3" onclick="bulkAction('activate')">
                             <i class="fas fa-check me-1"></i> {{ __('center::students.activate') }}
                         </button>
-                        <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="bulkAction('deactivate')">
+                        <button class="btn btn-sm btn-outline-secondary rounded-xl px-3" onclick="bulkAction('deactivate')">
                             <i class="fas fa-times me-1"></i> {{ __('center::students.deactivate') }}
                         </button>
-                        <button class="btn btn-sm btn-danger rounded-pill px-3" onclick="bulkAction('delete')">
+                        <button class="btn btn-sm btn-danger rounded-xl px-3" onclick="bulkAction('delete')">
                             <i class="fas fa-trash me-1"></i> {{ __('center::students.delete') }}
                         </button>
                     </div>
@@ -275,51 +275,51 @@
             </div>
 
             <!-- Students Table -->
-            <div class="table-responsive" data-mobile-cards style="min-height: 350px;">
-                <table class="table align-middle custom-table">
-                    <thead>
+            <div class="table-responsive rounded-2xl border border-slate-200 dark:border-slate-800" data-mobile-cards style="min-height: 350px;">
+                <table class="table align-middle custom-table mb-0">
+                    <thead class="bg-slate-50/95 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-700 text-[11px] uppercase font-bold text-slate-600 dark:text-slate-300 tracking-wider">
                         <tr>
-                            <th class="border-0 bg-transparent px-3" style="width: 40px;">
+                            <th class="px-3" style="width: 40px;">
                                 <div class="form-check custom-check">
                                     <input class="form-check-input" type="checkbox" id="select-all">
                                 </div>
                             </th>
-                            <th class="border-0 bg-transparent">{{ __('center::students.name') }}</th>
-                            <th class="border-0 bg-transparent">{{ __('center::students.phone') }}</th>
-                            <th class="border-0 bg-transparent d-none d-lg-table-cell">{{ __('center::students.grade') }}</th>
-                            <th class="border-0 bg-transparent">{{ __('center::students.status') }}</th>
-                            <th class="border-0 bg-transparent text-end px-4">{{ __('center::students.actions') }}</th>
+                            <th class="px-4 py-3">{{ __('center::students.name') }}</th>
+                            <th class="px-4 py-3">{{ __('center::students.phone') }}</th>
+                            <th class="px-4 py-3 d-none d-lg-table-cell">{{ __('center::students.grade') }}</th>
+                            <th class="px-4 py-3">{{ __('center::students.status') }}</th>
+                            <th class="px-4 py-3 text-end">{{ __('center::students.actions') }}</th>
                         </tr>
                     </thead>
-                    <tbody class="border-0">
+                    <tbody class="divide-y divide-slate-100 dark:divide-slate-800/80">
                         @forelse($students as $student)
-                            <tr class="student-row align-middle border-bottom" data-grade="{{ $student->grade_id }}" data-fin-status="{{ $student->financial_status }}" data-name="{{ $student->name }}" data-phone="{{ $student->phone }}">
+                            <tr class="student-row align-middle hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors" data-grade="{{ $student->grade_id }}" data-fin-status="{{ $student->financial_status }}" data-name="{{ $student->name }}" data-phone="{{ $student->phone }}">
                                 <td class="px-3">
                                     <div class="form-check custom-check">
                                         <input class="form-check-input student-checkbox" type="checkbox" value="{{ $student->id }}">
                                     </div>
                                 </td>
-                                <td>
+                                <td class="px-4 py-3.5">
                                     <div class="d-flex align-items-center">
                                         <div class="student-avatar me-3">
                                             @if($student->profile_photo)
                                                 <img src="{{ Storage::url($student->profile_photo) }}" alt="Avatar" class="rounded-circle shadow-sm" style="width: 38px; height: 38px; object-fit: cover;">
                                             @else
-                                                <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 38px; height: 38px;">
-                                                    <span class="fw-bold small">{{ mb_substr($student->name, 0, 1) }}</span>
+                                                <div class="bg-brand-50 text-brand-primary dark:bg-brand-900/40 dark:text-brand-300 rounded-circle d-flex align-items-center justify-content-center shadow-xs font-bold" style="width: 38px; height: 38px;">
+                                                    <span class="small">{{ mb_substr($student->name, 0, 1) }}</span>
                                                 </div>
                                             @endif
                                         </div>
                                         <div>
-                                            <div class="fw-bold text-dark small mb-0">{{ $student->name }}</div>
+                                            <div class="fw-bold text-slate-900 dark:text-slate-100 small mb-0">{{ $student->name }}</div>
                                             <div class="text-muted extra-small d-lg-none">{{ $student->phone }}</div>
                                         </div>
                                     </div>
                                 </td>
-                                <td>
+                                <td class="px-4 py-3.5">
                                     <div class="d-flex flex-column gap-1">
                                         <div class="d-flex align-items-center text-dark small" dir="ltr">
-                                            <i class="fas fa-mobile-screen-button me-2 text-primary opacity-50" style="font-size: 0.8rem;"></i>
+                                            <i class="fas fa-mobile-screen-button me-2 text-brand-primary opacity-60" style="font-size: 0.8rem;"></i>
                                             {{ $student->phone }}
                                         </div>
                                         @if($student->parent_phone)
@@ -330,16 +330,16 @@
                                         @endif
                                     </div>
                                 </td>
-                                <td class="d-none d-lg-table-cell">
+                                <td class="px-4 py-3.5 d-none d-lg-table-cell">
                                     <div class="d-flex flex-column">
-                                        <span class="badge bg-light text-dark fw-normal rounded-pill px-2 py-1 border mb-1" style="font-size: 0.75rem;">
+                                        <span class="badge bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 fw-semibold rounded-lg px-2.5 py-1 border border-slate-200 dark:border-slate-700" style="font-size: 0.75rem;">
                                             {{ $student->grade_level_name }}
                                         </span>
                                     </div>
                                 </td>
-                                <td>
+                                <td class="px-4 py-3.5">
                                     <div class="d-flex flex-column align-items-start">
-                                        <span class="badge bg-{{ $student->status == 'active' ? 'success' : 'danger' }} bg-opacity-10 text-{{ $student->status == 'active' ? 'success' : 'danger' }} rounded-pill px-2 py-1" style="font-size: 0.7rem;">
+                                        <span class="badge bg-{{ $student->status == 'active' ? 'success' : 'danger' }} bg-opacity-10 text-{{ $student->status == 'active' ? 'success' : 'danger' }} rounded-pill px-2.5 py-1" style="font-size: 0.7rem;">
                                             {{ $student->status == 'active' ? __('center::students.active') : __('center::students.stopped') }}
                                         </span>
                                         @if($student->total_balance > 0)
@@ -347,7 +347,7 @@
                                         @endif
                                     </div>
                                 </td>
-                                <td class="text-end px-4">
+                                <td class="px-4 py-3.5 text-end">
                                     <div class="d-inline-flex gap-1 me-2">
                                         @php
                                             $phoneForWa = sanitizePhoneForWhatsApp($student->phone);
@@ -358,7 +358,7 @@
                                         </a>
                                         <button type="button" class="btn btn-sm btn-light rounded-circle text-primary shadow-none p-2 quick-pay-btn" 
                                                 data-id="{{ $student->id }}" data-name="{{ $student->name }}" data-balance="{{ $student->total_balance }}" title="{{ __('center::students.quick_pay') }}">
-                                            <i class="fas fa-dollar-sign"></i>
+                                            <i class="fas fa-hand-holding-dollar"></i>
                                         </button>
                                         <button type="button" class="btn btn-sm btn-light rounded-circle text-info shadow-none p-2 quick-enroll-btn" 
                                                 data-id="{{ $student->id }}" data-name="{{ $student->name }}" 
@@ -417,17 +417,16 @@
                             <tr>
                                 <td colspan="7" class="text-center py-5 px-3">
                                     <div class="mb-3">
-                                        <!-- Replace generic img with a nice icon if image doesn't exist, to be safe -->
-                                        <div class="rounded-circle bg-primary bg-opacity-10 d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
-                                            <i class="fas fa-user-graduate fa-2x text-primary opacity-75"></i>
+                                        <div class="rounded-2xl bg-brand-50 text-brand-primary dark:bg-brand-900/30 dark:text-brand-300 d-inline-flex align-items-center justify-content-center mb-3 shadow-xs" style="width: 72px; height: 72px;">
+                                            <i class="fas fa-user-graduate text-3xl"></i>
                                         </div>
                                     </div>
-                                    <h5 class="text-dark fw-bold mb-2">لا يوجد طلاب مسجلون بعد</h5>
-                                    <p class="text-muted small px-3 mx-auto mb-4" style="max-width: 400px;">
+                                    <h5 class="text-slate-900 dark:text-slate-100 fw-bold mb-2 text-base">لا يوجد طلاب مسجلون بعد</h5>
+                                    <p class="text-slate-500 dark:text-slate-400 small px-3 mx-auto mb-4" style="max-width: 400px;">
                                         ابدأ رحلتك بإضافة أول طالب للمنصة لتتمكن من تسجيل الحضور وإدارة الفواتير.
                                     </p>
                                     @can('add students')
-                                    <a href="{{ route('center.students.create', ['tenant' => $tenant->domain ?? 'center']) }}" class="btn btn-primary rounded-pill px-4 py-2 shadow-sm transition-all hover-shadow-lg">
+                                    <a href="{{ route('center.students.create', ['tenant' => $tenant->domain ?? 'center']) }}" class="btn btn-primary rounded-xl px-5 py-2.5 font-bold shadow-xs">
                                         <i class="fas fa-plus me-2"></i> إضافة أول طالب
                                     </a>
                                     @endcan
