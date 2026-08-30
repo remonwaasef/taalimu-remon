@@ -1,4 +1,4 @@
-﻿@extends('layouts.app-next')
+@extends('layouts.app-next')
 
 @section('title', __('instructor::dashboard.title') ?? 'Instructor Dashboard')
 
@@ -20,7 +20,7 @@
 
     <!-- Getting Started Banner (If empty state) -->
     @if($totalCourses == 0 || $totalStudents == 0)
-        <x-ui.card glass="true" class="mb-8 border-brand-primary/20 bg-gradient-to-r from-brand-50/50 to-indigo-50/30 dark:from-slate-900 dark:to-slate-900">
+        <x-ui.card glass="true" class="mb-8 border-brand-primary/20 bg-gradient-to-r from-brand-50/50 to-emerald-50/30 dark:from-slate-900 dark:to-slate-900">
             <div class="flex flex-col lg:flex-row items-center justify-between gap-6">
                 <div class="space-y-2 max-w-xl">
                     <x-ui.badge variant="brand" size="sm" dot="true">{{ __('instructor::dashboard.getting_started_title') }}</x-ui.badge>

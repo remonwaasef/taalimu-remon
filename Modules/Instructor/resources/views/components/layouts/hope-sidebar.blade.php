@@ -86,13 +86,13 @@
 
     <!-- Premium Upgrade Widget Card -->
     <div class="px-3 my-3">
-        <div class="p-3 rounded-4 bg-gradient-to-br" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(139, 92, 246, 0.12) 100%); border: 1px solid rgba(139, 92, 246, 0.2);">
+        <div class="p-3 rounded-4 bg-gradient-to-br" style="background: linear-gradient(135deg, rgba(22, 143, 124, 0.08) 0%, rgba(13, 116, 101, 0.12) 100%); border: 1px solid rgba(22, 143, 124, 0.2);">
             <div class="d-flex align-items-center gap-2 mb-1">
-                <i class="fas fa-crown text-indigo"></i>
-                <span class="fw-bold text-xs text-indigo">Upgrade to Premium</span>
+                <i class="fas fa-crown text-brand-primary" style="color: var(--color-primary, #168F7C);"></i>
+                <span class="fw-bold text-xs" style="color: var(--color-primary, #168F7C);">Upgrade to Premium</span>
             </div>
             <p class="text-muted text-xs mb-2 font-arabic" style="font-size: 0.72rem; line-height: 1.3;">Unlock all features and grow your institution.</p>
-            <a href="{{ route('instructor.billing') }}" class="btn btn-indigo btn-sm rounded-pill w-100 font-bold text-xs py-1.5 shadow-sm">
+            <a href="{{ route('instructor.billing') }}" class="btn btn-primary btn-sm rounded-pill w-100 font-bold text-xs py-1.5 shadow-sm" style="background-color: var(--color-primary, #168F7C); border-color: var(--color-primary, #168F7C);">
                 Upgrade Now
             </a>
         </div>

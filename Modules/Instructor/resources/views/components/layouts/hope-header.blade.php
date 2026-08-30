@@ -30,7 +30,7 @@
                     <i class="fas fa-chevron-down ms-1 fs-8 opacity-75"></i>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-3">
-                    <li><a class="dropdown-item py-2 text-xs font-bold" href="{{ route('instructor.students.create') }}"><i class="fas fa-user-plus me-2 text-indigo"></i> {{ __('instructor::dashboard.add_new_student') }}</a></li>
+                    <li><a class="dropdown-item py-2 text-xs font-bold" href="{{ route('instructor.students.create') }}"><i class="fas fa-user-plus me-2 text-primary"></i> {{ __('instructor::dashboard.add_new_student') }}</a></li>
                     <li><a class="dropdown-item py-2 text-xs font-bold" href="{{ route('instructor.groups.create') }}"><i class="fas fa-folder-plus me-2 text-emerald"></i> {{ __('instructor::dashboard.create_new_group') }}</a></li>
                     <li><a class="dropdown-item py-2 text-xs font-bold" href="{{ route('instructor.schedules.index') }}"><i class="fas fa-calendar-plus me-2 text-amber"></i> {{ __('instructor::sidebar.schedules') }}</a></li>
                 </ul>

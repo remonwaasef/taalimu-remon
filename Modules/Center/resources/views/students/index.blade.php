@@ -1,4 +1,4 @@
-﻿@extends('center::layouts.app-next')
+@extends('center::layouts.app-next')
 @section('page-title', __('center::students.title'))
 
 @section('page-actions')
@@ -480,28 +480,6 @@
             <input type="hidden" name="student_id" id="enrollStudentId">
             <div class="text-center">
                 <p class="text-slate-500 text-sm mb-4">{{ __('center::students.quick_enroll_desc', ['name' => '<span class="font-semibold text-slate-900 dark:text-slate-100" id="enrollStudentName"></span>']) }}</p>
-                <div class="mb-4 text-start">
-                    <label class="block font-medium text-sm text-slate-500 mb-1">{{ __('center::students.available_courses') }}</label>
-                    <select id="courseSelect" class="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-primary focus:border-transparent" required>
-                        <option value="">{{ __('center::students.choose_course') }}</option>
-                        @foreach($courses as $course)
-                            <option value="{{ $course->id }}">{{ $course->title }} ({{ number_format($course->price, 0) }} {{ get_currency_symbol() }})</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="mb-4 p-3 bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-800 rounded-xl text-sm text-indigo-700 dark:text-indigo-300">
-                    {{ __('center::students.auto_invoice_hint') }}
-                </div>
-                <div id="enrollWarning" class="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-xl text-sm text-red-700 dark:text-red-300 hidden">
-                    <i class="fas fa-exclamation-circle me-2"></i> {{ __('center::students.already_enrolled_warning') }}
-                </div>
-                <button type="button" id="submitEnrollBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-xl transition-colors">{{ __('center::students.complete_enrollment') }}</button>
-            </div>
-        </form>
-    </x-ui.modal>
-
-    {{-- Hidden Form for Direct Email --}}
-    <form id="directEmailForm" method="POST" class="hidden">
         @csrf
         <input type="hidden" name="subject" id="directEmailSubject">
         <textarea name="message" id="directEmailMessage"></textarea>
