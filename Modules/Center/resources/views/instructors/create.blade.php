@@ -13,11 +13,11 @@
                     <form action="{{ route('center.instructors.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         
-                        <!-- Personal Info -->
+                        <!-- Essential Info -->
                         <div class="row g-3 mb-4">
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('center::instructors.name') }} <span class="text-danger">*</span></label>
-                                <input type="text" name="name" value="{{ old('name') }}" class="form-control bg-white border" required>
+                                <input type="text" name="name" value="{{ old('name') }}" class="form-control bg-white border" placeholder="اسم المدرس ثلاثي" required>
                                 @error('name')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                             </div>
                             <div class="col-md-6">
@@ -25,70 +25,71 @@
                                 <input type="text" name="specialization" value="{{ old('specialization') }}" class="form-control bg-white border" placeholder="{{ __('center::instructors.specialization_placeholder') }}" required>
                                 @error('specialization')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                             </div>
-                        </div>
-
-                        <!-- Status & Administrative -->
-                        <div class="row g-3 mb-4">
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold">{{ __('center::instructors.status') }} <span class="text-danger">*</span></label>
-                                <select name="status" class="form-select bg-white border" required>
-                                    <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>{{ __('center::instructors.active') }}</option>
-                                    <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>{{ __('center::instructors.inactive') }}</option>
-                                    <option value="on_hold" {{ old('status') == 'on_hold' ? 'selected' : '' }}>{{ __('center::instructors.on_hold') }}</option>
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold">{{ __('center::instructors.gender') }}</label>
-                                <select name="gender" class="form-select bg-white border">
-                                    <option value="">{{ __('center::instructors.select_placeholder') }}</option>
-                                    <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>{{ __('center::instructors.male') }}</option>
-                                    <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>{{ __('center::instructors.female') }}</option>
-                                </select>
-                                @error('gender')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold">{{ __('center::instructors.hiring_date') }}</label>
-                                <input type="date" name="hiring_date" value="{{ old('hiring_date') }}" class="form-control bg-white border">
-                                @error('hiring_date')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
-                            </div>
-                        </div>
-
-                        <!-- Identifiers & Finance -->
-                        <div class="row g-3 mb-4">
-                            <div class="col-md-12">
-                                <label class="form-label fw-bold">{{ __('center::instructors.commission_rate') }} <span class="text-danger">*</span></label>
-                                <div class="input-group">
-                                    <select name="commission_type" class="form-select bg-white border" style="max-width: 140px; border-radius: 0 10px 10px 0 !important;" required>
-                                        <option value="">{{ __('center::instructors.select_placeholder') }}</option>
-                                        <option value="percentage" {{ old('commission_type') == 'percentage' ? 'selected' : '' }}>{{ __('center::instructors.commission_percentage') }}</option>
-                                        <option value="fixed" {{ old('commission_type') == 'fixed' ? 'selected' : '' }}>{{ __('center::instructors.commission_fixed') }}</option>
-                                    </select>
-                                    <input type="number" step="0.01" name="commission_rate" value="{{ old('commission_rate', 0) }}" class="form-control bg-white border" placeholder="0.00" style="border-radius: 10px 0 0 10px !important;" required>
-                                </div>
-                                @error('commission_rate')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
-                                @error('commission_type')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
-                            </div>
-                        </div>
-
-                        <!-- Contact Info -->
-                        <div class="row g-3 mb-4">
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">{{ __('center::instructors.email') }}</label>
-                                <input type="email" name="email" value="{{ old('email') }}" class="form-control bg-white border">
-                                @error('email')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
-                            </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('center::instructors.phone') }} <span class="text-danger">*</span></label>
-                                <input type="tel" name="phone" value="{{ old('phone') }}" class="form-control bg-white border" required>
+                                <input type="tel" name="phone" value="{{ old('phone') }}" class="form-control bg-white border" placeholder="01xxxxxxxxx" required>
                                 @error('phone')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">{{ __('center::instructors.email') }} <span class="text-muted fw-normal">(اختياري)</span></label>
+                                <input type="email" name="email" value="{{ old('email') }}" class="form-control bg-white border" placeholder="instructor@example.com">
+                                @error('email')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                             </div>
                         </div>
 
-                        <div class="mb-4">
-                            <label class="form-label fw-bold">{{ __('center::instructors.bio') }}</label>
-                            <textarea name="bio" class="form-control bg-white border" rows="3">{{ old('bio') }}</textarea>
-                            @error('bio')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
-                        </div>
+                        <!-- Collapsible Advanced Settings (Optional) -->
+                        <details class="mb-4 border rounded-3 p-3 bg-light" {{ (old('gender') || old('hiring_date') || old('bio') || (old('commission_rate') && old('commission_rate') > 0) || $errors->has('commission_rate') || $errors->has('gender')) ? 'open' : '' }}>
+                            <summary class="fw-bold text-muted cursor-pointer user-select-none d-flex justify-content-between align-items-center">
+                                <span><i class="fas fa-sliders-h me-1 text-primary"></i> بيانات إضافية وتفاصيل الحساب (اختياري)</span>
+                                <span class="badge bg-white text-secondary border small">اضغط للتوسيع</span>
+                            </summary>
+                            <div class="pt-3 border-top mt-3">
+                                <!-- Status & Gender & Date -->
+                                <div class="row g-3 mb-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label fw-bold small">{{ __('center::instructors.status') }}</label>
+                                        <select name="status" class="form-select bg-white border">
+                                            <option value="active" {{ old('status', 'active') == 'active' ? 'selected' : '' }}>{{ __('center::instructors.active') }}</option>
+                                            <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>{{ __('center::instructors.inactive') }}</option>
+                                            <option value="on_hold" {{ old('status') == 'on_hold' ? 'selected' : '' }}>{{ __('center::instructors.on_hold') }}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label fw-bold small">{{ __('center::instructors.gender') }}</label>
+                                        <select name="gender" class="form-select bg-white border">
+                                            <option value="">{{ __('center::instructors.select_placeholder') }}</option>
+                                            <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>{{ __('center::instructors.male') }}</option>
+                                            <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>{{ __('center::instructors.female') }}</option>
+                                        </select>
+                                        @error('gender')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label fw-bold small">{{ __('center::instructors.hiring_date') }}</label>
+                                        <input type="date" name="hiring_date" value="{{ old('hiring_date') }}" class="form-control bg-white border">
+                                        @error('hiring_date')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+                                    </div>
+                                </div>
+
+                                <!-- Finance / Commission -->
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold small">{{ __('center::instructors.commission_rate') }}</label>
+                                    <div class="input-group">
+                                        <select name="commission_type" class="form-select bg-white border" style="max-width: 140px; border-radius: 0 10px 10px 0 !important;">
+                                            <option value="percentage" {{ old('commission_type', 'percentage') == 'percentage' ? 'selected' : '' }}>{{ __('center::instructors.commission_percentage') }}</option>
+                                            <option value="fixed" {{ old('commission_type') == 'fixed' ? 'selected' : '' }}>{{ __('center::instructors.commission_fixed') }}</option>
+                                        </select>
+                                        <input type="number" step="0.01" name="commission_rate" value="{{ old('commission_rate', 0) }}" class="form-control bg-white border" placeholder="0.00" style="border-radius: 10px 0 0 10px !important;">
+                                    </div>
+                                    @error('commission_rate')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+                                </div>
+
+                                <div class="mb-2">
+                                    <label class="form-label fw-bold small">{{ __('center::instructors.bio') }}</label>
+                                    <textarea name="bio" class="form-control bg-white border" rows="2" placeholder="نبذة مختصرة عن خبرات المدرس...">{{ old('bio') }}</textarea>
+                                    @error('bio')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+                                </div>
+                            </div>
+                        </details>
 
 
 

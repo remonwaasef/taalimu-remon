@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Streamlined Data Entry & Launchpad Quick Modals (2026-09-04)**:
+  - Added lightweight 1-click Quick Modals for adding Instructors, Courses, and Students directly from the Launchpad without page navigation.
+  - Implemented progressive disclosure on full Instructor and Course creation forms, grouping secondary/optional fields inside modern collapsible `<details>` sections to eliminate visual overwhelm.
+  - Allowed courses to be created with flexible schedules (optional at creation time, preventing blocking validation).
+  - Enhanced controller JSON responses for seamless asynchronous AJAX modal submissions.
+
 ### Fixed
 - **Clean Center Initialization & Unified Login Response Fix (2026-09-04)**:
   - Removed automatic demo data provisioning from [RegistrationController.php](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/app/Http/Controllers/RegistrationController.php) so that newly registered centers start 100% clean with zero mock students, courses, or instructors.

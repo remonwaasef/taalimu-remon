@@ -136,6 +136,33 @@
                                 <span>{{ __('center::dashboard.launchpad.action') }}</span>
                                 <i class="fas fa-arrow-left text-[9px] rtl:rotate-0 ltr:rotate-180"></i>
                             </button>
+                        @elseif($key === 'instructor')
+                            <button
+                                type="button" 
+                                class="w-full py-1.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 {{ $isCurrent ? 'bg-brand-primary text-white hover:bg-brand-600 shadow-xs' : 'bg-slate-100 hover:bg-slate-200 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200' }}"
+                                @click="$dispatch('open-modal', 'quick-instructor-modal')"
+                            >
+                                <span>{{ __('center::dashboard.launchpad.action') }}</span>
+                                <i class="fas fa-arrow-left text-[9px] rtl:rotate-0 ltr:rotate-180"></i>
+                            </button>
+                        @elseif($key === 'course')
+                            <button
+                                type="button" 
+                                class="w-full py-1.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 {{ $isCurrent ? 'bg-brand-primary text-white hover:bg-brand-600 shadow-xs' : 'bg-slate-100 hover:bg-slate-200 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200' }}"
+                                @click="$dispatch('open-modal', 'quick-course-modal')"
+                            >
+                                <span>{{ __('center::dashboard.launchpad.action') }}</span>
+                                <i class="fas fa-arrow-left text-[9px] rtl:rotate-0 ltr:rotate-180"></i>
+                            </button>
+                        @elseif($key === 'student')
+                            <button
+                                type="button" 
+                                class="w-full py-1.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 {{ $isCurrent ? 'bg-brand-primary text-white hover:bg-brand-600 shadow-xs' : 'bg-slate-100 hover:bg-slate-200 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200' }}"
+                                @click="$dispatch('open-modal', 'quick-student-modal')"
+                            >
+                                <span>{{ __('center::dashboard.launchpad.action') }}</span>
+                                <i class="fas fa-arrow-left text-[9px] rtl:rotate-0 ltr:rotate-180"></i>
+                            </button>
                         @else
                             <a
                                 href="{{ route($data['route'], ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}" 

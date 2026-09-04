@@ -5,6 +5,7 @@ namespace Modules\Center\Http\Controllers;
 use App\Models\Course;
 use App\Models\Expense;
 use App\Models\Sale;
+use App\Models\Stage;
 use App\Models\Student;
 use App\Services\StudentRiskService;
 use Illuminate\Http\Request;
@@ -136,6 +137,10 @@ class CenterController extends Controller
         $launchpadProgress = round(($completedCount / count($launchpadSteps)) * 100);
         $showLaunchpad = $launchpadProgress < 100;
 
+        $stages = Stage::getCached();
+        $instructorsList = \App\Models\Instructor::select('id', 'name', 'specialization')->get();
+        $courses = Course::orderBy('title')->get(['id', 'title', 'price']);
+
         if (request()->expectsJson()) {
             return response()->json([
                 'success' => true,
@@ -175,7 +180,10 @@ class CenterController extends Controller
             'overdueAmount',
             'launchpadSteps',
             'launchpadProgress',
-            'showLaunchpad'
+            'showLaunchpad',
+            'stages',
+            'instructorsList',
+            'courses'
         ));
     }
 

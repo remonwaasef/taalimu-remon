@@ -202,4 +202,9 @@
             @endif
         </x-ui.card>
     </div>
+
+    {{-- Quick Action Modals for Instant Setup --}}
+    @include('center::partials._quick-instructor-modal')
+    @include('center::partials._quick-course-modal')
+    @include('center::partials._quick-student-modal')
 @endsection

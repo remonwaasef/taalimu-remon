@@ -69,11 +69,15 @@ class CourseController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCourseRequest $request): RedirectResponse
+    public function store(StoreCourseRequest $request)
     {
         $this->authorize('create', Course::class);
 
         if (! $this->tenant->hasFeature('max_courses')) {
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => __('center::messages.msg_025')], 403);
+            }
+
             return redirect()->back()->with('error', __('center::messages.msg_025'));
         }
 
@@ -81,9 +85,25 @@ class CourseController extends Controller
 
         try {
             $data['image'] = $this->handleFileUpload($request, 'image', null, 'courses');
-            $this->courseService->createCourse(CourseData::fromArray($data));
+            $course = $this->courseService->createCourse(CourseData::fromArray($data));
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => __('center::messages.msg_026'),
+                    'course' => [
+                        'id' => $course->id,
+                        'title' => $course->title,
+                        'price' => $course->price,
+                    ],
+                ]);
+            }
         } catch (\Exception $e) {
             \Log::error('Course creation failed: '.$e->getMessage());
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => __('center::messages.error_unexpected')], 500);
+            }
 
             return redirect()->back()->withInput()->with('error', __('center::messages.error_unexpected'));
         }

@@ -121,11 +121,15 @@ class StudentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreStudentRequest $request): RedirectResponse
+    public function store(StoreStudentRequest $request)
     {
         $this->authorize('create', Student::class);
 
         if (! $this->tenant->hasFeature('max_students')) {
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => __('center::students.max_limit_reached')], 403);
+            }
+
             return redirect()->back()->with('error', __('center::students.max_limit_reached'));
         }
 
@@ -140,6 +144,18 @@ class StudentController extends Controller
             );
 
             $result = $this->studentService->registerStudent(StudentData::fromArray($data), auth()->user());
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => __('center::messages.msg_081'),
+                    'student' => [
+                        'id' => $result['student']->id,
+                        'name' => $result['student']->name,
+                        'phone' => $result['student']->phone,
+                    ],
+                ]);
+            }
 
             // Store info in session to display to the user
             session()->flash('generated_password', $result['generated_password']);
@@ -156,6 +172,10 @@ class StudentController extends Controller
             return redirect()->route('center.students.index', ['tenant' => $this->tenant->domain])->with('success', __('center::messages.msg_081'));
         } catch (\Exception $e) {
             \Log::error('Student registration failed: '.$e->getMessage());
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => __('center::messages.registration_failed')], 500);
+            }
 
             return redirect()->back()->withInput()->with('error', __('center::messages.registration_failed'));
         }

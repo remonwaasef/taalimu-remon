@@ -98,8 +98,8 @@
                         @enderror
                     </div>
 
-                    <!-- Price, Sessions Count, Status Row -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    <!-- Price & Sessions Count Row -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <!-- Price -->
                         <div>
                             <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
@@ -125,69 +125,94 @@
                                 <p class="text-rose-500 text-xs mt-1.5 flex items-center gap-1"><i class="fas fa-exclamation-circle"></i>{{ $message }}</p>
                             @enderror
                         </div>
-
-                        <!-- Status -->
-                        <div>
-                            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
-                                {{ __('center::courses.status') }}
-                            </label>
-                            <select name="status" 
-                                    class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all text-sm">
-                                <option value="published" {{ old('status', 'published') === 'published' ? 'selected' : '' }}>{{ __('center::courses.published') }}</option>
-                                <option value="draft" {{ old('status') === 'draft' ? 'selected' : '' }}>{{ __('center::courses.draft') }}</option>
-                            </select>
-                        </div>
                     </div>
 
-                    <!-- Image Upload -->
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
-                            {{ __('center::courses.course_image') }}
-                        </label>
-                        <input type="file" name="image" 
-                               class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-700 dark:text-slate-300 text-xs file:me-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 transition-all @error('image') border-rose-500 @enderror" 
-                               accept="image/*">
-                        @error('image')
-                            <p class="text-rose-500 text-xs mt-1.5 flex items-center gap-1"><i class="fas fa-exclamation-circle"></i>{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- Description -->
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
-                            {{ __('center::courses.description') }}
-                        </label>
-                        <textarea name="description" rows="3" 
-                                  class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all text-sm @error('description') border-rose-500 @enderror" 
-                                  placeholder="اكتب وصفاً موجزاً ومميزاً للدورة الدراسية...">{{ old('description') }}</textarea>
-                        @error('description')
-                            <p class="text-rose-500 text-xs mt-1.5 flex items-center gap-1"><i class="fas fa-exclamation-circle"></i>{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- Weekly Schedules Section -->
-                    <div class="pt-6 border-t border-brand-border dark:border-slate-800">
-                        <div class="flex items-center justify-between mb-4">
-                            <div>
-                                <h4 class="text-sm font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider">
-                                    {{ __('center::courses.schedules_weekly') }}
-                                </h4>
-                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                                    {{ __('center::courses.schedules_desc') }}
-                                </p>
+                    <!-- Collapsible Optional Section -->
+                    <details class="group border border-slate-200 dark:border-slate-800 rounded-2xl p-4 bg-slate-50/50 dark:bg-slate-900/30" {{ ($errors->has('status') || $errors->has('image') || $errors->has('description') || $errors->has('schedules') || !empty(old('schedules'))) ? 'open' : '' }}>
+                        <summary class="cursor-pointer font-bold text-xs text-slate-700 dark:text-slate-300 flex items-center justify-between list-none select-none">
+                            <div class="flex items-center gap-2">
+                                <span class="w-7 h-7 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 flex items-center justify-center text-xs">
+                                    <i class="fas fa-sliders-h"></i>
+                                </span>
+                                <span>تفاصيل إضافية ومواعيد الحصص (اختياري)</span>
                             </div>
-                            <button type="button" id="add-schedule-btn" 
-                                    class="py-2 px-3.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 font-bold text-xs transition-all flex items-center gap-1.5 border border-emerald-200 dark:border-emerald-800/50">
-                                <i class="fas fa-plus"></i>
-                                <span>{{ __('center::courses.add_schedule') }}</span>
-                            </button>
+                            <span class="text-xs text-slate-400 group-open:rotate-180 transition-transform duration-200">
+                                <i class="fas fa-chevron-down"></i>
+                            </span>
+                        </summary>
+
+                        <div class="mt-4 pt-4 border-t border-slate-200 dark:border-slate-800 space-y-5">
+                            <!-- Status & Image Row -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <!-- Status -->
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+                                        {{ __('center::courses.status') }}
+                                    </label>
+                                    <select name="status" 
+                                            class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all text-sm">
+                                        <option value="published" {{ old('status', 'published') === 'published' ? 'selected' : '' }}>{{ __('center::courses.published') }}</option>
+                                        <option value="draft" {{ old('status') === 'draft' ? 'selected' : '' }}>{{ __('center::courses.draft') }}</option>
+                                    </select>
+                                </div>
+
+                                <!-- Image Upload -->
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+                                        {{ __('center::courses.course_image') }}
+                                    </label>
+                                    <input type="file" name="image" 
+                                           class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-700 dark:text-slate-300 text-xs file:me-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 transition-all @error('image') border-rose-500 @enderror" 
+                                           accept="image/*">
+                                    @error('image')
+                                        <p class="text-rose-500 text-xs mt-1.5 flex items-center gap-1"><i class="fas fa-exclamation-circle"></i>{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <!-- Description -->
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+                                    {{ __('center::courses.description') }}
+                                </label>
+                                <textarea name="description" rows="3" 
+                                          class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all text-sm @error('description') border-rose-500 @enderror" 
+                                          placeholder="اكتب وصفاً موجزاً ومميزاً للدورة الدراسية...">{{ old('description') }}</textarea>
+                                @error('description')
+                                    <p class="text-rose-500 text-xs mt-1.5 flex items-center gap-1"><i class="fas fa-exclamation-circle"></i>{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <!-- Weekly Schedules Section -->
+                            <div class="pt-5 border-t border-slate-200 dark:border-slate-800">
+                                <div class="flex items-center justify-between mb-4">
+                                    <div>
+                                        <h4 class="text-sm font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider">
+                                            {{ __('center::courses.schedules_weekly') }}
+                                        </h4>
+                                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                                            {{ __('center::courses.schedules_desc') }}
+                                        </p>
+                                    </div>
+                                    <button type="button" id="add-schedule-btn" 
+                                            class="py-2 px-3.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 font-bold text-xs transition-all flex items-center gap-1.5 border border-emerald-200 dark:border-emerald-800/50">
+                                        <i class="fas fa-plus"></i>
+                                        <span>{{ __('center::courses.add_schedule') }}</span>
+                                    </button>
+                                </div>
+
+                                <div id="schedule-count-info" class="p-3.5 rounded-xl text-xs font-bold mb-4 flex items-center gap-2 transition-all" style="display:none;">
+                                    <i class="fas fa-info-circle text-base"></i>
+                                    <span id="schedule-count-text"></span>
+                                </div>
+                                
+                                <!-- Schedules Container -->
+                                <div id="schedules-container" class="space-y-4">
+                                    <!-- Dynamic Schedules will be added here -->
+                                </div>
+                            </div>
                         </div>
-                        
-                        <!-- Schedules Container -->
-                        <div id="schedules-container" class="space-y-4">
-                            <!-- Dynamic Schedules will be added here -->
-                        </div>
-                    </div>
+                    </details>
 
                     <!-- Dynamic Schedule Template -->
                     <template id="schedule-template">

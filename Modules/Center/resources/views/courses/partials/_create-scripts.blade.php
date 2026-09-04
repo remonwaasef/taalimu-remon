@@ -22,60 +22,57 @@
             const required = getRequiredSchedules();
             const current = getCurrentScheduleCount();
             
-            // First, basic count validation
+            // First, basic count validation (optional if no schedule items added)
             let countValid = true;
-            if (required > 0) {
+            if (required > 0 && current > 0) {
                 if (current !== required) countValid = false;
             }
 
             // Perform full validation (incompleteness + conflicts)
             const validation = validateAllSchedules();
             
-            if (required <= 0) {
-                scheduleCountInfo.style.display = validation.isComplete && !validation.hasConflicts ? 'none' : 'block';
-                addButton.style.display = '';
-            } else {
-                scheduleCountInfo.style.display = 'block';
-            }
+            if (scheduleCountInfo && scheduleCountText) {
+                if (required <= 0 || current === 0) {
+                    scheduleCountInfo.style.display = (current > 0 && (!validation.isComplete || validation.hasConflicts)) ? 'block' : 'none';
+                    addButton.style.display = '';
+                } else {
+                    scheduleCountInfo.style.display = 'block';
+                }
 
-            // Update UI based on results
-            if (required > 0 && current < required) {
-                scheduleCountInfo.className = 'alert alert-warning py-2 mb-3';
-                scheduleCountText.textContent = "{{ __('center::courses.schedules_count_info', ['required' => '__REQ__', 'current' => '__CUR__']) }}"
-                    .replace('__REQ__', required)
-                    .replace('__CUR__', current);
-                addButton.style.display = '';
-            } else if (required > 0 && current > required) {
-                scheduleCountInfo.className = 'alert alert-danger py-2 mb-3';
-                scheduleCountText.textContent = "{{ __('center::courses.schedules_count_info', ['required' => '__REQ__', 'current' => '__CUR__']) }}"
-                    .replace('__REQ__', required)
-                    .replace('__CUR__', current);
-                addButton.style.display = 'none';
-            } else if (!validation.isComplete) {
-                scheduleCountInfo.className = 'alert alert-warning py-2 mb-3';
-                scheduleCountText.textContent = "{{ __('center::schedules.incomplete_schedules') }}";
-                addButton.style.display = (required > 0) ? 'none' : '';
-            } else if (validation.hasConflicts) {
-                scheduleCountInfo.className = 'alert alert-danger py-2 mb-3';
-                scheduleCountText.textContent = "{{ __('center::schedules.conflict_error') }}";
-                addButton.style.display = (required > 0) ? 'none' : '';
-            } else if (required > 0 && current === required) {
-                scheduleCountInfo.className = 'alert alert-success py-2 mb-3';
-                scheduleCountText.textContent = "{{ __('center::courses.schedules_count_complete') }}";
-                addButton.style.display = 'none';
-            } else {
-                scheduleCountInfo.style.display = 'none';
+                // Update UI based on results
+                if (required > 0 && current > 0 && current < required) {
+                    scheduleCountInfo.className = 'p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-300 text-xs mb-3';
+                    scheduleCountText.textContent = "{{ __('center::courses.schedules_count_info', ['required' => '__REQ__', 'current' => '__CUR__']) }}"
+                        .replace('__REQ__', required)
+                        .replace('__CUR__', current);
+                    addButton.style.display = '';
+                } else if (required > 0 && current > required) {
+                    scheduleCountInfo.className = 'p-3 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-300 text-xs mb-3';
+                    scheduleCountText.textContent = "{{ __('center::courses.schedules_count_info', ['required' => '__REQ__', 'current' => '__CUR__']) }}"
+                        .replace('__REQ__', required)
+                        .replace('__CUR__', current);
+                    addButton.style.display = 'none';
+                } else if (current > 0 && !validation.isComplete) {
+                    scheduleCountInfo.className = 'p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-300 text-xs mb-3';
+                    scheduleCountText.textContent = "{{ __('center::schedules.incomplete_schedules') }}";
+                    addButton.style.display = (required > 0) ? 'none' : '';
+                } else if (current > 0 && validation.hasConflicts) {
+                    scheduleCountInfo.className = 'p-3 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-300 text-xs mb-3';
+                    scheduleCountText.textContent = "{{ __('center::schedules.conflict_error') }}";
+                    addButton.style.display = (required > 0) ? 'none' : '';
+                } else if (required > 0 && current === required) {
+                    scheduleCountInfo.className = 'p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 text-xs mb-3';
+                    scheduleCountText.textContent = "{{ __('center::courses.schedules_count_complete') }}";
+                    addButton.style.display = 'none';
+                } else {
+                    scheduleCountInfo.style.display = 'none';
+                }
             }
 
             // Final submit button control
-            const canSubmit = countValid && validation.isComplete && !validation.hasConflicts;
-            submitBtn.disabled = !canSubmit;
-            if (canSubmit) {
-                submitBtn.classList.remove('btn-secondary');
-                submitBtn.classList.add('btn-primary');
-            } else {
-                submitBtn.classList.remove('btn-primary');
-                submitBtn.classList.add('btn-secondary');
+            const canSubmit = countValid && (current === 0 || (validation.isComplete && !validation.hasConflicts));
+            if (submitBtn) {
+                submitBtn.disabled = !canSubmit;
             }
         }
 

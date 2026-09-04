@@ -140,16 +140,28 @@
                 window.dispatchEvent(new CustomEvent('close-modal', { detail: 'quick-instructor-modal' }));
                 form.reset();
 
+                // Update select in quick course modal if present
+                const quickCourseSelect = document.getElementById('quick_course_instructor_id');
+                if (quickCourseSelect) {
+                    quickCourseSelect.appendChild(new Option(data.instructor.name, data.instructor.id, true, true));
+                    quickCourseSelect.value = data.instructor.id;
+                }
+
                 if (typeof Swal !== 'undefined') {
                     Swal.fire({
                         icon: 'success',
-                        title: 'تمت إضافة المدرس',
+                        title: 'تمت إضافة المدرس بنجاح 🎉',
                         text: data.message || '',
                         toast: true,
                         position: 'top-end',
-                        timer: 2500,
+                        timer: 2000,
                         showConfirmButton: false
                     });
+                }
+
+                // If on dashboard, reload to update launchpad progress
+                if (document.getElementById('quick-course-modal') || document.getElementById('demoDataForm') || document.getElementById('deleteDemoDataForm')) {
+                    setTimeout(() => window.location.reload(), 1000);
                 }
             } catch (error) {
                 console.error('Quick instructor error:', error);
