@@ -146,14 +146,7 @@ class RegistrationController extends Controller
                 }
             }
 
-            // Auto-Provisioning: Inject Demo Data for new centers (non-critical)
-            try {
-                \Modules\Tenancy\Services\TenantResolver::set($tenant);
-                app(\App\Services\DemoDataService::class)->seedForTenant($tenant);
-                \Illuminate\Support\Facades\Log::info("Auto-Provisioning: Demo data seeded for tenant {$tenant->domain}");
-            } catch (\Throwable $e) {
-                \Illuminate\Support\Facades\Log::error('Auto-Provisioning Error (Demo Data): '.$e->getMessage());
-            }
+            // New centers start completely clean (0 students, 0 courses) for a real onboarding experience
 
             // Auto-Provisioning: Cloudflare DNS Automation (Mocked/Prepared)
             try {
