@@ -30,24 +30,6 @@
                         </button>
                     </div>
 
-                    <!-- Currency Selector -->
-                    <div class="flex items-center gap-2 mb-5 bg-slate-50 rounded-xl p-2.5 border border-slate-100">
-                        <i class="bi bi-globe2 text-slate-400 text-sm"></i>
-                        <span class="text-xs font-semibold text-slate-500 font-arabic">{{ __('auth.plan_modal.billing_region') }}</span>
-                        <div class="relative flex-1" dir="ltr">
-                            <select x-model="selectedCurrency" 
-                                    class="w-full h-8 px-3 bg-white border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#2E8B83]/20 focus:border-[#2E8B83] appearance-none cursor-pointer">
-                                <option value="EGP">Egypt (EGP)</option>
-                                <option value="SAR">Saudi Arabia (SAR)</option>
-                                <option value="AED">UAE (AED)</option>
-                                <option value="EUR">Europe (EUR)</option>
-                                <option value="USD">Global (USD)</option>
-                            </select>
-                            <div class="absolute inset-y-0 right-2 flex items-center pointer-events-none">
-                                <i class="bi bi-chevron-down text-[10px] text-slate-400"></i>
-                            </div>
-                        </div>
-                    </div>
 
                     <!-- Billing Cycle Toggle -->
                     <div class="flex justify-center">
