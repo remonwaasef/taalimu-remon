@@ -35,6 +35,11 @@ return [
         'have_coupon' => 'Avez-vous un coupon ?',
         'hide' => 'Masquer',
         'confirm_password' => 'Confirmez le mot de passe',
+        'billing_monthly' => 'Mensuel',
+        'billing_term' => 'Trimestriel',
+        'billing_yearly' => 'Annuel',
+        'secure' => 'Sécurisé et Chiffré',
+        'flexible' => 'Sans Engagement',
         'password_criteria' => [
             'chars' => '8+ caractères',
             'upper' => 'Majuscule',

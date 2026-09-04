@@ -50,10 +50,15 @@ return [
         'discount_applied' => 'Discount Applied:',
         'save' => 'Save',
         'join_leaders' => 'Join the education leaders today.',
-        'show' => 'SHOW',
+        'show' => 'Show',
         'have_coupon' => 'Have a coupon code?',
-        'hide' => 'HIDE',
+        'hide' => 'Hide',
         'confirm_password' => 'Confirm Password',
+        'billing_monthly' => 'Monthly',
+        'billing_term' => 'Term',
+        'billing_yearly' => 'Yearly',
+        'secure' => 'Secure & Encrypted',
+        'flexible' => 'Cancel Anytime',
         'password_criteria' => [
             'chars' => '8+ Chars',
             'upper' => 'ABC',
@@ -203,6 +208,7 @@ return [
     // Guarantee & Trust
     'guarantee' => [
         'money_back' => '30-Day Money-Back Guarantee.',
+        'trial_reassurance' => 'No credit card required • Instant setup • Cancel anytime',
         'secure' => 'Secure',
         'flexible' => 'Flexible',
     ],

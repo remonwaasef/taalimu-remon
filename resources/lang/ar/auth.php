@@ -54,6 +54,11 @@ return [
         'have_coupon' => 'هل لديك كود خصم؟',
         'hide' => 'إخفاء',
         'confirm_password' => 'تأكيد كلمة المرور',
+        'billing_monthly' => 'شهري',
+        'billing_term' => 'فصلي',
+        'billing_yearly' => 'سنوي',
+        'secure' => 'آمن ومشفر',
+        'flexible' => 'بدون التزام',
         'password_criteria' => [
             'chars' => '8+ رموز',
             'upper' => 'حرف كبير',
@@ -203,6 +208,7 @@ return [
     // Guarantee & Trust
     'guarantee' => [
         'money_back' => 'ضمان استرجاع الأموال خلال 30 يوماً.',
+        'trial_reassurance' => 'لا يتطلب بطاقة ائتمان • تفعيل فوري لمنصتك • إلغاء في أي وقت',
         'secure' => 'آمن',
         'flexible' => 'مرن',
     ],
