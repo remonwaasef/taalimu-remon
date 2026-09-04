@@ -38,6 +38,10 @@ trait ClearsDashboardCache
 
         if ($tenantId) {
             CenterAnalyticsQuery::clearCacheForTenant($tenantId);
+            \App\Support\TenantCache::forget('dashboard_stats_v3');
+            \App\Support\TenantCache::forget('active_instructors_count');
+            \App\Support\TenantCache::forget('recent_activities');
+            \App\Support\TenantCache::forget("dashboard_ai_insights_v3_{$tenantId}");
         }
     }
 
@@ -49,6 +53,10 @@ trait ClearsDashboardCache
         $tenantId = app()->bound('tenant') ? app('tenant')->id : null;
         if ($tenantId) {
             CenterAnalyticsQuery::clearCacheForTenant($tenantId);
+            \App\Support\TenantCache::forget('dashboard_stats_v3');
+            \App\Support\TenantCache::forget('active_instructors_count');
+            \App\Support\TenantCache::forget('recent_activities');
+            \App\Support\TenantCache::forget("dashboard_ai_insights_v3_{$tenantId}");
         }
     }
 }

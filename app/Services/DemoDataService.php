@@ -175,6 +175,10 @@ class DemoDataService
                     $instructor->delete();
                 }
 
+                // 3. Delete Demo Academic Structure
+                Grade::where('tenant_id', $tenant->id)->where('name', 'الصف الثالث الثانوي')->delete();
+                Stage::where('tenant_id', $tenant->id)->where('name', 'المرحلة الثانوية')->delete();
+
                 return true;
             });
         } finally {
@@ -184,6 +188,10 @@ class DemoDataService
             \Illuminate\Support\Facades\Cache::forget("tenant_{$tenant->id}_usage_max_students");
             \Illuminate\Support\Facades\Cache::forget("tenant_{$tenant->id}_usage_max_instructors");
             \Illuminate\Support\Facades\Cache::forget("tenant_{$tenant->id}_usage_max_courses");
+            \App\Support\TenantCache::forget('dashboard_stats_v3');
+            \App\Support\TenantCache::forget('active_instructors_count');
+            \App\Support\TenantCache::forget('recent_activities');
+            \App\Support\TenantCache::forget("dashboard_ai_insights_v3_{$tenant->id}");
         }
     }
 }
