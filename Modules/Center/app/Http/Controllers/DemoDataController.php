@@ -16,15 +16,17 @@ class DemoDataController extends Controller
     public function __construct(DemoDataService $demoService)
     {
         $this->demoService = $demoService;
-        $this->middleware(function ($request, $next) {
-            abort_if(! auth()->user() || ! auth()->user()->hasRole('center_admin'), 403, 'Unauthorized action.');
+    }
 
-            return $next($request);
-        });
+    protected function authorizeAdmin(): void
+    {
+        $user = auth()->user();
+        abort_if(! $user || ! ($user->role === 'center_admin' || $user->hasRole('center_admin') || $user->role === 'admin'), 403, 'Unauthorized action.');
     }
 
     public function seed(Request $request)
     {
+        $this->authorizeAdmin();
         $tenant = app('tenant');
 
         try {
@@ -45,6 +47,7 @@ class DemoDataController extends Controller
 
     public function destroy(Request $request)
     {
+        $this->authorizeAdmin();
         $tenant = app('tenant');
 
         try {
