@@ -125,7 +125,7 @@ function removeScreenshot() {
     
     const small = document.createElement('small');
     small.style.color = '#94a3b8';
-    small.textContent = '{{ app()->getLocale() == "ar" ? "لم يتم إرفاق صورة" : "No screenshot attached" }}';
+    small.textContent = '{{ __('center::messages.bug_report.no_screenshot') }}';
     
     loading.appendChild(div);
     loading.appendChild(small);

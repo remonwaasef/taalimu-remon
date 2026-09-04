@@ -7,7 +7,7 @@
                                     ? 'bg-white text-brand-secondary shadow-sm border border-brand-secondary/15' 
                                     : 'text-slate-400 hover:text-slate-600'">
                             <i class="fas fa-university text-[11px]"></i>
-                            {{ app()->isLocale('ar') ? 'مركز تعليمي' : 'Center' }}
+                            {{ __('auth.registration_steps.center') }}
                         </button>
                         <button type="button" @click="accountType = 'instructor'"
                                 class="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[11px] font-black transition-all duration-200"
@@ -15,7 +15,7 @@
                                     ? 'bg-white text-brand-secondary shadow-sm border border-brand-secondary/15' 
                                     : 'text-slate-400 hover:text-slate-600'">
                             <i class="fas fa-chalkboard-teacher text-[11px]"></i>
-                            {{ app()->isLocale('ar') ? 'مدرس مستقل' : 'Tutor' }}
+                            {{ __('auth.registration_steps.tutor') }}
                         </button>
                     </div>
                 </div>

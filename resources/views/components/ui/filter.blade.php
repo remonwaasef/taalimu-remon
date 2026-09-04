@@ -11,7 +11,7 @@
     <ul class="dropdown-menu shadow border-0 mt-2 rounded-3">
         <li>
             <a class="dropdown-item {{ !request($name) ? 'active' : '' }}" href="{{ request()->fullUrlWithQuery([$name => null]) }}">
-                All
+                {{ __('ui.filter.all') }}
             </a>
         </li>
         @foreach($options as $value => $text)

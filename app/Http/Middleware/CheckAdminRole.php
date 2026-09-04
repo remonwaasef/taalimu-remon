@@ -15,7 +15,7 @@ class CheckAdminRole
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $user = auth()->user();
+        $user = auth('admin')->user();
 
         if (! $user) {
             abort(403, 'USER DOES NOT HAVE THE RIGHT ROLES.');

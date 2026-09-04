@@ -38,7 +38,7 @@ class ActivityLogTest extends TestCase
 
     public function test_user_creation_is_logged()
     {
-        $this->actingAs($this->admin);
+        $this->actingAs($this->admin, 'admin');
 
         $user = User::factory()->create([
             'name' => 'New User',
@@ -57,7 +57,7 @@ class ActivityLogTest extends TestCase
 
     public function test_user_update_is_logged()
     {
-        $this->actingAs($this->admin);
+        $this->actingAs($this->admin, 'admin');
 
         $user = User::factory()->create([
             'name' => 'Old Name',
@@ -80,7 +80,7 @@ class ActivityLogTest extends TestCase
 
     public function test_admin_can_view_activity_logs()
     {
-        $this->actingAs($this->admin);
+        $this->actingAs($this->admin, 'admin');
 
         // Create some activity
         User::factory()->create(['tenant_id' => $this->tenant->id]);

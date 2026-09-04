@@ -23,7 +23,7 @@
 <option value="252">🇸🇴 الصومال +252</option>
 <option value="269">🇰🇲 جزر القمر +269</option>
 {{-- Separator --}}
-<option disabled>──── {{ app()->isLocale('ar') ? 'أفريقيا' : 'Africa' }} ────</option>
+<option disabled>──── {{ __('auth.regions.africa') }} ────</option>
 <option value="27">🇿🇦 South Africa +27</option>
 <option value="234">🇳🇬 Nigeria +234</option>
 <option value="254">🇰🇪 Kenya +254</option>
@@ -48,7 +48,7 @@
 <option value="244">🇦🇴 Angola +244</option>
 <option value="230">🇲🇺 Mauritius +230</option>
 {{-- Separator --}}
-<option disabled>──── {{ app()->isLocale('ar') ? 'أوروبا' : 'Europe' }} ────</option>
+<option disabled>──── {{ __('auth.regions.europe') }} ────</option>
 <option value="44">🇬🇧 UK +44</option>
 <option value="33">🇫🇷 France +33</option>
 <option value="49">🇩🇪 Germany +49</option>
@@ -80,7 +80,7 @@
 <option value="371">🇱🇻 Latvia +371</option>
 <option value="372">🇪🇪 Estonia +372</option>
 {{-- Separator --}}
-<option disabled>──── {{ app()->isLocale('ar') ? 'آسيا' : 'Asia' }} ────</option>
+<option disabled>──── {{ __('auth.regions.asia') }} ────</option>
 <option value="90">🇹🇷 Turkey +90</option>
 <option value="98">🇮🇷 Iran +98</option>
 <option value="92">🇵🇰 Pakistan +92</option>
@@ -107,7 +107,7 @@
 <option value="95">🇲🇲 Myanmar +95</option>
 <option value="855">🇰🇭 Cambodia +855</option>
 {{-- Separator --}}
-<option disabled>──── {{ app()->isLocale('ar') ? 'أمريكا' : 'Americas' }} ────</option>
+<option disabled>──── {{ __('auth.regions.americas') }} ────</option>
 <option value="1">🇺🇸 USA / Canada +1</option>
 <option value="52">🇲🇽 Mexico +52</option>
 <option value="55">🇧🇷 Brazil +55</option>
@@ -124,6 +124,6 @@
 <option value="506">🇨🇷 Costa Rica +506</option>
 <option value="598">🇺🇾 Uruguay +598</option>
 {{-- Separator --}}
-<option disabled>──── {{ app()->isLocale('ar') ? 'أوقيانوسيا' : 'Oceania' }} ────</option>
+<option disabled>──── {{ __('auth.regions.oceania') }} ────</option>
 <option value="61">🇦🇺 Australia +61</option>
 <option value="64">🇳🇿 New Zealand +64</option>

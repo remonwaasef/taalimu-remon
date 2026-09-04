@@ -28,12 +28,12 @@ class Student extends Model
 
     public function clearCache()
     {
-        cache()->forget('student_profile_'.$this->id);
+        cache()->forget("tenant_{$this->tenant_id}:student_profile_{$this->id}");
     }
 
     public function getCachedProfile()
     {
-        return cache()->remember('student_profile_'.$this->id, now()->addHours(6), function () {
+        return cache()->remember("tenant_{$this->tenant_id}:student_profile_{$this->id}", now()->addHours(6), function () {
             return $this->load(['user', 'grade']);
         });
     }

@@ -1,6 +1,21 @@
 <?php
 
 return [
+    // Onboarding Wizard
+    'onboarding_wizard' => [
+        'error_title' => 'Oops, an error occurred',
+        'session_expired' => 'Session expired. Please log in again.',
+        'ok' => 'OK',
+    ],
+    // Bug Report Widget
+    'bug_report' => [
+        'screenshot' => 'Screenshot',
+        'capturing' => 'Capturing screenshot...',
+        'remove' => 'Remove',
+        'change' => 'Change',
+        'retake' => 'Retake',
+        'no_screenshot' => 'No screenshot attached',
+    ],
     'validation_error' => 'Please review the following errors:',
     'back' => 'Back',
     'first_instructor_onboarding' => 'Great job! The first instructor has been added. Now, let\'s create your first training course.',

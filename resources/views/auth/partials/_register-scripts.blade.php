@@ -27,7 +27,7 @@ document.addEventListener('alpine:init', () => {
         showPlanModal: false,
         formSubmitted: false,
         phoneVerified: false,
-        countryCode: '{{ old("country_code", app()->getLocale() === "fr" ? "33" : "20") }}',
+        countryCode: '{{ old("country_code", app()->getLocale() === 'fr' ? '33' : '20') }}',
         otpSent: false,
         otpCode: '',
         otpStatus: 'idle',
@@ -214,7 +214,7 @@ document.addEventListener('alpine:init', () => {
 
         async sendPhoneOtp() {
             if (!this.phone || this.phone.length < 10) {
-                this.otpMessage = {{ Js::from(app()->isLocale('ar') ? 'يرجى إدخال رقم هاتف صحيح' : 'Please enter a valid phone number') }};
+                this.otpMessage = {{ Js::from(__('auth.google_registration.invalid_phone')) }};
                 this.otpStatus = 'error';
                 return;
             }
@@ -239,7 +239,7 @@ document.addEventListener('alpine:init', () => {
                 }
             } catch (e) {
                 this.otpStatus = 'error';
-                this.otpMessage = {{ Js::from(app()->isLocale('ar') ? 'حدث خطأ. حاول مرة أخرى.' : 'An error occurred. Please try again.') }};
+                this.otpMessage = {{ Js::from(__('auth.google_registration.error_occurred')) }};
             } finally {
                 this.isSendingOtp = false;
             }
@@ -267,7 +267,7 @@ document.addEventListener('alpine:init', () => {
                 }
             } catch (e) {
                 this.otpStatus = 'error';
-                this.otpMessage = {{ Js::from(app()->isLocale('ar') ? 'حدث خطأ. حاول مرة أخرى.' : 'An error occurred. Please try again.') }};
+                this.otpMessage = {{ Js::from(__('auth.google_registration.error_occurred')) }};
             } finally {
                 this.isVerifyingOtp = false;
             }
@@ -295,11 +295,11 @@ document.addEventListener('alpine:init', () => {
             // New logic: Step 1 is Center Details
             if (this.currentStep === 1) {
                 if (!this.centerName || !this.subdomain) {
-                    alert('{{ app()->getLocale() == 'ar' ? 'يرجى إدخال اسم المركز والرابط' : 'Please enter center name and subdomain' }}');
+                    alert('{{ __('auth.validation.enter_center_name') }}');
                     return;
                 }
                 if (this.subdomainStatus === 'invalid') {
-                    alert('{{ app()->getLocale() == 'ar' ? 'هذا الرابط مستخدم بالفعل' : 'This subdomain is already taken' }}');
+                    alert('{{ __('auth.validation.subdomain_taken') }}');
                     return;
                 }
                 this.currentStep = 2;

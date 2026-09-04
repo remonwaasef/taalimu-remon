@@ -21,7 +21,7 @@ use Modules\Admin\Http\Controllers\TenantController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
     // Guest Routes
-    Route::middleware('guest')->group(function () {
+    Route::middleware('guest:admin')->group(function () {
         Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
         Route::post('login', [AuthController::class, 'login'])
             ->middleware('throttle:login')
@@ -33,7 +33,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     });
 
     // Protected Routes (General Auth - accessible while impersonating)
-    Route::middleware(['auth'])->group(function () {
+    Route::middleware(['auth:admin'])->group(function () {
         Route::get('impersonate/stop', [TenantController::class, 'stopImpersonating'])->name('impersonate.stop');
     });
 
@@ -41,7 +41,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('impersonate/return', [TenantController::class, 'returnFromImpersonation'])->name('impersonate.return');
 
     // Protected Routes (Super Admin Only)
-    Route::middleware(['auth', \App\Http\Middleware\CheckAdminRole::class])->group(function () {
+    Route::middleware(['auth:admin', \App\Http\Middleware\CheckAdminRole::class])->group(function () {
         Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
         Route::get('/', [AdminController::class, 'index'])->name('dashboard');

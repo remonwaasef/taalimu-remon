@@ -85,7 +85,7 @@ class TicketSystemTest extends TestCase
         ]);
 
         // 2. Login as Super Admin
-        $this->actingAs($this->admin);
+        $this->actingAs($this->admin, 'admin');
 
         // 3. View Ticket
         $response = $this->get(route('admin.tickets.show', $ticket->id));
@@ -113,7 +113,7 @@ class TicketSystemTest extends TestCase
             'status' => 'open',
         ]);
 
-        $this->actingAs($this->admin);
+        $this->actingAs($this->admin, 'admin');
 
         $response = $this->post(route('admin.tickets.close', $ticket->id));
 

@@ -23,7 +23,7 @@ document.addEventListener('alpine:init', () => {
 
         showPlanModal: false,
         phoneNumber: '{{ old("phone") }}',
-        countryCode: '{{ old("country_code", app()->getLocale() === "fr" ? "33" : "20") }}',
+        countryCode: '{{ old("country_code", app()->getLocale() === 'fr' ? '33' : '20') }}',
         phoneVerified: false,
         otpSent: false,
         otpCode: '',
@@ -147,7 +147,7 @@ document.addEventListener('alpine:init', () => {
 
         async sendOtp() {
             if (!this.phoneNumber || this.phoneNumber.length < 10) {
-                this.otpMessage = {{ Js::from(app()->isLocale('ar') ? 'يرجى إدخال رقم هاتف صحيح' : 'Please enter a valid phone number') }};
+                this.otpMessage = {{ Js::from(__('auth.validation.invalid_phone')) }};
                 this.otpStatus = 'error';
                 return;
             }
@@ -172,7 +172,7 @@ document.addEventListener('alpine:init', () => {
                 }
             } catch (e) {
                 this.otpStatus = 'error';
-                this.otpMessage = {{ Js::from(app()->isLocale('ar') ? 'حدث خطأ. حاول مرة أخرى.' : 'An error occurred. Please try again.') }};
+                this.otpMessage = {{ Js::from(__('auth.validation.error_occurred')) }};
             } finally {
                 this.isSendingOtp = false;
             }
@@ -200,7 +200,7 @@ document.addEventListener('alpine:init', () => {
                 }
             } catch (e) {
                 this.otpStatus = 'error';
-                this.otpMessage = {{ Js::from(app()->isLocale('ar') ? 'حدث خطأ. حاول مرة أخرى.' : 'An error occurred. Please try again.') }};
+                this.otpMessage = {{ Js::from(__('auth.validation.error_occurred')) }};
             } finally {
                 this.isVerifyingOtp = false;
             }
@@ -289,7 +289,7 @@ document.addEventListener('alpine:init', () => {
             }
             if (this.subdomainStatus === 'invalid') {
                 e.preventDefault();
-                alert('{{ app()->getLocale() == 'ar' ? 'هذا الرابط مستخدم بالفعل' : 'This subdomain is already taken' }}');
+                alert('{{ __('auth.validation.subdomain_taken') }}');
                 return;
             }
             this.isSubmitting = true;
@@ -349,10 +349,10 @@ window.addEventListener('pageshow', (event) => {
 
                     <div class="mb-8">
                         <h1 class="text-2xl font-black text-slate-900 mb-2 font-arabic leading-tight">
-                            {{ app()->isLocale('ar') ? 'تأكيد الحساب' : 'Confirm Account' }}
+                            {{ __('auth.google_registration.confirm_account') }}
                         </h1>
                         <p class="text-slate-500 text-xs font-arabic font-medium opacity-80 leading-relaxed">
-                            {{ app()->isLocale('ar') ? 'خطوة واحدة لنبدأ في تجهيز منصتك التعليمية' : 'One last step to complete your platform setup' }}
+                            {{ __('auth.google_registration.setup_complete') }}
                         </p>
                     </div>
 
@@ -363,7 +363,7 @@ window.addEventListener('pageshow', (event) => {
                                 <div class="flex items-center gap-2 mb-1">
                                     <span class="text-[11px] font-black text-slate-400 uppercase tracking-widest">{{ __('auth.register.selected_plan') }}</span>
                                     <button type="button" @click="showPlanModal = true" class="text-[11px] font-black text-brand-secondary underline hover:opacity-70 transition-opacity uppercase tracking-widest">
-                                        {{ app()->getLocale() == 'ar' ? 'تغيير' : 'Change' }}
+                                        {{ __('auth.google_registration.change') }}
                                     </button>
                                 </div>
                                 <h3 class="text-xl font-black text-slate-900 font-arabic">
@@ -376,7 +376,7 @@ window.addEventListener('pageshow', (event) => {
                         <!-- Mini Features List -->
                         <div x-data="{ openFeatures: false }" class="py-3 border-y border-slate-50">
                             <button type="button" @click="openFeatures = !openFeatures" class="w-full flex items-center justify-center gap-2 text-[12px] font-black text-slate-700 font-arabic hover:text-brand-secondary transition-colors pb-2 cursor-pointer">
-                                <span>{{ app()->isLocale('ar') ? 'عرض المميزات' : 'View Features' }}</span>
+                                <span>{{ __('auth.google_registration.view_features') }}</span>
                                 <i class="bi bi-chevron-down transition-transform duration-300 transform" :class="openFeatures ? 'rotate-180' : ''"></i>
                             </button>
                             <div x-show="openFeatures" x-transition.opacity.duration.300ms class="space-y-2 pt-2 border-t border-slate-50">
@@ -392,13 +392,13 @@ window.addEventListener('pageshow', (event) => {
                         <!-- Price & Switcher -->
                         <div class="pt-2">
                             <div class="flex items-center justify-between mb-4">
-                                <span class="text-sm font-black text-slate-500 uppercase tracking-wide">{{ app()->getLocale() == 'ar' ? 'الإجمالي' : 'Total' }}</span>
+                                <span class="text-sm font-black text-slate-500 uppercase tracking-wide">{{ __('auth.register.total') ?? 'Total' }}</span>
                                 <div class="text-right">
                                     <template x-if="currentPlan.trial_days > 0 && couponStatus !== 'valid'">
                                         <div class="flex items-center justify-end mb-2 animate-fade-in">
                                             <span class="text-[11px] font-black bg-emerald-50 text-emerald-600 px-3 py-1 rounded-lg border border-emerald-100 uppercase tracking-wider inline-flex items-center gap-1.5 shadow-sm">
                                                 <i class="bi bi-gift-fill text-[11px]"></i>
-                                                <span x-text="currentPlan.trial_days"></span> {{ app()->isLocale('ar') ? 'أيام مجانية' : 'Days Free' }}
+                                                <span x-text="currentPlan.trial_days"></span> {{ __('auth.google_registration.days_free') }}
                                             </span>
                                         </div>
                                     </template>
@@ -413,35 +413,35 @@ window.addEventListener('pageshow', (event) => {
                                                     <span>- <span x-text="couponDiscountAmount.toLocaleString()"></span></span>
                                                 </template>
                                                 <template x-if="couponStatus !== 'valid' && currentPriceData.old_price_raw > finalPrice">
-                                                    <span>{{ app()->isLocale('ar') ? 'خصم متاح' : 'Discount' }}</span>
+                                                    <span>{{ __('auth.google_registration.discount_available') }}</span>
                                                 </template>
                                             </span>
                                         </div>
                                     </template>
                                     <div class="flex items-baseline gap-1 justify-end" :class="currentPlan.trial_days > 0 ? 'text-emerald-500' : 'text-brand-secondary'">
                                         <span class="text-3xl font-black tracking-tighter" x-text="currentPlan.trial_days > 0 ? '0' : finalPrice.toLocaleString()"></span>
-                                        <span class="text-sm font-bold opacity-60" x-text="currentPlan.trial_days > 0 ? ({{ app()->isLocale('ar') ? '\'مجاناً\'' : '\'FREE\'' }}) : currentPriceData.currency"></span>
+                                        <span class="text-sm font-bold opacity-60" x-text="currentPlan.trial_days > 0 ? ({{ Js::from(__('auth.google_registration.free')) }}) : currentPriceData.currency"></span>
                                     </div>
-                                    <span class="text-[11px] font-black text-slate-400 uppercase tracking-widest" x-text="'/ ' + (billingCycle === 'yearly' ? '{{ app()->getLocale() == 'ar' ? 'سنة' : 'year' }}' : (billingCycle === 'term' ? '{{ app()->getLocale() == 'ar' ? 'ترم' : 'term' }}' : '{{ app()->getLocale() == 'ar' ? 'شهر' : 'month' }}'))"></span>
+                                    <span class="text-[11px] font-black text-slate-400 uppercase tracking-widest" x-text="'/ ' + (billingCycle === 'yearly' ? '{{ __('auth.register.billing_yearly_short') ?? 'year' }}' : (billingCycle === 'term' ? '{{ __('auth.register.billing_term') ?? 'term' }}' : '{{ __('auth.register.billing_monthly_short') ?? 'month' }}'))"></span>
                                 </div>
                             </div>
                             
                             <div class="flex p-1 bg-slate-100 rounded-xl items-center">
-                                <button type="button" @click="billingCycle = 'monthly'" 
-                                        class="flex-1 py-2 min-h-[40px] text-[11px] font-black rounded-lg transition-all"
-                                        :class="billingCycle === 'monthly' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:bg-slate-50'">
-                                    {{ app()->getLocale() == 'ar' ? 'شهري' : 'Month' }}
-                                </button>
-                                <button type="button" @click="billingCycle = 'term'" 
-                                        class="flex-1 py-2 min-h-[40px] text-[11px] font-black rounded-lg transition-all"
-                                        :class="billingCycle === 'term' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:bg-slate-50'">
-                                    {{ app()->getLocale() == 'ar' ? 'ترم' : 'Term' }}
-                                </button>
-                                <button type="button" @click="billingCycle = 'yearly'" 
-                                        class="flex-1 py-2 min-h-[40px] text-[11px] font-black rounded-lg transition-all"
-                                        :class="billingCycle === 'yearly' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:bg-slate-50'">
-                                    {{ app()->getLocale() == 'ar' ? 'سنوي' : 'Yearly' }}
-                                </button>
+                                    <button type="button" @click="billingCycle = 'monthly'" 
+                                            class="flex-1 py-2 min-h-[40px] text-[11px] font-black rounded-lg transition-all"
+                                            :class="billingCycle === 'monthly' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:bg-slate-50'">
+                                        {{ __('auth.register.billing_monthly') ?? 'Month' }}
+                                    </button>
+                                    <button type="button" @click="billingCycle = 'term'" 
+                                            class="flex-1 py-2 min-h-[40px] text-[11px] font-black rounded-lg transition-all"
+                                            :class="billingCycle === 'term' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:bg-slate-50'">
+                                        {{ __('auth.register.billing_term') ?? 'Term' }}
+                                    </button>
+                                    <button type="button" @click="billingCycle = 'yearly'" 
+                                            class="flex-1 py-2 min-h-[40px] text-[11px] font-black rounded-lg transition-all"
+                                            :class="billingCycle === 'yearly' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:bg-slate-50'">
+                                        {{ __('auth.register.billing_yearly') ?? 'Yearly' }}
+                                    </button>
                             </div>
                         </div>
                     </div>
@@ -449,7 +449,7 @@ window.addEventListener('pageshow', (event) => {
 
                 <div class="hidden lg:flex items-center gap-3 text-slate-400 text-[11px] font-bold opacity-40 px-6">
                     <i class="bi bi-shield-check text-emerald-500 text-sm"></i>
-                    <span>{{ app()->getLocale() == 'ar' ? 'جميع البيانات مشفرة وآمنة تماماً' : 'All data is encrypted and secure' }}</span>
+                    <span>{{ __('auth.register.all_data_secure') ?? 'All data is encrypted and secure' }}</span>
                 </div>
             </div>
 
@@ -481,7 +481,7 @@ window.addEventListener('pageshow', (event) => {
                     {{-- Center Name --}}
                     <div class="space-y-1">
                         <label class="text-[12px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">
-                            <span x-text="accountType === 'center' ? '{{ __('auth.register.center_name') }}' : ({{ Js::from(app()->isLocale('ar') ? 'اسم المدرس / المنصة' : 'Teacher / Platform Name') }})"></span>
+                            <span x-text="accountType === 'center' ? '{{ __('auth.register.center_name') }}' : ({{ Js::from(__('auth.registration_steps.teacher_name')) }})"></span>
                         </label>
                         <div class="relative group">
                             <div class="absolute inset-y-0 start-0 ps-4 flex items-center pointer-events-none text-slate-300 group-focus-within:text-brand-secondary transition-colors"><i class="bi bi-building"></i></div>
@@ -494,7 +494,7 @@ window.addEventListener('pageshow', (event) => {
 
                     {{-- Subdomain Field --}}
                     <div class="space-y-1">
-                        <label class="text-[12px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">{{ app()->isLocale('ar') ? 'رابط المنصة' : 'Platform Link' }}</label>
+                        <label class="text-[12px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">{{ __('auth.registration_steps.platform_link') }}</label>
                         <div class="relative flex items-center w-full group" dir="ltr">
                             <div class="absolute left-0 inset-y-0 hidden sm:flex items-center px-3 pointer-events-none text-brand-secondary font-black text-[11px] bg-brand-secondary/5 border-r border-brand-secondary/10 rounded-l-xl">https://</div>
                             <input type="text" name="subdomain" x-model="subdomain"
@@ -517,7 +517,7 @@ window.addEventListener('pageshow', (event) => {
 
                     {{-- Phone Field with OTP Verification --}}
                     <div class="space-y-1.5">
-                        <label class="text-[12px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">{{ __('auth.register.phone') }} <span class="text-[11px] font-normal text-slate-300">({{ app()->getLocale() == 'ar' ? 'اختياري' : 'Optional' }})</span></label>
+                        <label class="text-[12px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">{{ __('auth.register.phone') }} <span class="text-[11px] font-normal text-slate-300">({{ __('auth.register.optional') ?? 'Optional' }})</span></label>
                         
                         {{-- Country Code + Phone Input + Send OTP Button --}}
                         <div class="relative flex gap-2">
@@ -563,7 +563,7 @@ window.addEventListener('pageshow', (event) => {
                                 <button type="button" @click="validateCoupon()" :disabled="isApplyingCoupon || !couponCode"
                                         class="h-11 px-6 rounded-xl bg-slate-900 text-white font-black text-[11px] uppercase tracking-widest hover:bg-brand-secondary transition-all disabled:opacity-50 flex items-center justify-center min-w-[80px]">
                                     <template x-if="isApplyingCoupon"><div class="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></div></template>
-                                    <span x-show="!isApplyingCoupon">{{ app()->isLocale('ar') ? 'تطبيق' : 'Apply' }}</span>
+                                    <span x-show="!isApplyingCoupon">{{ __('auth.google_registration.apply') }}</span>
                                 </button>
                             </div>
                             <p x-show="couponMessage" :class="couponStatus === 'valid' ? 'text-emerald-600' : 'text-red-500'" 
@@ -574,7 +574,7 @@ window.addEventListener('pageshow', (event) => {
                     <!-- Payment Gateway Selection -->
                     <div class="space-y-2 pt-2" x-show="currentPlan.trial_days === 0">
                         <label class="text-[12px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">
-                            {{ app()->getLocale() == 'ar' ? 'طريقة الدفع' : 'Payment' }}
+                            {{ __('auth.register.payment_method') ?? 'Payment' }}
                         </label>
                         <div class="grid grid-cols-2 gap-2">
                             <!-- Paymob -->
@@ -600,11 +600,11 @@ window.addEventListener('pageshow', (event) => {
                         <button type="submit" :disabled="isSubmitting || subdomainStatus === 'invalid' || (phoneNumber.length > 0 && phoneNumber.length < 8)"
                                 class="w-full h-14 rounded-full flex items-center justify-center gap-3 group bg-brand-secondary text-white shadow-xl shadow-brand-secondary/20 hover:shadow-brand-secondary/40 hover:-translate-y-0.5 active:scale-95 transition-all disabled:opacity-50 disabled:grayscale">
                              <span x-show="!isSubmitting" class="text-lg font-black font-arabic" 
-                                  x-text="currentPlan.trial_days > 0 ? ({{ Js::from(app()->isLocale('ar') ? 'ابدأ الفترة التجريبية' : 'Start Free Trial') }}) : (finalPrice === 0 ? '{{ __('auth.register.cta_main') }}' : '{{ app()->isLocale('ar') ? 'ادفع واستكمل التسجيل' : 'Pay & Complete Registration' }}')">
+                                   x-text="currentPlan.trial_days > 0 ? ({{ Js::from(__('auth.google_registration.start_free_trial')) }}) : (finalPrice === 0 ? '{{ __('auth.register.cta_main') }}' : '{{ __('auth.google_registration.pay_complete') }}')">
                             </span>
                             <span x-show="isSubmitting" class="flex items-center gap-2">
                                 <div class="w-5 h-5 border-3 border-white border-t-transparent rounded-full animate-spin"></div>
-                                {{ app()->isLocale('ar') ? 'جاري الإكمال...' : 'Completing...' }}
+                                {{ __('auth.google_registration.completing') }}
                             </span>
                             <i x-show="!isSubmitting" class="bi bi-arrow-right-short text-2xl group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform"></i>
                         </button>
@@ -637,11 +637,11 @@ window.addEventListener('pageshow', (event) => {
              class="bg-white rounded-[2.5rem] w-full max-w-lg shadow-2xl overflow-hidden animate-scale-in">
             <div class="p-5 sm:p-8 border-b border-slate-100 bg-slate-50/50">
                 <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-                    <h3 class="text-xl font-black text-slate-900 font-arabic">{{ app()->getLocale() == 'ar' ? 'اختر الباقة المناسبة' : 'Select Plan' }}</h3>
+                    <h3 class="text-xl font-black text-slate-900 font-arabic">{{ __('auth.plan_modal.select_plan') }}</h3>
                     
                     <!-- Billing Country Selector -->
                     <div class="flex items-center gap-2 bg-slate-100/50 p-1.5 rounded-2xl border border-slate-200">
-                        <span class="text-[11px] font-black text-slate-500 uppercase tracking-wider px-2 whitespace-nowrap"><i class="bi bi-globe-americas me-1"></i> {{ app()->getLocale() == 'ar' ? 'دولة الفوترة' : 'Billing Region' }}</span>
+                        <span class="text-[11px] font-black text-slate-500 uppercase tracking-wider px-2 whitespace-nowrap"><i class="bi bi-globe-americas me-1"></i> {{ __('auth.plan_modal.billing_region') }}</span>
                         <div class="relative" dir="ltr">
                             <select x-model="selectedCurrency" class="h-8 pl-3 pr-8 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-secondary/20 focus:border-brand-secondary appearance-none cursor-pointer shadow-sm min-w-[120px]">
                                 <option value="EGP">ðŸ‡ªðŸ‡¬ Egypt (EGP)</option>
@@ -656,7 +656,7 @@ window.addEventListener('pageshow', (event) => {
                         </div>
                     </div>
                     
-                    <button type="button" @click="showPlanModal = false" aria-label="{{ app()->getLocale() == 'ar' ? 'إغلاق' : 'Close' }}" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-slate-200 transition-colors">
+                    <button type="button" @click="showPlanModal = false" aria-label="{{ __('auth.plan_modal.close') }}" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-slate-200 transition-colors">
                         <i class="bi bi-x-lg"></i>
                     </button>
                 </div>
@@ -666,17 +666,17 @@ window.addEventListener('pageshow', (event) => {
                         <button type="button" @click="billingCycle = 'monthly'" 
                                 class="px-4 sm:px-5 py-2 min-h-[40px] rounded-xl text-[13px] font-black transition-all font-sans uppercase tracking-wide"
                                 :class="billingCycle === 'monthly' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'">
-                            {{ app()->getLocale() == 'ar' ? 'شهري' : 'Month' }}
+                            {{ __('auth.billing.monthly') }}
                         </button>
                         <button type="button" @click="billingCycle = 'term'" 
                                 class="px-4 sm:px-5 py-2 min-h-[40px] rounded-xl text-[13px] font-black transition-all font-sans uppercase tracking-wide"
                                 :class="billingCycle === 'term' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'">
-                            {{ app()->getLocale() == 'ar' ? 'ترم' : 'Term' }}
+                            {{ __('auth.billing.term') }}
                         </button>
                         <button type="button" @click="billingCycle = 'yearly'" 
                                 class="px-4 sm:px-5 py-2 min-h-[40px] rounded-xl text-[13px] font-black transition-all font-sans uppercase tracking-wide"
                                 :class="billingCycle === 'yearly' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'">
-                            {{ app()->getLocale() == 'ar' ? 'سنوي' : 'Yearly' }}
+                            {{ __('auth.billing.yearly') }}
                         </button>
                     </div>
                 </div>
@@ -705,7 +705,7 @@ window.addEventListener('pageshow', (event) => {
             </div>
             <div class="p-6 bg-slate-50 text-center">
                 <button type="button" @click="showPlanModal = false" class="text-sm font-black text-slate-500 hover:text-slate-700 transition-colors uppercase tracking-widest">
-                    {{ app()->getLocale() == 'ar' ? 'إغلاق' : 'Close' }}
+                    {{ __('auth.plan_modal.close') }}
                 </button>
             </div>
         </div>

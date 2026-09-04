@@ -99,6 +99,8 @@ return [
         'no_account' => 'ليس لديك حساب؟',
         'register_now' => 'إنشاء حساب جديد',
         'admin_login' => 'دخول المشرف العام',
+        'or_continue_with' => 'أو تابع باستخدام',
+        'google' => 'Google',
     ],
 
     // Registration Success Page
@@ -114,5 +116,127 @@ return [
         'copy' => 'نسخ',
         'copied' => 'تم النسخ!',
         'url_copied' => 'تم نسخ الرابط!',
+    ],
+
+    // Two-Factor Authentication
+    '2fa' => [
+        'enable_title' => 'تفعيل المصادقة الثنائية',
+        'setup' => 'إعداد المصادقة الثنائية',
+        'scan_qr' => 'امسح رمز QR هذا bằng تطبيق Google Authenticator على هاتفك:',
+        'secret_key' => 'المفتاح السري',
+        'save_key_hint' => 'احفظ هذا المفتاح في مكان آمن. يمكنك استخدامه لاسترجاع حسابك إذا فقدت الوصول إلى هاتفك.',
+        'enter_code' => 'أدخل الرمز المكون من 6 أرقام من تطبيقك:',
+        'enable_button' => 'تفعيل المصادقة الثنائية',
+        'cancel' => 'إلغاء',
+    ],
+
+    // Google Registration
+    'google_registration' => [
+        'confirm_account' => 'تأكيد الحساب',
+        'setup_complete' => 'خطوة واحدة لنبدأ في تجهيز منصتك التعليمية',
+        'change' => 'تغيير',
+        'view_features' => 'عرض المميزات',
+        'days_free' => 'أيام مجانية',
+        'discount_available' => 'خصم متاح',
+        'free' => 'مجاناً',
+        'teacher_name' => 'اسم المدرس / المنصة',
+        'platform_link' => 'رابط المنصة',
+        'apply' => 'تطبيق',
+        'start_free_trial' => 'ابدأ الفترة التجريبية',
+        'pay_complete' => 'ادفع واستكمل التسجيل',
+        'completing' => 'جاري الإكمال...',
+        'invalid_phone' => 'يرجى إدخال رقم هاتف صحيح',
+        'error_occurred' => 'حدث خطأ. حاول مرة أخرى.',
+    ],
+
+    // Registration Steps
+    'registration_steps' => [
+        'step_1' => 'الخطوة ١ من ٢',
+        'step_2' => 'الخطوة ٢ من ٢',
+        'personal_details' => 'البيانات الشخصية',
+        'start_free_trial' => 'ابدأ رحلتك التعليمية مجاناً',
+        'or_fill_below' => 'أو ادخل البيانات التالية',
+        'center_name' => 'اسم المركز التعليمي',
+        'teacher_name' => 'اسم المنصة / المدرس',
+        'platform_url' => 'رابط منصتك الإلكترونية',
+        'platform_link' => 'رابط المنصة',
+        'next_personal' => 'التالي — البيانات الشخصية',
+        'days_free_trial' => 'يوم تجربة مجانية',
+        'no_credit_card' => 'بدون بطاقة ائتمان',
+        'center_info' => 'بيانات المركز',
+        'enter_details' => 'أدخل بياناتك الشخصية',
+        'last_step' => 'الخطوة الأخيرة لتفعيل منصتك',
+        'verified' => 'تم التحقق',
+        'send_otp' => 'إرسال كود',
+        'verify' => 'تحقق',
+        'otp_sent' => 'تم إرسال كود التحقق عبر واتساب والبريد الإلكتروني',
+        'chars_8' => '٨ أحرف على الأقل',
+        'uppercase' => 'حرف كبير',
+        'lowercase' => 'حرف صغير',
+        'number' => 'رقم',
+        'symbol' => 'رمز (!@#$)',
+        'days_free_trial_caps' => 'يوم تجربة مجانية',
+        'back' => 'رجوع',
+        'pay_complete_short' => 'ادفع واستكمل',
+        'continue' => 'استمرار',
+        'center' => 'مركز تعليمي',
+        'tutor' => 'مدرس مستقل',
+    ],
+
+    // Billing Cycle Labels
+    'billing' => [
+        'monthly' => 'شهري',
+        'term' => 'ترم',
+        'yearly' => 'سنوي',
+        'monthly_short' => 'شهر',
+        'yearly_short' => 'سنة',
+        'term_short' => 'ترم',
+    ],
+
+    // Plan Modal Labels
+    'plan_modal' => [
+        'select_plan' => 'اختر الباقة المناسبة',
+        'billing_region' => 'دولة الفوترة',
+        'close' => 'إغلاق',
+    ],
+
+    // Guarantee & Trust
+    'guarantee' => [
+        'money_back' => 'ضمان استرجاع الأموال خلال 30 يوماً.',
+        'secure' => 'آمن',
+        'flexible' => 'مرن',
+    ],
+
+    // Country Codes (Regions)
+    'regions' => [
+        'africa' => 'أفريقيا',
+        'europe' => 'أوروبا',
+        'asia' => 'آسيا',
+        'americas' => 'أمريكا',
+        'oceania' => 'أوقيانوسيا',
+    ],
+
+    // Subscription Labels
+    'subscription' => [
+        'monthly' => 'شهري',
+        'term' => 'ترم',
+        'yearly' => 'سنوي',
+        'close' => 'إغلاق',
+        'select_plan' => 'اختر الباقة المناسبة',
+        'billing_region' => 'دولة الفوترة',
+    ],
+
+    // Validation Messages
+    'validation' => [
+        'invalid_phone' => 'يرجى إدخال رقم هاتف صحيح',
+        'error_occurred' => 'حدث خطأ. حاول مرة أخرى.',
+        'subdomain_taken' => 'هذا الرابط مستخدم بالفعل',
+        'enter_center_name' => 'يرجى إدخال اسم المركز والرابط',
+    ],
+
+    // Login Show/Hide
+    'show_hide' => [
+        'show' => 'إظهار',
+        'hide' => 'إخفاء',
     ],
 ];

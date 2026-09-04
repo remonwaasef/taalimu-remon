@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+    protected function guard()
+    {
+        return Auth::guard('admin');
+    }
+
     public function showLoginForm()
     {
         return view('admin::auth.login');
@@ -61,7 +66,7 @@ class AuthController extends Controller
                 return redirect()->route('admin.login.2fa');
             }
 
-            Auth::login($user);
+            $this->guard()->login($user);
             $request->session()->regenerate();
             session(['tenant_id' => $user->tenant_id]);
 
@@ -167,7 +172,7 @@ class AuthController extends Controller
         }
 
         $request->session()->forget(['admin_2fa_pending', 'admin_2fa_pending_secret']);
-        Auth::login($user);
+        $this->guard()->login($user);
         $request->session()->regenerate();
         session(['tenant_id' => $user->tenant_id]);
         session(['2fa_verified' => true]);
@@ -177,7 +182,7 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        Auth::logout();
+        $this->guard()->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 

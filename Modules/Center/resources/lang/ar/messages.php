@@ -1,6 +1,21 @@
 <?php
 
 return [
+    // Onboarding Wizard
+    'onboarding_wizard' => [
+        'error_title' => 'عذراً، حدث خطأ',
+        'session_expired' => 'انتهت مدة الجلسة. يرجى تسجيل الدخول مرة أخرى.',
+        'ok' => 'حسناً',
+    ],
+    // Bug Report Widget
+    'bug_report' => [
+        'screenshot' => 'لقطة الشاشة',
+        'capturing' => 'جاري التقاط الشاشة...',
+        'remove' => 'حذف',
+        'change' => 'تغيير',
+        'retake' => 'إعادة التقاط',
+        'no_screenshot' => 'لم يتم إرفاق صورة',
+    ],
     'validation_error' => 'يرجى مراجعة الأخطاء التالية:',
     'back' => 'رجوع',
     'first_instructor_onboarding' => 'عمل رائع! تم إضافة أول معلم. الآن، دعنا ننشئ دورتك التدريبية الأولى.',

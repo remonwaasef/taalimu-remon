@@ -41,9 +41,11 @@ class FinanceService
             $student = Student::with('user')->find($data['student_id']);
 
             // 1. Fetch actual prices from DB — scoped to current tenant to prevent cross-tenant manipulation
+            // PAY-1: Lock course rows to prevent race condition on price changes during concurrent sales
             $courseIds = collect($data['items'])->pluck('id')->toArray();
             $courses = Course::with('instructor')->whereIn('id', $courseIds)
                 ->where('tenant_id', $tenantId)
+                ->lockForUpdate()
                 ->get()
                 ->keyBy('id');
 

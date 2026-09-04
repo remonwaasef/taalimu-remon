@@ -82,7 +82,7 @@ class TenantIdentityTest extends TestCase
 
         app()->instance('tenant', $tenant);
 
-        $this->actingAs($globalAdmin);
+        $this->actingAs($globalAdmin, 'admin');
 
         $response = $this->get(route('admin.dashboard'));
 

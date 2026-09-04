@@ -120,7 +120,7 @@
                 <div class="flex justify-between items-center px-1">
                     <label class="text-[11px] font-bold text-slate-500 font-arabic uppercase tracking-wider">{{ __('auth.login.password') }}</label>
                     <button type="button" @click="showPassword = !showPassword" class="text-[11px] font-black transition-colors uppercase tracking-widest text-emerald-600 hover:text-emerald-500">
-                        <span x-text="showPassword ? ({{ app()->getLocale() == 'ar' ? '\'إخفاء\'' : '\'HIDE\'' }}) : ({{ app()->getLocale() == 'ar' ? '\'إظهار\'' : '\'SHOW\'' }})"></span>
+                        <span x-text="showPassword ? '{{ __('auth.show_hide.hide') }}' : '{{ __('auth.show_hide.show') }}'"></span>
                     </button>
                 </div>
                 <input :type="showPassword ? 'text' : 'password'" name="password" 

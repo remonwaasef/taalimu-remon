@@ -108,13 +108,17 @@ class AuthServiceProvider extends ServiceProvider
             }
         });
 
-        // Zero DB Hits: Cache authenticated user data in Redis
+        // Zero DB Hits: Cache authenticated user data in Redis with tenant isolation
         \Illuminate\Support\Facades\Auth::provider('cached', function ($app, array $config) {
             return new class($app['hash'], $config['model']) extends \Illuminate\Auth\EloquentUserProvider
             {
                 public function retrieveById($identifier)
                 {
-                    return \Illuminate\Support\Facades\Cache::remember("user_cache_{$identifier}", 3600, function () use ($identifier) {
+                    $tenantPrefix = app()->bound('tenant') && app('tenant')
+                        ? "tenant_{$app['tenant']->id}:"
+                        : 'global:';
+
+                    return \Illuminate\Support\Facades\Cache::remember("{$tenantPrefix}user_cache_{$identifier}", 3600, function () use ($identifier) {
                         return parent::retrieveById($identifier);
                     });
                 }

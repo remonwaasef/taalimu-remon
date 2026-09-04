@@ -78,15 +78,15 @@
                             <div class="screenshot-actions d-none" id="screenshotActions">
                                 <button type="button" class="btn btn-outline-danger btn-sm" onclick="removeScreenshot()">
                                     <i class="fas fa-trash me-1"></i>
-                                    @if(app()->getLocale() == 'ar') حذف @elseif(app()->getLocale() == 'fr') Supprimer @else Remove @endif
+                                    {{ __('center::messages.bug_report.remove') }}
                                 </button>
                                 <button type="button" class="btn btn-outline-primary btn-sm" onclick="document.getElementById('bugScreenshot').click()">
                                     <i class="fas fa-exchange-alt me-1"></i>
-                                    @if(app()->getLocale() == 'ar') تغيير @elseif(app()->getLocale() == 'fr') Changer @else Change @endif
+                                    {{ __('center::messages.bug_report.change') }}
                                 </button>
                                 <button type="button" class="btn btn-outline-success btn-sm" onclick="retakeScreenshot()">
                                     <i class="fas fa-redo me-1"></i>
-                                    @if(app()->getLocale() == 'ar') إعادة التقاط @elseif(app()->getLocale() == 'fr') Reprendre @else Retake @endif
+                                    {{ __('center::messages.bug_report.retake') }}
                                 </button>
                             </div>
                         </div>

@@ -131,7 +131,7 @@
                         }
                     } catch (error) {
                         let errorMessage = error.message;
-                        let errorTitle = '{{ app()->getLocale() === 'ar' ? 'عذراً، حدث خطأ' : (app()->getLocale() === 'fr' ? 'Oups, une erreur est survenue' : 'Oops, an error occurred') }}';
+                        let errorTitle = '{{ __('center::messages.onboarding_wizard.error_title') }}';
                         
                         if (errorMessage.includes('CSRF token mismatch') || errorMessage.includes('419')) {
                             errorMessage = '{{ app()->getLocale() === 'ar' ? 'انتهت مدة الجلسة بسبب عدم النشاط. يرجى تحديث الصفحة والمحاولة مرة أخرى.' : (app()->getLocale() === 'fr' ? 'La session a expiré pour cause d\'inactivité. Veuillez actualiser la page et réessayer.' : 'Session expired due to inactivity. Please refresh the page and try again.') }}';
@@ -142,7 +142,7 @@
                             title: errorTitle, 
                             text: errorMessage, 
                             confirmButtonColor: '#10b981',
-                            confirmButtonText: '{{ app()->getLocale() === 'ar' ? 'حسناً' : 'OK' }}'
+                            confirmButtonText: '{{ __('center::messages.onboarding_wizard.ok') }}'
                         });
                     } finally { this.loading = false; }
                 }

@@ -99,6 +99,8 @@ return [
         'no_account' => 'Don\'t have an account?',
         'register_now' => 'Create new account',
         'admin_login' => 'Admin Login',
+        'or_continue_with' => 'Or continue with',
+        'google' => 'Google',
     ],
 
     // Registration Success Page
@@ -114,5 +116,127 @@ return [
         'copy' => 'Copy',
         'copied' => 'Copied!',
         'url_copied' => 'URL copied to clipboard!',
+    ],
+
+    // Two-Factor Authentication
+    '2fa' => [
+        'enable_title' => 'Enable Two-Factor Authentication',
+        'setup' => 'Setup 2FA',
+        'scan_qr' => 'Scan this QR code with the Google Authenticator app on your phone:',
+        'secret_key' => 'Secret Key',
+        'save_key_hint' => 'Save this key in a safe place. You can use it to recover your account if you lose access to your phone.',
+        'enter_code' => 'Enter the 6-digit code from your app:',
+        'enable_button' => 'Enable 2FA',
+        'cancel' => 'Cancel',
+    ],
+
+    // Google Registration
+    'google_registration' => [
+        'confirm_account' => 'Confirm Account',
+        'setup_complete' => 'One last step to complete your platform setup',
+        'change' => 'Change',
+        'view_features' => 'View Features',
+        'days_free' => 'Days Free',
+        'discount_available' => 'Discount',
+        'free' => 'FREE',
+        'teacher_name' => 'Teacher / Platform Name',
+        'platform_link' => 'Platform Link',
+        'apply' => 'Apply',
+        'start_free_trial' => 'Start Free Trial',
+        'pay_complete' => 'Pay & Complete Registration',
+        'completing' => 'Completing...',
+        'invalid_phone' => 'Please enter a valid phone number',
+        'error_occurred' => 'An error occurred. Please try again.',
+    ],
+
+    // Registration Steps
+    'registration_steps' => [
+        'step_1' => 'Step 1 of 2',
+        'step_2' => 'Step 2 of 2',
+        'personal_details' => 'Personal Details',
+        'start_free_trial' => 'Start Your Free Trial',
+        'or_fill_below' => 'OR FILL DETAILS BELOW',
+        'center_name' => 'Educational Center Name',
+        'teacher_name' => 'Teacher / Platform Name',
+        'platform_url' => 'Platform URL',
+        'platform_link' => 'Platform Link',
+        'next_personal' => 'Next — Personal Details',
+        'days_free_trial' => 'days free trial',
+        'no_credit_card' => 'No credit card',
+        'center_info' => 'Center Info',
+        'enter_details' => 'Enter Your Details',
+        'last_step' => 'Last step to activate your platform',
+        'verified' => 'Verified',
+        'send_otp' => 'Send OTP',
+        'verify' => 'Verify',
+        'otp_sent' => 'Verification code sent via WhatsApp and Email',
+        'chars_8' => '8+ Characters',
+        'uppercase' => 'Uppercase',
+        'lowercase' => 'Lowercase',
+        'number' => 'Number',
+        'symbol' => 'Symbol (!@#$)',
+        'days_free_trial_caps' => 'Days Free Trial',
+        'back' => 'Back',
+        'pay_complete_short' => 'Pay & Complete',
+        'continue' => 'Continue',
+        'center' => 'Center',
+        'tutor' => 'Tutor',
+    ],
+
+    // Billing Cycle Labels
+    'billing' => [
+        'monthly' => 'Month',
+        'term' => 'Term',
+        'yearly' => 'Yearly',
+        'monthly_short' => 'month',
+        'yearly_short' => 'year',
+        'term_short' => 'term',
+    ],
+
+    // Plan Modal Labels
+    'plan_modal' => [
+        'select_plan' => 'Select Plan',
+        'billing_region' => 'Billing Region',
+        'close' => 'Close',
+    ],
+
+    // Guarantee & Trust
+    'guarantee' => [
+        'money_back' => '30-Day Money-Back Guarantee.',
+        'secure' => 'Secure',
+        'flexible' => 'Flexible',
+    ],
+
+    // Country Codes (Regions)
+    'regions' => [
+        'africa' => 'Africa',
+        'europe' => 'Europe',
+        'asia' => 'Asia',
+        'americas' => 'Americas',
+        'oceania' => 'Oceania',
+    ],
+
+    // Subscription Labels
+    'subscription' => [
+        'monthly' => 'Month',
+        'term' => 'Term',
+        'yearly' => 'Yearly',
+        'close' => 'Close',
+        'select_plan' => 'Select Plan',
+        'billing_region' => 'Billing Region',
+    ],
+
+    // Validation Messages
+    'validation' => [
+        'invalid_phone' => 'Please enter a valid phone number',
+        'error_occurred' => 'An error occurred. Please try again.',
+        'subdomain_taken' => 'This subdomain is already taken',
+        'enter_center_name' => 'Please enter center name and subdomain',
+    ],
+
+    // Login Show/Hide
+    'show_hide' => [
+        'show' => 'SHOW',
+        'hide' => 'HIDE',
     ],
 ];

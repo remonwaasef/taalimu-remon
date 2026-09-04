@@ -44,7 +44,7 @@ class AdminAuthTest extends TestCase
         ]);
 
         $response->assertRedirect(route('admin.dashboard'));
-        $this->assertAuthenticatedAs($admin);
+        $this->assertAuthenticatedAs($admin, 'admin');
     }
 
     public function test_admin_with_wrong_password_cannot_login()
@@ -57,7 +57,7 @@ class AdminAuthTest extends TestCase
         ]);
 
         $response->assertSessionHasErrors('email');
-        $this->assertGuest();
+        $this->assertGuest('admin');
     }
 
     public function test_tenant_user_cannot_login_through_admin_panel()
@@ -76,7 +76,7 @@ class AdminAuthTest extends TestCase
         ]);
 
         $response->assertSessionHasErrors('email');
-        $this->assertGuest();
+        $this->assertGuest('admin');
     }
 
     public function test_tenant_user_cannot_access_admin_dashboard()
@@ -87,7 +87,7 @@ class AdminAuthTest extends TestCase
             'role' => 'center_admin',
         ]);
 
-        $this->actingAs($user);
+        $this->actingAs($user, 'admin');
 
         $this->get(route('admin.dashboard'))->assertForbidden();
     }
@@ -101,9 +101,9 @@ class AdminAuthTest extends TestCase
     {
         $admin = $this->globalAdmin();
 
-        $this->actingAs($admin);
+        $this->actingAs($admin, 'admin');
         $this->post(route('admin.logout'));
-        $this->assertGuest();
+        $this->assertGuest('admin');
 
         $response = $this->post(route('admin.login.submit'), [
             'email' => $admin->email,
@@ -111,7 +111,7 @@ class AdminAuthTest extends TestCase
         ]);
 
         $response->assertRedirect(route('admin.dashboard'));
-        $this->assertAuthenticatedAs($admin);
+        $this->assertAuthenticatedAs($admin, 'admin');
     }
 
     public function test_admin_with_2fa_enabled_is_redirected_to_verification()
@@ -129,7 +129,7 @@ class AdminAuthTest extends TestCase
         ]);
 
         $response->assertRedirect(route('admin.login.2fa'));
-        $this->assertGuest();
+        $this->assertGuest('admin');
     }
 
     public function test_admin_with_2fa_enabled_but_bypass_logs_in_directly()
@@ -149,7 +149,7 @@ class AdminAuthTest extends TestCase
         ]);
 
         $response->assertRedirect(route('admin.dashboard'));
-        $this->assertAuthenticatedAs($admin);
+        $this->assertAuthenticatedAs($admin, 'admin');
     }
 
     public function test_admin_with_2fa_enabled_can_verify_and_reach_dashboard()
@@ -173,7 +173,7 @@ class AdminAuthTest extends TestCase
         ]);
 
         $response->assertRedirect(route('admin.dashboard'));
-        $this->assertAuthenticatedAs($admin);
+        $this->assertAuthenticatedAs($admin, 'admin');
     }
 
     public function test_admin_with_2fa_enabled_is_rejected_with_wrong_otp()
@@ -195,6 +195,6 @@ class AdminAuthTest extends TestCase
         ]);
 
         $response->assertSessionHasErrors('one_time_password');
-        $this->assertGuest();
+        $this->assertGuest('admin');
     }
 }

@@ -1,4 +1,4 @@
-﻿@extends('layouts.landing-new')
+@extends('layouts.landing-new')
 
 @section('content')
 <!-- Import Google Fonts -->
@@ -39,100 +39,94 @@
          :class="currentStep === 2 ? 'max-w-4xl' : 'max-w-xl'">
         
         <div class="bg-white p-5 lg:p-6">
-
-            {{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
-            {{-- STEP 1: Fast & Intuitive Onboarding                   --}}
-            {{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
-            <div x-show="currentStep === 1" x-cloak>
+            <form action="{{ route('register.submit') }}" method="POST" 
+                  @submit="if(currentStep === 1) { $event.preventDefault(); nextStep(); } else { if(formSubmitted) { $event.preventDefault(); return; } formSubmitted = true; const btn = $event.target.querySelector('button[type=submit]'); if(btn) btn.disabled = true; }">
+                @csrf
+                @if(request('google_id'))
+                    <input type="hidden" name="google_id" value="{{ request('google_id') }}">
+                @endif
                 
-                <!-- Progress: Step 1 of 2 -->
-                <div class="mb-4">
-                    <div class="flex justify-between mb-1 px-0.5">
-                        <span class="text-[11px] font-black uppercase tracking-[0.15em] text-brand-secondary">
-                            {{ app()->isLocale('ar') ? 'الخطوة ١ من ٢' : 'Step 1 of 2' }}
-                        </span>
-                        <span class="text-[11px] font-bold text-slate-300 uppercase tracking-[0.15em]">
-                            {{ app()->isLocale('ar') ? 'البيانات الشخصية' : 'Personal Details' }}
-                        </span>
-                    </div>
-                    <div class="h-1 w-full bg-slate-100 rounded-full overflow-hidden">
-                        <div class="h-full w-1/2 bg-brand-secondary rounded-full"></div>
-                    </div>
-                </div>
-
-                <!-- Main Header + Clear Login Link at TOP -->
-                <div class="text-center mb-4">
-                    <h1 class="text-xl font-black text-slate-900 mb-1 font-arabic leading-tight">
-                        {{ app()->isLocale('ar') ? 'ابدأ رحلتك التعليمية مجاناً' : 'Start Your Free Trial' }}
-                    </h1>
-                    <!-- Clear Prominent Login Link at Top -->
-                    <p class="text-xs text-slate-500 font-arabic font-semibold">
-                        {{ __('auth.login.no_account_link') }}
-                        <a href="{{ route('login.portal') }}" class="text-brand-secondary font-black hover:underline me-1 bg-brand-secondary/5 px-2 py-0.5 rounded-full border border-brand-secondary/10">
-                            {{ __('auth.login.title') }}
-                        </a>
-                    </p>
-                </div>
-
-                <!-- Account Type Selector (First Interaction Step) -->
-@include('auth.partials._register-account-type')
-
-                <!-- â‘  Google Fast Registration (Right After Account Type Selection) -->
-                <div class="mb-4">
-                    <a :href="'{{ route('auth.google') }}?plan=' + selectedPlan + '&cycle=' + billingCycle + '&account_type=' + (accountType || 'center')" 
-                       class="w-full flex items-center justify-center gap-3 py-2.5 px-6 border-2 border-slate-200 rounded-xl text-sm font-black text-slate-800 bg-white hover:bg-slate-50 hover:border-brand-secondary/40 hover:shadow-md transition-all group">
-                        <svg class="w-5 h-5 group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
-                            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-                            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-                        </svg>
-                        <span>{{ __('auth.register.google_signup') }}</span>
-                    </a>
-                </div>
-
-                <!-- Divider -->
-                <div class="relative my-4 px-6">
-                    <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-100"></div></div>
-                    <div class="relative flex justify-center text-[11px] uppercase">
-                        <span class="bg-white px-4 text-slate-400 font-bold tracking-[0.15em]">
-                            {{ app()->isLocale('ar') ? 'أو ادخل البيانات التالية' : 'OR FILL DETAILS BELOW' }}
-                        </span>
-                    </div>
-                </div>
-
-                <!-- THE FORM -->
-                <form action="{{ route('register.submit') }}" method="POST" 
-                      @submit="if(currentStep === 1) { $event.preventDefault(); nextStep(); } else { if(formSubmitted) { $event.preventDefault(); return; } formSubmitted = true; const btn = $event.target.querySelector('button[type=submit]'); if(btn) btn.disabled = true; }">
-                    @csrf
-                    @if(request('google_id'))
-                        <input type="hidden" name="google_id" value="{{ request('google_id') }}">
-                    @endif
-                    
-                    @if ($errors->any())
-                        <div class="bg-red-50 border border-red-100 rounded-xl p-3 mb-3">
-                            <div class="flex items-start gap-2">
-                                <i class="bi bi-exclamation-triangle-fill text-red-500 text-sm mt-0.5"></i>
-                                <ul class="text-[11px] text-red-700 font-arabic space-y-0.5">
-                                    @foreach ($errors->all() as $error) <li>â€¢ {{ $error }}</li> @endforeach
-                                </ul>
-                            </div>
+                @if ($errors->any())
+                    <div class="bg-red-50 border border-red-100 rounded-xl p-3 mb-3">
+                        <div class="flex items-start gap-2">
+                            <i class="bi bi-exclamation-triangle-fill text-red-500 text-sm mt-0.5"></i>
+                            <ul class="text-[11px] text-red-700 font-arabic space-y-0.5">
+                                @foreach ($errors->all() as $error) <li>• {{ $error }}</li> @endforeach
+                            </ul>
                         </div>
-                    @endif
+                    </div>
+                @endif
 
-                    <input type="hidden" name="plan" x-model="selectedPlan">
-                    <input type="hidden" name="account_type" x-model="accountType">
-                    <input type="hidden" name="billing_cycle" x-model="billingCycle">
-                    <input type="hidden" name="country_code" x-model="userCountry">
-                    <input type="hidden" name="currency" x-model="selectedCurrency">
+                <input type="hidden" name="plan" x-model="selectedPlan">
+                <input type="hidden" name="account_type" x-model="accountType">
+                <input type="hidden" name="billing_cycle" x-model="billingCycle">
+                <input type="hidden" name="country_code" x-model="userCountry">
+                <input type="hidden" name="currency" x-model="selectedCurrency">
+
+                {{-- STEP 1: Fast & Intuitive Onboarding --}}
+                <div x-show="currentStep === 1" x-cloak>
+                    <!-- Progress: Step 1 of 2 -->
+                    <div class="mb-4">
+                        <div class="flex justify-between mb-1 px-0.5">
+                            <span class="text-[11px] font-black uppercase tracking-[0.15em] text-brand-secondary">
+                                {{ __('auth.registration_steps.step_1') }}
+                            </span>
+                            <span class="text-[11px] font-bold text-slate-300 uppercase tracking-[0.15em]">
+                                {{ __('auth.registration_steps.personal_details') }}
+                            </span>
+                        </div>
+                        <div class="h-1 w-full bg-slate-100 rounded-full overflow-hidden">
+                            <div class="h-full w-1/2 bg-brand-secondary rounded-full"></div>
+                        </div>
+                    </div>
+
+                    <!-- Main Header + Clear Login Link at TOP -->
+                    <div class="text-center mb-4">
+                        <h1 class="text-xl font-black text-slate-900 mb-1 font-arabic leading-tight">
+                            {{ __('auth.registration_steps.start_free_trial') }}
+                        </h1>
+                        <p class="text-xs text-slate-500 font-arabic font-semibold">
+                            {{ __('auth.login.no_account_link') }}
+                            <a href="{{ route('login.portal') }}" class="text-brand-secondary font-black hover:underline me-1 bg-brand-secondary/5 px-2 py-0.5 rounded-full border border-brand-secondary/10">
+                                {{ __('auth.login.title') }}
+                            </a>
+                        </p>
+                    </div>
+
+                    <!-- Account Type Selector (First Interaction Step) -->
+                    @include('auth.partials._register-account-type')
+
+                    <!-- Google Fast Registration (Right After Account Type Selection) -->
+                    <div class="mb-4">
+                        <a :href="'{{ route('auth.google') }}?plan=' + selectedPlan + '&cycle=' + billingCycle + '&account_type=' + (accountType || 'center')" 
+                           class="w-full flex items-center justify-center gap-3 py-2.5 px-6 border-2 border-slate-200 rounded-xl text-sm font-black text-slate-800 bg-white hover:bg-slate-50 hover:border-brand-secondary/40 hover:shadow-md transition-all group">
+                            <svg class="w-5 h-5 group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
+                                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                            </svg>
+                            <span>{{ __('auth.register.google_signup') }}</span>
+                        </a>
+                    </div>
+
+                    <!-- Divider -->
+                    <div class="relative my-4 px-6">
+                        <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-100"></div></div>
+                        <div class="relative flex justify-center text-[11px] uppercase">
+                            <span class="bg-white px-4 text-slate-400 font-bold tracking-[0.15em]">
+                                {{ __('auth.registration_steps.or_fill_below') }}
+                            </span>
+                        </div>
+                    </div>
 
                     <!-- Center / Platform Name Input -->
                     <div class="space-y-3 mb-4">
                         <div>
                             <label class="text-[11px] font-bold text-slate-500 px-1 font-arabic block mb-1">
                                 <span x-text="accountType === 'center' 
-                                    ? '{{ app()->isLocale('ar') ? 'اسم المركز التعليمي' : 'Educational Center Name' }}'
-                                    : '{{ app()->isLocale('ar') ? 'اسم المنصة / المدرس' : 'Teacher / Platform Name' }}'"></span>
+                                    ? '{{ __('auth.registration_steps.center_name') }}'
+                                    : '{{ __('auth.registration_steps.teacher_name') }}'"></span>
                             </label>
                             <div class="relative group">
                                 <div class="absolute inset-y-0 start-0 ps-4 flex items-center pointer-events-none text-slate-300 group-focus-within:text-brand-secondary transition-colors">
@@ -149,7 +143,7 @@
                         <!-- Subdomain (Auto-filled) -->
                         <div>
                             <label class="text-[11px] font-bold text-slate-400 px-1 font-arabic block mb-1">
-                                {{ app()->isLocale('ar') ? 'رابط منصتك الإلكترونية' : 'Platform URL' }}
+                                {{ __('auth.registration_steps.platform_url') }}
                             </label>
                             <div class="relative flex items-center w-full" dir="ltr">
                                 <div class="absolute left-0 inset-y-0 hidden sm:flex items-center px-3 pointer-events-none text-brand-secondary font-bold text-[11px] bg-brand-secondary/5 border-r border-brand-secondary/10 rounded-l-xl z-10">https://</div>
@@ -175,7 +169,7 @@
                     <!-- Continue Button -->
                     <button type="button" @click="nextStep()"
                         class="w-full h-11 rounded-xl flex items-center justify-center gap-2 group bg-gradient-to-r from-emerald-600 to-teal-500 text-white shadow-lg shadow-emerald-600/20 hover:from-emerald-700 hover:to-teal-600 hover:-translate-y-0.5 active:scale-[0.98] transition-all mb-3">
-                        <span class="text-sm font-black font-arabic">{{ app()->isLocale('ar') ? 'التالي â€” البيانات الشخصية' : 'Next â€” Personal Details' }}</span>
+                        <span class="text-sm font-black font-arabic">{{ __('auth.registration_steps.next_personal') }}</span>
                         <i class="bi bi-arrow-left text-base rtl:rotate-0 ltr:rotate-180 group-hover:-translate-x-1 rtl:group-hover:-translate-x-1 transition-transform"></i>
                     </button>
 
@@ -184,12 +178,12 @@
                         <div class="flex items-center justify-center gap-3 text-[11px] text-slate-400 font-bold mb-2">
                             <span class="flex items-center gap-1">
                                 <i class="bi bi-shield-check text-emerald-500"></i>
-                                <span x-text="currentPlan.trial_days"></span> {{ app()->isLocale('ar') ? 'يوم تجربة مجانية' : 'days free trial' }}
+                                <span x-text="currentPlan.trial_days"></span> {{ __('auth.registration_steps.days_free_trial') }}
                             </span>
                             <span class="text-slate-200">|</span>
                             <span class="flex items-center gap-1">
                                 <i class="bi bi-credit-card text-slate-300"></i>
-                                {{ app()->isLocale('ar') ? 'بدون بطاقة ائتمان' : 'No credit card' }}
+                                {{ __('auth.registration_steps.no_credit_card') }}
                             </span>
                         </div>
                     </template>
@@ -200,43 +194,42 @@
                             {{ __('auth.register.terms_prefix') }}
                             <a href="{{ route('terms') }}" class="text-slate-600 font-black hover:underline">{{ __('auth.register.terms_of_service') }}</a> 
                             {{ __('auth.register.and') }} 
-                            <a href="{{ route('privacy') }}" class="text-slate-600 font-black hover:underline">{{ __('auth.privacy_policy') ?? __('auth.register.privacy_policy') }}</a>
+                            <a href="{{ route('privacy') }}" class="text-slate-600 font-black hover:underline">{{ __('auth.register.privacy_policy') }}</a>
+                        </p>
+                    </div>
+                </div>
+
+                {{-- STEP 2 CONTAINER --}}
+                <div x-show="currentStep === 2" x-cloak>
+                    <div class="mb-4">
+                        <div class="flex justify-between mb-1 px-0.5">
+                            <span class="text-[11px] font-bold text-emerald-500 uppercase tracking-[0.15em]">
+                                {{ __('auth.registration_steps.center_info') }} ✓
+                            </span>
+                            <span class="text-[11px] font-black uppercase tracking-[0.15em] text-brand-secondary">
+                                {{ __('auth.registration_steps.step_2') }}
+                            </span>
+                        </div>
+                        <div class="h-1 w-full bg-slate-100 rounded-full overflow-hidden">
+                            <div class="h-full w-full bg-brand-secondary rounded-full"></div>
+                        </div>
+                    </div>
+                    <div class="text-center mb-4">
+                        <h1 class="text-xl font-black text-slate-900 mb-1 font-arabic leading-tight">
+                            {{ __('auth.registration_steps.enter_details') }}
+                        </h1>
+                        <p class="text-xs text-slate-400 font-arabic font-medium">
+                            {{ __('auth.registration_steps.last_step') }}
                         </p>
                     </div>
 
-@include('auth.partials._register-step2')
-
-                </form>
-            </div>
-
-            {{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
-            {{-- STEP 2 HEADER                                         --}}
-            {{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
-            <div x-show="currentStep === 2" x-cloak>
-                <div class="mb-4">
-                    <div class="flex justify-between mb-1 px-0.5">
-                        <span class="text-[11px] font-bold text-emerald-500 uppercase tracking-[0.15em]">
-                            {{ app()->isLocale('ar') ? 'بيانات المركز' : 'Center Info' }} âœ“
-                        </span>
-                        <span class="text-[11px] font-black uppercase tracking-[0.15em] text-brand-secondary">
-                            {{ app()->isLocale('ar') ? 'الخطوة ٢ من ٢' : 'Step 2 of 2' }}
-                        </span>
-                    </div>
-                    <div class="h-1 w-full bg-slate-100 rounded-full overflow-hidden">
-                        <div class="h-full w-full bg-brand-secondary rounded-full"></div>
-                    </div>
+                    @include('auth.partials._register-step2')
                 </div>
-                <div class="text-center mb-4">
-                    <h1 class="text-xl font-black text-slate-900 mb-1 font-arabic leading-tight">
-                        {{ app()->isLocale('ar') ? 'أدخل بياناتك الشخصية' : 'Enter Your Details' }}
-                    </h1>
-                    <p class="text-xs text-slate-400 font-arabic font-medium">
-                        {{ app()->isLocale('ar') ? 'الخطوة الأخيرة لتفعيل منصتك' : 'Last step to activate your platform' }}
-                    </p>
-                </div>
-            </div>
+
+            </form>
         </div>
 
-@include('auth.partials._register-plan-modal')
+        @include('auth.partials._register-plan-modal')
     </div>
+</div>
 @endsection

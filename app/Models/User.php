@@ -46,11 +46,13 @@ class User extends Authenticatable
         });
 
         static::saved(function ($user) {
-            \Illuminate\Support\Facades\Cache::forget("user_cache_{$user->id}");
+            $tenantPrefix = $user->tenant_id ? "tenant_{$user->tenant_id}:" : 'global:';
+            \Illuminate\Support\Facades\Cache::forget("{$tenantPrefix}user_cache_{$user->id}");
         });
 
         static::deleted(function ($user) {
-            \Illuminate\Support\Facades\Cache::forget("user_cache_{$user->id}");
+            $tenantPrefix = $user->tenant_id ? "tenant_{$user->tenant_id}:" : 'global:';
+            \Illuminate\Support\Facades\Cache::forget("{$tenantPrefix}user_cache_{$user->id}");
             if ($user->role === 'student' && $user->tenant_id) {
                 $tenant = app()->bound('tenant') ? app('tenant') : Tenant::find($user->tenant_id);
                 if ($tenant && $tenant->id == $user->tenant_id) {

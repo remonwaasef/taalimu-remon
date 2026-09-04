@@ -1,6 +1,21 @@
 <?php
 
 return [
+    // Onboarding Wizard
+    'onboarding_wizard' => [
+        'error_title' => 'Oups, une erreur est survenue',
+        'session_expired' => 'Session expirée. Veuillez vous reconnecter.',
+        'ok' => 'OK',
+    ],
+    // Bug Report Widget
+    'bug_report' => [
+        'screenshot' => 'Capture d\'écran',
+        'capturing' => 'Capture en cours...',
+        'remove' => 'Supprimer',
+        'change' => 'Changer',
+        'retake' => 'Reprendre',
+        'no_screenshot' => 'Aucune capture jointe',
+    ],
     'validation_error' => 'Veuillez vérifier les erreurs suivantes :',
     'back' => 'Retour',
     'first_instructor_onboarding' => 'Excellent travail ! Le premier instructeur a été ajouté. Maintenant, créons votre premier cours de formation.',
