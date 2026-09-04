@@ -149,8 +149,13 @@ return [
     ],
     'plan_modal' => [
         'select_plan' => 'Choisir le forfait',
+        'subtitle' => 'Choisissez le forfait adapté à vos besoins',
         'billing_region' => 'Région de facturation',
         'close' => 'Fermer',
+        'most_popular' => 'Le plus populaire',
+        'save_badge' => 'Économisez 20%',
+        'days_trial' => 'jours d\'essai gratuit',
+        'confirm' => 'Confirmer le choix',
     ],
     'guarantee' => [
         'money_back' => 'Garantie de remboursement de 30 jours.',

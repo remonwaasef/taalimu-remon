@@ -127,6 +127,12 @@ class Package extends Model
                 'yearly_price_raw' => $p->yearly_price ?: ($p->price * 10),
                 'regional_prices' => $p->regional_prices ?? [],
                 'trial_days' => (int) $p->trial_days,
+                'is_featured' => (bool) $p->is_featured,
+                'description' => match (app()->getLocale()) {
+                    'ar' => $p->description ?: '',
+                    'fr' => $p->description_fr ?: ($p->description_en ?: ''),
+                    default => $p->description_en ?: '',
+                },
                 'features' => ($p->display_features && is_array($p->display_features) && count($p->display_features) > 0)
                     ? $p->display_features
                     : $p->features->map(function ($f) {

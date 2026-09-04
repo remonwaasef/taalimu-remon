@@ -201,8 +201,13 @@ return [
     // Plan Modal Labels
     'plan_modal' => [
         'select_plan' => 'Select Plan',
+        'subtitle' => 'Choose the plan that fits your needs',
         'billing_region' => 'Billing Region',
         'close' => 'Close',
+        'most_popular' => 'Most Popular',
+        'save_badge' => 'Save 20%',
+        'days_trial' => 'days free trial',
+        'confirm' => 'Confirm Selection',
     ],
 
     // Guarantee & Trust

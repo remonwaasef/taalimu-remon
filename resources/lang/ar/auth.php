@@ -201,8 +201,13 @@ return [
     // Plan Modal Labels
     'plan_modal' => [
         'select_plan' => 'اختر الباقة المناسبة',
+        'subtitle' => 'اختر الباقة التي تناسب احتياجاتك',
         'billing_region' => 'دولة الفوترة',
         'close' => 'إغلاق',
+        'most_popular' => 'الأكثر اختياراً',
+        'save_badge' => 'وفّر 20%',
+        'days_trial' => 'يوم تجربة مجانية',
+        'confirm' => 'تأكيد الاختيار',
     ],
 
     // Guarantee & Trust
