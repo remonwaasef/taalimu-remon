@@ -18,6 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Made instructor commission rate and type mandatory with clear UX guidance and default values in both Quick Modal and full creation form.
 
 ### Fixed
+- **Actions Dropdown Double-Toggle Fix (2026-09-04)**:
+  - Removed `bs-compat.js` import from [app.js](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/resources/js/app.js) to eliminate duplicate Bootstrap event listeners.
+  - Root cause: `libs.min.js` (real Bootstrap 5) and `bs-compat.js` (custom shim) both registered `data-bs-toggle="dropdown"` click handlers, causing dropdowns to open and immediately close (double-toggle).
+  - Fix affects ALL pages: Students, Instructors, Courses, and any view using Bootstrap dropdowns.
+
 - **Button Contrast, Disappearance on Hover, and Legacy Banner Overrides Fix (2026-09-04)**:
   - Removed obsolete white-on-white header banner CSS overrides in [taalimu-unified.css](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/public/assets/hope-ui/css/taalimu-unified.css) that caused `.btn-outline-secondary` and titles to blend into the light background.
   - Defined all missing button tokens in `:root` (`--color-secondary`, `--btn-light-*`, `--btn-secondary-*`, etc.) in `design-tokens.css` and `taalimu-unified.css`.
