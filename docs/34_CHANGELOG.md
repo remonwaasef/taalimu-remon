@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
+- **Clean Center Initialization & Unified Login Response Fix (2026-09-04)**:
+  - Removed automatic demo data provisioning from [RegistrationController.php](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/app/Http/Controllers/RegistrationController.php) so that newly registered centers start 100% clean with zero mock students, courses, or instructors.
+  - Fixed 500 error in [UnifiedAuthController.php](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/app/Http/Controllers/UnifiedAuthController.php) caused by calling undefined `response()->setContent()`, switching to standard `response()`.
+  - Handled optional phone number in [TenantRegistrationService.php](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/app/Services/TenantRegistrationService.php) with fallback null-coalescing operators.
+
 - **Ultra-Clean White Premium Canvas (#FAFAFA) with Layered Luxury Shadows (2026-08-30)**:
   - Upgraded dashboard body background from slate-mist `#EEF2F6` to ultra-clean white `#FAFAFA` for a pristine, Apple/Notion-grade aesthetic.
   - Introduced multi-layered luxury shadow system (`shadow-xs` → `shadow-xl`) with soft negative offsets for floating card depth.
