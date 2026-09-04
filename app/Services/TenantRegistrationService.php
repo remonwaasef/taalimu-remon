@@ -35,6 +35,9 @@ class TenantRegistrationService
 
         DB::transaction(function () use ($data, $password, $googleId, $geoData, &$tenant, &$user) {
             $package = Package::where('slug', $data['plan'])->first();
+            if (! $package) {
+                throw new \Exception(__('Invalid package selected.'));
+            }
             $currency = $data['currency'] ?? 'EGP';
             $regionalPrice = $package->getRegionalPrice($currency);
 
@@ -106,9 +109,9 @@ class TenantRegistrationService
 
             // 2. Create Admin User
             $userData = [
-                'name' => $data['center_name'],
+                'name' => $data['name'] ?? $data['center_name'],
                 'email' => $data['email'],
-                'phone' => $data['phone'],
+                'phone' => $data['phone'] ?? null,
                 'role' => 'center_admin',
                 'tenant_id' => $tenant->id,
                 'locale' => session('locale', 'ar'),
@@ -130,7 +133,7 @@ class TenantRegistrationService
                 'user_id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
-                'phone' => $user->phone,
+                'phone' => $user->phone ?? null,
                 'status' => 'active',
             ]);
 
