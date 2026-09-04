@@ -30,97 +30,7 @@
                 </div>
             </div>
 
-            <!-- Phone + Country Code + OTP -->
-            <div class="space-y-1">
-                <label class="text-[12px] font-black text-slate-500 px-1 font-arabic">{{ __('auth.register.phone') }}</label>
-                <div class="flex gap-2">
-                    {{-- Country Code Selector --}}
-                    <div class="relative" dir="ltr">
-                        <select x-model="countryCode" name="country_code"
-                            class="h-11 ps-2.5 pe-7 bg-slate-50/50 border border-slate-200 rounded-xl text-xs font-black text-slate-700 focus:outline-none focus:bg-white focus:ring-2 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all appearance-none cursor-pointer"
-                            :class="phoneVerified ? 'border-emerald-300 bg-emerald-50/30 pointer-events-none opacity-60' : ''">
-                            @include('partials.country-codes')
-                        </select>
-                        <div class="absolute inset-y-0 right-1.5 flex items-center pointer-events-none">
-                            <i class="bi bi-chevron-down text-[10px] text-slate-400"></i>
-                        </div>
-                    </div>
 
-                    {{-- Phone Input --}}
-                    <div class="relative flex-1 group">
-                        <div class="absolute inset-y-0 start-0 ps-3 flex items-center pointer-events-none text-slate-400 group-focus-within:text-brand-secondary transition-colors">
-                            <i class="bi bi-telephone text-sm"></i>
-                        </div>
-                        <input type="text" name="phone" x-model="phone" 
-                            :readonly="phoneVerified"
-                            class="w-full h-11 ps-9 pe-3 bg-slate-50/50 border border-slate-200 rounded-xl text-sm font-bold font-sans focus:outline-none focus:bg-white focus:ring-2 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all"
-                            :class="phoneVerified ? 'border-emerald-300 bg-emerald-50/30 pointer-events-none' : ''"
-                            placeholder="10xxxxxxx" :required="currentStep === 2" dir="ltr">
-                        {{-- Verified Badge --}}
-                        <div x-show="phoneVerified" class="absolute inset-y-0 end-0 pe-2.5 flex items-center">
-                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-black">
-                                <i class="bi bi-check-circle-fill"></i>
-                                {{ __('auth.registration_steps.verified') }}
-                            </span>
-                        </div>
-                    </div>
-
-                    {{-- Send OTP Button --}}
-                    <button type="button" @click="sendPhoneOtp()" 
-                            x-show="!phoneVerified"
-                            :disabled="isSendingOtp || otpCountdown > 0 || !phone || phone.length < 7"
-                            class="h-11 px-3.5 rounded-xl font-black text-xs font-arabic transition-all whitespace-nowrap flex items-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-emerald-600 to-teal-500 text-white shadow-md shadow-emerald-600/15 hover:from-emerald-700 hover:to-teal-600">
-                        <template x-if="isSendingOtp">
-                            <div class="w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
-                        </template>
-                        <template x-if="!isSendingOtp && otpCountdown > 0">
-                            <span x-text="otpFormattedCountdown"></span>
-                        </template>
-                        <template x-if="!isSendingOtp && otpCountdown <= 0">
-                            <span>{{ __('auth.registration_steps.send_otp') }}</span>
-                        </template>
-                    </button>
-                </div>
-
-                {{-- OTP Input (appears after sending) --}}
-                <div x-show="otpSent && !phoneVerified" x-cloak 
-                     x-transition:enter="transition ease-out duration-300"
-                     x-transition:enter-start="opacity-0 -translate-y-2"
-                     x-transition:enter-end="opacity-100 translate-y-0"
-                     class="space-y-2 pt-1">
-                    <div class="relative flex gap-2">
-                        <div class="relative flex-1">
-                            <input type="text" x-model="otpCode" maxlength="6" inputmode="numeric" pattern="[0-9]*"
-                                @input="otpCode = otpCode.replace(/[^0-9]/g, ''); if(otpCode.length === 6) verifyPhoneOtp()"
-                                class="w-full h-11 px-4 bg-amber-50/50 border-2 border-amber-200 rounded-xl text-center text-lg font-black tracking-[0.5em] focus:outline-none focus:ring-2 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all"
-                                placeholder="••••••">
-                        </div>
-                        <button type="button" @click="verifyPhoneOtp()" 
-                                :disabled="isVerifyingOtp || otpCode.length !== 6"
-                                class="h-11 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 text-white font-black text-xs font-arabic shadow-md shadow-emerald-600/15 hover:from-emerald-700 hover:to-teal-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5">
-                            <template x-if="isVerifyingOtp">
-                                <div class="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                            </template>
-                            <template x-if="!isVerifyingOtp">
-                                <span>{{ __('auth.registration_steps.verify') }}</span>
-                            </template>
-                        </button>
-                    </div>
-                    <p class="text-[11px] font-bold font-arabic text-amber-600 flex items-center gap-1 px-1">
-                        <i class="bi bi-whatsapp text-emerald-500"></i>
-                        {{ __('auth.registration_steps.otp_sent') }}
-                    </p>
-                </div>
-
-                {{-- OTP Status Message --}}
-                <p x-show="otpMessage && otpStatus !== 'sent'" x-cloak
-                   :class="{
-                       'text-emerald-600': otpStatus === 'verified',
-                       'text-red-500': otpStatus === 'error',
-                       'text-amber-600': otpStatus === 'sending' || otpStatus === 'verifying'
-                   }"
-                   class="text-[11px] font-bold px-1 font-arabic animate-fade-in" x-text="otpMessage"></p>
-            </div>
 
             <!-- Password & Confirm Password (Side-by-side) -->
             <div class="space-y-1">
@@ -295,7 +205,7 @@
         <button type="button" @click="prevStep()" class="sm:w-36 h-12 rounded-xl font-black text-sm text-slate-600 bg-slate-100 hover:bg-slate-200 transition-all border border-slate-200">
             {{ __('auth.registration_steps.back') }}
         </button>
-        <button type="submit" :disabled="(password.length > 0 && !isPasswordMatch) || !phoneVerified"
+        <button type="submit" :disabled="(password.length > 0 && !isPasswordMatch)"
                 class="flex-1 h-12 rounded-xl font-black text-base text-white bg-gradient-to-r from-emerald-600 to-teal-500 shadow-lg shadow-emerald-600/20 hover:from-emerald-700 hover:to-teal-600 hover:-translate-y-0.5 active:scale-[0.98] transition-all disabled:opacity-50 disabled:grayscale disabled:pointer-events-none relative overflow-hidden group">
             <div class="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-white opacity-20 group-hover:animate-[shine_1s] group-hover:left-full transition-all duration-700 ease-in-out"></div>
             <span class="relative z-10" x-text="currentPlan.trial_days > 0 ? ({{ Js::from(__('auth.google_registration.start_free_trial')) }}) : (finalPrice === 0 ? '{{ __('auth.register.cta_main') }}' : '{{ __('auth.registration_steps.pay_complete_short') }}')"></span>

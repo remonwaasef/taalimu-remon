@@ -47,7 +47,7 @@ class RegistrationController extends Controller
             'center_name' => 'required|string|max:255',
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email',
-            'phone' => 'required|string|max:20|unique:users,phone',
+            'phone' => 'nullable|string|max:20|unique:users,phone',
             'password' => [
                 'required',
                 'string',
@@ -64,12 +64,6 @@ class RegistrationController extends Controller
             'country_code' => 'nullable|string|max:2',
             'payment_gateway' => 'required|in:'.$allowedGateways,
         ]);
-
-        // PHONE VERIFICATION GATE: Ensure phone was verified via OTP before account creation
-        $phoneVerified = session('phone_verified') && session('phone_verified_number') === $request->phone;
-        if (! $phoneVerified) {
-            return back()->withErrors(['phone' => __('messages.verify_phone_first')])->withInput();
-        }
 
         $currency = $request->input('currency', 'EGP');
 
