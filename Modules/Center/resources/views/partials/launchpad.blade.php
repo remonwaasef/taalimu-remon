@@ -16,7 +16,20 @@
         }
     }
 
-    $hasDemoData = \App\Models\Instructor::where('tenant_id', app('tenant')->id)->where('email', 'like', '%.demo@%')->exists();
+    $tenantId = app('tenant')?->id;
+    $hasDemoData = $tenantId && (
+        \App\Models\Instructor::where('tenant_id', $tenantId)
+            ->where('email', 'like', '%.demo%@%')
+            ->exists()
+        || \App\Models\User::where('tenant_id', $tenantId)
+            ->where(function ($q) {
+                $q->where('email', 'like', '%.demo%@%')
+                  ->orWhere('email', 'like', 'std%.demo%@%');
+            })->exists()
+        || \App\Models\Course::where('tenant_id', $tenantId)
+            ->where('description', 'دورة تجريبية للعرض')
+            ->exists()
+    );
 @endphp
 
 <div class="mb-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs relative overflow-hidden font-inter transition-all duration-200">
@@ -51,9 +64,9 @@
             {{-- Action Tools: Demo Seed / Reset --}}
             <div class="flex items-center gap-2 shrink-0">
                 @if($hasDemoData)
-                    <form action="{{ route('center.demo.reset', ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}" method="POST" id="deleteRowForm_1" class="m-0">
+                    <form action="{{ route('center.demo.reset', ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}" method="POST" id="deleteDemoDataForm" class="m-0">
                         @csrf
-                        <button type="button" data-confirm-delete data-form="deleteRowForm_1" class="px-3 py-1.5 rounded-xl text-xs font-bold text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/40 hover:bg-red-100 dark:hover:bg-red-900/40 border border-red-200/60 dark:border-red-800/40 transition-colors flex items-center gap-1.5">
+                        <button type="button" data-confirm-delete data-form="deleteDemoDataForm" data-title="{{ __('center::dashboard.launchpad.reset_demo') }}" data-confirm="{{ __('center::dashboard.launchpad.reset_demo_desc') }}" class="px-3 py-1.5 rounded-xl text-xs font-bold text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/40 hover:bg-red-100 dark:hover:bg-red-900/40 border border-red-200/60 dark:border-red-800/40 transition-colors flex items-center gap-1.5">
                             <i class="fas fa-trash-alt text-[10px]"></i>
                             <span>{{ __('center::dashboard.launchpad.reset_demo') }}</span>
                         </button>
