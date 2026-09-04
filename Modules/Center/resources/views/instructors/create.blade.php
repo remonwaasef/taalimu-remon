@@ -35,10 +35,27 @@
                                 <input type="email" name="email" value="{{ old('email') }}" class="form-control bg-white border" placeholder="instructor@example.com">
                                 @error('email')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                             </div>
+
+                            <!-- Finance / Commission (Primary & Required) -->
+                            <div class="col-md-12">
+                                <label class="form-label fw-bold">{{ __('center::instructors.commission_rate') }} <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <select name="commission_type" class="form-select bg-white border" style="max-width: 160px; border-radius: 0 10px 10px 0 !important;" required>
+                                        <option value="percentage" {{ old('commission_type', 'percentage') == 'percentage' ? 'selected' : '' }}>{{ __('center::instructors.commission_percentage') }} (%)</option>
+                                        <option value="fixed" {{ old('commission_type') == 'fixed' ? 'selected' : '' }}>{{ __('center::instructors.commission_fixed') }} ({{ get_currency_symbol() }})</option>
+                                    </select>
+                                    <input type="number" step="0.01" min="0" name="commission_rate" value="{{ old('commission_rate', 70) }}" class="form-control bg-white border" placeholder="70" style="border-radius: 10px 0 0 10px !important;" required>
+                                </div>
+                                <div class="form-text text-muted small mt-1">
+                                    <i class="fas fa-info-circle me-1"></i> تُستخدم لاحتساب أرباح المعلم وكشف حسابه المالي تلقائياً عند تحصيل الاشتراكات (اكتب 0 في حال الإيجار أو الراتب الثابت).
+                                </div>
+                                @error('commission_rate')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+                                @error('commission_type')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+                            </div>
                         </div>
 
                         <!-- Collapsible Advanced Settings (Optional) -->
-                        <details class="mb-4 border rounded-3 p-3 bg-light" {{ (old('gender') || old('hiring_date') || old('bio') || (old('commission_rate') && old('commission_rate') > 0) || $errors->has('commission_rate') || $errors->has('gender')) ? 'open' : '' }}>
+                        <details class="mb-4 border rounded-3 p-3 bg-light" {{ (old('gender') || old('hiring_date') || old('bio') || $errors->has('gender') || $errors->has('hiring_date') || $errors->has('bio')) ? 'open' : '' }}>
                             <summary class="fw-bold text-muted cursor-pointer user-select-none d-flex justify-content-between align-items-center">
                                 <span><i class="fas fa-sliders-h me-1 text-primary"></i> بيانات إضافية وتفاصيل الحساب (اختياري)</span>
                                 <span class="badge bg-white text-secondary border small">اضغط للتوسيع</span>
@@ -68,19 +85,6 @@
                                         <input type="date" name="hiring_date" value="{{ old('hiring_date') }}" class="form-control bg-white border">
                                         @error('hiring_date')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                                     </div>
-                                </div>
-
-                                <!-- Finance / Commission -->
-                                <div class="mb-3">
-                                    <label class="form-label fw-bold small">{{ __('center::instructors.commission_rate') }}</label>
-                                    <div class="input-group">
-                                        <select name="commission_type" class="form-select bg-white border" style="max-width: 140px; border-radius: 0 10px 10px 0 !important;">
-                                            <option value="percentage" {{ old('commission_type', 'percentage') == 'percentage' ? 'selected' : '' }}>{{ __('center::instructors.commission_percentage') }}</option>
-                                            <option value="fixed" {{ old('commission_type') == 'fixed' ? 'selected' : '' }}>{{ __('center::instructors.commission_fixed') }}</option>
-                                        </select>
-                                        <input type="number" step="0.01" name="commission_rate" value="{{ old('commission_rate', 0) }}" class="form-control bg-white border" placeholder="0.00" style="border-radius: 10px 0 0 10px !important;">
-                                    </div>
-                                    @error('commission_rate')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                                 </div>
 
                                 <div class="mb-2">

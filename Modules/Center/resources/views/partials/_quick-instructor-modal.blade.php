@@ -2,8 +2,6 @@
     <form id="quick-instructor-form" class="space-y-4">
         @csrf
         <input type="hidden" name="status" value="active">
-        <input type="hidden" name="commission_type" value="percentage">
-        <input type="hidden" name="commission_rate" value="0">
 
         <div>
             <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
@@ -29,9 +27,26 @@
                    class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all text-sm">
         </div>
 
+        <!-- Commission Field -->
         <div>
             <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
-                {{ __('center::instructors.email') }}
+                {{ __('center::instructors.commission_rate') }} <span class="text-rose-500">*</span>
+            </label>
+            <div class="flex rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50">
+                <select name="commission_type" class="px-3 py-3 text-xs bg-slate-100 dark:bg-slate-700/60 text-slate-700 dark:text-slate-200 border-e border-slate-200 dark:border-slate-700 focus:outline-hidden font-bold">
+                    <option value="percentage">{{ __('center::instructors.commission_percentage') }} (%)</option>
+                    <option value="fixed">{{ __('center::instructors.commission_fixed') }} ({{ get_currency_symbol() }})</option>
+                </select>
+                <input type="number" step="0.01" min="0" name="commission_rate" value="70" required
+                       class="w-full px-4 py-3 bg-transparent text-slate-900 dark:text-slate-100 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all text-sm"
+                       placeholder="70">
+            </div>
+            <p class="text-[11px] text-slate-400 mt-1">تُستخدم لحساب أرباح المعلم تلقائياً عند سداد الطلاب (اكتب 0 في حال الإيجار أو الراتب الثابت).</p>
+        </div>
+
+        <div>
+            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+                {{ __('center::instructors.email') }} <span class="text-slate-400 font-normal">({{ __('center::courses.optional') ?? 'اختياري' }})</span>
             </label>
             <input type="email" name="email"
                    class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all text-sm">

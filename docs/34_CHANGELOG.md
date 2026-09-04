@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Implemented progressive disclosure on full Instructor and Course creation forms, grouping secondary/optional fields inside modern collapsible `<details>` sections to eliminate visual overwhelm.
   - Allowed courses to be created with flexible schedules (optional at creation time, preventing blocking validation).
   - Enhanced controller JSON responses for seamless asynchronous AJAX modal submissions.
+  - Made instructor commission rate and type mandatory with clear UX guidance and default values in both Quick Modal and full creation form.
 
 ### Fixed
 - **Clean Center Initialization & Unified Login Response Fix (2026-09-04)**:
