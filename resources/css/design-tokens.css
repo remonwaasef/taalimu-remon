@@ -142,18 +142,44 @@
     --shadow-xl: 0 24px 60px -8px rgba(16, 32, 51, .11);
 
     /* ----------------------------------------------------------------------
-       7. Button & Form Tokens
+        7. Button & Form Tokens
        ---------------------------------------------------------------------- */
+    --color-secondary: #475569;
+    --color-secondary-hover: #1e293b;
+
     --btn-primary-bg: #168F7C;
     --btn-primary-hover-bg: #0D7465;
     --btn-primary-text: #FFFFFF;
 
     --btn-secondary-bg: #FFFFFF;
-    --btn-secondary-text: #168F7C;
-    --btn-secondary-border: #D3EBE5;
+    --btn-secondary-text: #334155;
+    --btn-secondary-border: #CBD5E1;
+    --btn-secondary-hover-bg: #F1F5F9;
+
+    --btn-light-bg: #F1F5F9;
+    --btn-light-border: #CBD5E1;
+    --btn-light-text: #1E293B;
+    --btn-light-hover-bg: #E2E8F0;
+    --btn-light-hover-text: #0F172A;
 
     --btn-dark-bg: #0D1A2B;
     --btn-dark-text: #FFFFFF;
+
+    --btn-success-bg: #168F7C;
+    --btn-success-hover-bg: #0D7465;
+    --btn-success-text: #FFFFFF;
+
+    --btn-danger-bg: #DC2626;
+    --btn-danger-hover-bg: #B91C1C;
+    --btn-danger-text: #FFFFFF;
+
+    --btn-warning-bg: #D97706;
+    --btn-warning-hover-bg: #B45309;
+    --btn-warning-text: #FFFFFF;
+
+    --btn-info-bg: #0284C7;
+    --btn-info-hover-bg: #0369A1;
+    --btn-info-text: #FFFFFF;
 
     --input-bg: #FFFFFF;
     --input-border: #DDE7E4;

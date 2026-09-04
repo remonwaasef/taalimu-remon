@@ -1,10 +1,21 @@
 @extends('center::layouts.app-next')
 
 @section('panel-content')
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-dark">{{ __('center::instructors.add_new') }}</h2>
-        <a href="{{ route('center.instructors.index') }}" class="btn btn-outline-secondary rounded-pill px-4">{{ __('center::instructors.back_to_list') }}</a>
-    </div>
+    <x-ui.page-header
+        title="{{ __('center::instructors.add_new') }}"
+        subtitle="إضافة معلم جديد وتحديد بياناته وعمولته"
+        :breadcrumb="[
+            __('center::dashboard.title') => route('center.dashboard'),
+            __('center::instructors.title') => route('center.instructors.index'),
+            __('center::instructors.add_new') => null
+        ]"
+    >
+        <x-slot name="actions">
+            <x-ui.button variant="outline" icon="fas fa-arrow-right" href="{{ route('center.instructors.index') }}">
+                {{ __('center::instructors.back_to_list') }}
+            </x-ui.button>
+        </x-slot>
+    </x-ui.page-header>
 
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -97,9 +108,14 @@
 
 
 
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm py-3 fw-bold">{{ __('center::instructors.save_instructor') }}</button>
-                            <a href="{{ route('center.instructors.index') }}" class="btn btn-light rounded-pill py-3">{{ __('center::instructors.cancel') }}</a>
+                        <div class="d-flex flex-column gap-2 pt-2">
+                            <button type="submit" class="w-full py-3.5 px-6 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md shadow-emerald-600/20 transition-all flex items-center justify-center gap-2">
+                                <i class="fas fa-check-circle"></i>
+                                <span>{{ __('center::instructors.save_instructor') }}</span>
+                            </button>
+                            <a href="{{ route('center.instructors.index') }}" class="btn btn-outline-secondary rounded-xl py-2.5 text-center fw-bold">
+                                {{ __('center::instructors.cancel') }}
+                            </a>
                         </div>
                     </form>
                 </div>

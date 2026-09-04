@@ -18,6 +18,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Made instructor commission rate and type mandatory with clear UX guidance and default values in both Quick Modal and full creation form.
 
 ### Fixed
+- **Button Contrast, Disappearance on Hover, and Legacy Banner Overrides Fix (2026-09-04)**:
+  - Removed obsolete white-on-white header banner CSS overrides in [taalimu-unified.css](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/public/assets/hope-ui/css/taalimu-unified.css) that caused `.btn-outline-secondary` and titles to blend into the light background.
+  - Defined all missing button tokens in `:root` (`--color-secondary`, `--btn-light-*`, `--btn-secondary-*`, etc.) in `design-tokens.css` and `taalimu-unified.css`.
+  - Added rock-solid high-contrast background and hover states for `.btn-light`, `.btn-secondary`, and all `.btn-outline-*` variants so they never disappear or turn white on transparent on hover.
+  - Upgraded [instructors/create.blade.php](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/Modules/Center/resources/views/instructors/create.blade.php) and [instructors/edit.blade.php](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/Modules/Center/resources/views/instructors/edit.blade.php) to use `<x-ui.page-header>` and `<x-ui.button>`.
+
 - **Clean Center Initialization & Unified Login Response Fix (2026-09-04)**:
   - Removed automatic demo data provisioning from [RegistrationController.php](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/app/Http/Controllers/RegistrationController.php) so that newly registered centers start 100% clean with zero mock students, courses, or instructors.
   - Fixed 500 error in [UnifiedAuthController.php](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/app/Http/Controllers/UnifiedAuthController.php) caused by calling undefined `response()->setContent()`, switching to standard `response()`.

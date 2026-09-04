@@ -550,6 +550,20 @@ html.dark .btn-outline-secondary:active {
     color: #FFFFFF !important;
 }
 
+html.dark .btn-light {
+    background: #1E293B !important;
+    border: 1px solid #334155 !important;
+    color: #CBD5E1 !important;
+}
+
+html.dark .btn-light:hover,
+html.dark .btn-light:focus,
+html.dark .btn-light:active {
+    background: #334155 !important;
+    border-color: #475569 !important;
+    color: #FFFFFF !important;
+}
+
 /* --------------------------------------------------------------------------
    13. Lists, Badges & Misc Components
    -------------------------------------------------------------------------- */

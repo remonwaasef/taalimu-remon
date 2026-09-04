@@ -6,6 +6,53 @@
     --bs-link-hover-color: var(--color-primary-hover, #0D7465) !important;
     --primary-color: var(--color-primary, #168F7C) !important;
     --primary-gradient: linear-gradient(135deg, var(--color-primary, #168F7C) 0%, var(--color-primary-dark, #0D7465) 100%);
+
+    /* Secondary & Neutrals */
+    --color-secondary: #475569;
+    --color-secondary-hover: #1e293b;
+    --color-secondary-bg: #f1f5f9;
+
+    /* Button Tokens */
+    --btn-primary-bg: #168F7C;
+    --btn-primary-hover-bg: #0D7465;
+    --btn-primary-text: #FFFFFF;
+    --btn-primary-shadow: 0 1px 2px rgba(22, 143, 124, 0.2);
+    --btn-primary-hover-shadow: 0 4px 12px rgba(22, 143, 124, 0.25);
+
+    --btn-secondary-bg: #475569;
+    --btn-secondary-hover-bg: #334155;
+    --btn-secondary-text: #FFFFFF;
+    --btn-secondary-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+
+    --btn-light-bg: #F1F5F9;
+    --btn-light-border: #CBD5E1;
+    --btn-light-text: #1E293B;
+    --btn-light-hover-bg: #E2E8F0;
+    --btn-light-hover-text: #0F172A;
+
+    --btn-dark-bg: #0F172A;
+    --btn-dark-hover-bg: #1E293B;
+    --btn-dark-text: #FFFFFF;
+
+    --btn-success-bg: #168F7C;
+    --btn-success-hover-bg: #0D7465;
+    --btn-success-text: #FFFFFF;
+    --btn-success-shadow: 0 1px 2px rgba(22, 143, 124, 0.2);
+
+    --btn-danger-bg: #DC2626;
+    --btn-danger-hover-bg: #B91C1C;
+    --btn-danger-text: #FFFFFF;
+    --btn-danger-shadow: 0 1px 2px rgba(220, 38, 38, 0.2);
+
+    --btn-warning-bg: #D97706;
+    --btn-warning-hover-bg: #B45309;
+    --btn-warning-text: #FFFFFF;
+    --btn-warning-shadow: 0 1px 2px rgba(217, 119, 6, 0.2);
+
+    --btn-info-bg: #0284C7;
+    --btn-info-hover-bg: #0369A1;
+    --btn-info-text: #FFFFFF;
+    --btn-info-shadow: 0 1px 2px rgba(2, 132, 199, 0.2);
 }
 
 body {
@@ -253,101 +300,140 @@ body {
 }
 
 .btn-light {
-    background: var(--btn-light-bg) !important;
-    border: 1px solid var(--btn-light-border) !important;
-    color: var(--btn-light-text) !important;
+    background: #f1f5f9 !important;
+    border: 1px solid #cbd5e1 !important;
+    color: #1e293b !important;
+    font-weight: 600 !important;
+    transition: all 0.2s ease-in-out !important;
 }
 
 .btn-light:hover,
 .btn-light:focus,
 .btn-light:active {
-    background: var(--btn-light-hover-bg) !important;
-    color: var(--btn-light-hover-text) !important;
+    background: #e2e8f0 !important;
+    border-color: #94a3b8 !important;
+    color: #0f172a !important;
+    transform: translateY(-1px);
 }
 
 /* Outline Variants */
 .btn-outline-secondary {
-    color: var(--color-secondary) !important;
-    border-color: var(--color-secondary) !important;
-    background: transparent !important;
+    color: #334155 !important;
+    border: 1px solid #cbd5e1 !important;
+    background: #ffffff !important;
+    font-weight: 600 !important;
+    transition: all 0.2s ease-in-out !important;
 }
 
 .btn-outline-secondary:hover,
 .btn-outline-secondary:focus,
 .btn-outline-secondary:active {
-    background: var(--color-secondary) !important;
-    border-color: var(--color-secondary) !important;
+    background: #f1f5f9 !important;
+    border-color: #94a3b8 !important;
+    color: #0f172a !important;
+    transform: translateY(-1px);
+}
+
+.btn-outline-primary {
+    color: var(--color-primary, #168F7C) !important;
+    border: 1px solid var(--color-primary, #168F7C) !important;
+    background: transparent !important;
+    font-weight: 600 !important;
+    transition: all 0.2s ease-in-out !important;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus,
+.btn-outline-primary:active {
+    background: var(--color-primary, #168F7C) !important;
+    border-color: var(--color-primary, #168F7C) !important;
     color: #ffffff !important;
+    transform: translateY(-1px);
 }
 
 .btn-outline-success {
-    color: var(--btn-success-bg) !important;
-    border-color: var(--btn-success-bg) !important;
+    color: #168F7C !important;
+    border: 1px solid #168F7C !important;
     background: transparent !important;
+    font-weight: 600 !important;
+    transition: all 0.2s ease-in-out !important;
 }
 
 .btn-outline-success:hover,
 .btn-outline-success:focus,
 .btn-outline-success:active {
-    background: var(--btn-success-bg) !important;
-    border-color: var(--btn-success-bg) !important;
+    background: #168F7C !important;
+    border-color: #168F7C !important;
     color: #ffffff !important;
+    transform: translateY(-1px);
 }
 
 .btn-outline-danger {
-    color: var(--btn-danger-bg) !important;
-    border-color: var(--btn-danger-bg) !important;
+    color: #dc2626 !important;
+    border: 1px solid #dc2626 !important;
     background: transparent !important;
+    font-weight: 600 !important;
+    transition: all 0.2s ease-in-out !important;
 }
 
 .btn-outline-danger:hover,
 .btn-outline-danger:focus,
 .btn-outline-danger:active {
-    background: var(--btn-danger-bg) !important;
-    border-color: var(--btn-danger-bg) !important;
+    background: #dc2626 !important;
+    border-color: #dc2626 !important;
     color: #ffffff !important;
+    transform: translateY(-1px);
 }
 
 .btn-outline-warning {
-    color: var(--btn-warning-bg) !important;
-    border-color: var(--btn-warning-bg) !important;
+    color: #d97706 !important;
+    border: 1px solid #d97706 !important;
     background: transparent !important;
+    font-weight: 600 !important;
+    transition: all 0.2s ease-in-out !important;
 }
 
 .btn-outline-warning:hover,
 .btn-outline-warning:focus,
 .btn-outline-warning:active {
-    background: var(--btn-warning-bg) !important;
-    border-color: var(--btn-warning-bg) !important;
+    background: #d97706 !important;
+    border-color: #d97706 !important;
     color: #ffffff !important;
+    transform: translateY(-1px);
 }
 
 .btn-outline-info {
-    color: var(--btn-info-bg) !important;
-    border-color: var(--btn-info-bg) !important;
+    color: #0284c7 !important;
+    border: 1px solid #0284c7 !important;
     background: transparent !important;
+    font-weight: 600 !important;
+    transition: all 0.2s ease-in-out !important;
 }
 
 .btn-outline-info:hover,
 .btn-outline-info:focus,
 .btn-outline-info:active {
-    background: var(--btn-info-bg) !important;
-    border-color: var(--btn-info-bg) !important;
+    background: #0284c7 !important;
+    border-color: #0284c7 !important;
     color: #ffffff !important;
+    transform: translateY(-1px);
 }
 
 .btn-outline-dark {
-    color: var(--btn-dark-bg) !important;
-    border-color: var(--btn-dark-bg) !important;
+    color: #0f172a !important;
+    border: 1px solid #0f172a !important;
     background: transparent !important;
+    font-weight: 600 !important;
+    transition: all 0.2s ease-in-out !important;
 }
 
 .btn-outline-dark:hover,
 .btn-outline-dark:focus,
 .btn-outline-dark:active {
-    background: var(--btn-dark-bg) !important;
-    border-color: var(--btn-dark-bg) !important;
+    background: #0f172a !important;
+    border-color: #0f172a !important;
     color: #ffffff !important;
+    transform: translateY(-1px);
 }
 
 .text-primary {
@@ -856,21 +942,30 @@ h6 {
     /* Darker Slate for better readability */
 }
 
-/* Content layout (Premium Overlap effect) */
+/* Content layout */
 .content-inner {
-    margin-top: -3rem !important;
-    /* Pull content up slightly less */
+    margin-top: 0 !important;
     position: relative;
     z-index: 10;
 }
 
-/* Auto-style the first row containing title and actions over the green banner */
-.content-inner>.d-flex:first-child h2,
-.content-inner>.row:first-child h2,
-.content-inner>.mb-4:first-child h2,
-.content-inner>.mb-4:first-child .h2 {
-    color: #ffffff !important;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+/* Ensure headings have proper contrast on light canvas */
+.content-inner h1,
+.content-inner h2,
+.content-inner h3,
+.content-inner h4,
+.content-inner h5,
+.content-inner h6 {
+    color: #0f172a !important;
+}
+
+html.dark .content-inner h1,
+html.dark .content-inner h2,
+html.dark .content-inner h3,
+html.dark .content-inner h4,
+html.dark .content-inner h5,
+html.dark .content-inner h6 {
+    color: #f8fafc !important;
 }
 
 /* Specific reset for cards to ensure internal text is visible and sharp */
@@ -884,59 +979,17 @@ h6 {
 .content-inner .card .h2 {
     text-shadow: none !important;
     color: #1e293b !important;
-    /* Force Black/Dark Slate */
 }
 
-.content-inner .card h2,
-.content-inner .card .h2 {
-    font-size: 2.5rem !important;
-    /* Premium Large Numbers */
-    font-weight: 800 !important;
-    line-height: 1 !important;
-}
-
-.content-inner>.d-flex:first-child .text-muted,
-.content-inner>.d-flex:first-child p,
-.content-inner>.mb-4:first-child .breadcrumb-item a,
-.content-inner>.mb-4:first-child .breadcrumb-item.active,
-.content-inner>.mb-4:first-child p {
-    color: rgba(255, 255, 255, 0.85) !important;
-}
-
-.content-inner>.mb-4:first-child .breadcrumb-item+.breadcrumb-item::before {
-    color: rgba(255, 255, 255, 0.6) !important;
-}
-
-/* Buttons in the overlapping header */
-.content-inner>.d-flex:first-child .btn-outline-secondary,
-.content-inner>.mb-4:first-child .btn-outline-secondary {
-    background-color: rgba(255, 255, 255, 0.15) !important;
-    color: #ffffff !important;
-    border-color: rgba(255, 255, 255, 0.3) !important;
-    backdrop-filter: blur(10px);
-    font-weight: 700;
-}
-
-.content-inner>.d-flex:first-child .btn-outline-secondary:hover,
-.content-inner>.mb-4:first-child .btn-outline-secondary:hover {
-    background-color: rgba(255, 255, 255, 0.25) !important;
-    color: #ffffff !important;
-    transform: translateY(-1px);
-}
-
-.content-inner>.d-flex:first-child .btn-primary,
-.content-inner>.mb-4:first-child .btn-primary {
-    background-color: #ffffff !important;
-    color: var(--color-primary, #168F7C) !important;
-    border-color: #ffffff !important;
-    font-weight: 700;
-}
-
-.content-inner>.d-flex:first-child .btn-primary:hover,
-.content-inner>.mb-4:first-child .btn-primary:hover {
-    background-color: #f8fafc !important;
-    color: #168F7C !important;
-    transform: translateY(-1px);
+html.dark .content-inner .card h1,
+html.dark .content-inner .card h2,
+html.dark .content-inner .card h3,
+html.dark .content-inner .card h4,
+html.dark .content-inner .card h5,
+html.dark .content-inner .card h6,
+html.dark .content-inner .card p,
+html.dark .content-inner .card .h2 {
+    color: #e2e8f0 !important;
 }
 
 /* Prevent Sidebar Arrow Overlap in RTL */
