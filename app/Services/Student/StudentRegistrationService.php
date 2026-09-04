@@ -32,14 +32,28 @@ class StudentRegistrationService
             $email = $data->email ?? $this->generateUniqueEmail();
             $code = $data->code ?? $this->generateUniqueCode();
 
-            $existingUser = User::where('email', $email)->first();
+            $tenantId = \Modules\Tenancy\Services\TenantResolver::id() ?? $creator->tenant_id;
+
+            $existingUser = User::withTrashed()
+                ->where('tenant_id', $tenantId)
+                ->where('email', $email)
+                ->first();
             if (! $existingUser && ! empty($data->phone)) {
-                $existingUser = User::where('phone', $data->phone)->first();
+                $existingUser = User::withTrashed()
+                    ->where('tenant_id', $tenantId)
+                    ->where('phone', $data->phone)
+                    ->first();
             }
 
             if ($existingUser) {
-                $student = Student::where('user_id', $existingUser->id)->first();
+                if ($existingUser->trashed()) {
+                    $existingUser->restore();
+                }
+                $student = Student::withTrashed()->where('user_id', $existingUser->id)->first();
                 if ($student) {
+                    if ($student->trashed()) {
+                        $student->restore();
+                    }
                     $student->update([
                         'grade_id' => $data->grade_id,
                         'name' => $data->name,
@@ -60,7 +74,7 @@ class StudentRegistrationService
                     'phone' => $data->phone,
                     'password' => Hash::make($generatedPassword),
                     'role' => 'student',
-                    'tenant_id' => \Modules\Tenancy\Services\TenantResolver::get()->id,
+                    'tenant_id' => $tenantId,
                     'must_change_password' => true,
                 ]);
             }
@@ -68,7 +82,7 @@ class StudentRegistrationService
             $guardianId = null;
             if ($data->parent_phone) {
                 $guardian = Guardian::updateOrCreate(
-                    ['tenant_id' => \Modules\Tenancy\Services\TenantResolver::get()->id, 'phone' => $data->parent_phone],
+                    ['tenant_id' => $tenantId, 'phone' => $data->parent_phone],
                     [
                         'name' => $data->parent_name ?? 'N/A',
                         'job' => $data->parent_job,
@@ -80,7 +94,7 @@ class StudentRegistrationService
             }
 
             $student = Student::forceCreate([
-                'tenant_id' => \Modules\Tenancy\Services\TenantResolver::get()->id,
+                'tenant_id' => $tenantId,
                 'user_id' => $user->id,
                 'grade_id' => $data->grade_id,
                 'grade_level' => $data->grade_level,
@@ -210,9 +224,11 @@ class StudentRegistrationService
     public function generateUniqueEmail()
     {
         $tenant = \Modules\Tenancy\Services\TenantResolver::get();
-        $subdomain = $tenant->domain;
+        $tenantId = $tenant?->id;
+        $subdomain = $tenant?->domain ?? 'center';
 
-        $lastStudent = User::where('tenant_id', $tenant->id)
+        $lastStudent = User::withTrashed()
+            ->when($tenantId, fn ($q) => $q->where('tenant_id', $tenantId))
             ->where('role', 'student')
             ->where('email', 'like', "std%.{$subdomain}@taalimu.com")
             ->latest('id')
@@ -223,12 +239,15 @@ class StudentRegistrationService
         if ($lastStudent && preg_match('/std(\d+)\./', $lastStudent->email, $matches)) {
             $counter = intval($matches[1]) + 1;
         } else {
-            $counter = User::where('tenant_id', $tenant->id)->where('role', 'student')->count() + 1;
+            $counter = User::withTrashed()
+                ->when($tenantId, fn ($q) => $q->where('tenant_id', $tenantId))
+                ->where('role', 'student')
+                ->count() + 1;
         }
 
         $email = "std{$counter}.{$subdomain}@taalimu.com";
 
-        while (User::withoutGlobalScopes()->where('email', $email)->exists()) {
+        while (User::withTrashed()->withoutGlobalScopes()->where('email', $email)->exists()) {
             $counter++;
             $email = "std{$counter}.{$subdomain}@taalimu.com";
         }

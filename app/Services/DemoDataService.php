@@ -11,6 +11,7 @@ use App\Models\Student;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Modules\Tenancy\Services\TenantResolver;
 
 class DemoDataService
 {
@@ -29,6 +30,11 @@ class DemoDataService
 
     public function seedForTenant($tenant)
     {
+        TenantResolver::set($tenant);
+
+        // First clean up any prior or soft-deleted demo records for this tenant
+        $this->removeDemoDataForTenant($tenant);
+
         SubscriptionService::silence(true);
         try {
             return DB::transaction(function () use ($tenant) {
@@ -43,18 +49,21 @@ class DemoDataService
                     ['order' => 3]
                 );
 
+                // Unique batch token to ensure uniqueness
+                $batch = substr(md5(uniqid('', true)), 0, 5);
+
                 // 2. Create Instructors
                 $instructorsData = [
                     [
                         'name' => 'أحمد محمد',
                         'specialization' => 'الرياضيات',
-                        'email' => 'ahmed.demo@'.$tenant->domain,
+                        'email' => 'ahmed.demo.' . $batch . '@' . $tenant->domain,
                         'status' => 'active',
                     ],
                     [
                         'name' => 'سارة أحمد',
                         'specialization' => 'اللغة العربية',
-                        'email' => 'sara.demo@'.$tenant->domain,
+                        'email' => 'sara.demo.' . $batch . '@' . $tenant->domain,
                         'status' => 'active',
                     ],
                 ];
@@ -63,7 +72,7 @@ class DemoDataService
                 foreach ($instructorsData as $data) {
                     $instructors[] = Instructor::create(array_merge($data, [
                         'tenant_id' => $tenant->id,
-                        'phone' => '01'.rand(100000000, 999999999),
+                        'phone' => '01' . rand(10, 99) . rand(1000000, 9999999),
                         'commission_rate' => 20,
                         'commission_type' => 'percentage',
                     ]));
@@ -89,20 +98,23 @@ class DemoDataService
                 $studentsNames = ['محمد علي', 'فاطمة حسن', 'يوسف إبراهيم', 'نور الدين', 'مريم عبدالله'];
 
                 foreach ($studentsNames as $index => $name) {
-                    $studentEmail = Str::slug($name, '.').'.demo'.$index.'@'.$tenant->domain;
+                    $studentEmail = Str::slug($name, '.') . '.demo' . $index . '.' . $batch . '@' . $tenant->domain;
 
                     // Register Student
                     $sData = StudentData::fromArray([
                         'name' => $name,
                         'email' => $studentEmail,
-                        'phone' => '01'.rand(100000000, 999999999),
+                        'phone' => '01' . rand(10, 99) . rand(1000000, 9999999),
                         'grade_id' => $grade->id,
                         'password' => Str::random(12),
                     ]);
 
                     // During self-registration no user is authenticated yet — fall back
-                    // to the tenant's admin (first user) as the creator.
-                    $creator = auth()->user() ?? User::where('tenant_id', $tenant->id)->orderBy('id')->first();
+                    // to the tenant's admin (first non-student user) as the creator.
+                    $creator = (auth()->check() && User::where('id', auth()->id())->exists())
+                        ? auth()->user()
+                        : User::where('tenant_id', $tenant->id)->where('role', '!=', 'student')->orderBy('id')->first();
+
                     if (! $creator) {
                         $creator = User::firstOrCreate(
                             ['email' => 'admin@' . $tenant->domain . '.local'],
@@ -127,6 +139,7 @@ class DemoDataService
                         'payment_method' => 'cash',
                         'paid_amount' => $index % 2 == 0 ? $course->price : 0, // Some paid, some debt
                         'status' => $index % 2 == 0 ? 'paid' : 'pending',
+                        'received_by' => $creator?->id,
                     ]);
                 }
 
@@ -134,6 +147,15 @@ class DemoDataService
             });
         } finally {
             SubscriptionService::silence(false);
+
+            // Bust caches so dashboard stats update immediately
+            \Illuminate\Support\Facades\Cache::forget("tenant_{$tenant->id}_usage_max_students");
+            \Illuminate\Support\Facades\Cache::forget("tenant_{$tenant->id}_usage_max_instructors");
+            \Illuminate\Support\Facades\Cache::forget("tenant_{$tenant->id}_usage_max_courses");
+            \App\Support\TenantCache::forget('dashboard_stats_v3');
+            \App\Support\TenantCache::forget('active_instructors_count');
+            \App\Support\TenantCache::forget('recent_activities');
+            \App\Support\TenantCache::forget("dashboard_ai_insights_v3_{$tenant->id}");
         }
     }
 
@@ -142,8 +164,8 @@ class DemoDataService
         SubscriptionService::silence(true);
         try {
             return DB::transaction(function () use ($tenant) {
-                // 1. Delete Demo Students (Users & Profiles)
-                $demoUsers = User::with(['student.sales', 'student.enrollments'])
+                // 1. Delete Demo Students (Users & Profiles, including soft-deleted)
+                $demoUsers = User::withTrashed()
                     ->where('tenant_id', $tenant->id)
                     ->where('role', 'student')
                     ->where(function ($q) {
@@ -152,28 +174,65 @@ class DemoDataService
                     })->get();
 
                 foreach ($demoUsers as $user) {
-                    if ($user->student) {
-                        $user->student->sales()->delete();
-                        $user->student->enrollments()->delete();
-                        \Modules\Center\Models\Attendance::where('student_id', $user->student->id)->delete();
-                        $user->student->delete();
+                    $student = Student::withTrashed()->where('user_id', $user->id)->first();
+                    if ($student) {
+                        foreach ($student->sales()->withTrashed()->get() as $sale) {
+                            $sale->items()->delete();
+                            $sale->payments()->delete();
+                            $sale->refunds()->delete();
+                            $sale->forceDelete();
+                        }
+                        $student->enrollments()->delete();
+                        $student->guardians()->detach();
+                        \Modules\Center\Models\Attendance::where('student_id', $student->id)->delete();
+                        $student->forceDelete();
                     }
                     \App\Models\PointLog::where('user_id', $user->id)->delete();
-                    $user->delete();
+                    $user->forceDelete();
                 }
 
-                // 2. Delete Demo Instructors
-                $demoInstructors = Instructor::with('courses.schedules')
+                // Also clean up any orphan students with demo emails
+                $orphanStudents = Student::withTrashed()
                     ->where('tenant_id', $tenant->id)
-                    ->where('email', 'like', '%.demo@%')->get();
+                    ->where(function ($q) {
+                        $q->where('email', 'like', '%.demo%@%');
+                    })->get();
+
+                foreach ($orphanStudents as $student) {
+                    foreach ($student->sales()->withTrashed()->get() as $sale) {
+                        $sale->items()->delete();
+                        $sale->payments()->delete();
+                        $sale->refunds()->delete();
+                        $sale->forceDelete();
+                    }
+                    $student->enrollments()->delete();
+                    $student->guardians()->detach();
+                    \Modules\Center\Models\Attendance::where('student_id', $student->id)->delete();
+                    $student->forceDelete();
+                }
+
+                // 2. Delete Demo Instructors & Courses
+                $demoInstructors = Instructor::where('tenant_id', $tenant->id)
+                    ->where(function ($q) {
+                        $q->where('email', 'like', '%.demo@%')
+                            ->orWhere('email', 'like', '%.demo.%@%');
+                    })->get();
 
                 foreach ($demoInstructors as $instructor) {
-                    foreach ($instructor->courses as $course) {
+                    $courses = Course::withTrashed()->where('instructor_id', $instructor->id)->get();
+                    foreach ($courses as $course) {
                         $course->schedules()->delete();
-                        $course->delete();
+                        $course->enrollments()->delete();
+                        $course->forceDelete();
                     }
                     $instructor->delete();
                 }
+
+                // Also delete any remaining demo courses
+                Course::withTrashed()
+                    ->where('tenant_id', $tenant->id)
+                    ->where('description', 'دورة تجريبية للعرض')
+                    ->forceDelete();
 
                 // 3. Delete Demo Academic Structure
                 Grade::where('tenant_id', $tenant->id)->where('name', 'الصف الثالث الثانوي')->delete();

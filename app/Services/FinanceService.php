@@ -211,7 +211,7 @@ class FinanceService
                     'sale_id' => $sale->id,
                     'amount' => $data['paid_amount'],
                     'payment_method' => $data['payment_method'],
-                    'received_by' => auth()->id(),
+                    'received_by' => $data['received_by'] ?? (auth()->check() && \App\Models\User::where('id', auth()->id())->exists() ? auth()->id() : null),
                     'paid_at' => now(),
                     'notes' => 'دفعة أولى عند إنشاء الفاتورة',
                 ]);
@@ -272,7 +272,7 @@ class FinanceService
                 'sale_id' => $sale->id,
                 'amount' => $amount,
                 'payment_method' => $method ?? $sale->payment_method,
-                'received_by' => auth()->id(),
+                'received_by' => auth()->check() && \App\Models\User::where('id', auth()->id())->exists() ? auth()->id() : null,
                 'paid_at' => now(),
                 'notes' => $notes ?? 'سداد دفعة مالية',
                 'reference_number' => $referenceNumber,
