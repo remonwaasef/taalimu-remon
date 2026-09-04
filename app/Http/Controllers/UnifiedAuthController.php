@@ -102,7 +102,7 @@ class UnifiedAuthController extends Controller
             $safeSignature = e($signature);
             $csrfToken = e(csrf_token());
 
-            return response()->setContent("
+            return response("
                 <!DOCTYPE html>
                 <html>
                 <head>
