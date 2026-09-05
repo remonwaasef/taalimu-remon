@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Student Profile Complete Decluttering & Visual Streamlining (2026-09-06)**:
+  - Eliminated the 4 cramped, multi-colored stat boxes (12 numbers) in the student profile header (`_show-header.blade.php`), replacing them with 3 clean, high-signal metric badges (Attendance %, Active Enrolled Courses, Financial Balance status).
+  - Resolved broken tab text caused by conflicting display classes in `_show-tabs-nav.blade.php`, restoring full visibility of Arabic labels alongside icons.
+  - Re-architected the Basic Info tab (`_show-tab-info.blade.php`) into clean, responsive cards without oversized 48px circle icons for empty fields.
+  - Compacted the Digital ID QR card and integrated print triggers seamlessly.
+
 - **Center Dashboard Complete Visual Redesign & Operational Hierarchy (2026-09-06)**:
   - Redesigned `Modules/Center/resources/views/index.blade.php` to transform the center dashboard into an executive command center.
   - Replaced hardcoded `font-inter` in `resources/views/layouts/app-next.blade.php` with dynamic locale-based typography (`font-cairo` for Arabic, `font-inter` for English/Latin), resolving system font degradation and disjointed Arabic text rendering.

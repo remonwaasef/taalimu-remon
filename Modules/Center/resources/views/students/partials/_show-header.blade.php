@@ -1,154 +1,107 @@
         <!-- Student Header Card -->
         <div class="col-12">
-            <div class="card border-0 shadow-elite rounded-5 overflow-hidden position-relative mb-4" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);">
-                <div class="card-body p-4 p-md-5 position-relative" style="z-index: 2;">
-                    <div class="d-flex flex-column flex-md-row align-items-center gap-4 text-center text-md-start" style="text-align: right !important;">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden position-relative mb-4 bg-white">
+                <div class="card-body p-4 position-relative" style="z-index: 2;">
+                    <div class="d-flex flex-column flex-md-row align-items-center align-items-md-start gap-4 text-center text-md-start" style="text-align: right !important;">
                         <!-- Profile Image Section -->
                         <div class="position-relative flex-shrink-0">
                             @if($student->profile_photo)
-                                <img src="{{ asset('storage/' . $student->profile_photo) }}" alt="{{ $student->name }}" class="rounded-circle shadow-lg border border-4 border-white" style="width: 130px; height: 130px; object-fit: cover;">
+                                <img src="{{ asset('storage/' . $student->profile_photo) }}" alt="{{ $student->name }}" class="rounded-circle shadow-sm border border-3 border-white" style="width: 100px; height: 100px; object-fit: cover;">
                             @else
-                                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center shadow-lg border border-4 border-white" style="width: 130px; height: 130px; font-size: 3.5rem;">
+                                <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center border border-2 border-primary border-opacity-25 shadow-xs" style="width: 100px; height: 100px; font-size: 2.5rem; font-weight: 800;">
                                     {{ substr($student->name, 0, 1) }}
                                 </div>
                             @endif
-                            <div class="position-absolute bottom-0 end-0 bg-success border border-white border-4 rounded-circle p-2 pulse-success" title="{{ __('center::students.active') }}"></div>
+                            <div class="position-absolute bottom-0 end-0 bg-success border border-white border-3 rounded-circle p-2" title="{{ __('center::students.active') }}"></div>
                         </div>
 
                         <!-- Main Info Section -->
-                        <div class="flex-grow-1">
-                            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
-                                <div class="mb-3 mb-md-0">
-                                    <h1 class="fw-bold text-dark mb-2 display-6">{{ $student->name }}</h1>
-                                    <div class="d-flex align-items-center gap-2 justify-content-center justify-content-md-start mb-2">
-                                        <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2 fw-bold">
-                                            <i class="fas fa-graduation-cap me-1"></i> {{ $student->grade_level_name }}
-                                        </span>
-                                        <span class="badge bg-secondary bg-opacity-10 text-secondary rounded-pill px-3 py-2 fw-bold">
-                                            <i class="fas fa-barcode me-1"></i> {{ $student->code }}
+                        <div class="flex-grow-1 w-100">
+                            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center align-items-md-start gap-3 mb-3">
+                                <div>
+                                    <div class="d-flex align-items-center gap-2 justify-content-center justify-content-md-start flex-wrap mb-1">
+                                        <h2 class="fw-black text-dark mb-0 fs-3">{{ $student->name }}</h2>
+                                        <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2.5 py-1 text-xs fw-bold">
+                                            <i class="fas fa-check-circle me-1"></i> {{ __('center::students.active') }}
                                         </span>
                                     </div>
-                                    <div class="d-flex align-items-center gap-2 justify-content-center justify-content-md-start">
+                                    <div class="d-flex align-items-center gap-2 justify-content-center justify-content-md-start flex-wrap mt-1">
+                                        <span class="badge bg-light text-secondary border rounded-pill px-2.5 py-1 text-xs">
+                                            <i class="fas fa-graduation-cap me-1 text-primary"></i> {{ $student->grade_level_name }}
+                                        </span>
+                                        <span class="badge bg-light text-secondary border rounded-pill px-2.5 py-1 text-xs font-monospace">
+                                            <i class="fas fa-barcode me-1 text-muted"></i> #{{ $student->code }}
+                                        </span>
                                         @if($student->school_name)
-                                            <span class="badge bg-info bg-opacity-10 text-info rounded-pill px-3 py-1">
-                                                <i class="fas fa-school me-1"></i> {{ $student->school_name }}
-                                            </span>
-                                        @endif
-                                        @if($student->section_type)
-                                            <span class="badge bg-dark bg-opacity-10 text-dark rounded-pill px-3 py-1">
-                                                <i class="fas fa-shapes me-1"></i> {{ $student->section_type }}
+                                            <span class="badge bg-light text-secondary border rounded-pill px-2.5 py-1 text-xs">
+                                                <i class="fas fa-school me-1 text-muted"></i> {{ $student->school_name }}
                                             </span>
                                         @endif
                                     </div>
                                 </div>
+
+                                <!-- Action Buttons -->
                                 @php
                                     $reminderMsg = __('center::students.debt_reminder_msg', ['name' => $student->name]);
                                     $guardianPhone = sanitizePhoneForWhatsApp($student->guardian?->phone ?? $student->parent_phone);
                                     $whatsappUrl = "https://web.whatsapp.com/send?phone=" . $guardianPhone . "&text=" . urlencode($reminderMsg);
                                 @endphp
-                                <div class="d-flex gap-2">
-                                    <a href="{{ $whatsappUrl }}" onclick="openSmartWhatsApp('{{ $guardianPhone }}', @json($reminderMsg)); return false;" target="_blank" class="btn btn-success rounded-pill px-4 shadow-sm hover-lift fw-bold">
-                                        <i class="fab fa-whatsapp me-2"></i>{{ __('center::students.profile.send_whatsapp') }}</a>
-                                    <a href="{{ route('center.students.edit', $student->id) }}" class="btn btn-white border rounded-pill px-4 shadow-sm hover-lift text-dark fw-bold">
-                                        <i class="fas fa-edit me-2"></i>{{ __('center::students.profile.edit_profile') }}</a>
-                                    <button type="button" class="btn btn-outline-primary bg-white border rounded-pill px-4 shadow-sm hover-lift text-primary fw-bold" data-bs-toggle="modal" data-bs-target="#sendEmailModal" title="{{ __('center::students.send_email') ?? 'إرسال بريد إلكتروني' }}">
+                                <div class="d-flex align-items-center gap-2 shrink-0">
+                                    <a href="{{ $whatsappUrl }}" onclick="openSmartWhatsApp('{{ $guardianPhone }}', @json($reminderMsg)); return false;" target="_blank" class="btn btn-success rounded-xl px-3 py-2 text-xs fw-bold shadow-xs">
+                                        <i class="fab fa-whatsapp me-1.5"></i>{{ __('center::students.profile.send_whatsapp') }}
+                                    </a>
+                                    <a href="{{ route('center.students.edit', $student->id) }}" class="btn btn-outline-secondary rounded-xl px-3 py-2 text-xs fw-bold bg-white shadow-xs">
+                                        <i class="fas fa-edit me-1.5"></i>{{ __('center::students.profile.edit_profile') }}
+                                    </a>
+                                    <button type="button" class="btn btn-outline-secondary rounded-xl px-2.5 py-2 text-xs bg-white shadow-xs" data-bs-toggle="modal" data-bs-target="#sendEmailModal" title="{{ __('center::students.send_email') ?? 'إرسال بريد إلكتروني' }}">
                                         <i class="fas fa-envelope"></i>
                                     </button>
                                 </div>
                             </div>
-                            
-                            <!-- Stats Strip (Redesigned) -->
-                            <div class="row g-3">
-                                <!-- Attendance Card -->
-                                <div class="col-6 col-lg-3">
-                                    <div class="stats-item bg-white shadow-sm rounded-4 p-3 border-start border-4 border-primary h-100">
-                                        <div class="text-muted small mb-2">{{ __('center::students.attendance_stats_header') }}</div>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="text-center">
-                                                <div class="fw-bold text-primary fs-5">{{ $stats['attendance_pct'] }}%</div>
-                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::students.attendance_pct') }}</div>
-                                            </div>
-                                            <div class="text-center border-start border-end px-2">
-                                                <div class="fw-bold text-success">{{ $stats['attendance_count'] }}</div>
-                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::students.present') }}</div>
-                                            </div>
-                                            <div class="text-center">
-                                                <div class="fw-bold text-danger">{{ $stats['absent_count'] }}</div>
-                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::students.absent') }}</div>
-                                            </div>
-                                        </div>
-                                    </div>
+
+                            <!-- Clean High-Signal Metric Badges (Decluttered) -->
+                            @php
+                                $enrolledCount = $student->enrollments()->where('status', 'active')->count();
+                                $studentBalance = $student->balance ?? 0;
+                            @endphp
+                            <div class="d-flex align-items-center gap-2 flex-wrap pt-2 border-top border-light">
+                                <!-- 1. Attendance Rate -->
+                                <div class="d-inline-flex align-items-center gap-2 px-3 py-1.5 rounded-xl bg-light border text-xs">
+                                    <i class="fas fa-calendar-check text-primary"></i>
+                                    <span class="text-muted">{{ __('center::students.attendance_pct') }}:</span>
+                                    <strong class="text-primary fw-bold">{{ $stats['attendance_pct'] }}%</strong>
+                                    <span class="text-muted">({{ $stats['attendance_count'] }} {{ __('center::students.present') }})</span>
                                 </div>
 
-                                <!-- Points Card -->
-                                <div class="col-6 col-lg-3">
-                                    <div class="stats-item bg-white shadow-sm rounded-4 p-3 border-start border-4 border-indigo h-100">
-                                        <div class="text-muted small mb-2">{{ __('center::students.points_stats_header') }}</div>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="text-center">
-                                                <div class="fw-bold text-indigo fs-5">{{ $stats['points'] }}</div>
-                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::students.net') }}</div>
-                                            </div>
-                                            <div class="text-center border-start border-end px-2">
-                                                <div class="fw-bold text-success">{{ $stats['points_earned'] }}</div>
-                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::students.earned') }}</div>
-                                            </div>
-                                            <div class="text-center">
-                                                <div class="fw-bold text-danger">{{ $stats['points_spent'] }}</div>
-                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::students.spent') }}</div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <!-- 2. Active Courses -->
+                                <div class="d-inline-flex align-items-center gap-2 px-3 py-1.5 rounded-xl bg-light border text-xs">
+                                    <i class="fas fa-book-open text-info"></i>
+                                    <span class="text-muted">{{ __('center::students.profile.tabs.courses') }}:</span>
+                                    <strong class="text-dark fw-bold">{{ $enrolledCount }}</strong>
                                 </div>
 
-                                <!-- Quiz Stats Card -->
-                                <div class="col-6 col-lg-3">
-                                    <div class="stats-item bg-white shadow-sm rounded-4 p-3 border-start border-4 border-success h-100">
-                                        <div class="text-muted small mb-2">{{ __('center::students.quizzes_stats_header') }}</div>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="text-center">
-                                                <div class="fw-bold text-success fs-5">{{ $stats['avg_quiz_score'] }}%</div>
-                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::students.avg') }}</div>
-                                            </div>
-                                            <div class="text-center border-start border-end px-2">
-                                                <div class="fw-bold text-dark">{{ $stats['quiz_count'] }}</div>
-                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::students.count_stat') }}</div>
-                                            </div>
-                                            <div class="text-center">
-                                                <div class="fw-bold text-primary">{{ $stats['highest_score'] }}%</div>
-                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::students.highest') }}</div>
-                                            </div>
-                                        </div>
+                                <!-- 3. Balance -->
+                                @if($studentBalance > 0)
+                                    <div class="d-inline-flex align-items-center gap-2 px-3 py-1.5 rounded-xl bg-danger bg-opacity-10 border border-danger border-opacity-25 text-xs text-danger">
+                                        <i class="fas fa-exclamation-circle"></i>
+                                        <span>{{ __('center::students.current_balance') }}:</span>
+                                        <strong class="fw-bold">{{ number_format($studentBalance) }} {{ __('center::dashboard.currency') }}</strong>
                                     </div>
-                                </div>
+                                @else
+                                    <div class="d-inline-flex align-items-center gap-2 px-3 py-1.5 rounded-xl bg-success bg-opacity-10 border border-success border-opacity-25 text-xs text-success">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span class="fw-bold">{{ __('center::students.paid') }} (لا توجد متأخرات)</span>
+                                    </div>
+                                @endif
 
-                                <!-- Sessions Card -->
-                                <div class="col-6 col-lg-3">
-                                    <div class="stats-item bg-white shadow-sm rounded-4 p-3 border-start border-4 border-warning h-100">
-                                        <div class="text-muted small mb-2">{{ __('center::students.sessions_stats_header') }}</div>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="text-center">
-                                                <div class="fw-bold text-dark fs-5">{{ $stats['total_sessions'] }}</div>
-                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::students.total') }}</div>
-                                            </div>
-                                            <div class="text-center border-start border-end px-2">
-                                                <div class="fw-bold text-success">{{ $stats['attendance_count'] }}</div>
-                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::students.present') }}</div>
-                                            </div>
-                                            <div class="text-center">
-                                                <div class="fw-bold text-warning">{{ $stats['remaining_sessions_count'] }}</div>
-                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::students.remaining') }}</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <!-- 4. Quick ID Card Print Trigger -->
+                                <button type="button" onclick="printIDCard()" class="btn btn-link text-decoration-none text-muted text-xs p-0 ms-auto d-none d-md-inline-flex align-items-center gap-1 hover:text-primary">
+                                    <i class="fas fa-print"></i>
+                                    <span>{{ __('center::students.print_id_card') }}</span>
+                                </button>
                             </div>
                         </div>
                     </div>
-                </div>
-                <!-- Subtle Watermark -->
-                <div class="position-absolute bottom-0 start-0 p-4 opacity-05 d-none d-lg-block" style="z-index: 1;">
-                    <i class="fas fa-user-graduate" style="font-size: 180px; transform: rotate(15deg) translateY(40px);"></i>
                 </div>
             </div>
         </div>

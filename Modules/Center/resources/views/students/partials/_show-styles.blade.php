@@ -12,6 +12,23 @@
         .extra-small { font-size: 0.75rem; }
 
         /* Navigation */
+        #profileTabs .nav-link {
+            color: #64748b;
+            background: transparent;
+            border: none;
+            font-weight: 700;
+            transition: all 0.2s ease;
+        }
+        #profileTabs .nav-link:hover {
+            color: var(--bs-primary, #168F7C);
+            background: #f1f5f9;
+        }
+        #profileTabs .nav-link.active {
+            background-color: var(--bs-primary, #168F7C) !important;
+            color: #ffffff !important;
+            box-shadow: 0 4px 12px rgba(22, 143, 124, 0.2);
+        }
+
         .elite-profile-nav .nav-link {
             border: none;
             color: #64748b;
