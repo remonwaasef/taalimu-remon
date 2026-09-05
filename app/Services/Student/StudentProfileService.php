@@ -53,37 +53,37 @@ class StudentProfileService
                     ['tenant_id' => \Modules\Tenancy\Services\TenantResolver::get()->id, 'phone' => $data->parent_phone],
                     [
                         'name' => $data->parent_name ?? 'N/A',
-                        'job' => $data->parent_job,
-                        'address' => $data->address,
+                        'job' => $data->parent_job ?? ($student->parent_job ?? null),
+                        'address' => $data->address ?? ($student->address ?? null),
                     ]
                 );
                 $guardianId = $guardian->id;
             }
 
             $student->update([
-                'grade_id' => $data->grade_id,
-                'grade_level' => $data->grade_level,
+                'grade_id' => $data->grade_id ?? $student->grade_id,
+                'grade_level' => $data->grade_level ?? $student->grade_level,
                 'code' => $data->code ?? $student->code,
                 'national_id' => $data->national_id ?? $student->national_id,
                 'name' => $data->name,
-                'email' => $data->email,
+                'email' => $data->email ?: $student->email,
                 'phone' => $data->phone,
                 'parent_phone' => $data->parent_phone,
                 'parent_email' => $data->parent_email,
-                'birth_date' => $data->birth_date,
-                'gender' => $data->gender,
-                'address' => $data->address,
+                'birth_date' => $data->birth_date ?? $student->birth_date,
+                'gender' => $data->gender ?? $student->gender,
+                'address' => $data->address ?? $student->address,
                 'parent_name' => $data->parent_name,
-                'parent_job' => $data->parent_job,
-                'parent_relation' => $data->parent_relation,
-                'emergency_phone' => $data->emergency_phone,
-                'school_name' => $data->school_name,
-                'section_type' => $data->section_type,
+                'parent_job' => $data->parent_job ?? $student->parent_job,
+                'parent_relation' => $data->parent_relation ?? $student->parent_relation,
+                'emergency_phone' => $data->emergency_phone ?? $student->emergency_phone,
+                'school_name' => $data->school_name ?? $student->school_name,
+                'section_type' => $data->section_type ?? $student->section_type,
                 'profile_photo' => $data->profile_photo ?? $student->profile_photo,
             ]);
 
             if ($guardianId) {
-                $student->guardians()->syncWithPivotValues([$guardianId], ['relation' => $data->parent_relation ?: 'parent']);
+                $student->guardians()->syncWithPivotValues([$guardianId], ['relation' => $data->parent_relation ?: ($student->parent_relation ?: 'parent')]);
             } else {
                 $student->guardians()->detach();
             }
