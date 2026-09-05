@@ -30,11 +30,49 @@
                             </div>
                         </div>
 
-                        <div class="mt-4 pt-3 border-top d-flex flex-wrap gap-2">
-                            <button onclick="copyAllDetails()" class="btn btn-outline-dark rounded-pill px-4">
-                                <i class="fas fa-copy me-2"></i>{{ __('center::students.profile.copy_all') }}</button>
-                            <a href="{{ $whatsappUrl }}" target="_blank" class="btn btn-success rounded-pill px-4">
-                                <i class="fab fa-whatsapp me-2"></i>{{ __('center::students.profile.send_whatsapp') }}</a>
+                        <div class="mt-4 pt-3 border-top d-flex flex-wrap align-items-center gap-2">
+                            <!-- Copy Full Credentials Button -->
+                            <button type="button" onclick="copyAllDetails()" class="btn btn-outline-dark rounded-pill px-4" title="{{ __('center::students.profile.copy_all') }}">
+                                <i class="fas fa-copy me-2"></i> {{ __('center::students.profile.copy_all') }}
+                            </button>
+
+                            <!-- Smart WhatsApp Action Group -->
+                            <div class="btn-group">
+                                <button type="button" onclick="openSmartWhatsApp('{{ $cleanPhone }}')" class="btn btn-success rounded-pill-start px-4" title="إرسال رابط الدخول المشفر عبر واتساب">
+                                    <i class="fab fa-whatsapp me-2"></i> {{ __('center::students.profile.send_whatsapp') }}
+                                </button>
+                                <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split rounded-pill-end pe-3" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <span class="visually-hidden">خيارات واتساب</span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-2" style="min-width: 250px;">
+                                    <li>
+                                        <a class="dropdown-item rounded-3 py-2 text-success fw-bold" href="{{ $waWebUrl }}" target="_blank">
+                                            <i class="fab fa-whatsapp me-2"></i> فتح واتساب ويب مباشرة
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item rounded-3 py-2 text-dark" href="{{ $waAppUrl }}">
+                                            <i class="fas fa-laptop me-2 text-muted"></i> فتح تطبيق واتساب لسطح المكتب
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider my-1"></li>
+                                    <li>
+                                        <button type="button" class="dropdown-item rounded-3 py-2 text-primary" onclick="copyMagicLink('{{ $qrUrl }}')">
+                                            <i class="fas fa-link me-2"></i> نسخ رابط الدخول المباشر فقط
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button type="button" class="dropdown-item rounded-3 py-2 text-secondary" onclick="copyAllDetails()">
+                                            <i class="fas fa-key me-2"></i> نسخ الرسالة مع كلمة المرور
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- Email Button -->
+                            <a href="{{ $mailtoUrl }}" class="btn btn-light border rounded-pill px-4">
+                                <i class="fas fa-envelope me-2"></i> إرسال إيميل
+                            </a>
                         </div>
                     </div>
 

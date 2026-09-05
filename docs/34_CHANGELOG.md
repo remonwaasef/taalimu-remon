@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **Student WhatsApp Credentials Security & Direct Desktop Launch (2026-09-05)**:
+  - Eliminated plaintext password exposure in public browser GET URLs (`api.whatsapp.com/send?text=...`) across Student Registration Cards and Password Tickets.
+  - Introduced cryptographically signed temporary Magic Login Links (`center.login.magic` valid for 24h) for WhatsApp messages, allowing students to access their accounts and set passwords without URL credential leakage.
+  - Implemented direct WhatsApp Web launching (`web.whatsapp.com/send`) on desktop to bypass the intermediate `api.whatsapp.com` landing page ("Continue to WhatsApp Web").
+  - Added smart action dropdown on WhatsApp buttons (Direct Web, Desktop App protocol, Copy Magic Link, and Safe Clipboard Copy).
+
 ### Changed
 - **Unified Login Screen Complete Overhaul (2026-09-05)**:
   - Transformed the unified login (`taalimu.com/login`) into a modern 2-column SaaS split layout with rich branding, value propositions, and interactive features.

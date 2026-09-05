@@ -21,22 +21,49 @@
 
     function copyToClipboard(text) {
         navigator.clipboard.writeText(text).then(function() {
-            const toast = document.createElement('div');
-            toast.className = 'position-fixed bottom-0 start-50 translate-middle-x mb-5 bg-dark text-white p-3 rounded-4 shadow animate__animated animate__fadeInUp';
-            toast.style.zIndex = '9999';
-            toast.innerHTML = '<i class="fas fa-check-circle text-success me-2"></i> {{ __('center::students.profile.reset_password.copy_success') }}';
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 2000);
+            showSuccessToast('{{ __('center::students.profile.reset_password.copy_success') }}');
         });
     }
 
     function copyAllDetails() {
         @if(session('generated_password'))
-            const text = @json($msg ?? '');
+            const text = @json($fullCredentialsMsg ?? $msg ?? '');
             navigator.clipboard.writeText(text).then(function() {
-                alert("{{ __('center::students.profile.reset_password.copy_success') }}");
+                showSuccessToast('{{ __('center::students.profile.reset_password.copy_success') }} (تم نسخ الرسالة مع كلمة المرور للحافظة بأمان)');
             });
         @endif
+    }
+
+    function copyMagicLink(url) {
+        navigator.clipboard.writeText(url).then(function() {
+            showSuccessToast('تم نسخ رابط الدخول السريع المشفر بنجاح!');
+        });
+    }
+
+    function openSmartWhatsApp(phone) {
+        const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+        const msg = @json($secureWhatsAppMsg ?? '');
+        const encoded = encodeURIComponent(msg);
+
+        if (isMobile) {
+            window.open('https://api.whatsapp.com/send?phone=' + phone + '&text=' + encoded, '_blank');
+        } else {
+            // Open WhatsApp Web directly on desktop (skips intermediate api.whatsapp.com landing page)
+            window.open('https://web.whatsapp.com/send?phone=' + phone + '&text=' + encoded, '_blank');
+        }
+    }
+
+    function showSuccessToast(message) {
+        const toast = document.createElement('div');
+        toast.className = 'position-fixed bottom-0 start-50 translate-middle-x mb-5 bg-dark text-white py-2 px-4 rounded-pill shadow-lg animate__animated animate__fadeInUp';
+        toast.style.zIndex = '99999';
+        toast.innerHTML = '<i class="fas fa-check-circle text-success me-2"></i> ' + message;
+        document.body.appendChild(toast);
+        setTimeout(() => {
+            toast.classList.remove('animate__fadeInUp');
+            toast.classList.add('animate__fadeOutDown');
+            setTimeout(() => toast.remove(), 400);
+        }, 2500);
     }
 </script>
 

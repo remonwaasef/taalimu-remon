@@ -58,24 +58,70 @@
                             </div>
                         </div>
 
-                        <div class="mt-4 pt-3 border-top d-flex flex-wrap gap-2">
-                            @php
-                                $msg = __('center::students.welcome_whatsapp_msg', [
-                                    'name' => session('student_name'),
-                                    'url' => url('/login'),
-                                    'email' => session('student_email'),
-                                    'password' => session('generated_password')
-                                ]);
-                                $whatsappUrl = "https://wa.me/" . sanitizePhoneForWhatsApp(session('student_phone')) . "?text=" . urlencode($msg);
-                                $mailtoUrl = "mailto:" . session('student_email') . "?subject=" . urlencode(__('center::students.login_credentials_subject')) . "&body=" . rawurlencode($msg);
-                            @endphp
+                        @php
+                            $studentForQr = session('student_email')
+                                ? \App\Models\Student::where('email', session('student_email'))->where('tenant_id', app('tenant')->id)->first()
+                                : null;
 
-                            <button onclick="copyAllDetails()" class="btn btn-outline-dark rounded-pill px-4">
+                            // Temporary signed magic-login link valid for 24 hours
+                            $qrUrl = $studentForQr
+                                ? \Illuminate\Support\Facades\URL::temporarySignedRoute('center.login.magic', now()->addHours(24), ['student' => $studentForQr->id, 'tenant' => app('tenant')->domain])
+                                : url('/login');
+
+                            $cleanPhone = sanitizePhoneForWhatsApp(session('student_phone'));
+
+                            // Secure Message for WhatsApp (Signed Magic Link - No passwords exposed in URL GET params)
+                            $secureWhatsAppMsg = "مرحباً " . session('student_name') . "،\nيسعدنا انضمامك إلى " . (app('tenant')->name ?? 'المركز') . "! 🎉\n\nبيانات الدخول لحسابك:\nالبريد: " . session('student_email') . "\n\nرابط الدخول الآمن المباشر:\n" . $qrUrl . "\n\n(هذا الرابط مشفر ومخصص لك لتعيين كلمة مرورك والدخول مباشرة)";
+
+                            // Full Message with Temporary Password (for Clipboard Copying, never leaked in browser address bar)
+                            $fullCredentialsMsg = "مرحباً " . session('student_name') . "،\nيسعدنا انضمامك إلى " . (app('tenant')->name ?? 'المركز') . "! 🎉\n\nبيانات الدخول الخاصة بك:\nرابط المنصة: " . url('/login') . "\nالبريد: " . session('student_email') . "\nكلمة المرور المؤقتة: " . session('generated_password') . "\n\n(يرجى تغيير كلمة المرور عند أول تسجيل دخول للأمان)";
+
+                            // Direct WhatsApp URLs
+                            $waWebUrl = "https://web.whatsapp.com/send?phone=" . $cleanPhone . "&text=" . urlencode($secureWhatsAppMsg);
+                            $waAppUrl = "whatsapp://send?phone=" . $cleanPhone . "&text=" . urlencode($secureWhatsAppMsg);
+                            $mailtoUrl = "mailto:" . session('student_email') . "?subject=" . urlencode(__('center::students.login_credentials_subject')) . "&body=" . rawurlencode($fullCredentialsMsg);
+                        @endphp
+
+                        <div class="mt-4 pt-3 border-top d-flex flex-wrap align-items-center gap-2">
+                            <!-- Copy Full Credentials Button -->
+                            <button type="button" onclick="copyAllDetails()" class="btn btn-outline-dark rounded-pill px-4" title="{{ __('center::students.copy_all_data') }}">
                                 <i class="fas fa-copy me-2"></i> {{ __('center::students.copy_all_data') }}
                             </button>
-                            <a href="{{ $whatsappUrl }}" target="_blank" class="btn btn-success rounded-pill px-4">
-                                <i class="fab fa-whatsapp me-2"></i> {{ __('center::students.send_whatsapp') }}
-                            </a>
+
+                            <!-- Smart WhatsApp Action Group -->
+                            <div class="btn-group">
+                                <button type="button" onclick="openSmartWhatsApp('{{ $cleanPhone }}')" class="btn btn-success rounded-pill-start px-4" title="إرسال رابط الدخول المشفر عبر واتساب">
+                                    <i class="fab fa-whatsapp me-2"></i> {{ __('center::students.send_whatsapp') }}
+                                </button>
+                                <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split rounded-pill-end pe-3" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <span class="visually-hidden">خيارات واتساب</span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-2" style="min-width: 250px;">
+                                    <li>
+                                        <a class="dropdown-item rounded-3 py-2 text-success fw-bold" href="{{ $waWebUrl }}" target="_blank">
+                                            <i class="fab fa-whatsapp me-2"></i> فتح واتساب ويب مباشرة
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item rounded-3 py-2 text-dark" href="{{ $waAppUrl }}">
+                                            <i class="fas fa-laptop me-2 text-muted"></i> فتح تطبيق واتساب لسطح المكتب
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider my-1"></li>
+                                    <li>
+                                        <button type="button" class="dropdown-item rounded-3 py-2 text-primary" onclick="copyMagicLink('{{ $qrUrl }}')">
+                                            <i class="fas fa-link me-2"></i> نسخ رابط الدخول المباشر فقط
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button type="button" class="dropdown-item rounded-3 py-2 text-secondary" onclick="copyAllDetails()">
+                                            <i class="fas fa-key me-2"></i> نسخ الرسالة مع كلمة المرور
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- Email Button -->
                             <a href="{{ $mailtoUrl }}" class="btn btn-light border rounded-pill px-4">
                                 <i class="fas fa-envelope me-2"></i> {{ __('center::students.send_email') }}
                             </a>
@@ -87,17 +133,6 @@
                         <div class="ticket-stub-decoration top"></div>
                         <div class="ticket-stub-decoration bottom"></div>
                         
-                        @php
-                            $studentForQr = session('student_email')
-                                ? \App\Models\Student::where('email', session('student_email'))->where('tenant_id', app('tenant')->id)->first()
-                                : null;
-                            // Temporary signed magic-login link â€” expires after 15 minutes
-                            // so a leaked QR cannot be reused indefinitely. Generated as a
-                            // QR locally in the browser; never sent to a third-party service.
-                            $qrUrl = $studentForQr
-                                ? \Illuminate\Support\Facades\URL::temporarySignedRoute('center.login.magic', now()->addMinutes(15), ['student' => $studentForQr->id, 'tenant' => app('tenant')->domain])
-                                : url('/login');
-                        @endphp
                         <div class="qr-container bg-white p-2 rounded-3 shadow-sm mb-3">
                             <div class="student-local-qr d-flex justify-content-center" style="width: 140px; height: 140px;" data-qr="{{ $qrUrl }}"></div>
                         </div>
@@ -125,20 +160,47 @@
         <script>
             function copyToClipboard(text) {
                 navigator.clipboard.writeText(text).then(function() {
-                    const toast = document.createElement('div');
-                    toast.className = 'position-fixed bottom-0 start-50 translate-middle-x mb-5 bg-dark text-white p-3 rounded-4 shadow animate__animated animate__fadeInUp';
-                    toast.style.zIndex = '9999';
-                    toast.innerHTML = '<i class="fas fa-check-circle text-success me-2"></i> {{ __('center::students.copy_success') }}';
-                    document.body.appendChild(toast);
-                    setTimeout(() => toast.remove(), 2000);
+                    showSuccessToast('{{ __('center::students.copy_success') }}');
                 });
             }
 
             function copyAllDetails() {
-                const text = @json($msg);
+                const text = @json($fullCredentialsMsg);
                 navigator.clipboard.writeText(text).then(function() {
-                    alert('{{ __('center::students.copy_all_success') }}');
+                    showSuccessToast('{{ __('center::students.copy_all_success') }} (تم نسخ الرسالة مع كلمة المرور للحافظة بأمان)');
                 });
+            }
+
+            function copyMagicLink(url) {
+                navigator.clipboard.writeText(url).then(function() {
+                    showSuccessToast('تم نسخ رابط الدخول السريع المشفر بنجاح!');
+                });
+            }
+
+            function openSmartWhatsApp(phone) {
+                const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+                const msg = @json($secureWhatsAppMsg);
+                const encoded = encodeURIComponent(msg);
+
+                if (isMobile) {
+                    window.open('https://api.whatsapp.com/send?phone=' + phone + '&text=' + encoded, '_blank');
+                } else {
+                    // Open WhatsApp Web directly on desktop (skips the intermediate api.whatsapp.com landing page)
+                    window.open('https://web.whatsapp.com/send?phone=' + phone + '&text=' + encoded, '_blank');
+                }
+            }
+
+            function showSuccessToast(message) {
+                const toast = document.createElement('div');
+                toast.className = 'position-fixed bottom-0 start-50 translate-middle-x mb-5 bg-dark text-white py-2 px-4 rounded-pill shadow-lg animate__animated animate__fadeInUp';
+                toast.style.zIndex = '99999';
+                toast.innerHTML = '<i class="fas fa-check-circle text-success me-2"></i> ' + message;
+                document.body.appendChild(toast);
+                setTimeout(() => {
+                    toast.classList.remove('animate__fadeInUp');
+                    toast.classList.add('animate__fadeOutDown');
+                    setTimeout(() => toast.remove(), 400);
+                }, 2500);
             }
         </script>
 
