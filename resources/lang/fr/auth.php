@@ -187,4 +187,22 @@ return [
         'show' => 'Afficher',
         'hide' => 'Masquer',
     ],
+
+    // Login Page
+    'login' => [
+        'title' => 'Connexion',
+        'subtitle' => 'Bon retour parmi nous',
+        'no_account_link' => 'Vous avez déjà un compte ?',
+        'email' => 'Adresse e-mail',
+        'email_or_phone' => 'E-mail ou numéro de téléphone',
+        'password' => 'Mot de passe',
+        'remember_me' => 'Se souvenir de moi',
+        'forgot_password' => 'Mot de passe oublié ?',
+        'login_button' => 'Se connecter',
+        'no_account' => 'Vous n\'avez pas de compte ?',
+        'register_now' => 'Créer un nouveau compte',
+        'admin_login' => 'Connexion administrateur',
+        'or_continue_with' => 'Ou continuer avec',
+        'google' => 'Google',
+    ],
 ];

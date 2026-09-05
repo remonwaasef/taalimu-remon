@@ -9,7 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
+### Changed
+- **Unified Login Screen Complete Overhaul (2026-09-05)**:
+  - Transformed the unified login (`taalimu.com/login`) into a modern 2-column SaaS split layout with rich branding, value propositions, and interactive features.
+  - Added Taalimu brand mark, platform badges, key feature highlights, and customer trust proof on the presentation panel.
+  - Fixed corrupted placeholder encoding (`ç€â€...`) on the password field and added interactive show/hide password toggle.
+  - Integrated "Remember Me" checkbox, "Forgot Password" link (`route('password.request')`), Google SSO button, and clear free-trial registration link.
+  - Refined floating dark mode toggle with backdrop blur and responsive behavior.
+  - Added missing French auth translations for full trilingual localization compliance (AR/EN/FR).
 - **Streamlined Data Entry & Launchpad Quick Modals (2026-09-04)**:
   - Added lightweight 1-click Quick Modals for adding Instructors, Courses, and Students directly from the Launchpad without page navigation.
   - Implemented progressive disclosure on full Instructor and Course creation forms, grouping secondary/optional fields inside modern collapsible `<details>` sections to eliminate visual overwhelm.

@@ -70,17 +70,30 @@
     html.dark .login-card .bg-slate-900,
     html.dark .login-card .bg-slate-900:hover { background-color: #168F7C !important; }
 
-    /* Fixed toggle button (corner; RTL/LTR aware) */
+    /* Floating theme toggle button (corner; RTL/LTR aware) */
     #taalimu-theme-toggle {
-        position: fixed; top: 1rem; inset-inline-end: 1rem; z-index: 100001;
+        position: fixed; top: 1.25rem; inset-inline-end: 1.25rem; z-index: 100001;
         width: 2.75rem; height: 2.75rem; border-radius: 9999px; cursor: pointer;
         display: inline-flex; align-items: center; justify-content: center;
-        background: rgba(255, 255, 255, .92); border: 1px solid #e2e8f0; color: #475569;
-        box-shadow: 0 6px 18px rgba(2, 6, 23, .12); transition: transform .25s; font-size: 1rem;
+        background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(226, 232, 240, 0.8); color: #0f172a;
+        box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.08); transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        font-size: 1rem;
     }
-    #taalimu-theme-toggle:hover { transform: translateY(-1px); }
+    #taalimu-theme-toggle:hover {
+        transform: translateY(-2px) scale(1.05);
+        box-shadow: 0 8px 24px -2px rgba(15, 23, 42, 0.12);
+        color: #168F7C;
+        border-color: #168F7C;
+    }
     html.dark #taalimu-theme-toggle {
-        background: rgba(30, 41, 59, .85); border-color: #334155; color: #fbbf24;
+        background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+        border-color: rgba(51, 65, 85, 0.8); color: #38bdf8;
+        box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+    }
+    html.dark #taalimu-theme-toggle:hover {
+        color: #34d399;
+        border-color: #34d399;
     }
     #taalimu-theme-toggle .fa-sun { display: none; }
     html.dark #taalimu-theme-toggle .fa-moon { display: none; }
