@@ -399,6 +399,7 @@
                                         <button type="button" class="btn btn-sm btn-light rounded-circle text-info shadow-none p-2 quick-enroll-btn" 
                                                 data-id="{{ $student->id }}" data-name="{{ $student->name }}" 
                                                 data-enrolled="{{ $student->enrollments->pluck('course_id')->implode(',') }}"
+                                                onclick="openQuickEnrollModal('{{ $student->id }}', @json($student->name), '{{ $student->enrollments->pluck('course_id')->implode(',') }}')"
                                                 title="{{ __('center::students.enroll_in_course') }}">
                                             <i class="fas fa-plus"></i>
                                         </button>
@@ -510,27 +511,36 @@
 
     {{-- Quick Enroll Modal --}}
     <x-ui.modal id="quickEnrollModal" title="{{ __('center::students.enroll_in_course') }}" size="md">
-        <form id="enrollForm" method="POST">
+        <form id="enrollForm" method="POST" onsubmit="return handleEnrollSubmit(event)">
             @csrf
             <input type="hidden" name="student_id" id="enrollStudentId">
             <div class="text-center">
-                <p class="text-slate-500 text-sm mb-4">{{ __('center::students.quick_enroll_desc', ['name' => '<span class="font-semibold text-slate-900 dark:text-slate-100" id="enrollStudentName"></span>']) }}</p>
+                <div class="rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 p-3 mb-3 inline-flex">
+                    <i class="fas fa-graduation-cap fa-2x"></i>
+                </div>
+                <h3 class="font-semibold mb-1 text-slate-900 dark:text-slate-100" id="enrollStudentName"></h3>
+                <p class="text-slate-500 text-sm mb-4">{{ __('center::students.quick_enroll_desc_short') ?? 'اختر الكورس لتسجيل الطالب وإصدار الفاتورة تلقائياً' }}</p>
                 <div class="mb-4 text-start">
-                    <label class="block font-medium text-sm text-slate-500 mb-1">{{ __('center::students.available_courses') }}</label>
-                    <select id="courseSelect" class="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-primary focus:border-transparent" required>
-                        <option value="">{{ __('center::students.choose_course') }}</option>
+                    <label class="block font-medium text-sm text-slate-700 dark:text-slate-300 mb-1.5">{{ __('center::students.available_courses') }}</label>
+                    <select id="courseSelect" name="course_id" onchange="handleCourseSelectChange(this)" class="w-full px-4 py-2.5 border border-slate-300 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-primary focus:border-transparent text-sm" required>
+                        <option value="">-- {{ __('center::students.choose_course') }} --</option>
                         @foreach($courses as $course)
                             <option value="{{ $course->id }}">{{ $course->title }} ({{ number_format($course->price, 0) }} {{ get_currency_symbol() }})</option>
                         @endforeach
                     </select>
                 </div>
-                <div class="mb-4 p-3 bg-brand-50 dark:bg-brand-900/30 border border-brand-200 dark:border-brand-800 rounded-xl text-sm text-brand-700 dark:text-brand-300">
-                    {{ __('center::students.auto_invoice_hint') }}
+                <div class="mb-4 p-3 bg-brand-50 dark:bg-brand-900/30 border border-brand-200 dark:border-brand-800 rounded-xl text-sm text-brand-700 dark:text-brand-300 text-start">
+                    <i class="fas fa-info-circle me-1.5"></i> {{ __('center::students.auto_invoice_hint') }}
                 </div>
-                <div id="enrollWarning" class="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-xl text-sm text-red-700 dark:text-red-300 hidden">
-                    <i class="fas fa-exclamation-circle me-2"></i> {{ __('center::students.already_enrolled_warning') }}
+                <div id="enrollWarning" class="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-xl text-sm text-red-700 dark:text-red-300 text-start d-none">
+                    <i class="fas fa-exclamation-circle me-1.5"></i> {{ __('center::students.already_enrolled_warning') }}
                 </div>
-                <button type="button" id="submitEnrollBtn" class="w-full bg-brand-primary hover:bg-brand-600 text-white font-semibold py-2.5 rounded-xl transition-colors">{{ __('center::students.complete_enrollment') }}</button>
+                <div class="flex gap-2 justify-end pt-2">
+                    <button type="button" class="btn btn-light rounded-xl px-4 py-2" @click="show = false">{{ __('center::students.close') }}</button>
+                    <button type="submit" id="submitEnrollBtn" class="btn btn-primary rounded-xl px-5 py-2 fw-bold">
+                        <i class="fas fa-check-circle me-1.5"></i> {{ __('center::students.complete_enrollment') }}
+                    </button>
+                </div>
             </div>
         </form>
     </x-ui.modal>

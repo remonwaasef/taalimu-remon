@@ -16,6 +16,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added full trilingual localization support (AR, EN, FR).
 
 ### Fixed
+- **Student Quick Course Enrollment Modal Activation (2026-09-05)**:
+  - Fixed non-responsive "Enroll in Course" (`+`) quick action button in students list.
+  - Eliminated DOMContentLoaded null element access errors caused by Alpine modal `<template>` encapsulation.
+  - Replaced faulty Select2 initialization inside teleported modal with robust native responsive selector.
+  - Added direct and delegated modal launcher `openQuickEnrollModal` and form submit handler `handleEnrollSubmit`.
 - **Student Quick Action WhatsApp Direct Launch (2026-09-05)**:
   - Fixed student table action WhatsApp button (next to Quick Pay) to launch WhatsApp Web directly on desktop (`web.whatsapp.com/send?phone=...`) bypassing the `api.whatsapp.com` interstitial landing page ("Share on WhatsApp").
   - Added smart cross-platform device detection (`openDirectWhatsApp`) for both student table action bar and student profile view.
