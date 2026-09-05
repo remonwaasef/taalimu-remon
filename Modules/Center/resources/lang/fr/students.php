@@ -172,6 +172,8 @@ Conseil : Il vous sera demandé de modifier votre mot de passe lors de votre pre
     'current_balance' => 'Solde Actuel',
     'enroll_in_course' => 'Inscrire à un Cours',
     'quick_enroll_desc' => 'Sélectionnez le cours auquel vous souhaitez inscrire l\'étudiant :name.',
+    'quick_enroll_desc_short' => 'Sélectionnez un cours pour inscrire l\'étudiant et générer la facture automatiquement.',
+    'all_courses_enrolled' => 'L\'étudiant est déjà inscrit à tous les cours disponibles.',
     'available_courses' => 'Cours Disponibles',
     'choose_course' => 'Choisir un cours...',
     'auto_invoice_hint' => 'Une facture \\"Impayée\\" sera automatiquement créée pour cet étudiant.',

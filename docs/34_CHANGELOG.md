@@ -16,6 +16,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added full trilingual localization support (AR, EN, FR).
 
 ### Fixed
+- **Student Quick Course Enrollment - Disabled State for Enrolled Courses (2026-09-05)**:
+  - Added HTML `disabled` attribute to courses in which the student is already enrolled, preventing re-selection.
+  - Added visual dimming and clear single status suffix ` - (مسجل بالفعل)`.
+  - Added missing localization key `quick_enroll_desc_short` across AR/EN/FR.
+  - Added automatic detection and notification when a student is already enrolled in all available courses.
 - **Student Quick Course Enrollment Modal Activation (2026-09-05)**:
   - Fixed non-responsive "Enroll in Course" (`+`) quick action button in students list.
   - Eliminated DOMContentLoaded null element access errors caused by Alpine modal `<template>` encapsulation.

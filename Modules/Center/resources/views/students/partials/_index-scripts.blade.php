@@ -184,41 +184,63 @@
         });
 
     window.openQuickEnrollModal = function(studentId, studentName, enrolledStr) {
-        const enrolledIds = enrolledStr ? String(enrolledStr).split(',').map(s => s.trim()) : [];
+        const enrolledIds = enrolledStr ? String(enrolledStr).split(',').map(s => s.trim()).filter(Boolean) : [];
 
         const idInput = document.getElementById('enrollStudentId');
         const nameEl = document.getElementById('enrollStudentName');
         const selectEl = document.getElementById('courseSelect');
         const warningEl = document.getElementById('enrollWarning');
+        const warningTextEl = document.getElementById('enrollWarningText');
         const submitBtn = document.getElementById('submitEnrollBtn');
 
         if (idInput) idInput.value = studentId;
         if (nameEl) nameEl.textContent = studentName;
 
+        let availableCount = 0;
+
         if (selectEl) {
             selectEl.value = '';
             Array.from(selectEl.options).forEach(opt => {
-                if (opt.value && enrolledIds.includes(String(opt.value))) {
-                    opt.setAttribute('data-enrolled', 'true');
-                    if (!opt.text.includes('({{ __('center::students.already_enrolled_label') }})')) {
-                        opt.text = opt.text + ' ({{ __('center::students.already_enrolled_label') }})';
-                    }
-                } else if (opt.value) {
-                    opt.removeAttribute('data-enrolled');
-                    opt.text = opt.text.replace(' ({{ __('center::students.already_enrolled_label') }})', '');
+                if (!opt.value) return;
+
+                const originalText = opt.getAttribute('data-original-text') || opt.text;
+                if (!opt.getAttribute('data-original-text')) {
+                    opt.setAttribute('data-original-text', originalText);
+                }
+
+                if (enrolledIds.includes(String(opt.value))) {
+                    opt.disabled = true;
+                    opt.style.color = '#94a3b8';
+                    opt.text = originalText + ' - {{ __('center::students.already_enrolled_label') }}';
+                } else {
+                    opt.disabled = false;
+                    opt.style.color = '';
+                    opt.text = originalText;
+                    availableCount++;
                 }
             });
         }
 
-        if (warningEl) warningEl.classList.add('d-none');
-        if (submitBtn) submitBtn.disabled = false;
+        if (availableCount === 0 && enrolledIds.length > 0) {
+            if (warningEl) {
+                if (warningTextEl) warningTextEl.textContent = '{{ __('center::students.all_courses_enrolled') }}';
+                warningEl.classList.remove('d-none');
+            }
+            if (submitBtn) submitBtn.disabled = true;
+        } else {
+            if (warningEl) {
+                if (warningTextEl) warningTextEl.textContent = '{{ __('center::students.already_enrolled_warning') }}';
+                warningEl.classList.add('d-none');
+            }
+            if (submitBtn) submitBtn.disabled = false;
+        }
 
         window.dispatchEvent(new CustomEvent('open-modal', { detail: 'quickEnrollModal' }));
     };
 
     window.handleCourseSelectChange = function(selectEl) {
         const selectedOpt = selectEl.options[selectEl.selectedIndex];
-        const isEnrolled = selectedOpt && selectedOpt.getAttribute('data-enrolled') === 'true';
+        const isEnrolled = selectedOpt && selectedOpt.disabled;
         const warningEl = document.getElementById('enrollWarning');
         const submitBtn = document.getElementById('submitEnrollBtn');
 

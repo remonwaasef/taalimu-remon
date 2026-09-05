@@ -519,21 +519,21 @@
                     <i class="fas fa-graduation-cap fa-2x"></i>
                 </div>
                 <h3 class="font-semibold mb-1 text-slate-900 dark:text-slate-100" id="enrollStudentName"></h3>
-                <p class="text-slate-500 text-sm mb-4">{{ __('center::students.quick_enroll_desc_short') ?? 'اختر الكورس لتسجيل الطالب وإصدار الفاتورة تلقائياً' }}</p>
+                <p class="text-slate-500 text-sm mb-4">{{ __('center::students.quick_enroll_desc_short') }}</p>
                 <div class="mb-4 text-start">
                     <label class="block font-medium text-sm text-slate-700 dark:text-slate-300 mb-1.5">{{ __('center::students.available_courses') }}</label>
                     <select id="courseSelect" name="course_id" onchange="handleCourseSelectChange(this)" class="w-full px-4 py-2.5 border border-slate-300 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-primary focus:border-transparent text-sm" required>
                         <option value="">-- {{ __('center::students.choose_course') }} --</option>
                         @foreach($courses as $course)
-                            <option value="{{ $course->id }}">{{ $course->title }} ({{ number_format($course->price, 0) }} {{ get_currency_symbol() }})</option>
+                            <option value="{{ $course->id }}" data-original-text="{{ $course->title }} ({{ number_format($course->price, 0) }} {{ get_currency_symbol() }})">{{ $course->title }} ({{ number_format($course->price, 0) }} {{ get_currency_symbol() }})</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="mb-4 p-3 bg-brand-50 dark:bg-brand-900/30 border border-brand-200 dark:border-brand-800 rounded-xl text-sm text-brand-700 dark:text-brand-300 text-start">
                     <i class="fas fa-info-circle me-1.5"></i> {{ __('center::students.auto_invoice_hint') }}
                 </div>
-                <div id="enrollWarning" class="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-xl text-sm text-red-700 dark:text-red-300 text-start d-none">
-                    <i class="fas fa-exclamation-circle me-1.5"></i> {{ __('center::students.already_enrolled_warning') }}
+                <div id="enrollWarning" class="mb-4 p-3 bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 rounded-xl text-sm text-amber-800 dark:text-amber-200 text-start d-none">
+                    <i class="fas fa-info-circle me-1.5"></i> <span id="enrollWarningText">{{ __('center::students.already_enrolled_warning') }}</span>
                 </div>
                 <div class="flex gap-2 justify-end pt-2">
                     <button type="button" class="btn btn-light rounded-xl px-4 py-2" @click="show = false">{{ __('center::students.close') }}</button>

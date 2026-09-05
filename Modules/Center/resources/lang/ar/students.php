@@ -172,6 +172,8 @@ return [
     'current_balance' => 'المستحق الحالي',
     'enroll_in_course' => 'تسجيل في كورس',
     'quick_enroll_desc' => 'اختر الكورس الذي ترغب في تسجيل الطالب :name به.',
+    'quick_enroll_desc_short' => 'اختر الكورس لتسجيل الطالب وإصدار الفاتورة تلقائياً.',
+    'all_courses_enrolled' => 'الطالب مسجل بالفعل في جميع الكورسات المتاحة.',
     'available_courses' => 'الكورسات المتاحة',
     'choose_course' => 'اختر الكورس...',
     'auto_invoice_hint' => 'سيتم إنشاء فاتورة "غير مدفوعة" تلقائياً لهذا الطالب.',
