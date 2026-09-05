@@ -182,7 +182,7 @@
                         </div>
                     </div>
 
-                    <button type="button" onclick="openQuickEnrollModal()" class="btn btn-primary rounded-xl px-4 py-2 text-xs font-bold shadow-xs flex items-center gap-1.5 transition-all">
+                    <button type="button" @click="$dispatch('open-modal', 'quickEnrollModal')" onclick="openQuickEnrollModal()" class="btn btn-primary rounded-xl px-4 py-2 text-xs font-bold shadow-xs flex items-center gap-1.5 transition-all">
                         <i class="fas fa-plus-circle text-sm"></i>
                         <span>{{ __('center::students.enroll_in_course') ?? 'تسجيل في كورس جديد' }}</span>
                     </button>
@@ -280,7 +280,7 @@
                         <p class="text-slate-500 dark:text-slate-400 text-xs mb-4 max-w-md mx-auto">
                             يمكنك تسجيل الطالب مباشرة في المجموعات أو الكورسات المتاحة لبدء الحضور والمتابعة المالية.
                         </p>
-                        <button type="button" onclick="openQuickEnrollModal()" class="btn btn-primary rounded-xl px-4 py-2 text-xs font-bold shadow-xs">
+                        <button type="button" @click="$dispatch('open-modal', 'quickEnrollModal')" onclick="openQuickEnrollModal()" class="btn btn-primary rounded-xl px-4 py-2 text-xs font-bold shadow-xs">
                             <i class="fas fa-plus me-1.5"></i>
                             <span>{{ __('center::students.enroll_in_course') ?? 'تسجيل في كورس الآن' }}</span>
                         </button>
@@ -342,7 +342,7 @@
     </x-ui.modal>
 @endsection
 
-@section('scripts')
+@push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         function showWarning(input, msg) {
@@ -379,7 +379,7 @@
         nameInputs.forEach(input => {
             input.addEventListener('input', function(e) {
                 let original = this.value;
-                let clean = original.replace(/[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/g, '');
+                let clean = original.replace(/[0-9!@#$%^&*()_+=\[\]{};':"\\|,.<>\/?`~]/g, '');
                 if (original !== clean) {
                     this.value = clean;
                     showWarning(this, "{{ __('center::students.letters_only') }}");
@@ -387,31 +387,28 @@
             });
         });
 
-        // Guardian lookup by phone
+        // Parent phone auto-lookup guardian
         const parentPhoneInput = document.getElementById('parent_phone');
-        const badge = document.getElementById('guardian-found-badge');
-        const alertBox = document.getElementById('guardian-info-alert');
-        const nameSpan = document.getElementById('found-guardian-name');
-        const parentNameInput = document.querySelector('input[name="parent_name"]');
-
         if (parentPhoneInput) {
-            let timeout = null;
+            let lookupTimeout;
             parentPhoneInput.addEventListener('input', function() {
-                clearTimeout(timeout);
+                clearTimeout(lookupTimeout);
                 const phone = this.value.trim();
+                const badge = document.getElementById('guardian-found-badge');
+                const alertBox = document.getElementById('guardian-info-alert');
+                const nameSpan = document.getElementById('found-guardian-name');
 
-                if (phone.length >= 8) {
-                    timeout = setTimeout(() => {
-                        fetch(`{{ route('center.guardians.lookup') }}?phone=${phone}`)
-                            .then(response => response.json())
+                if (phone.length >= 10) {
+                    lookupTimeout = setTimeout(() => {
+                        fetch(`{{ route('center.guardians.lookup') }}?phone=${encodeURIComponent(phone)}`, {
+                            headers: { 'Accept': 'application/json' }
+                        })
+                            .then(res => res.json())
                             .then(data => {
-                                if (data.found) {
+                                if (data && data.guardian) {
                                     if (badge) badge.classList.remove('d-none');
                                     if (alertBox) alertBox.classList.remove('d-none');
-                                    if (nameSpan) nameSpan.textContent = data.guardian.name;
-                                    if (parentNameInput && !parentNameInput.value) {
-                                        parentNameInput.value = data.guardian.name;
-                                    }
+                                    if (nameSpan) nameSpan.textContent = data.guardian.name || '';
                                 } else {
                                     if (badge) badge.classList.add('d-none');
                                     if (alertBox) alertBox.classList.add('d-none');
@@ -473,4 +470,4 @@
         return true;
     };
 </script>
-@endsection
+@endpush

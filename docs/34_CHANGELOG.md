@@ -20,6 +20,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added full trilingual localization support (AR, EN, FR).
 
 ### Fixed
+- **Student Edit Page Quick Enroll Button Activation (2026-09-05)**:
+  - Converted `@section('scripts')` to `@push('scripts')` in `edit.blade.php` so that modal opening handlers and validation scripts are properly rendered into `@stack('scripts')` of the layout.
+  - Added direct Alpine `@click` dispatch to the quick enrollment buttons.
 - **Student Edit Page 500 Error Resolution (2026-09-05)**:
   - Fixed `BadMethodCallException: Call to undefined method App\Models\Course::forTenant()` by scoping courses via `Course::where('tenant_id', ...)` and adding universal `scopeForTenant` to `BelongsToTenant` trait.
   - Added null safety checks for enrollment date formatting in student edit view.
