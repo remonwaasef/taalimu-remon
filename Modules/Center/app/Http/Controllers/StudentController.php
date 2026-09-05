@@ -200,12 +200,13 @@ class StudentController extends Controller
      */
     public function edit($id)
     {
-        $student = $this->findStudentOrFail($id);
+        $student = $this->findStudentOrFail($id, ['enrollments.course.instructor', 'grade.stage']);
         $this->authorize('update', $student);
 
         $stages = Stage::getCached();
+        $courses = Course::forTenant($this->tenant->id)->where('status', 'active')->get();
 
-        return view('center::students.edit', compact('student', 'stages'));
+        return view('center::students.edit', compact('student', 'stages', 'courses'));
     }
 
     /**
