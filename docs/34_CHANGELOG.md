@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Professional Enrolled Courses Display in Student Edit Screen (2026-09-05)**:
+  - Added dedicated modern courses & groups section in the student edit screen (`Modules/Center/resources/views/students/edit.blade.php`).
+  - Displays rich course cards with subject badge, course title, instructor, active status badge, progress percentage & bar, enrollment date, price, and direct link to course details.
+  - Added quick course enrollment modal right inside the edit view to register the student into new courses instantly with one click, while disabling already enrolled courses.
 - **Smart Dynamic WhatsApp Message on Quick Action (2026-09-05)**:
   - Enabled context-aware automatic pre-filled WhatsApp message on the quick action button next to Quick Pay.
   - Generates polite debt reminder with outstanding balance and center name when `total_balance > 0`, and general check-in/support message when balance is clear (`total_balance <= 0`).
