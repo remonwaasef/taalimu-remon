@@ -193,16 +193,25 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         @foreach($student->enrollments as $enrollment)
                             @if($enrollment->course)
-                                <div class="bg-white dark:bg-slate-800/80 border border-slate-200/90 dark:border-slate-700/80 rounded-2xl p-4 shadow-xs hover:border-brand-primary/50 transition-all flex flex-col justify-between">
+                                @php
+                                    $isSuspended = ($enrollment->status === 'suspended');
+                                @endphp
+                                <div class="{{ $isSuspended ? 'bg-gradient-to-br from-amber-50/60 to-orange-50/30 dark:from-amber-950/30 dark:to-orange-950/20 border-2 border-amber-300 dark:border-amber-700/80 shadow-sm' : 'bg-white dark:bg-slate-800/80 border border-slate-200/90 dark:border-slate-700/80 shadow-xs hover:border-brand-primary/50' }} rounded-2xl p-4 transition-all flex flex-col justify-between relative overflow-hidden">
+                                    @if($isSuspended)
+                                        <div class="absolute top-0 end-0 bg-gradient-to-l from-amber-500 to-amber-600 text-white text-[11px] font-extrabold px-3 py-0.5 rounded-bl-xl shadow-xs flex items-center gap-1">
+                                            <i class="fas fa-pause-circle"></i>
+                                            <span>معطّل مؤقتاً</span>
+                                        </div>
+                                    @endif
                                     <div>
                                         {{-- Top Line: Icon, Title, Status Badge --}}
-                                        <div class="flex items-start justify-between gap-3 mb-3">
+                                        <div class="flex items-start justify-between gap-3 mb-3 {{ $isSuspended ? 'pt-2' : '' }}">
                                             <div class="flex items-center gap-3">
-                                                <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-brand-primary/15 to-brand-primary/5 text-brand-primary dark:bg-brand-900/40 dark:text-brand-300 flex items-center justify-center text-lg flex-shrink-0 border border-brand-primary/20">
-                                                    <i class="fas fa-book-reader"></i>
+                                                <div class="w-11 h-11 rounded-xl {{ $isSuspended ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/60 dark:text-amber-300 border border-amber-300' : 'bg-gradient-to-br from-brand-primary/15 to-brand-primary/5 text-brand-primary dark:bg-brand-900/40 dark:text-brand-300 border border-brand-primary/20' }} flex items-center justify-center text-lg flex-shrink-0">
+                                                    <i class="fas {{ $isSuspended ? 'fa-pause-circle' : 'fa-book-reader' }}"></i>
                                                 </div>
                                                 <div>
-                                                    <h6 class="font-bold text-slate-900 dark:text-slate-100 text-sm leading-snug mb-1">
+                                                    <h6 class="font-bold {{ $isSuspended ? 'text-amber-950 dark:text-amber-200' : 'text-slate-900 dark:text-slate-100' }} text-sm leading-snug mb-0.5">
                                                         {{ $enrollment->course->title }}
                                                     </h6>
                                                     <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
@@ -211,6 +220,12 @@
                                                             {{ $enrollment->course->instructor?->name ?? 'المركز' }}
                                                         </span>
                                                     </div>
+                                                    @if($isSuspended)
+                                                        <div class="text-[11px] font-bold text-amber-700 dark:text-amber-300 mt-1 flex items-center gap-1">
+                                                            <i class="fas fa-exclamation-circle text-[10px]"></i>
+                                                            <span>الاشتراك معطّل حالياً (متوقف عن الحضور)</span>
+                                                        </div>
+                                                    @endif
                                                 </div>
                                             </div>
 
@@ -220,9 +235,9 @@
                                                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                                                         {{ __('center::students.course_status.active') }}
                                                     </span>
-                                                @elseif($enrollment->status === 'suspended')
-                                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
-                                                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                                                @elseif($isSuspended)
+                                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-amber-200 text-amber-950 dark:bg-amber-900 dark:text-amber-100 border border-amber-400 dark:border-amber-600 shadow-xs">
+                                                        <span class="w-2 h-2 rounded-full bg-amber-600 animate-pulse"></span>
                                                         {{ __('center::students.course_status.suspended') }}
                                                     </span>
                                                 @else
@@ -234,22 +249,22 @@
                                         </div>
 
                                         {{-- Progress Bar --}}
-                                        <div class="mb-3 bg-slate-50/80 dark:bg-slate-900/40 p-3 rounded-xl border border-slate-100 dark:border-slate-800">
+                                        <div class="mb-3 {{ $isSuspended ? 'bg-amber-100/50 dark:bg-amber-950/40 border-amber-200/80 dark:border-amber-800' : 'bg-slate-50/80 dark:bg-slate-900/40 border-slate-100 dark:border-slate-800' }} p-3 rounded-xl border">
                                             <div class="flex justify-between items-center text-xs mb-1.5 font-medium">
                                                 <span class="text-slate-500 dark:text-slate-400">
-                                                    <i class="fas fa-chart-line text-brand-primary me-1"></i>
+                                                    <i class="fas fa-chart-line {{ $isSuspended ? 'text-amber-600' : 'text-brand-primary' }} me-1"></i>
                                                     {{ __('center::students.profile.academic.progress') ?? 'نسبة الحضور والإنجاز' }}
                                                 </span>
-                                                <span class="font-bold text-brand-primary">{{ $enrollment->progress ?? 0 }}%</span>
+                                                <span class="font-bold {{ $isSuspended ? 'text-amber-700 dark:text-amber-300' : 'text-brand-primary' }}">{{ $enrollment->progress ?? 0 }}%</span>
                                             </div>
                                             <div class="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
-                                                <div class="bg-gradient-to-l from-brand-primary to-teal-400 h-2 rounded-full transition-all duration-500" style="width: {{ min(100, max(0, $enrollment->progress ?? 0)) }}%"></div>
+                                                <div class="{{ $isSuspended ? 'bg-gradient-to-l from-amber-500 to-amber-400' : 'bg-gradient-to-l from-brand-primary to-teal-400' }} h-2 rounded-full transition-all duration-500" style="width: {{ min(100, max(0, $enrollment->progress ?? 0)) }}%"></div>
                                             </div>
                                         </div>
                                     </div>
 
                                     {{-- Footer Info & Actions --}}
-                                    <div class="pt-3 border-t border-slate-100 dark:border-slate-700/60 flex flex-wrap items-center justify-between gap-2 text-xs">
+                                    <div class="pt-3 border-t {{ $isSuspended ? 'border-amber-200/80 dark:border-amber-800/60' : 'border-slate-100 dark:border-slate-700/60' }} flex flex-wrap items-center justify-between gap-2 text-xs">
                                         <div class="flex items-center gap-2 text-slate-400">
                                             <div class="flex items-center gap-1">
                                                 <i class="far fa-calendar-alt"></i>
@@ -269,8 +284,8 @@
                                             <form action="{{ route('center.students.courses.toggle-status', ['student' => $student->id, 'course' => $enrollment->course_id]) }}" method="POST" class="inline m-0">
                                                 @csrf
                                                 @method('PATCH')
-                                                @if($enrollment->status === 'suspended')
-                                                    <button type="submit" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/50 dark:text-emerald-300 dark:hover:bg-emerald-900/60 border border-emerald-200 dark:border-emerald-800 transition shadow-2xs" title="{{ __('center::students.resume_course') }}">
+                                                @if($isSuspended)
+                                                    <button type="submit" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-extrabold text-white bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-500 shadow-sm transition" title="{{ __('center::students.resume_course') }}">
                                                         <i class="fas fa-play text-[10px]"></i>
                                                         <span>{{ __('center::students.resume_course') }}</span>
                                                     </button>

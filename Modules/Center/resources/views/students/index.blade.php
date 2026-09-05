@@ -367,11 +367,20 @@
                                     @if($coursesCount > 0)
                                         <div class="d-flex flex-wrap align-items-center gap-1.5" style="max-width: 290px;">
                                             @foreach($validEnrollments->take(2) as $enrollment)
+                                                @php
+                                                    $isSuspended = ($enrollment->status === 'suspended');
+                                                @endphp
                                                 <a href="{{ route('center.courses.show', $enrollment->course_id) }}" 
-                                                   class="badge bg-teal-50 hover:bg-teal-100 text-teal-800 dark:bg-teal-950/50 dark:hover:bg-teal-900/60 dark:text-teal-300 border border-teal-200/80 dark:border-teal-800/60 rounded-lg px-2.5 py-1 text-xs text-decoration-none d-inline-flex align-items-center gap-1.5 transition-all shadow-2xs"
-                                                   title="{{ $enrollment->course->title }}{{ $enrollment->course->instructor ? ' - ' . $enrollment->course->instructor->name : '' }}">
-                                                    <span class="w-1.5 h-1.5 rounded-full {{ $enrollment->status === 'active' ? 'bg-emerald-500' : 'bg-slate-400' }}"></span>
-                                                    <span class="fw-bold text-truncate" style="max-width: 105px;">{{ $enrollment->course->title }}</span>
+                                                   class="badge {{ $isSuspended ? 'bg-amber-50 hover:bg-amber-100 text-amber-900 border-amber-300 dark:bg-amber-950/60 dark:hover:bg-amber-900/60 dark:text-amber-300 dark:border-amber-800' : 'bg-teal-50 hover:bg-teal-100 text-teal-800 border-teal-200/80 dark:bg-teal-950/50 dark:hover:bg-teal-900/60 dark:text-teal-300 dark:border-teal-800/60' }} border rounded-lg px-2.5 py-1 text-xs text-decoration-none d-inline-flex align-items-center gap-1.5 transition-all shadow-2xs"
+                                                   title="{{ $enrollment->course->title }}{{ $isSuspended ? ' (معطّل)' : ' (نشط)' }}{{ $enrollment->course->instructor ? ' - ' . $enrollment->course->instructor->name : '' }}">
+                                                    @if($isSuspended)
+                                                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                                                        <span class="fw-bold text-truncate text-amber-900 dark:text-amber-200" style="max-width: 90px;">{{ $enrollment->course->title }}</span>
+                                                        <span class="badge bg-amber-200/90 text-amber-950 dark:bg-amber-900 dark:text-amber-200 text-[10px] px-1 py-0 rounded font-bold ms-0.5">معطل</span>
+                                                    @else
+                                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                                        <span class="fw-bold text-truncate" style="max-width: 105px;">{{ $enrollment->course->title }}</span>
+                                                    @endif
                                                 </a>
                                             @endforeach
 
@@ -386,12 +395,21 @@
                                                             {{ __('center::students.enrolled_courses') }} ({{ $coursesCount }})
                                                         </li>
                                                         @foreach($validEnrollments as $enrollment)
+                                                            @php
+                                                                $isSuspended = ($enrollment->status === 'suspended');
+                                                            @endphp
                                                             <li>
-                                                                <a class="dropdown-item rounded-xl px-2.5 py-1.5 text-xs d-flex align-items-center justify-content-between hover:bg-slate-50 dark:hover:bg-slate-800" 
+                                                                <a class="dropdown-item rounded-xl px-2.5 py-1.5 text-xs d-flex align-items-center justify-content-between hover:bg-slate-50 dark:hover:bg-slate-800 {{ $isSuspended ? 'bg-amber-50/40 dark:bg-amber-950/20' : '' }}" 
                                                                    href="{{ route('center.courses.show', $enrollment->course_id) }}">
                                                                     <div class="d-flex align-items-center gap-2">
-                                                                        <span class="w-2 h-2 rounded-full {{ $enrollment->status === 'active' ? 'bg-emerald-500' : 'bg-slate-400' }}"></span>
-                                                                        <span class="fw-semibold text-slate-800 dark:text-slate-200">{{ $enrollment->course->title }}</span>
+                                                                        @if($isSuspended)
+                                                                            <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                                                                            <span class="fw-semibold text-slate-700 dark:text-slate-300">{{ $enrollment->course->title }}</span>
+                                                                            <span class="badge bg-amber-100 text-amber-900 dark:bg-amber-900/80 dark:text-amber-200 text-[10px] px-1.5 py-0.5 rounded font-bold ms-1">معطل</span>
+                                                                        @else
+                                                                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                                                                            <span class="fw-semibold text-slate-800 dark:text-slate-200">{{ $enrollment->course->title }}</span>
+                                                                        @endif
                                                                     </div>
                                                                     @if($enrollment->course->instructor)
                                                                         <span class="text-muted extra-small ms-2">{{ $enrollment->course->instructor->name }}</span>

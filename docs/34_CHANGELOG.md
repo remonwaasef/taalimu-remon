@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Visual Distinction for Suspended vs Active Courses (2026-09-05)**:
+  - Added dedicated amber badges, pulsing indicators, and explicit "معطل" tags for suspended courses in the main students directory table (`index.blade.php`).
+  - Redesigned suspended course cards in the edit view (`edit.blade.php`) with prominent corner badges, warm amber tint, warning notice, and bold green "تنشيط الكورس" CTA button.
+  - Updated student profile courses tab (`_show-tab-courses.blade.php`) with contextual status styling.
 - **Student Course Suspension & Unenrollment Management (2026-09-05)**:
   - Added migration `2026_09_05_194500_add_suspended_to_enrollments_status_enum.php` extending `enrollments.status` enum with `'suspended'`.
   - Added route `PATCH center.students.courses.toggle-status` and `StudentController@toggleCourseStatus` to toggle student course enrollment status between active and suspended.
