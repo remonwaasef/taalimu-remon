@@ -21,34 +21,28 @@
 
     function copyToClipboard(text) {
         navigator.clipboard.writeText(text).then(function() {
-            showSuccessToast('{{ __('center::students.profile.reset_password.copy_success') }}');
+            showSuccessToast('{{ __('center::students.copy_success') }}');
         });
     }
 
     function copyAllDetails() {
         @if(session('generated_password'))
-            const text = @json($fullCredentialsMsg ?? $msg ?? '');
+            const text = @json($whatsappText ?? '');
             navigator.clipboard.writeText(text).then(function() {
-                showSuccessToast('{{ __('center::students.profile.reset_password.copy_success') }} (تم نسخ الرسالة مع كلمة المرور للحافظة بأمان)');
+                showSuccessToast('{{ __('center::students.copy_all_success') }}');
             });
         @endif
     }
 
-    function copyMagicLink(url) {
-        navigator.clipboard.writeText(url).then(function() {
-            showSuccessToast('تم نسخ رابط الدخول السريع المشفر بنجاح!');
-        });
-    }
-
     function openSmartWhatsApp(phone) {
         const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-        const msg = @json($secureWhatsAppMsg ?? '');
+        const msg = @json($whatsappText ?? '');
         const encoded = encodeURIComponent(msg);
 
         if (isMobile) {
             window.open('https://api.whatsapp.com/send?phone=' + phone + '&text=' + encoded, '_blank');
         } else {
-            // Open WhatsApp Web directly on desktop (skips intermediate api.whatsapp.com landing page)
+            // Open WhatsApp Web directly on desktop
             window.open('https://web.whatsapp.com/send?phone=' + phone + '&text=' + encoded, '_blank');
         }
     }

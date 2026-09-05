@@ -3,18 +3,17 @@
 @section('panel-content')
     @if(session('generated_password'))
         @php
-            $cleanPhone = sanitizePhoneForWhatsApp(session('student_phone') ?? $student->phone);
+            $studentPhone = session('student_phone') ?? $student->phone;
+            $cleanPhone = sanitizePhoneForWhatsApp($studentPhone);
             $qrUrl = \Illuminate\Support\Facades\URL::temporarySignedRoute('center.login.magic', now()->addHours(24), ['student' => $student->id, 'tenant' => app('tenant')->domain]);
+            $studentEmail = session('student_email') ?? $student->email;
+            $hasCustomEmail = $studentEmail && !preg_match('/^std\d+\./', $studentEmail);
+            $tenantName = app('tenant')->name ?? 'المركز';
+            $loginUrl = url('/login');
+            $studentName = session('student_name') ?? $student->name;
 
-            // Secure Message for WhatsApp (Signed Magic Link - No passwords exposed in URL GET params)
-            $secureWhatsAppMsg = "مرحباً " . (session('student_name') ?? $student->name) . "،\nيسعدنا انضمامك إلى " . (app('tenant')->name ?? 'المركز') . "! 🎉\n\nبيانات الدخول لحسابك:\nالبريد: " . (session('student_email') ?? $student->email) . "\n\nرابط الدخول الآمن المباشر:\n" . $qrUrl . "\n\n(هذا الرابط مشفر ومخصص لك لتعيين كلمة مرورك والدخول مباشرة)";
-
-            // Full Message with Temporary Password (for Clipboard Copying, never leaked in browser address bar)
-            $fullCredentialsMsg = "مرحباً " . (session('student_name') ?? $student->name) . "،\nيسعدنا انضمامك إلى " . (app('tenant')->name ?? 'المركز') . "! 🎉\n\nبيانات الدخول الخاصة بك:\nرابط المنصة: " . url('/login') . "\nالبريد: " . (session('student_email') ?? $student->email) . "\nكلمة المرور المؤقتة: " . session('generated_password') . "\n\n(يرجى تغيير كلمة المرور عند أول تسجيل دخول للأمان)";
-
-            $waWebUrl = "https://web.whatsapp.com/send?phone=" . $cleanPhone . "&text=" . urlencode($secureWhatsAppMsg);
-            $waAppUrl = "whatsapp://send?phone=" . $cleanPhone . "&text=" . urlencode($secureWhatsAppMsg);
-            $mailtoUrl = "mailto:" . (session('student_email') ?? $student->email) . "?subject=تم إعادة تعيين كلمة مرورك&body=" . rawurlencode($fullCredentialsMsg);
+            // Clean, concise credentials message
+            $whatsappText = "مرحباً {$studentName}، تم تحديث بيانات حسابك في {$tenantName}! 🎉\n\nبيانات تسجيل الدخول لحسابك:\n📱 رقم الهاتف: {$studentPhone}\n🔑 كلمة المرور: " . session('generated_password') . "\n🌐 رابط المنصة: {$loginUrl}";
         @endphp
 
         @include('center::students.partials._show-password-ticket')

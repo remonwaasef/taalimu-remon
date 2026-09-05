@@ -34,97 +34,53 @@
                             </div>
                         </div>
 
+                        @php
+                            $email = session('student_email');
+                            $hasCustomEmail = $email && !preg_match('/^std\d+\./', $email);
+                            $cleanPhone = sanitizePhoneForWhatsApp(session('student_phone'));
+                            $tenantName = app('tenant')->name ?? 'المركز';
+                            $loginUrl = url('/login');
+
+                            // Concise, essential message only
+                            $whatsappText = "مرحباً " . session('student_name') . "، تم تسجيلك بنجاح في {$tenantName}! 🎉\n\nبيانات تسجيل الدخول لحسابك:\n📱 رقم الهاتف: " . session('student_phone') . "\n🔑 كلمة المرور: " . session('generated_password') . "\n🌐 رابط المنصة: " . $loginUrl;
+                        @endphp
+
                         <div class="row g-4 mt-2">
-                            <div class="col-sm-6">
+                            <div class="col-sm-{{ $hasCustomEmail ? '3' : '4' }}">
                                 <label class="text-muted small text-uppercase fw-bold d-block mb-1">{{ __('center::students.name') }}</label>
-                                <span class="fw-bold fs-5">{{ session('student_name') }}</span>
+                                <span class="fw-bold fs-5 text-dark">{{ session('student_name') }}</span>
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-{{ $hasCustomEmail ? '3' : '4' }}">
                                 <label class="text-muted small text-uppercase fw-bold d-block mb-1">{{ __('center::students.phone') }}</label>
-                                <span class="fw-bold text-dark">{{ session('student_phone') }}</span>
+                                <span class="fw-bold text-dark fs-5 font-monospace">{{ session('student_phone') }}</span>
                             </div>
-                            <div class="col-sm-6">
+                            @if($hasCustomEmail)
+                            <div class="col-sm-3">
                                 <label class="text-muted small text-uppercase fw-bold d-block mb-1">{{ __('center::students.email') }}</label>
-                                <span class="text-primary fw-bold">{{ session('student_email') }}</span>
+                                <span class="text-primary fw-bold">{{ $email }}</span>
                             </div>
-                            <div class="col-sm-6">
+                            @endif
+                            <div class="col-sm-{{ $hasCustomEmail ? '3' : '4' }}">
                                 <label class="text-muted small text-uppercase fw-bold d-block mb-1">{{ __('center::students.temporary_password') }}</label>
                                 <div class="d-flex align-items-center gap-2">
                                     <span class="fs-4 fw-bold text-danger font-monospace">{{ session('generated_password') }}</span>
-                                    <button onclick="copyToClipboard('{{ session('generated_password') }}')" class="btn btn-sm btn-light rounded-circle" title="{{ __('center::students.copy') }}">
+                                    <button type="button" onclick="copyToClipboard('{{ session('generated_password') }}')" class="btn btn-sm btn-light rounded-circle shadow-sm" title="{{ __('center::students.copy') }}">
                                         <i class="fas fa-copy text-primary"></i>
                                     </button>
                                 </div>
                             </div>
                         </div>
 
-                        @php
-                            $studentForQr = session('student_email')
-                                ? \App\Models\Student::where('email', session('student_email'))->where('tenant_id', app('tenant')->id)->first()
-                                : null;
-
-                            // Temporary signed magic-login link valid for 24 hours
-                            $qrUrl = $studentForQr
-                                ? \Illuminate\Support\Facades\URL::temporarySignedRoute('center.login.magic', now()->addHours(24), ['student' => $studentForQr->id, 'tenant' => app('tenant')->domain])
-                                : url('/login');
-
-                            $cleanPhone = sanitizePhoneForWhatsApp(session('student_phone'));
-
-                            // Secure Message for WhatsApp (Signed Magic Link - No passwords exposed in URL GET params)
-                            $secureWhatsAppMsg = "مرحباً " . session('student_name') . "،\nيسعدنا انضمامك إلى " . (app('tenant')->name ?? 'المركز') . "! 🎉\n\nبيانات الدخول لحسابك:\nالبريد: " . session('student_email') . "\n\nرابط الدخول الآمن المباشر:\n" . $qrUrl . "\n\n(هذا الرابط مشفر ومخصص لك لتعيين كلمة مرورك والدخول مباشرة)";
-
-                            // Full Message with Temporary Password (for Clipboard Copying, never leaked in browser address bar)
-                            $fullCredentialsMsg = "مرحباً " . session('student_name') . "،\nيسعدنا انضمامك إلى " . (app('tenant')->name ?? 'المركز') . "! 🎉\n\nبيانات الدخول الخاصة بك:\nرابط المنصة: " . url('/login') . "\nالبريد: " . session('student_email') . "\nكلمة المرور المؤقتة: " . session('generated_password') . "\n\n(يرجى تغيير كلمة المرور عند أول تسجيل دخول للأمان)";
-
-                            // Direct WhatsApp URLs
-                            $waWebUrl = "https://web.whatsapp.com/send?phone=" . $cleanPhone . "&text=" . urlencode($secureWhatsAppMsg);
-                            $waAppUrl = "whatsapp://send?phone=" . $cleanPhone . "&text=" . urlencode($secureWhatsAppMsg);
-                            $mailtoUrl = "mailto:" . session('student_email') . "?subject=" . urlencode(__('center::students.login_credentials_subject')) . "&body=" . rawurlencode($fullCredentialsMsg);
-                        @endphp
-
                         <div class="mt-4 pt-3 border-top d-flex flex-wrap align-items-center gap-2">
-                            <!-- Copy Full Credentials Button -->
-                            <button type="button" onclick="copyAllDetails()" class="btn btn-outline-dark rounded-pill px-4" title="{{ __('center::students.copy_all_data') }}">
-                                <i class="fas fa-copy me-2"></i> {{ __('center::students.copy_all_data') }}
+                            <!-- Send WhatsApp Direct Button -->
+                            <button type="button" onclick="openSmartWhatsApp('{{ $cleanPhone }}')" class="btn btn-success rounded-pill px-4 py-2 fw-bold shadow-sm">
+                                <i class="fab fa-whatsapp me-2 fs-5"></i> {{ __('center::students.send_whatsapp') }}
                             </button>
 
-                            <!-- Smart WhatsApp Action Group -->
-                            <div class="btn-group">
-                                <button type="button" onclick="openSmartWhatsApp('{{ $cleanPhone }}')" class="btn btn-success rounded-pill-start px-4" title="إرسال رابط الدخول المشفر عبر واتساب">
-                                    <i class="fab fa-whatsapp me-2"></i> {{ __('center::students.send_whatsapp') }}
-                                </button>
-                                <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split rounded-pill-end pe-3" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <span class="visually-hidden">خيارات واتساب</span>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-2" style="min-width: 250px;">
-                                    <li>
-                                        <a class="dropdown-item rounded-3 py-2 text-success fw-bold" href="{{ $waWebUrl }}" target="_blank">
-                                            <i class="fab fa-whatsapp me-2"></i> فتح واتساب ويب مباشرة
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item rounded-3 py-2 text-dark" href="{{ $waAppUrl }}">
-                                            <i class="fas fa-laptop me-2 text-muted"></i> فتح تطبيق واتساب لسطح المكتب
-                                        </a>
-                                    </li>
-                                    <li><hr class="dropdown-divider my-1"></li>
-                                    <li>
-                                        <button type="button" class="dropdown-item rounded-3 py-2 text-primary" onclick="copyMagicLink('{{ $qrUrl }}')">
-                                            <i class="fas fa-link me-2"></i> نسخ رابط الدخول المباشر فقط
-                                        </button>
-                                    </li>
-                                    <li>
-                                        <button type="button" class="dropdown-item rounded-3 py-2 text-secondary" onclick="copyAllDetails()">
-                                            <i class="fas fa-key me-2"></i> نسخ الرسالة مع كلمة المرور
-                                        </button>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <!-- Email Button -->
-                            <a href="{{ $mailtoUrl }}" class="btn btn-light border rounded-pill px-4">
-                                <i class="fas fa-envelope me-2"></i> {{ __('center::students.send_email') }}
-                            </a>
+                            <!-- Copy Details Button -->
+                            <button type="button" onclick="copyAllDetails()" class="btn btn-outline-dark rounded-pill px-4 py-2 fw-bold shadow-sm">
+                                <i class="fas fa-copy me-2"></i> {{ __('center::students.copy_all_data') }}
+                            </button>
                         </div>
                     </div>
 
@@ -133,6 +89,15 @@
                         <div class="ticket-stub-decoration top"></div>
                         <div class="ticket-stub-decoration bottom"></div>
                         
+                        @php
+                            $studentForQr = session('student_email')
+                                ? \App\Models\Student::where('email', session('student_email'))->where('tenant_id', app('tenant')->id)->first()
+                                : null;
+
+                            $qrUrl = $studentForQr
+                                ? \Illuminate\Support\Facades\URL::temporarySignedRoute('center.login.magic', now()->addHours(24), ['student' => $studentForQr->id, 'tenant' => app('tenant')->domain])
+                                : url('/login');
+                        @endphp
                         <div class="qr-container bg-white p-2 rounded-3 shadow-sm mb-3">
                             <div class="student-local-qr d-flex justify-content-center" style="width: 140px; height: 140px;" data-qr="{{ $qrUrl }}"></div>
                         </div>
@@ -165,27 +130,21 @@
             }
 
             function copyAllDetails() {
-                const text = @json($fullCredentialsMsg);
+                const text = @json($whatsappText);
                 navigator.clipboard.writeText(text).then(function() {
-                    showSuccessToast('{{ __('center::students.copy_all_success') }} (تم نسخ الرسالة مع كلمة المرور للحافظة بأمان)');
-                });
-            }
-
-            function copyMagicLink(url) {
-                navigator.clipboard.writeText(url).then(function() {
-                    showSuccessToast('تم نسخ رابط الدخول السريع المشفر بنجاح!');
+                    showSuccessToast('{{ __('center::students.copy_all_success') }}');
                 });
             }
 
             function openSmartWhatsApp(phone) {
                 const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-                const msg = @json($secureWhatsAppMsg);
+                const msg = @json($whatsappText);
                 const encoded = encodeURIComponent(msg);
 
                 if (isMobile) {
                     window.open('https://api.whatsapp.com/send?phone=' + phone + '&text=' + encoded, '_blank');
                 } else {
-                    // Open WhatsApp Web directly on desktop (skips the intermediate api.whatsapp.com landing page)
+                    // Open WhatsApp Web directly on desktop
                     window.open('https://web.whatsapp.com/send?phone=' + phone + '&text=' + encoded, '_blank');
                 }
             }

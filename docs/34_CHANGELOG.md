@@ -17,6 +17,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added smart action dropdown on WhatsApp buttons (Direct Web, Desktop App protocol, Copy Magic Link, and Safe Clipboard Copy).
 
 ### Changed
+- **Student Registration & Password Reset Ticket UX Cleanup (2026-09-05)**:
+  - Removed internal synthetic placeholder email (`stdX.domain@taalimu.com`) from student registration and password reset cards, showing email only when an authentic custom email exists.
+  - Eliminated redundant "إرسال إيميل" (Send Email) button targeting fake addresses.
+  - Replaced over-complicated 4-option WhatsApp dropdown with a streamlined 2-button action layout:
+    - 🟢 Direct WhatsApp Send (`web.whatsapp.com` on PC, native app on mobile).
+    - 📋 Copy All Data (direct copy to clipboard with toast notification).
+  - Streamlined WhatsApp notification text to contain only essential login credentials (Name, Phone Number, Password, Platform URL).
 - **Unified Login Screen Complete Overhaul (2026-09-05)**:
   - Transformed the unified login (`taalimu.com/login`) into a modern 2-column SaaS split layout with rich branding, value propositions, and interactive features.
   - Added Taalimu brand mark, platform badges, key feature highlights, and customer trust proof on the presentation panel.
