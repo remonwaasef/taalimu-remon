@@ -36,6 +36,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added smart action dropdown on WhatsApp buttons (Direct Web, Desktop App protocol, Copy Magic Link, and Safe Clipboard Copy).
 
 ### Changed
+- **Student Edit Form Streamlined to Match Create Form (2026-09-05)**:
+  - Removed legacy, redundant fields from the edit student form (`Modules/Center/resources/views/students/edit.blade.php`) to align exactly with the clean creation form: removed national ID, birth date, gender, address, profile photo, emergency phone, parent job, parent relation, school name, and section type.
+  - Eliminated synthetic email display (`stdX.domain@taalimu.com`) in the edit email input so users only see and edit authentic email addresses.
+  - Displayed student code as a non-intrusive header badge rather than a large readonly input field.
+  - Updated `StudentProfileService::updateStudent` to safely preserve existing legacy database values when omitted from the streamlined form.
 - **Student Registration & Password Reset Ticket UX Cleanup (2026-09-05)**:
   - Removed internal synthetic placeholder email (`stdX.domain@taalimu.com`) from student registration and password reset cards, showing email only when an authentic custom email exists.
   - Eliminated redundant "إرسال إيميل" (Send Email) button targeting fake addresses.
