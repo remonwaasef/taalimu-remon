@@ -34,16 +34,16 @@
         @endif
     }
 
-    function openSmartWhatsApp(phone) {
+    function openSmartWhatsApp(phone, customMsg = null) {
         const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-        const msg = @json($whatsappText ?? '');
-        const encoded = encodeURIComponent(msg);
+        const msg = customMsg !== null ? customMsg : @json($whatsappText ?? '');
+        const query = msg ? ('?phone=' + phone + '&text=' + encodeURIComponent(msg)) : ('?phone=' + phone);
 
         if (isMobile) {
-            window.open('https://api.whatsapp.com/send?phone=' + phone + '&text=' + encoded, '_blank');
+            window.open('https://api.whatsapp.com/send' + query, '_blank');
         } else {
             // Open WhatsApp Web directly on desktop
-            window.open('https://web.whatsapp.com/send?phone=' + phone + '&text=' + encoded, '_blank');
+            window.open('https://web.whatsapp.com/send' + query, '_blank');
         }
     }
 

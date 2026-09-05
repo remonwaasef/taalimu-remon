@@ -101,11 +101,16 @@
                                                         <button class="btn btn-sm btn-white border text-success rounded-circle shadow-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="واتساب">
                                                             <i class="fab fa-whatsapp"></i>
                                                         </button>
+                                                        @php
+                                                            $studentWa = sanitizePhoneForWhatsApp($student->phone);
+                                                            $waPayMsg = __('center::students.wa_student_payment_msg', ['name' => $student->name]);
+                                                            $waAttMsg = __('center::students.wa_student_attendance_msg', ['name' => $student->name]);
+                                                        @endphp
                                                         <ul class="dropdown-menu shadow-sm border-0 rounded-4">
-                                                            <li><a class="dropdown-item d-flex align-items-center gap-2" href="https://wa.me/{{ sanitizePhoneForWhatsApp($student->phone) }}" target="_blank"><i class="fas fa-comment text-muted"></i> {{ __('center::students.wa_general_msg') }}</a></li>
+                                                            <li><a class="dropdown-item d-flex align-items-center gap-2" href="https://web.whatsapp.com/send?phone={{ $studentWa }}" onclick="openSmartWhatsApp('{{ $studentWa }}', ''); return false;" target="_blank"><i class="fas fa-comment text-muted"></i> {{ __('center::students.wa_general_msg') }}</a></li>
                                                             <li><hr class="dropdown-divider"></li>
-                                                            <li><a class="dropdown-item text-danger d-flex align-items-center gap-2" href="https://wa.me/{{ sanitizePhoneForWhatsApp($student->phone) }}?text={{ urlencode(__('center::students.wa_student_payment_msg', ['name' => $student->name])) }}" target="_blank"><i class="fas fa-file-invoice-dollar"></i> {{ __('center::students.wa_payment_reminder') }}</a></li>
-                                                            <li><a class="dropdown-item text-warning d-flex align-items-center gap-2" href="https://wa.me/{{ sanitizePhoneForWhatsApp($student->phone) }}?text={{ urlencode(__('center::students.wa_student_attendance_msg', ['name' => $student->name])) }}" target="_blank"><i class="fas fa-user-clock"></i> {{ __('center::students.wa_attendance_alert') }}</a></li>
+                                                            <li><a class="dropdown-item text-danger d-flex align-items-center gap-2" href="https://web.whatsapp.com/send?phone={{ $studentWa }}&text={{ urlencode($waPayMsg) }}" onclick="openSmartWhatsApp('{{ $studentWa }}', @json($waPayMsg)); return false;" target="_blank"><i class="fas fa-file-invoice-dollar"></i> {{ __('center::students.wa_payment_reminder') }}</a></li>
+                                                            <li><a class="dropdown-item text-warning d-flex align-items-center gap-2" href="https://web.whatsapp.com/send?phone={{ $studentWa }}&text={{ urlencode($waAttMsg) }}" onclick="openSmartWhatsApp('{{ $studentWa }}', @json($waAttMsg)); return false;" target="_blank"><i class="fas fa-user-clock"></i> {{ __('center::students.wa_attendance_alert') }}</a></li>
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -130,11 +135,16 @@
                                                         <button class="btn btn-sm btn-white border text-success rounded-circle shadow-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="واتساب">
                                                             <i class="fab fa-whatsapp"></i>
                                                         </button>
+                                                        @php
+                                                            $guardianWa = sanitizePhoneForWhatsApp($student->guardian?->phone ?? $student->parent_phone);
+                                                            $waGPayMsg = __('center::students.wa_guardian_payment_msg', ['name' => $student->name]);
+                                                            $waGAttMsg = __('center::students.wa_guardian_attendance_msg', ['name' => $student->name]);
+                                                        @endphp
                                                         <ul class="dropdown-menu shadow-sm border-0 rounded-4">
-                                                            <li><a class="dropdown-item d-flex align-items-center gap-2" href="https://wa.me/{{ sanitizePhoneForWhatsApp($student->guardian?->phone ?? $student->parent_phone) }}" target="_blank"><i class="fas fa-comment text-muted"></i> {{ __('center::students.wa_general_msg') }}</a></li>
+                                                            <li><a class="dropdown-item d-flex align-items-center gap-2" href="https://web.whatsapp.com/send?phone={{ $guardianWa }}" onclick="openSmartWhatsApp('{{ $guardianWa }}', ''); return false;" target="_blank"><i class="fas fa-comment text-muted"></i> {{ __('center::students.wa_general_msg') }}</a></li>
                                                             <li><hr class="dropdown-divider"></li>
-                                                            <li><a class="dropdown-item text-danger d-flex align-items-center gap-2" href="https://wa.me/{{ sanitizePhoneForWhatsApp($student->guardian?->phone ?? $student->parent_phone) }}?text={{ urlencode(__('center::students.wa_guardian_payment_msg', ['name' => $student->name])) }}" target="_blank"><i class="fas fa-file-invoice-dollar"></i> {{ __('center::students.wa_payment_reminder') }}</a></li>
-                                                            <li><a class="dropdown-item text-warning d-flex align-items-center gap-2" href="https://wa.me/{{ sanitizePhoneForWhatsApp($student->guardian?->phone ?? $student->parent_phone) }}?text={{ urlencode(__('center::students.wa_guardian_attendance_msg', ['name' => $student->name])) }}" target="_blank"><i class="fas fa-user-clock"></i> {{ __('center::students.wa_attendance_alert') }}</a></li>
+                                                            <li><a class="dropdown-item text-danger d-flex align-items-center gap-2" href="https://web.whatsapp.com/send?phone={{ $guardianWa }}&text={{ urlencode($waGPayMsg) }}" onclick="openSmartWhatsApp('{{ $guardianWa }}', @json($waGPayMsg)); return false;" target="_blank"><i class="fas fa-file-invoice-dollar"></i> {{ __('center::students.wa_payment_reminder') }}</a></li>
+                                                            <li><a class="dropdown-item text-warning d-flex align-items-center gap-2" href="https://web.whatsapp.com/send?phone={{ $guardianWa }}&text={{ urlencode($waGAttMsg) }}" onclick="openSmartWhatsApp('{{ $guardianWa }}', @json($waGAttMsg)); return false;" target="_blank"><i class="fas fa-user-clock"></i> {{ __('center::students.wa_attendance_alert') }}</a></li>
                                                         </ul>
                                                     </div>
                                                 </div>

@@ -43,10 +43,11 @@
                                 </div>
                                 @php
                                     $reminderMsg = __('center::students.debt_reminder_msg', ['name' => $student->name]);
-                                    $whatsappUrl = "https://wa.me/" . sanitizePhoneForWhatsApp($student->guardian?->phone ?? $student->parent_phone) . "?text=" . urlencode($reminderMsg);
+                                    $guardianPhone = sanitizePhoneForWhatsApp($student->guardian?->phone ?? $student->parent_phone);
+                                    $whatsappUrl = "https://web.whatsapp.com/send?phone=" . $guardianPhone . "&text=" . urlencode($reminderMsg);
                                 @endphp
                                 <div class="d-flex gap-2">
-                                    <a href="{{ $whatsappUrl }}" target="_blank" class="btn btn-success rounded-pill px-4 shadow-sm hover-lift fw-bold">
+                                    <a href="{{ $whatsappUrl }}" onclick="openSmartWhatsApp('{{ $guardianPhone }}', @json($reminderMsg)); return false;" target="_blank" class="btn btn-success rounded-pill px-4 shadow-sm hover-lift fw-bold">
                                         <i class="fab fa-whatsapp me-2"></i>{{ __('center::students.profile.send_whatsapp') }}</a>
                                     <a href="{{ route('center.students.edit', $student->id) }}" class="btn btn-white border rounded-pill px-4 shadow-sm hover-lift text-dark fw-bold">
                                         <i class="fas fa-edit me-2"></i>{{ __('center::students.profile.edit_profile') }}</a>

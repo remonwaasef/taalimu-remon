@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
+- **Student Quick Action WhatsApp Direct Launch (2026-09-05)**:
+  - Fixed student table action WhatsApp button (next to Quick Pay) to launch WhatsApp Web directly on desktop (`web.whatsapp.com/send?phone=...`) bypassing the `api.whatsapp.com` interstitial landing page ("Share on WhatsApp").
+  - Added smart cross-platform device detection (`openDirectWhatsApp`) for both student table action bar and student profile view.
 - **Student WhatsApp Credentials Security & Direct Desktop Launch (2026-09-05)**:
   - Eliminated plaintext password exposure in public browser GET URLs (`api.whatsapp.com/send?text=...`) across Student Registration Cards and Password Tickets.
   - Introduced cryptographically signed temporary Magic Login Links (`center.login.magic` valid for 24h) for WhatsApp messages, allowing students to access their accounts and set passwords without URL credential leakage.

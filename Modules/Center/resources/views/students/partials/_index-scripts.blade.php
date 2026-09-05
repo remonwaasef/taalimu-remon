@@ -235,7 +235,22 @@
             });
         });
 
-    </script>
+    window.openDirectWhatsApp = function(phone, text = '') {
+        if (!phone) {
+            alert('لا يوجد رقم هاتف مسجل للطالب');
+            return;
+        }
+        const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+        const query = text ? ('?phone=' + phone + '&text=' + encodeURIComponent(text)) : ('?phone=' + phone);
+
+        if (isMobile) {
+            window.open('https://api.whatsapp.com/send' + query, '_blank');
+        } else {
+            // Direct WhatsApp Web without intermediate landing page
+            window.open('https://web.whatsapp.com/send' + query, '_blank');
+        }
+    };
+</script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function() {

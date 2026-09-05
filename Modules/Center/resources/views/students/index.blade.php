@@ -374,7 +374,7 @@
                                             $phoneForWa = sanitizePhoneForWhatsApp($student->phone);
                                             $reportMsg = "تقرير الطالب: {$student->name}\nالمبلغ المتبقي: " . number_format($student->total_balance, 0) . " " . get_currency_symbol() . "\nشكراً لمتابعتكم.";
                                         @endphp
-                                        <a href="https://api.whatsapp.com/send?phone={{ $phoneForWa }}" target="_blank" class="btn btn-sm btn-light rounded-circle text-success shadow-none p-2" title="{{ __('center::students.whatsapp') }}">
+                                        <a href="https://web.whatsapp.com/send?phone={{ $phoneForWa }}" onclick="openDirectWhatsApp('{{ $phoneForWa }}'); return false;" target="_blank" class="btn btn-sm btn-light rounded-circle text-success shadow-none p-2" title="{{ __('center::students.whatsapp') }}">
                                             <i class="fab fa-whatsapp"></i>
                                         </a>
                                         <button type="button" class="btn btn-sm btn-light rounded-circle text-primary shadow-none p-2 quick-pay-btn" 
@@ -393,7 +393,7 @@
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-end border-0 shadow rounded-3">
                                                 <li>
-                                                    <a class="dropdown-item rounded-3 mb-1 text-success" href="https://api.whatsapp.com/send?phone={{ $phoneForWa }}&text={{ urlencode($reportMsg) }}" target="_blank">
+                                                    <a class="dropdown-item rounded-3 mb-1 text-success" href="https://web.whatsapp.com/send?phone={{ $phoneForWa }}&text={{ urlencode($reportMsg) }}" onclick="openDirectWhatsApp('{{ $phoneForWa }}', @json($reportMsg)); return false;" target="_blank">
                                                         <i class="fab fa-whatsapp me-2"></i> {{ __('center::students.whatsapp') }}
                                                     </a>
                                                 </li>
