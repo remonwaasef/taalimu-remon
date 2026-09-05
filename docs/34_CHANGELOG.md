@@ -10,6 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Professional Enrolled Courses Column in Students Directory Table (2026-09-05)**:
+  - Added modern, responsive enrolled courses column in the main students table (`Modules/Center/resources/views/students/index.blade.php`).
+  - Displays compact, styled chips with course title, active status indicator, and direct link to course details.
+  - Added a smart dropdown popover for students enrolled in more than 2 courses displaying all courses with teacher names.
+  - Added an interactive empty state quick-action chip (`+ تسجيل في كورس`) to register unenrolled students with a single click.
+  - Eager loaded `enrollments.course.instructor` in `StudentController@index` to avoid N+1 queries.
+  - Integrated course titles into smart instant search for real-time filtering by course name.
 - **Professional Enrolled Courses Display in Student Edit Screen (2026-09-05)**:
   - Added dedicated modern courses & groups section in the student edit screen (`Modules/Center/resources/views/students/edit.blade.php`).
   - Displays rich course cards with subject badge, course title, instructor, active status badge, progress percentage & bar, enrollment date, price, and direct link to course details.

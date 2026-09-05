@@ -82,7 +82,7 @@ class StudentController extends Controller
         $query = Student::query();
         $query = $this->studentQuery->apply($query, $request->all());
 
-        $students = $query->with(['grade.stage', 'enrollments.course'])
+        $students = $query->with(['grade.stage', 'enrollments.course.instructor'])
             ->withSum('sales', 'paid_amount')
             ->latest()
             ->paginate(10);

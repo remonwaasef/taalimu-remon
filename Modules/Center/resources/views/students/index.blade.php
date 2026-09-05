@@ -219,7 +219,7 @@
                             type="text" 
                             id="search-input"
                             data-smart-search=".custom-table"
-                            data-search-fields="name,phone"
+                            data-search-fields="name,phone,courses"
                             data-search-highlight="true"
                             class="form-control ps-5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50/60 dark:bg-slate-800/60 text-slate-800 dark:text-slate-100 shadow-2xs focus:bg-white" 
                             placeholder="{{ __('center::students.search_placeholder') }}"
@@ -307,14 +307,15 @@
                             </th>
                             <th class="px-4 py-3">{{ __('center::students.name') }}</th>
                             <th class="px-4 py-3">{{ __('center::students.phone') }}</th>
-                            <th class="px-4 py-3 d-none d-lg-table-cell">{{ __('center::students.grade') }}</th>
+                            <th class="px-4 py-3">{{ __('center::students.enrolled_courses') }}</th>
+                            <th class="px-4 py-3 d-none d-xl-table-cell">{{ __('center::students.grade') }}</th>
                             <th class="px-4 py-3">{{ __('center::students.status') }}</th>
                             <th class="px-4 py-3 text-end">{{ __('center::students.actions') }}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800/80">
                         @forelse($students as $student)
-                            <tr class="student-row align-middle hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors" data-grade="{{ $student->grade_id }}" data-fin-status="{{ $student->financial_status }}" data-name="{{ $student->name }}" data-phone="{{ $student->phone }}">
+                            <tr class="student-row align-middle hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors" data-grade="{{ $student->grade_id }}" data-fin-status="{{ $student->financial_status }}" data-name="{{ $student->name }}" data-phone="{{ $student->phone }}" data-courses="{{ $student->enrollments->map(fn($e) => $e->course?->title)->filter()->implode(' ') }}">
                                 <td class="px-3">
                                     <div class="form-check custom-check">
                                         <input class="form-check-input student-checkbox" type="checkbox" value="{{ $student->id }}">
@@ -322,18 +323,24 @@
                                 </td>
                                 <td class="px-4 py-3.5">
                                     <div class="d-flex align-items-center">
-                                        <div class="student-avatar me-3">
+                                        <div class="student-avatar me-3 flex-shrink-0">
                                             @if($student->profile_photo)
-                                                <img src="{{ Storage::url($student->profile_photo) }}" alt="Avatar" class="rounded-circle shadow-sm" style="width: 38px; height: 38px; object-fit: cover;">
+                                                <img src="{{ Storage::url($student->profile_photo) }}" alt="Avatar" class="rounded-circle shadow-xs" style="width: 38px; height: 38px; object-fit: cover;">
                                             @else
-                                                <div class="bg-brand-50 text-brand-primary dark:bg-brand-900/40 dark:text-brand-300 rounded-circle d-flex align-items-center justify-content-center shadow-xs font-bold" style="width: 38px; height: 38px;">
+                                                <div class="bg-brand-50 text-brand-primary dark:bg-brand-900/40 dark:text-brand-300 rounded-circle d-flex align-items-center justify-content-center shadow-2xs font-bold" style="width: 38px; height: 38px;">
                                                     <span class="small">{{ mb_substr($student->name, 0, 1) }}</span>
                                                 </div>
                                             @endif
                                         </div>
                                         <div>
                                             <div class="fw-bold text-slate-900 dark:text-slate-100 small mb-0">{{ $student->name }}</div>
-                                            <div class="text-muted extra-small d-lg-none">{{ $student->phone }}</div>
+                                            <div class="text-muted extra-small d-flex align-items-center gap-1 mt-0.5">
+                                                <span class="text-brand-primary font-mono fw-semibold">#{{ $student->code ?? $student->id }}</span>
+                                                @if($student->grade_level_name)
+                                                    <span class="text-slate-300 dark:text-slate-600 d-xl-none">•</span>
+                                                    <span class="d-xl-none text-slate-500">{{ $student->grade_level_name }}</span>
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
                                 </td>
@@ -351,7 +358,62 @@
                                         @endif
                                     </div>
                                 </td>
-                                <td class="px-4 py-3.5 d-none d-lg-table-cell">
+                                <td class="px-4 py-3.5">
+                                    @php
+                                        $validEnrollments = $student->enrollments->filter(fn($e) => !empty($e->course));
+                                        $coursesCount = $validEnrollments->count();
+                                    @endphp
+
+                                    @if($coursesCount > 0)
+                                        <div class="d-flex flex-wrap align-items-center gap-1.5" style="max-width: 290px;">
+                                            @foreach($validEnrollments->take(2) as $enrollment)
+                                                <a href="{{ route('center.courses.show', $enrollment->course_id) }}" 
+                                                   class="badge bg-teal-50 hover:bg-teal-100 text-teal-800 dark:bg-teal-950/50 dark:hover:bg-teal-900/60 dark:text-teal-300 border border-teal-200/80 dark:border-teal-800/60 rounded-lg px-2.5 py-1 text-xs text-decoration-none d-inline-flex align-items-center gap-1.5 transition-all shadow-2xs"
+                                                   title="{{ $enrollment->course->title }}{{ $enrollment->course->instructor ? ' - ' . $enrollment->course->instructor->name : '' }}">
+                                                    <span class="w-1.5 h-1.5 rounded-full {{ $enrollment->status === 'active' ? 'bg-emerald-500' : 'bg-slate-400' }}"></span>
+                                                    <span class="fw-bold text-truncate" style="max-width: 105px;">{{ $enrollment->course->title }}</span>
+                                                </a>
+                                            @endforeach
+
+                                            @if($coursesCount > 2)
+                                                <div class="dropdown d-inline-block">
+                                                    <button class="badge bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1 text-xs fw-bold cursor-pointer transition-all dropdown-toggle shadow-2xs" 
+                                                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        +{{ $coursesCount - 2 }}
+                                                    </button>
+                                                    <ul class="dropdown-menu dropdown-menu-end shadow-lg border border-slate-200 dark:border-slate-700 p-2 rounded-2xl" style="min-width: 220px; z-index: 1050;">
+                                                        <li class="dropdown-header text-xs text-slate-400 fw-bold px-2 py-1">
+                                                            {{ __('center::students.enrolled_courses') }} ({{ $coursesCount }})
+                                                        </li>
+                                                        @foreach($validEnrollments as $enrollment)
+                                                            <li>
+                                                                <a class="dropdown-item rounded-xl px-2.5 py-1.5 text-xs d-flex align-items-center justify-content-between hover:bg-slate-50 dark:hover:bg-slate-800" 
+                                                                   href="{{ route('center.courses.show', $enrollment->course_id) }}">
+                                                                    <div class="d-flex align-items-center gap-2">
+                                                                        <span class="w-2 h-2 rounded-full {{ $enrollment->status === 'active' ? 'bg-emerald-500' : 'bg-slate-400' }}"></span>
+                                                                        <span class="fw-semibold text-slate-800 dark:text-slate-200">{{ $enrollment->course->title }}</span>
+                                                                    </div>
+                                                                    @if($enrollment->course->instructor)
+                                                                        <span class="text-muted extra-small ms-2">{{ $enrollment->course->instructor->name }}</span>
+                                                                    @endif
+                                                                </a>
+                                                            </li>
+                                                        @endforeach
+                                                    </ul>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    @else
+                                        <button type="button" 
+                                                class="badge bg-slate-50 hover:bg-brand-50 text-slate-400 hover:text-brand-primary dark:bg-slate-800/40 dark:hover:bg-brand-900/30 dark:text-slate-400 dark:hover:text-brand-300 border border-dashed border-slate-200 hover:border-brand-primary/40 dark:border-slate-700 dark:hover:border-brand-500/40 rounded-lg px-2.5 py-1 text-xs d-inline-flex align-items-center gap-1 transition-all cursor-pointer"
+                                                onclick="openQuickEnrollModal('{{ $student->id }}', @json($student->name), '')"
+                                                title="{{ __('center::students.enroll_in_course') }}">
+                                            <i class="fas fa-plus text-2xs"></i>
+                                            <span>{{ __('center::students.enroll_in_course') }}</span>
+                                        </button>
+                                    @endif
+                                </td>
+                                <td class="px-4 py-3.5 d-none d-xl-table-cell">
                                     <div class="d-flex flex-column">
                                         <span class="badge bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 fw-semibold rounded-lg px-2.5 py-1 border border-slate-200 dark:border-slate-700" style="font-size: 0.75rem;">
                                             {{ $student->grade_level_name }}
