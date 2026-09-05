@@ -427,8 +427,33 @@
     // Quick Enroll Modal Handlers
     window.openQuickEnrollModal = function() {
         const selectEl = document.getElementById('courseSelect');
+        const warningEl = document.getElementById('enrollWarning');
+        const warningTextEl = document.getElementById('enrollWarningText');
+        const submitBtn = document.getElementById('submitEnrollBtn');
+
         if (selectEl) {
             selectEl.value = '';
+            let availableCount = 0;
+            let totalCount = 0;
+            Array.from(selectEl.options).forEach(opt => {
+                if (!opt.value) return;
+                totalCount++;
+                if (!opt.disabled) availableCount++;
+            });
+
+            if (totalCount > 0 && availableCount === 0) {
+                if (warningEl) {
+                    if (warningTextEl) warningTextEl.textContent = '{{ __('center::students.all_courses_enrolled') }}';
+                    warningEl.classList.remove('d-none');
+                }
+                if (submitBtn) submitBtn.disabled = true;
+            } else {
+                if (warningEl) {
+                    if (warningTextEl) warningTextEl.textContent = '{{ __('center::students.already_enrolled_warning') }}';
+                    warningEl.classList.add('d-none');
+                }
+                if (submitBtn) submitBtn.disabled = false;
+            }
         }
         window.dispatchEvent(new CustomEvent('open-modal', { detail: 'quickEnrollModal' }));
     };
