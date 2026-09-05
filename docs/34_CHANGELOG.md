@@ -27,6 +27,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added full trilingual localization support (AR, EN, FR).
 
 ### Fixed
+- **Student Edit Quick Course Modal Empty List Resolution (2026-09-05)**:
+  - Removed restrictive `where('status', 'active')` filter from `StudentController@edit` method and unified it with `Course::orderBy('title')->get()`, ensuring all published center courses are populated in the selection dropdown.
+  - Added real-time all-courses-enrolled detection on modal opening in the edit view.
 - **Student Edit Page Quick Enroll Button Activation (2026-09-05)**:
   - Converted `@section('scripts')` to `@push('scripts')` in `edit.blade.php` so that modal opening handlers and validation scripts are properly rendered into `@stack('scripts')` of the layout.
   - Added direct Alpine `@click` dispatch to the quick enrollment buttons.
