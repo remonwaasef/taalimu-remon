@@ -94,6 +94,8 @@ return [
     'confirm_delete_student' => 'Êtes-vous sûr ? Les données de l\'étudiant seront définitivement supprimées.',
     'copy_success' => 'Mot de passe copié !',
     'copy_all_success' => 'Toutes les données ont été copiées avec succès !',
+    'quick_wa_balance_msg' => 'Bonjour :name, nous vous rappelons que le solde restant auprès de :center est de :balance :currency. Nous vous souhaitons plein de succès ! 📚',
+    'quick_wa_checkin_msg' => 'Bonjour :name, nous vous contactons de la part de :center pour faire le point sur vos études. Avez-vous besoin d\'aide ? 🌟',
     'bulk_confirm' => 'Êtes-vous sûr de vouloir effectuer cette action sur :count étudiant(s) ?',
     'attendance_stats_header' => 'Assiduité (% / Présent / Absent)',
     'points_stats_header' => 'Points d\'Excellence (Net / Gagné / Déduit)',

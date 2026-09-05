@@ -372,9 +372,24 @@
                                     <div class="d-inline-flex gap-1 me-2">
                                         @php
                                             $phoneForWa = sanitizePhoneForWhatsApp($student->phone);
-                                            $reportMsg = "تقرير الطالب: {$student->name}\nالمبلغ المتبقي: " . number_format($student->total_balance, 0) . " " . get_currency_symbol() . "\nشكراً لمتابعتكم.";
+                                            $tenantName = app('tenant')->name ?? 'المركز';
+                                            $currency = get_currency_symbol();
+                                            if ($student->total_balance > 0) {
+                                                $smartWaMsg = __('center::students.quick_wa_balance_msg', [
+                                                    'name' => $student->name,
+                                                    'center' => $tenantName,
+                                                    'balance' => number_format($student->total_balance, 0),
+                                                    'currency' => $currency,
+                                                ]);
+                                            } else {
+                                                $smartWaMsg = __('center::students.quick_wa_checkin_msg', [
+                                                    'name' => $student->name,
+                                                    'center' => $tenantName,
+                                                ]);
+                                            }
+                                            $reportMsg = "تقرير الطالب: {$student->name}\nالمبلغ المتبقي: " . number_format($student->total_balance, 0) . " " . $currency . "\nشكراً لمتابعتكم.";
                                         @endphp
-                                        <a href="https://web.whatsapp.com/send?phone={{ $phoneForWa }}" onclick="openDirectWhatsApp('{{ $phoneForWa }}'); return false;" target="_blank" class="btn btn-sm btn-light rounded-circle text-success shadow-none p-2" title="{{ __('center::students.whatsapp') }}">
+                                        <a href="https://web.whatsapp.com/send?phone={{ $phoneForWa }}&text={{ urlencode($smartWaMsg) }}" onclick="openDirectWhatsApp('{{ $phoneForWa }}', @json($smartWaMsg)); return false;" target="_blank" class="btn btn-sm btn-light rounded-circle text-success shadow-none p-2" title="{{ __('center::students.whatsapp') }}">
                                             <i class="fab fa-whatsapp"></i>
                                         </a>
                                         <button type="button" class="btn btn-sm btn-light rounded-circle text-primary shadow-none p-2 quick-pay-btn" 

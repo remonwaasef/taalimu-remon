@@ -94,6 +94,8 @@ return [
     'confirm_delete_student' => 'Are you sure? Student data will be permanently deleted.',
     'copy_success' => 'Password copied!',
     'copy_all_success' => 'All data copied successfully!',
+    'quick_wa_balance_msg' => 'Hello :name, this is a reminder that the outstanding balance at :center is :balance :currency. We wish you continued success! 📚',
+    'quick_wa_checkin_msg' => 'Hello :name, we are checking in from :center regarding your studies. Do you need any assistance? 🌟',
     'bulk_confirm' => 'Are you sure you want to perform this action on :count student(s)?',
     'attendance_stats_header' => 'Attendance (% / Present / Absent)',
     'points_stats_header' => 'Excellence Points (Net / Earned / Deducted)',

@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Smart Dynamic WhatsApp Message on Quick Action (2026-09-05)**:
+  - Enabled context-aware automatic pre-filled WhatsApp message on the quick action button next to Quick Pay.
+  - Generates polite debt reminder with outstanding balance and center name when `total_balance > 0`, and general check-in/support message when balance is clear (`total_balance <= 0`).
+  - Added full trilingual localization support (AR, EN, FR).
+
 ### Fixed
 - **Student Quick Action WhatsApp Direct Launch (2026-09-05)**:
   - Fixed student table action WhatsApp button (next to Quick Pay) to launch WhatsApp Web directly on desktop (`web.whatsapp.com/send?phone=...`) bypassing the `api.whatsapp.com` interstitial landing page ("Share on WhatsApp").

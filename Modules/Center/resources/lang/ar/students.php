@@ -95,6 +95,8 @@ return [
     'confirm_delete_student' => 'هل أنت متأكد؟ سيتم حذف بيانات الطالب نهائياً.',
     'copy_success' => 'تم نسخ كلمة المرور!',
     'copy_all_success' => 'تم نسخ جميع البيانات بنجاح في صيغة رسالة منظمة!',
+    'quick_wa_balance_msg' => 'مرحباً :name، نود تذكيركم بأن الرصيد المتبقي لدى :center هو :balance :currency. نتمنى لكم دوام التوفيق والنجاح! 📚',
+    'quick_wa_checkin_msg' => 'السلام عليكم :name، نتواصل معك من إدارة :center للاطمئنان على سير دراستك، هل تحتاج أي مساعدة؟ 🌟',
     'bulk_confirm' => 'هل أنت متأكد من تنفيذ هذا الإجراء على :count طالب؟',
     'attendance_stats_header' => 'الحضور (٪ / حاضر / غائب)',
     'points_stats_header' => 'نقاط التميز (صافي / كسب / خصم)',
