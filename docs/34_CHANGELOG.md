@@ -10,6 +10,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Center Dashboard Complete Visual Redesign & Operational Hierarchy (2026-09-06)**:
+  - Redesigned `Modules/Center/resources/views/index.blade.php` to transform the center dashboard into an executive command center.
+  - Replaced hardcoded `font-inter` in `resources/views/layouts/app-next.blade.php` with dynamic locale-based typography (`font-cairo` for Arabic, `font-inter` for English/Latin), resolving system font degradation and disjointed Arabic text rendering.
+  - Upgraded KPI metrics grid into 4 high-value cards: Active Students with enrollment trend, Today's Scheduled Sessions (`sessionsToday`), Weekly Attendance Rate (`attendanceRate`), and Monthly Revenue with contextual overdue warnings (`overdueAmount`).
+  - Replaced 4 massive blank quick-action tiles with a sleek, compact Smart Quick Actions Dock with micro-interactions, modal triggers, and zero wasted vertical space.
+  - Upgraded split operational lists: Recent Student Registrations now features 1-click WhatsApp messaging buttons, status pills, and relative timestamps; Active Groups features enrolled count chips and teacher avatars.
+  - Replaced hardcoded English `View All` text with localized `center::dashboard.view_all` (`عرض الكل`) and directionally correct RTL arrow indicators.
+  - Enhanced `x-ui.stats-card` component to support proper RTL BiDi text wrapping and font inheritance.
+
 - **Status & Financial Balance Badge Organization in Students Directory (2026-09-05)**:
   - Redesigned the "الحالة" column into "الحالة والموقف المالي" (`status_and_balance`) in `Modules/Center/resources/views/students/index.blade.php`.
   - Disentangled academic account status (`نشط` / `متوقف`) from financial dues, presenting each as distinct visual badges.

@@ -55,7 +55,7 @@
 
     @stack('styles')
 </head>
-<body class="h-full bg-[#FAFAFA] dark:bg-[#0B1118] text-slate-800 dark:text-slate-100 font-inter antialiased selection:bg-brand-primary selection:text-white transition-colors duration-200" x-data="{ sidebarOpen: false, collapsed: false }" x-effect="document.body.style.overflow = sidebarOpen ? 'hidden' : ''">
+<body class="h-full bg-[#FAFAFA] dark:bg-[#0B1118] text-slate-800 dark:text-slate-100 {{ app()->getLocale() == 'ar' ? 'font-cairo' : 'font-inter' }} antialiased selection:bg-brand-primary selection:text-white transition-colors duration-200" x-data="{ sidebarOpen: false, collapsed: false }" x-effect="document.body.style.overflow = sidebarOpen ? 'hidden' : ''">
 
     <!-- Accessibility Skip to Main Content Link -->
     <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:start-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-brand-primary focus:text-white focus:rounded-xl focus:shadow-lg focus:font-bold">

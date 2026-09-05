@@ -7,7 +7,10 @@
 - **Unified Blade UI Library (`resources/views/components/ui/`)**:
   - Buttons (`button.blade.php`), Form Fields (`form-field.blade.php`), Inputs (`input.blade.php`), Selects (`select.blade.php`), Textareas (`textarea.blade.php`)
   - Alerts (`alert.blade.php`), Toasts (`toast.blade.php`), Tabs (`tabs.blade.php`), Tooltips (`tooltip.blade.php`), Progress (`progress.blade.php`), Drawers (`drawer.blade.php`)
-  - Modals (`modal.blade.php`), Cards (`card.blade.php`), Tables (`table.blade.php`), Empty States (`empty-state.blade.php`), Badges (`badge.blade.php`), Avatars (`avatar.blade.php`), Page Headers (`page-header.blade.php`), Skeletons (`skeleton-loader.blade.php`).
+  - Modals (`modal.blade.php`), Cards (`card.blade.php`), Tables (`table.blade.php`), Empty States (`empty-state.blade.php`), Badges (`badge.blade.php`), Avatars (`avatar.blade.php`), Page Headers (`page-header.blade.php`), Skeletons (`skeleton-loader.blade.php`), Stats Cards (`stats-card.blade.php`).
+- **Typography & Font Enforcement**:
+  - Arabic interfaces MUST resolve to `Cairo` (`font-cairo` or default sans) as specified in `.agents/DESIGN_SYSTEM.md`. Never hardcode Latin fonts (`font-inter`) on layout body or wrapper divs in Arabic views.
+  - Directional indicators and BiDi numbers must be enclosed with `<bdi>` or `dir="ltr"` where appropriate to prevent sign inversions.
 - **Full Documentation**:
   - `docs/design-system/DESIGN_TOKENS_REFERENCE.md` — Tokens reference
   - `docs/design-system/COMPONENT_GUIDE.md` — Component catalog with examples

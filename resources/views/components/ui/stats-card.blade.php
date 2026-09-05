@@ -28,13 +28,13 @@
     ];
 @endphp
 
-<div {{ $attributes->merge(['class' => 'bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5.5 shadow-xs hover:shadow-md transition-all duration-200 relative overflow-hidden font-inter group ' . ($accents[$accent] ?? $accents['brand'])]) }}>
+<div {{ $attributes->merge(['class' => 'bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-xs hover:shadow-md transition-all duration-200 relative overflow-hidden group ' . ($accents[$accent] ?? $accents['brand'])]) }}>
     <!-- Top subtle gradient hover glow -->
     <div class="absolute inset-x-0 top-0 h-1 bg-transparent group-hover:bg-gradient-to-r group-hover:from-transparent group-hover:via-brand-primary/40 group-hover:to-transparent transition-all duration-300"></div>
 
     <div class="flex items-start justify-between gap-3">
         <div class="min-w-0 flex-1">
-            <p class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider truncate">{{ $title }}</p>
+            <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 truncate">{{ $title }}</p>
             <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-slate-100 mt-2 tracking-tight">
                 <span
                     x-data='{
@@ -77,15 +77,15 @@
         <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center gap-2 text-xs font-medium">
             @if($changeType === 'positive')
                 <span class="inline-flex items-center text-emerald-700 dark:text-emerald-300 font-bold bg-emerald-50 dark:bg-emerald-950/50 px-2 py-0.5 rounded-full border border-emerald-200/60 dark:border-emerald-800/40 text-[11px]">
-                    <i class="fas fa-arrow-up text-[9px] me-1"></i>{{ $change }}
+                    <i class="fas fa-arrow-up text-[9px] me-1"></i><span dir="ltr">{{ $change }}</span>
                 </span>
             @elseif($changeType === 'negative')
                 <span class="inline-flex items-center text-red-700 dark:text-red-300 font-bold bg-red-50 dark:bg-red-950/50 px-2 py-0.5 rounded-full border border-red-200/60 dark:border-red-800/40 text-[11px]">
-                    <i class="fas fa-arrow-down text-[9px] me-1"></i>{{ $change }}
+                    <i class="fas fa-arrow-down text-[9px] me-1"></i><span dir="ltr">{{ $change }}</span>
                 </span>
             @else
                 <span class="inline-flex items-center text-slate-700 dark:text-slate-300 font-bold bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full border border-slate-200/60 dark:border-slate-700 text-[11px]">
-                    {{ $change }}
+                    <span dir="ltr">{{ $change }}</span>
                 </span>
             @endif
             
