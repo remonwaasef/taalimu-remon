@@ -38,6 +38,13 @@ return [
         'billing_monthly' => 'Mensuel',
         'billing_term' => 'Trimestriel',
         'billing_yearly' => 'Annuel',
+        'billing_monthly_short' => 'mois',
+        'billing_yearly_short' => 'an',
+        'billing_term_short' => 'trimestre',
+        'total' => 'Total',
+        'optional' => 'Optionnel',
+        'all_data_secure' => 'Toutes les données sont chiffrées et sécurisées',
+        'payment_method' => 'Mode de paiement',
         'secure' => 'Sécurisé et Chiffré',
         'flexible' => 'Sans Engagement',
         'password_criteria' => [

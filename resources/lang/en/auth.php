@@ -57,6 +57,13 @@ return [
         'billing_monthly' => 'Monthly',
         'billing_term' => 'Term',
         'billing_yearly' => 'Yearly',
+        'billing_monthly_short' => 'month',
+        'billing_yearly_short' => 'year',
+        'billing_term_short' => 'term',
+        'total' => 'Total',
+        'optional' => 'Optional',
+        'all_data_secure' => 'All data is encrypted and completely secure',
+        'payment_method' => 'Payment Method',
         'secure' => 'Secure & Encrypted',
         'flexible' => 'Cancel Anytime',
         'password_criteria' => [

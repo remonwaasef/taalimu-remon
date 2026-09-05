@@ -57,6 +57,13 @@ return [
         'billing_monthly' => 'شهري',
         'billing_term' => 'فصلي',
         'billing_yearly' => 'سنوي',
+        'billing_monthly_short' => 'شهر',
+        'billing_yearly_short' => 'سنة',
+        'billing_term_short' => 'ترم',
+        'total' => 'الإجمالي',
+        'optional' => 'اختياري',
+        'all_data_secure' => 'جميع البيانات مشفرة ومحمية بأمان',
+        'payment_method' => 'طريقة الدفع',
         'secure' => 'آمن ومشفر',
         'flexible' => 'بدون التزام',
         'password_criteria' => [

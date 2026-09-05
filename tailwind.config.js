@@ -48,6 +48,7 @@ export default {
                     300: '#A9D9D0',
                     400: '#62BDAE',
                     primary: '#168F7C',
+                    secondary: '#0D7465',
                     500: '#168F7C',
                     600: '#0D7465',
                     700: '#0A5F54',

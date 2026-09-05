@@ -1,4 +1,4 @@
-﻿@extends('layouts.landing-new')
+@extends('layouts.landing-new')
 
 @section('content')
 <!-- Import Cairo & Outfit Fonts -->
@@ -328,143 +328,145 @@ window.addEventListener('pageshow', (event) => {
      dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
     
     <!-- Main Centered Card Container (Optimized Layout) -->
-    <div class="w-full max-w-4xl bg-white rounded-[2.5rem] shadow-2xl shadow-blue-900/5 overflow-hidden border border-slate-100/50 animate-fade-in-up md:backdrop-blur-xl relative" x-cloak>
+    <div class="w-full max-w-5xl bg-white rounded-3xl shadow-xl shadow-slate-900/5 overflow-hidden border border-slate-100 animate-fade-in-up relative" x-cloak>
         
-        <div class="grid grid-cols-1 lg:grid-cols-12">
-            <!-- Left Info Panel (Hidden on Mobile or as Sidebar) -->
-            <div class="lg:col-span-4 bg-slate-50/50 border-e border-slate-100 p-6 lg:p-10 flex flex-col justify-between">
-                <div>
+        <div class="grid grid-cols-1 lg:grid-cols-12 min-h-[580px]">
+            <!-- Sidebar Panel (Info & Selected Plan Summary) -->
+            <div class="lg:col-span-5 bg-slate-50/70 border-b lg:border-b-0 lg:border-e border-slate-100 p-6 lg:p-8 flex flex-col justify-between space-y-6">
+                <div class="space-y-6">
                     {{-- Verified Account Pill --}}
-                    <div class="mb-8 animate-fade-in">
-                        <div class="flex items-center gap-3 p-3 bg-white border border-slate-100 rounded-2xl shadow-sm group hover:border-brand-secondary/30 transition-all">
-                            <div class="w-10 h-10 bg-slate-50 border border-brand-secondary/10 rounded-full flex items-center justify-center text-brand-secondary font-black text-lg group-hover:scale-110 transition-transform shadow-sm">
+                    <div>
+                        <div class="flex items-center gap-3 p-3 bg-white border border-slate-200/80 rounded-2xl shadow-sm hover:border-brand-primary/30 transition-all">
+                            <div class="w-10 h-10 bg-brand-50 border border-brand-200 rounded-full flex items-center justify-center text-brand-primary font-black text-lg shadow-sm flex-shrink-0">
                                 {{ mb_substr(session('google_user.name', 'U'), 0, 1) }}
                             </div>
                             <div class="flex-1 min-w-0">
-                                <p class="font-black text-slate-900 text-xs truncate uppercase tracking-tight">{{ session('google_user.name', 'User') }}</p>
-                                <p class="text-slate-500 text-[11px] truncate font-medium opacity-80">{{ session('google_user.email') }}</p>
+                                <div class="flex items-center gap-1.5">
+                                    <p class="font-bold text-slate-900 text-xs truncate">{{ session('google_user.name', 'User') }}</p>
+                                    <i class="bi bi-patch-check-fill text-emerald-500 text-xs" title="Google Verified"></i>
+                                </div>
+                                <p class="text-slate-500 text-[11px] truncate font-medium">{{ session('google_user.email') }}</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="mb-8">
-                        <h1 class="text-2xl font-black text-slate-900 mb-2 font-arabic leading-tight">
+                    <div>
+                        <h1 class="text-xl lg:text-2xl font-black text-slate-900 mb-1.5 font-arabic leading-tight">
                             {{ __('auth.google_registration.confirm_account') }}
                         </h1>
-                        <p class="text-slate-500 text-xs font-arabic font-medium opacity-80 leading-relaxed">
+                        <p class="text-slate-500 text-xs font-arabic font-medium leading-relaxed">
                             {{ __('auth.google_registration.setup_complete') }}
                         </p>
                     </div>
 
-                    <!-- Price Summary Card (Integrated into Sidebar) -->
-                    <div class="p-5 rounded-2xl bg-white border border-slate-100 shadow-sm space-y-4">
-                        <div class="flex items-center justify-between">
-                            <div class="flex flex-col">
-                                <div class="flex items-center gap-2 mb-1">
-                                    <span class="text-[11px] font-black text-slate-400 uppercase tracking-widest">{{ __('auth.register.selected_plan') }}</span>
-                                    <button type="button" @click="showPlanModal = true" class="text-[11px] font-black text-brand-secondary underline hover:opacity-70 transition-opacity uppercase tracking-widest">
-                                        {{ __('auth.google_registration.change') }}
-                                    </button>
-                                </div>
-                                <h3 class="text-xl font-black text-slate-900 font-arabic">
+                    <!-- Price Summary Card -->
+                    <div class="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-sm space-y-4">
+                        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                            <div>
+                                <span class="text-[11px] font-bold text-slate-400 font-arabic block">{{ __('auth.register.selected_plan') }}</span>
+                                <h3 class="text-base font-black text-slate-900 font-arabic">
                                     <span x-text="currentPlan.name"></span>
-                                    <span class="text-sm font-bold text-slate-400 ms-1" x-text="'(' + (billingCycle === 'yearly' ? (currentPriceData.yearly || 0).toLocaleString() : (billingCycle === 'term' ? (currentPriceData.term || 0).toLocaleString() : (currentPriceData.amount || 0).toLocaleString())) + ' ' + currentPriceData.currency + ')'"></span>
+                                    <span class="text-xs font-bold text-slate-400 ms-1 font-sans" x-text="'(' + (billingCycle === 'yearly' ? (currentPriceData.yearly || 0).toLocaleString() : (billingCycle === 'term' ? (currentPriceData.term || 0).toLocaleString() : (currentPriceData.amount || 0).toLocaleString())) + ' ' + currentPriceData.currency + ')'"></span>
                                 </h3>
                             </div>
+                            <button type="button" @click="showPlanModal = true" class="text-xs font-bold text-brand-primary hover:underline font-arabic cursor-pointer">
+                                {{ __('auth.google_registration.change') }}
+                            </button>
                         </div>
 
+                        {{-- CASE 1: FREE TRIAL BANNER --}}
+                        <template x-if="currentPlan.trial_days > 0">
+                            <div class="p-3.5 rounded-xl bg-emerald-50/70 border border-emerald-100/80 text-center space-y-1">
+                                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-black font-arabic">
+                                    <i class="bi bi-gift-fill text-emerald-600"></i>
+                                    <span x-text="currentPlan.trial_days"></span> {{ __('auth.google_registration.days_free') }}
+                                </div>
+                                <div class="flex items-baseline justify-center gap-1 text-emerald-600 pt-1">
+                                    <span class="text-3xl font-black tracking-tight">0</span>
+                                    <span class="text-sm font-bold font-arabic">{{ __('auth.google_registration.free') }}</span>
+                                </div>
+                                <p class="text-[11px] font-bold text-slate-400 font-arabic">بدون بطاقة ائتمان • تفعيل فوري لكامل المميزات</p>
+                            </div>
+                        </template>
+
+                        {{-- CASE 2: PAID PLAN SUMMARY --}}
+                        <template x-if="currentPlan.trial_days === 0">
+                            <div class="pt-1 space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm font-bold text-slate-600 font-arabic">{{ __('auth.register.total') }}</span>
+                                    <div class="text-end">
+                                        <template x-if="couponStatus === 'valid' || (currentPriceData.old_price_raw > finalPrice)">
+                                            <div class="flex items-center gap-1.5 justify-end text-xs text-slate-400 line-through">
+                                                <span x-text="((couponStatus === 'valid' ? currentPriceData.price_raw : currentPriceData.old_price_raw) || 0).toLocaleString()"></span>
+                                                <span x-text="currentPriceData.currency"></span>
+                                            </div>
+                                        </template>
+                                        <div class="flex items-baseline gap-1 justify-end text-brand-primary">
+                                            <span class="text-2xl font-black tracking-tight" x-text="finalPrice.toLocaleString()"></span>
+                                            <span class="text-xs font-bold text-slate-500" x-text="currentPriceData.currency"></span>
+                                            <span class="text-xs font-medium text-slate-400 font-arabic" x-text="'/ ' + (billingCycle === 'yearly' ? '{{ __('auth.register.billing_yearly_short') }}' : (billingCycle === 'term' ? '{{ __('auth.register.billing_term') }}' : '{{ __('auth.register.billing_monthly_short') }}'))"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex p-1 bg-slate-100 rounded-xl items-center gap-1">
+                                    <button type="button" @click="billingCycle = 'monthly'" 
+                                            class="flex-1 py-1.5 min-h-[36px] text-xs font-bold rounded-lg transition-all font-arabic cursor-pointer"
+                                            :class="billingCycle === 'monthly' ? 'bg-white text-brand-primary shadow-sm' : 'text-slate-500 hover:bg-slate-50'">
+                                        {{ __('auth.register.billing_monthly') }}
+                                    </button>
+                                    <button type="button" @click="billingCycle = 'term'" 
+                                            class="flex-1 py-1.5 min-h-[36px] text-xs font-bold rounded-lg transition-all font-arabic cursor-pointer"
+                                            :class="billingCycle === 'term' ? 'bg-white text-brand-primary shadow-sm' : 'text-slate-500 hover:bg-slate-50'">
+                                        {{ __('auth.register.billing_term') }}
+                                    </button>
+                                    <button type="button" @click="billingCycle = 'yearly'" 
+                                            class="flex-1 py-1.5 min-h-[36px] text-xs font-bold rounded-lg transition-all font-arabic cursor-pointer"
+                                            :class="billingCycle === 'yearly' ? 'bg-white text-brand-primary shadow-sm' : 'text-slate-500 hover:bg-slate-50'">
+                                        {{ __('auth.register.billing_yearly') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </template>
+
                         <!-- Mini Features List -->
-                        <div x-data="{ openFeatures: false }" class="py-3 border-y border-slate-50">
-                            <button type="button" @click="openFeatures = !openFeatures" class="w-full flex items-center justify-center gap-2 text-[12px] font-black text-slate-700 font-arabic hover:text-brand-secondary transition-colors pb-2 cursor-pointer">
-                                <span>{{ __('auth.google_registration.view_features') }}</span>
-                                <i class="bi bi-chevron-down transition-transform duration-300 transform" :class="openFeatures ? 'rotate-180' : ''"></i>
+                        <div x-data="{ openFeatures: false }" class="pt-2 border-t border-slate-100">
+                            <button type="button" @click="openFeatures = !openFeatures" class="w-full flex items-center justify-between text-xs font-bold text-slate-600 font-arabic hover:text-brand-primary transition-colors py-1 cursor-pointer">
+                                <span class="flex items-center gap-1.5">
+                                    <i class="bi bi-stars text-amber-500"></i>
+                                    <span>{{ __('auth.google_registration.view_features') }}</span>
+                                </span>
+                                <i class="bi bi-chevron-down text-xs transition-transform duration-200" :class="openFeatures ? 'rotate-180' : ''"></i>
                             </button>
-                            <div x-show="openFeatures" x-transition.opacity.duration.300ms class="space-y-2 pt-2 border-t border-slate-50">
+                            <div x-show="openFeatures" x-transition.opacity.duration.200ms class="space-y-2 pt-2 border-t border-slate-50">
                                 <template x-for="feature in (currentPlan.features || [])" :key="feature">
-                                    <div class="flex items-center gap-2 text-[11px] font-bold text-slate-600 font-arabic">
-                                        <i class="bi bi-check2 text-emerald-500"></i>
+                                    <div class="flex items-center gap-2 text-[11px] font-medium text-slate-600 font-arabic">
+                                        <i class="bi bi-check2 text-emerald-500 flex-shrink-0"></i>
                                         <span x-text="feature"></span>
                                     </div>
                                 </template>
                             </div>
                         </div>
-
-                        <!-- Price & Switcher -->
-                        <div class="pt-2">
-                            <div class="flex items-center justify-between mb-4">
-                                <span class="text-sm font-black text-slate-500 uppercase tracking-wide">{{ __('auth.register.total') ?? 'Total' }}</span>
-                                <div class="text-right">
-                                    <template x-if="currentPlan.trial_days > 0 && couponStatus !== 'valid'">
-                                        <div class="flex items-center justify-end mb-2 animate-fade-in">
-                                            <span class="text-[11px] font-black bg-emerald-50 text-emerald-600 px-3 py-1 rounded-lg border border-emerald-100 uppercase tracking-wider inline-flex items-center gap-1.5 shadow-sm">
-                                                <i class="bi bi-gift-fill text-[11px]"></i>
-                                                <span x-text="currentPlan.trial_days"></span> {{ __('auth.google_registration.days_free') }}
-                                            </span>
-                                        </div>
-                                    </template>
-                                    <template x-if="(couponStatus === 'valid' || currentPriceData.old_price_raw > finalPrice) && currentPlan.trial_days === 0">
-                                        <div class="flex items-center justify-end gap-2 mb-1 animate-fade-in">
-                                            <span class="text-[11px] font-bold text-slate-300 line-through">
-                                                <span x-text="((couponStatus === 'valid' ? currentPriceData.price_raw : currentPriceData.old_price_raw) || 0).toLocaleString()"></span>
-                                                <span x-text="currentPriceData.currency"></span>
-                                            </span>
-                                            <span class="text-[11px] font-black bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-md">
-                                                <template x-if="couponStatus === 'valid'">
-                                                    <span>- <span x-text="couponDiscountAmount.toLocaleString()"></span></span>
-                                                </template>
-                                                <template x-if="couponStatus !== 'valid' && currentPriceData.old_price_raw > finalPrice">
-                                                    <span>{{ __('auth.google_registration.discount_available') }}</span>
-                                                </template>
-                                            </span>
-                                        </div>
-                                    </template>
-                                    <div class="flex items-baseline gap-1 justify-end" :class="currentPlan.trial_days > 0 ? 'text-emerald-500' : 'text-brand-secondary'">
-                                        <span class="text-3xl font-black tracking-tighter" x-text="currentPlan.trial_days > 0 ? '0' : finalPrice.toLocaleString()"></span>
-                                        <span class="text-sm font-bold opacity-60" x-text="currentPlan.trial_days > 0 ? ({{ Js::from(__('auth.google_registration.free')) }}) : currentPriceData.currency"></span>
-                                    </div>
-                                    <span class="text-[11px] font-black text-slate-400 uppercase tracking-widest" x-text="'/ ' + (billingCycle === 'yearly' ? '{{ __('auth.register.billing_yearly_short') ?? 'year' }}' : (billingCycle === 'term' ? '{{ __('auth.register.billing_term') ?? 'term' }}' : '{{ __('auth.register.billing_monthly_short') ?? 'month' }}'))"></span>
-                                </div>
-                            </div>
-                            
-                            <div class="flex p-1 bg-slate-100 rounded-xl items-center">
-                                    <button type="button" @click="billingCycle = 'monthly'" 
-                                            class="flex-1 py-2 min-h-[40px] text-[11px] font-black rounded-lg transition-all"
-                                            :class="billingCycle === 'monthly' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:bg-slate-50'">
-                                        {{ __('auth.register.billing_monthly') ?? 'Month' }}
-                                    </button>
-                                    <button type="button" @click="billingCycle = 'term'" 
-                                            class="flex-1 py-2 min-h-[40px] text-[11px] font-black rounded-lg transition-all"
-                                            :class="billingCycle === 'term' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:bg-slate-50'">
-                                        {{ __('auth.register.billing_term') ?? 'Term' }}
-                                    </button>
-                                    <button type="button" @click="billingCycle = 'yearly'" 
-                                            class="flex-1 py-2 min-h-[40px] text-[11px] font-black rounded-lg transition-all"
-                                            :class="billingCycle === 'yearly' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:bg-slate-50'">
-                                        {{ __('auth.register.billing_yearly') ?? 'Yearly' }}
-                                    </button>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
-                <div class="hidden lg:flex items-center gap-3 text-slate-400 text-[11px] font-bold opacity-40 px-6">
-                    <i class="bi bi-shield-check text-emerald-500 text-sm"></i>
-                    <span>{{ __('auth.register.all_data_secure') ?? 'All data is encrypted and secure' }}</span>
+                <div class="flex items-center gap-2 text-slate-400 text-xs font-medium font-arabic pt-2">
+                    <i class="bi bi-shield-check text-emerald-500 text-base"></i>
+                    <span>{{ __('auth.register.all_data_secure') }}</span>
                 </div>
             </div>
 
-            <!-- Right Content Panel (Form) -->
-            <div class="lg:col-span-8 p-6 lg:p-10">
+            <!-- Form Panel -->
+            <div class="lg:col-span-7 p-6 lg:p-10 flex flex-col justify-center">
                 @if ($errors->any())
-                    <div class="bg-red-50 border-2 border-red-50 rounded-2xl p-4 mb-6 animate-shake">
+                    <div class="bg-red-50 border border-red-100 rounded-2xl p-4 mb-5">
                         <div class="flex items-start gap-3">
-                            <div class="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0 text-red-600">
+                            <div class="w-7 h-7 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0 text-red-600 text-sm">
                                 <i class="bi bi-exclamation-triangle-fill"></i>
                             </div>
                             <div>
                                 <h3 class="text-xs font-black text-red-900 font-arabic mb-1">{{ __('auth.register.registration_error') }}</h3>
-                                <ul class="text-[11px] text-red-700 font-arabic opacity-90">
-                                    @foreach ($errors->all() as $error) <li>â€¢ {{ $error }}</li> @endforeach
+                                <ul class="text-[11px] text-red-700 font-arabic space-y-0.5">
+                                    @foreach ($errors->all() as $error) <li>• {{ $error }}</li> @endforeach
                                 </ul>
                             </div>
                         </div>
@@ -479,81 +481,82 @@ window.addEventListener('pageshow', (event) => {
                     <input type="hidden" name="currency" x-model="selectedCurrency">
 
                     {{-- Center Name --}}
-                    <div class="space-y-1">
-                        <label class="text-[12px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">
+                    <div class="space-y-1.5">
+                        <label class="block text-xs font-bold text-slate-700 font-arabic">
                             <span x-text="accountType === 'center' ? '{{ __('auth.register.center_name') }}' : ({{ Js::from(__('auth.registration_steps.teacher_name')) }})"></span>
                         </label>
                         <div class="relative group">
-                            <div class="absolute inset-y-0 start-0 ps-4 flex items-center pointer-events-none text-slate-300 group-focus-within:text-brand-secondary transition-colors"><i class="bi bi-building"></i></div>
+                            <div class="absolute inset-y-0 start-0 ps-3.5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-brand-primary transition-colors">
+                                <i class="bi bi-building text-base"></i>
+                            </div>
                             <input type="text" name="center_name" x-model="centerName"
                                 @input="if(!manuallyEditedSubdomain) { subdomain = generateSlug(centerName); checkSubdomain(); }"
-                                class="w-full h-11 ps-10 pe-5 bg-slate-50/50 border-2 border-slate-100 rounded-xl text-base font-bold font-arabic focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner"
+                                class="w-full h-11 ps-10 pe-4 bg-slate-50/50 border border-slate-200 rounded-xl text-sm font-bold font-arabic focus:outline-none focus:bg-white focus:ring-2 focus:ring-brand-primary/10 focus:border-brand-primary transition-all shadow-inner"
                                 placeholder="{{ __('auth.register.center_name_placeholder') }}" required autofocus>
                         </div>
                     </div>
 
                     {{-- Subdomain Field --}}
-                    <div class="space-y-1">
-                        <label class="text-[12px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">{{ __('auth.registration_steps.platform_link') }}</label>
+                    <div class="space-y-1.5">
+                        <label class="block text-xs font-bold text-slate-700 font-arabic">{{ __('auth.registration_steps.platform_link') }}</label>
                         <div class="relative flex items-center w-full group" dir="ltr">
-                            <div class="absolute left-0 inset-y-0 hidden sm:flex items-center px-3 pointer-events-none text-brand-secondary font-black text-[11px] bg-brand-secondary/5 border-r border-brand-secondary/10 rounded-l-xl">https://</div>
+                            <div class="absolute left-0 inset-y-0 hidden sm:flex items-center px-3 pointer-events-none text-brand-primary font-bold text-xs bg-brand-primary/5 border-r border-brand-primary/10 rounded-l-xl">https://</div>
                             <input type="text" name="subdomain" x-model="subdomain"
                                 @input="manuallyEditedSubdomain = true; subdomain = cleanSlug(subdomain);"
                                 @input.debounce.500ms="checkSubdomain()"
-                                class="w-full h-11 pl-[60px] pr-[92px] sm:pl-[70px] sm:pr-[110px] bg-slate-50/50 border-2 border-slate-100 rounded-xl text-base font-bold font-sans focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner"
+                                class="w-full h-11 pl-[60px] pr-[92px] sm:pl-[70px] sm:pr-[110px] bg-slate-50/50 border border-slate-200 rounded-xl text-sm font-bold font-sans focus:outline-none focus:bg-white focus:ring-2 focus:ring-brand-primary/10 focus:border-brand-primary transition-all shadow-inner"
                                 placeholder="center-name" required>
-                            <div class="absolute right-0 inset-y-0 flex items-center pr-3 pointer-events-none text-slate-400 font-bold text-[11px] gap-2">
+                            <div class="absolute right-0 inset-y-0 flex items-center pr-3 pointer-events-none text-slate-400 font-bold text-xs gap-2">
                                 <span>.taalimu.com</span>
                                 <div class="flex items-center justify-center w-4 h-4">
-                                    <template x-if="subdomainStatus === 'loading'"><div class="w-3 h-3 border-2 border-brand-secondary border-t-transparent rounded-full animate-spin"></div></template>
-                                    <template x-if="subdomainStatus === 'valid'"><i class="bi bi-check-circle-fill text-emerald-500 text-base"></i></template>
-                                    <template x-if="subdomainStatus === 'invalid'"><i class="bi bi-x-circle-fill text-red-500 text-base"></i></template>
+                                    <template x-if="subdomainStatus === 'loading'"><div class="w-3.5 h-3.5 border-2 border-brand-primary border-t-transparent rounded-full animate-spin"></div></template>
+                                    <template x-if="subdomainStatus === 'valid'"><i class="bi bi-check-circle-fill text-emerald-500 text-sm"></i></template>
+                                    <template x-if="subdomainStatus === 'invalid'"><i class="bi bi-x-circle-fill text-red-500 text-sm"></i></template>
                                 </div>
                             </div>
                         </div>
                         <p x-show="subdomainMessage" :class="subdomainStatus === 'valid' ? 'text-emerald-600' : 'text-red-500'" 
-                           class="text-[11px] font-bold px-2 mt-0.5 animate-fade-in" x-text="subdomainMessage"></p>
+                           class="text-[11px] font-bold px-1 mt-0.5" x-text="subdomainMessage"></p>
                     </div>
 
-                    {{-- Phone Field with OTP Verification --}}
+                    {{-- Phone Field --}}
                     <div class="space-y-1.5">
-                        <label class="text-[12px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">{{ __('auth.register.phone') }} <span class="text-[11px] font-normal text-slate-300">({{ __('auth.register.optional') ?? 'Optional' }})</span></label>
-                        
-                        {{-- Country Code + Phone Input + Send OTP Button --}}
+                        <label class="block text-xs font-bold text-slate-700 font-arabic">
+                            {{ __('auth.register.phone') }} 
+                            <span class="text-[11px] font-normal text-slate-400">({{ __('auth.register.optional') }})</span>
+                        </label>
                         <div class="relative flex gap-2">
                             {{-- Country Code Selector --}}
                             <div class="relative" dir="ltr">
                                 <select x-model="countryCode" name="country_code"
-                                    class="h-11 pl-2 pr-7 bg-slate-50/50 border-2 border-slate-100 rounded-xl text-sm font-black text-slate-700 focus:outline-none focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all appearance-none cursor-pointer"
-                                    :class="phoneVerified ? 'border-emerald-300 bg-emerald-50/30 pointer-events-none opacity-60' : 'border-slate-100'">
+                                    class="h-11 pl-2 pr-7 bg-slate-50/50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-primary/10 focus:border-brand-primary transition-all appearance-none cursor-pointer">
                                     @include('partials.country-codes')
                                 </select>
-                                <div class="absolute inset-y-0 right-1 flex items-center pointer-events-none">
-                                    <i class="bi bi-chevron-down text-[11px] text-slate-400"></i>
+                                <div class="absolute inset-y-0 right-1.5 flex items-center pointer-events-none">
+                                    <i class="bi bi-chevron-down text-[10px] text-slate-400"></i>
                                 </div>
                             </div>
                             {{-- Phone Input --}}
                             <div class="relative flex-1 group">
                                 <input type="text" name="phone" x-model="phoneNumber"
-                                    class="w-full h-11 px-4 bg-slate-50/50 border-2 rounded-xl text-base font-bold focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary border-slate-100 transition-all shadow-inner"
+                                    class="w-full h-11 px-4 bg-slate-50/50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:bg-white focus:ring-2 focus:ring-brand-primary/10 focus:border-brand-primary transition-all shadow-inner"
                                     placeholder="10xxxxxxx" dir="ltr">
                             </div>
-                            {{-- Removed OTP Button for Google Auth --}}
                         </div>
-                        {{-- Removed OTP verification block --}}
+                    </div>
 
                     <!-- Coupon (Compact inline) -->
-                    <div class="pt-2">
+                    <div class="pt-1">
                         <button type="button" x-show="!showCouponInput && couponStatus !== 'valid'" @click="showCouponInput = true" 
-                                class="text-[11px] font-black text-brand-secondary hover:underline flex items-center gap-1 font-arabic">
-                            <i class="bi bi-tag-fill"></i> {{ __('auth.register.have_coupon') ?? 'هل لديك كود خصم؟' }}
+                                class="text-xs font-bold text-brand-primary hover:underline flex items-center gap-1.5 font-arabic cursor-pointer">
+                            <i class="bi bi-tag-fill"></i> {{ __('auth.register.have_coupon') }}
                         </button>
-                        <div x-show="showCouponInput || couponStatus === 'valid'" x-cloak class="space-y-2">
+                        <div x-show="showCouponInput || couponStatus === 'valid'" x-cloak class="space-y-1.5">
                             <div class="relative flex gap-2">
                                 <div class="relative flex-1">
                                     <input type="text" name="coupon_code" x-model="couponCode" @keyup.enter="validateCoupon()"
                                         placeholder="{{ __('admin.coupon_code') }}"
-                                        class="w-full h-11 px-4 bg-slate-50 border-2 border-slate-100 rounded-xl text-xs font-black uppercase focus:outline-none focus:border-brand-secondary transition-all"
+                                        class="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold uppercase focus:outline-none focus:border-brand-primary transition-all"
                                         :class="couponStatus === 'valid' ? 'border-emerald-200 bg-emerald-50' : (couponStatus === 'invalid' ? 'border-red-200 bg-red-50' : '')">
                                     <div class="absolute right-3 top-1/2 -translate-y-1/2">
                                         <template x-if="couponStatus === 'valid'"><i class="bi bi-patch-check-fill text-emerald-500 text-base"></i></template>
@@ -561,61 +564,71 @@ window.addEventListener('pageshow', (event) => {
                                     </div>
                                 </div>
                                 <button type="button" @click="validateCoupon()" :disabled="isApplyingCoupon || !couponCode"
-                                        class="h-11 px-6 rounded-xl bg-slate-900 text-white font-black text-[11px] uppercase tracking-widest hover:bg-brand-secondary transition-all disabled:opacity-50 flex items-center justify-center min-w-[80px]">
-                                    <template x-if="isApplyingCoupon"><div class="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></div></template>
+                                        class="h-11 px-5 rounded-xl bg-slate-900 text-white font-bold text-xs hover:bg-brand-primary transition-all disabled:opacity-50 flex items-center justify-center min-w-[75px] cursor-pointer">
+                                    <template x-if="isApplyingCoupon"><div class="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div></template>
                                     <span x-show="!isApplyingCoupon">{{ __('auth.google_registration.apply') }}</span>
                                 </button>
                             </div>
                             <p x-show="couponMessage" :class="couponStatus === 'valid' ? 'text-emerald-600' : 'text-red-500'" 
-                               class="text-[11px] font-black px-2 animate-fade-in" x-text="couponMessage"></p>
+                               class="text-[11px] font-bold px-1" x-text="couponMessage"></p>
                         </div>
                     </div>
 
                     <!-- Payment Gateway Selection -->
-                    <div class="space-y-2 pt-2" x-show="currentPlan.trial_days === 0">
-                        <label class="text-[12px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">
-                            {{ __('auth.register.payment_method') ?? 'Payment' }}
+                    <div class="space-y-2 pt-1" x-show="currentPlan.trial_days === 0">
+                        <label class="block text-xs font-bold text-slate-700 font-arabic">
+                            {{ __('auth.register.payment_method') }}
                         </label>
                         <div class="grid grid-cols-2 gap-2">
                             <!-- Paymob -->
                             <label class="relative cursor-pointer group" x-show="userCountry === 'EG' || userCountry === 'default'">
                                 <input type="radio" name="payment_gateway" value="paymob" x-model="paymentGateway" class="peer sr-only">
-                                <div class="flex items-center gap-2 p-3 rounded-xl border-2 border-slate-100 bg-slate-50/50 peer-checked:border-brand-secondary peer-checked:bg-white transition-all shadow-sm">
-                                    <i class="bi bi-credit-card-2-back text-lg text-slate-400 peer-checked:text-brand-secondary"></i>
-                                    <span class="text-xs font-black text-slate-600 peer-checked:text-slate-900">Paymob</span>
+                                <div class="flex items-center gap-2 p-3 rounded-xl border border-slate-200 bg-slate-50/50 peer-checked:border-brand-primary peer-checked:bg-brand-primary/5 transition-all shadow-sm">
+                                    <i class="bi bi-credit-card-2-back text-lg text-slate-400 peer-checked:text-brand-primary"></i>
+                                    <span class="text-xs font-bold text-slate-700 peer-checked:text-brand-primary">Paymob</span>
                                 </div>
                             </label>
                             <!-- PayPal -->
                             <label class="relative cursor-pointer group" x-show="userCountry !== 'EG' && userCountry !== 'default'">
                                 <input type="radio" name="payment_gateway" value="paypal" x-model="paymentGateway" class="peer sr-only">
-                                <div class="flex items-center gap-2 p-3 rounded-xl border-2 border-slate-100 bg-slate-50/50 peer-checked:border-brand-secondary peer-checked:bg-white transition-all shadow-sm">
-                                    <i class="bi bi-paypal text-lg text-slate-400 peer-checked:text-brand-secondary"></i>
-                                    <span class="text-xs font-black text-slate-600 peer-checked:text-slate-900">PayPal</span>
+                                <div class="flex items-center gap-2 p-3 rounded-xl border border-slate-200 bg-slate-50/50 peer-checked:border-brand-primary peer-checked:bg-brand-primary/5 transition-all shadow-sm">
+                                    <i class="bi bi-paypal text-lg text-slate-400 peer-checked:text-brand-primary"></i>
+                                    <span class="text-xs font-bold text-slate-700 peer-checked:text-brand-primary">PayPal</span>
                                 </div>
                             </label>
                         </div>
                     </div>
 
-                    <div class="pt-4">
-                        <button type="submit" :disabled="isSubmitting || subdomainStatus === 'invalid' || (phoneNumber.length > 0 && phoneNumber.length < 8)"
-                                class="w-full h-14 rounded-full flex items-center justify-center gap-3 group bg-brand-secondary text-white shadow-xl shadow-brand-secondary/20 hover:shadow-brand-secondary/40 hover:-translate-y-0.5 active:scale-95 transition-all disabled:opacity-50 disabled:grayscale">
-                             <span x-show="!isSubmitting" class="text-lg font-black font-arabic" 
-                                   x-text="currentPlan.trial_days > 0 ? ({{ Js::from(__('auth.google_registration.start_free_trial')) }}) : (finalPrice === 0 ? '{{ __('auth.register.cta_main') }}' : '{{ __('auth.google_registration.pay_complete') }}')">
-                            </span>
-                            <span x-show="isSubmitting" class="flex items-center gap-2">
-                                <div class="w-5 h-5 border-3 border-white border-t-transparent rounded-full animate-spin"></div>
-                                {{ __('auth.google_registration.completing') }}
-                            </span>
-                            <i x-show="!isSubmitting" class="bi bi-arrow-right-short text-2xl group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform"></i>
+                    {{-- Submit Button --}}
+                    <div class="pt-3">
+                        <button type="submit" 
+                                :disabled="isSubmitting || subdomainStatus === 'invalid' || (phoneNumber.length > 0 && phoneNumber.length < 8)"
+                                class="w-full h-12 rounded-xl flex items-center justify-center gap-2.5 group bg-brand-primary hover:bg-brand-600 text-white shadow-lg shadow-brand-primary/20 hover:shadow-brand-primary/30 hover:-translate-y-0.5 active:scale-[0.99] transition-all disabled:opacity-50 disabled:pointer-events-none cursor-pointer">
+                            <template x-if="isSubmitting">
+                                <span class="inline-flex items-center gap-2 text-sm font-bold font-arabic">
+                                    <div class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                    <span>{{ __('auth.google_registration.completing') }}</span>
+                                </span>
+                            </template>
+                            <template x-if="!isSubmitting">
+                                <span class="inline-flex items-center gap-2">
+                                    <span class="text-base font-black font-arabic" 
+                                          x-text="currentPlan.trial_days > 0 ? ({{ Js::from(__('auth.google_registration.start_free_trial')) }}) : (finalPrice === 0 ? '{{ __('auth.register.cta_main') }}' : '{{ __('auth.google_registration.pay_complete') }}')">
+                                    </span>
+                                    <i class="bi bi-arrow-left text-lg rtl:inline ltr:hidden group-hover:-translate-x-1 transition-transform"></i>
+                                    <i class="bi bi-arrow-right text-lg ltr:inline rtl:hidden group-hover:translate-x-1 transition-transform"></i>
+                                </span>
+                            </template>
                         </button>
                     </div>
 
-                    <div class="mt-6 text-center">
-                        <p class="text-[11px] text-slate-400 font-arabic leading-relaxed">
+                    {{-- Terms --}}
+                    <div class="mt-4 text-center">
+                        <p class="text-xs text-slate-400 font-arabic leading-relaxed">
                             {{ __('auth.register.terms_prefix') }}
-                            <a href="{{ route('terms') }}" class="text-slate-900 font-black hover:underline underline-offset-4">{{ __('auth.register.terms_of_service') }}</a> 
+                            <a href="{{ route('terms') }}" class="text-slate-700 font-bold hover:underline underline-offset-4">{{ __('auth.register.terms_of_service') }}</a> 
                             {{ __('auth.register.and') }} 
-                            <a href="{{ route('privacy') }}" class="text-slate-900 font-black hover:underline underline-offset-4">{{ __('auth.register.privacy_policy') }}</a>
+                            <a href="{{ route('privacy') }}" class="text-slate-700 font-bold hover:underline underline-offset-4">{{ __('auth.register.privacy_policy') }}</a>
                         </p>
                     </div>
                 </form>
@@ -623,7 +636,7 @@ window.addEventListener('pageshow', (event) => {
         </div>
     </div>
 
-    <!-- Plan Selection Modal (Restored) -->
+    <!-- Plan Selection Modal -->
     <div x-show="showPlanModal" 
          x-transition:enter="transition ease-out duration-300"
          x-transition:enter-start="opacity-0"
@@ -634,77 +647,77 @@ window.addEventListener('pageshow', (event) => {
          class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"
          x-cloak>
         <div @click.away="showPlanModal = false" 
-             class="bg-white rounded-[2.5rem] w-full max-w-lg shadow-2xl overflow-hidden animate-scale-in">
-            <div class="p-5 sm:p-8 border-b border-slate-100 bg-slate-50/50">
-                <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-                    <h3 class="text-xl font-black text-slate-900 font-arabic">{{ __('auth.plan_modal.select_plan') }}</h3>
+             class="bg-white rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden animate-scale-in">
+            <div class="p-5 sm:p-6 border-b border-slate-100 bg-slate-50/50">
+                <div class="flex justify-between items-center mb-4 gap-4">
+                    <h3 class="text-lg font-black text-slate-900 font-arabic">{{ __('auth.plan_modal.select_plan') }}</h3>
                     
                     <!-- Billing Country Selector -->
-                    <div class="flex items-center gap-2 bg-slate-100/50 p-1.5 rounded-2xl border border-slate-200">
-                        <span class="text-[11px] font-black text-slate-500 uppercase tracking-wider px-2 whitespace-nowrap"><i class="bi bi-globe-americas me-1"></i> {{ __('auth.plan_modal.billing_region') }}</span>
+                    <div class="flex items-center gap-2 bg-white px-2.5 py-1 rounded-xl border border-slate-200 shadow-sm">
+                        <span class="text-[11px] font-bold text-slate-500 whitespace-nowrap"><i class="bi bi-globe-americas me-1 text-brand-primary"></i> {{ __('auth.plan_modal.billing_region') }}</span>
                         <div class="relative" dir="ltr">
-                            <select x-model="selectedCurrency" class="h-8 pl-3 pr-8 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-secondary/20 focus:border-brand-secondary appearance-none cursor-pointer shadow-sm min-w-[120px]">
-                                <option value="EGP">ðŸ‡ªðŸ‡¬ Egypt (EGP)</option>
-                                <option value="SAR">ðŸ‡¸ðŸ‡¦ Saudi Arabia (SAR)</option>
-                                <option value="AED">ðŸ‡¦ðŸ‡ª UAE (AED)</option>
-                                <option value="EUR">ðŸ‡ªðŸ‡º Europe (EUR)</option>
-                                <option value="USD">ðŸ‡ºðŸ‡¸ Global (USD)</option>
+                            <select x-model="selectedCurrency" class="h-7 pl-2 pr-6 bg-transparent border-0 text-xs font-bold text-slate-700 focus:outline-none appearance-none cursor-pointer">
+                                <option value="EGP">🇪🇬 Egypt (EGP)</option>
+                                <option value="SAR">🇸🇦 Saudi Arabia (SAR)</option>
+                                <option value="AED">🇦🇪 UAE (AED)</option>
+                                <option value="EUR">🇪🇺 Europe (EUR)</option>
+                                <option value="USD">🇺🇸 Global (USD)</option>
                             </select>
-                            <div class="absolute inset-y-0 right-2 flex items-center pointer-events-none">
-                                <i class="bi bi-chevron-down text-[11px] text-slate-400"></i>
+                            <div class="absolute inset-y-0 right-1 flex items-center pointer-events-none">
+                                <i class="bi bi-chevron-down text-[10px] text-slate-400"></i>
                             </div>
                         </div>
                     </div>
                     
-                    <button type="button" @click="showPlanModal = false" aria-label="{{ __('auth.plan_modal.close') }}" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-slate-200 transition-colors">
-                        <i class="bi bi-x-lg"></i>
+                    <button type="button" @click="showPlanModal = false" aria-label="{{ __('auth.plan_modal.close') }}" class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-slate-200 transition-colors cursor-pointer text-slate-400 hover:text-slate-600">
+                        <i class="bi bi-x-lg text-sm"></i>
                     </button>
                 </div>
                 <!-- Billing Toggle in Modal -->
                 <div class="flex justify-center">
-                    <div class="inline-flex flex-wrap justify-center bg-slate-200/50 p-1.5 rounded-2xl border border-slate-200 gap-1" dir="ltr">
+                    <div class="inline-flex flex-wrap justify-center bg-slate-200/60 p-1 rounded-xl border border-slate-200/80 gap-1" dir="ltr">
                         <button type="button" @click="billingCycle = 'monthly'" 
-                                class="px-4 sm:px-5 py-2 min-h-[40px] rounded-xl text-[13px] font-black transition-all font-sans uppercase tracking-wide"
-                                :class="billingCycle === 'monthly' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'">
+                                class="px-4 py-1.5 min-h-[36px] rounded-lg text-xs font-bold transition-all cursor-pointer font-arabic"
+                                :class="billingCycle === 'monthly' ? 'bg-white text-brand-primary shadow-sm' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'">
                             {{ __('auth.billing.monthly') }}
                         </button>
                         <button type="button" @click="billingCycle = 'term'" 
-                                class="px-4 sm:px-5 py-2 min-h-[40px] rounded-xl text-[13px] font-black transition-all font-sans uppercase tracking-wide"
-                                :class="billingCycle === 'term' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'">
+                                class="px-4 py-1.5 min-h-[36px] rounded-lg text-xs font-bold transition-all cursor-pointer font-arabic"
+                                :class="billingCycle === 'term' ? 'bg-white text-brand-primary shadow-sm' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'">
                             {{ __('auth.billing.term') }}
                         </button>
                         <button type="button" @click="billingCycle = 'yearly'" 
-                                class="px-4 sm:px-5 py-2 min-h-[40px] rounded-xl text-[13px] font-black transition-all font-sans uppercase tracking-wide"
-                                :class="billingCycle === 'yearly' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'">
+                                class="px-4 py-1.5 min-h-[36px] rounded-lg text-xs font-bold transition-all cursor-pointer font-arabic"
+                                :class="billingCycle === 'yearly' ? 'bg-white text-brand-primary shadow-sm' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'">
                             {{ __('auth.billing.yearly') }}
                         </button>
                     </div>
                 </div>
             </div>
-            <div class="p-5 sm:p-8 space-y-4 max-h-[60vh] overflow-y-auto custom-scrollbar">
+            <div class="p-5 space-y-3 max-h-[55vh] overflow-y-auto custom-scrollbar">
                 <template x-for="pkg in packages" :key="pkg.slug">
                     <label class="relative block cursor-pointer group">
                         <input type="radio" name="plan_selector" :value="pkg.slug" x-model="selectedPlan" @change="showPlanModal = false" class="peer sr-only">
-                        <div class="p-6 rounded-2xl border-2 border-slate-100 bg-white hover:border-brand-secondary/30 peer-checked:border-brand-secondary peer-checked:bg-brand-secondary/5 transition-all">
+                        <div class="p-4 sm:p-5 rounded-2xl border-2 border-slate-100 bg-white hover:border-brand-primary/30 peer-checked:border-brand-primary peer-checked:bg-brand-primary/5 transition-all">
                             <div class="flex justify-between items-center">
                                 <div class="flex items-center gap-3">
                                     <div class="w-5 h-5 rounded-full border-2 border-slate-200 flex items-center justify-center transition-all bg-white"
-                                         :class="selectedPlan === pkg.slug ? 'border-brand-secondary' : 'border-slate-200'">
-                                        <div class="w-2.5 h-2.5 rounded-full bg-brand-secondary transition-transform"
+                                         :class="selectedPlan === pkg.slug ? 'border-brand-primary' : 'border-slate-200'">
+                                        <div class="w-2.5 h-2.5 rounded-full bg-brand-primary transition-transform"
                                              :class="selectedPlan === pkg.slug ? 'scale-100' : 'scale-0'"></div>
                                     </div>
-                                    <span class="font-black text-slate-900 uppercase tracking-tight" x-text="pkg.name"></span>
+                                    <span class="font-bold text-slate-900 text-sm font-arabic" x-text="pkg.name"></span>
                                 </div>
-                                <div class="text-right">
-                                    <span class="text-lg font-black text-brand-secondary" x-text="(billingCycle === 'yearly' ? getPriceData(pkg).yearly : (billingCycle === 'term' ? getPriceData(pkg).term : getPriceData(pkg).amount)).toLocaleString() + ' ' + getPriceData(pkg).currency"></span>
+                                <div class="text-end">
+                                    <span class="text-sm font-black text-brand-primary" x-text="(billingCycle === 'yearly' ? getPriceData(pkg).yearly : (billingCycle === 'term' ? getPriceData(pkg).term : getPriceData(pkg).amount)).toLocaleString() + ' ' + getPriceData(pkg).currency"></span>
                                 </div>
                             </div>
                         </div>
                     </label>
                 </template>
             </div>
-            <div class="p-6 bg-slate-50 text-center">
-                <button type="button" @click="showPlanModal = false" class="text-sm font-black text-slate-500 hover:text-slate-700 transition-colors uppercase tracking-widest">
+            <div class="p-4 bg-slate-50 border-t border-slate-100 text-center">
+                <button type="button" @click="showPlanModal = false" class="text-xs font-bold text-slate-500 hover:text-slate-700 transition-colors font-arabic cursor-pointer">
                     {{ __('auth.plan_modal.close') }}
                 </button>
             </div>
