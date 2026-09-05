@@ -20,6 +20,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added full trilingual localization support (AR, EN, FR).
 
 ### Fixed
+- **Student Edit Page 500 Error Resolution (2026-09-05)**:
+  - Fixed `BadMethodCallException: Call to undefined method App\Models\Course::forTenant()` by scoping courses via `Course::where('tenant_id', ...)` and adding universal `scopeForTenant` to `BelongsToTenant` trait.
+  - Added null safety checks for enrollment date formatting in student edit view.
 - **Student Quick Course Enrollment - Disabled State for Enrolled Courses (2026-09-05)**:
   - Added HTML `disabled` attribute to courses in which the student is already enrolled, preventing re-selection.
   - Added visual dimming and clear single status suffix ` - (مسجل بالفعل)`.

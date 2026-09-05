@@ -248,7 +248,7 @@
                                         <div class="text-slate-400 flex items-center gap-1">
                                             <i class="far fa-calendar-alt"></i>
                                             <span>
-                                                {{ $enrollment->enrolled_at ? $enrollment->enrolled_at->format('Y-m-d') : $enrollment->created_at->format('Y-m-d') }}
+                                                {{ $enrollment->enrolled_at ? $enrollment->enrolled_at->format('Y-m-d') : ($enrollment->created_at ? $enrollment->created_at->format('Y-m-d') : '-') }}
                                             </span>
                                         </div>
 

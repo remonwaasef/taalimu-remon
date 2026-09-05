@@ -204,7 +204,7 @@ class StudentController extends Controller
         $this->authorize('update', $student);
 
         $stages = Stage::getCached();
-        $courses = Course::forTenant($this->tenant->id)->where('status', 'active')->get();
+        $courses = Course::where('tenant_id', $this->tenant->id)->where('status', 'active')->orderBy('title')->get();
 
         return view('center::students.edit', compact('student', 'stages', 'courses'));
     }
