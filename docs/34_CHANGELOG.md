@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Student Course Suspension & Unenrollment Management (2026-09-05)**:
+  - Added migration `2026_09_05_194500_add_suspended_to_enrollments_status_enum.php` extending `enrollments.status` enum with `'suspended'`.
+  - Added route `PATCH center.students.courses.toggle-status` and `StudentController@toggleCourseStatus` to toggle student course enrollment status between active and suspended.
+  - Added route `DELETE center.students.courses.unenroll` and `StudentController@unenrollCourse` with SweetAlert2 confirmation to remove student course enrollment safely.
+  - Updated enrolled courses cards in `Modules/Center/resources/views/students/edit.blade.php` with dynamic status badges (`active` green vs `suspended` amber with animation) and direct action buttons (pause/resume & unenroll).
+  - Added trilingual localization in Arabic, English, and French (`center::students`).
 - **Professional Enrolled Courses Column in Students Directory Table (2026-09-05)**:
   - Added modern, responsive enrolled courses column in the main students table (`Modules/Center/resources/views/students/index.blade.php`).
   - Displays compact, styled chips with course title, active status indicator, and direct link to course details.

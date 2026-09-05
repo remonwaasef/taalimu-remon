@@ -7,6 +7,7 @@ use App\Http\Requests\Center\StoreStudentRequest;
 use App\Http\Requests\Center\UpdateStudentRequest;
 use App\Models\Student;
 use App\Models\Course;
+use App\Models\Enrollment;
 use App\Models\Stage;
 use App\Queries\StudentQuery;
 use App\Services\StudentService;
@@ -616,4 +617,50 @@ class StudentController extends Controller
             'Content-Type' => 'text/csv',
         ]);
     }
+
+    /**
+     * Toggle enrollment status for a course (active <-> suspended).
+     */
+    public function toggleCourseStatus($studentId, $courseId): RedirectResponse
+    {
+        $student = $this->findStudentOrFail($studentId);
+        $this->authorize('update', $student);
+
+        $course = Course::where('tenant_id', $this->tenant->id)->findOrFail($courseId);
+
+        $enrollment = Enrollment::where('tenant_id', $this->tenant->id)
+            ->where('user_id', $student->user_id)
+            ->where('course_id', $course->id)
+            ->firstOrFail();
+
+        $newStatus = ($enrollment->status === 'suspended') ? 'active' : 'suspended';
+        $enrollment->update(['status' => $newStatus]);
+
+        $message = ($newStatus === 'suspended')
+            ? __('center::students.course_suspended_successfully')
+            : __('center::students.course_resumed_successfully');
+
+        return redirect()->back()->with('success', $message);
+    }
+
+    /**
+     * Unenroll a student from a course (remove enrollment).
+     */
+    public function unenrollCourse($studentId, $courseId): RedirectResponse
+    {
+        $student = $this->findStudentOrFail($studentId);
+        $this->authorize('update', $student);
+
+        $course = Course::where('tenant_id', $this->tenant->id)->findOrFail($courseId);
+
+        $enrollment = Enrollment::where('tenant_id', $this->tenant->id)
+            ->where('user_id', $student->user_id)
+            ->where('course_id', $course->id)
+            ->firstOrFail();
+
+        $enrollment->delete();
+
+        return redirect()->back()->with('success', __('center::students.course_unenrolled_successfully'));
+    }
 }
+

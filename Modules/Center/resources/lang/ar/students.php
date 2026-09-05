@@ -375,4 +375,18 @@ return [
     ],
     'attendance_pct' => 'نسبة الحضور',
     'late' => 'متأخر',
+    'course_status' => [
+        'active' => 'نشط',
+        'suspended' => 'موقوف مؤقتاً',
+        'completed' => 'مكتمل',
+        'expired' => 'منتهي',
+    ],
+    'suspend_course' => 'إيقاف مؤقت',
+    'resume_course' => 'تنشيط الكورس',
+    'unenroll_course' => 'إلغاء التسجيل من الكورس',
+    'unenroll_confirm_title' => 'هل أنت متأكد من إلغاء التسجيل؟',
+    'unenroll_confirm_text' => 'سيتم إلغاء تسجيل الطالب من الكورس وإزالة بيانات الاشتراك.',
+    'course_suspended_successfully' => 'تم إيقاف اشتراك الطالب في الكورس بنجاح.',
+    'course_resumed_successfully' => 'تم تنشيط اشتراك الطالب في الكورس بنجاح.',
+    'course_unenrolled_successfully' => 'تم إلغاء تسجيل الطالب من الكورس بنجاح.',
 ];

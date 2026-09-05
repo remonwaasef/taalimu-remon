@@ -216,13 +216,18 @@
 
                                             <div>
                                                 @if($enrollment->status === 'active')
-                                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
                                                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                                                        نشط
+                                                        {{ __('center::students.course_status.active') }}
+                                                    </span>
+                                                @elseif($enrollment->status === 'suspended')
+                                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+                                                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                                                        {{ __('center::students.course_status.suspended') }}
                                                     </span>
                                                 @else
                                                     <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600">
-                                                        {{ $enrollment->status }}
+                                                        {{ __('center::students.course_status.' . $enrollment->status) ?? $enrollment->status }}
                                                     </span>
                                                 @endif
                                             </div>
@@ -243,23 +248,52 @@
                                         </div>
                                     </div>
 
-                                    {{-- Footer Info & Action Link --}}
-                                    <div class="pt-3 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between text-xs">
-                                        <div class="text-slate-400 flex items-center gap-1">
-                                            <i class="far fa-calendar-alt"></i>
-                                            <span>
-                                                {{ $enrollment->enrolled_at ? $enrollment->enrolled_at->format('Y-m-d') : ($enrollment->created_at ? $enrollment->created_at->format('Y-m-d') : '-') }}
-                                            </span>
-                                        </div>
-
-                                        <div class="flex items-center gap-2">
+                                    {{-- Footer Info & Actions --}}
+                                    <div class="pt-3 border-t border-slate-100 dark:border-slate-700/60 flex flex-wrap items-center justify-between gap-2 text-xs">
+                                        <div class="flex items-center gap-2 text-slate-400">
+                                            <div class="flex items-center gap-1">
+                                                <i class="far fa-calendar-alt"></i>
+                                                <span>
+                                                    {{ $enrollment->enrolled_at ? $enrollment->enrolled_at->format('Y-m-d') : ($enrollment->created_at ? $enrollment->created_at->format('Y-m-d') : '-') }}
+                                                </span>
+                                            </div>
                                             @if($enrollment->course->price > 0)
                                                 <span class="font-bold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded-md">
                                                     {{ number_format($enrollment->course->price, 0) }} {{ get_currency_symbol() }}
                                                 </span>
                                             @endif
-                                            <a href="{{ route('center.courses.show', $enrollment->course_id) }}" class="text-brand-primary hover:text-brand-dark font-bold inline-flex items-center gap-1" target="_blank">
-                                                <span>عرض الكورس</span>
+                                        </div>
+
+                                        <div class="flex items-center gap-1.5 ms-auto">
+                                            {{-- Toggle Status (Suspend / Resume) --}}
+                                            <form action="{{ route('center.students.courses.toggle-status', ['student' => $student->id, 'course' => $enrollment->course_id]) }}" method="POST" class="inline m-0">
+                                                @csrf
+                                                @method('PATCH')
+                                                @if($enrollment->status === 'suspended')
+                                                    <button type="submit" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/50 dark:text-emerald-300 dark:hover:bg-emerald-900/60 border border-emerald-200 dark:border-emerald-800 transition shadow-2xs" title="{{ __('center::students.resume_course') }}">
+                                                        <i class="fas fa-play text-[10px]"></i>
+                                                        <span>{{ __('center::students.resume_course') }}</span>
+                                                    </button>
+                                                @else
+                                                    <button type="submit" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold text-amber-700 bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/50 dark:text-amber-300 dark:hover:bg-amber-900/60 border border-amber-200 dark:border-amber-800 transition shadow-2xs" title="{{ __('center::students.suspend_course') }}">
+                                                        <i class="fas fa-pause text-[10px]"></i>
+                                                        <span>{{ __('center::students.suspend_course') }}</span>
+                                                    </button>
+                                                @endif
+                                            </form>
+
+                                            {{-- Unenroll Course --}}
+                                            <form id="unenroll-form-{{ $enrollment->id }}" action="{{ route('center.students.courses.unenroll', ['student' => $student->id, 'course' => $enrollment->course_id]) }}" method="POST" class="inline m-0">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="button" onclick="confirmUnenroll('unenroll-form-{{ $enrollment->id }}', '{{ addslashes($enrollment->course->title) }}')" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-950/50 dark:text-red-400 dark:hover:bg-red-900/60 border border-red-200 dark:border-red-800 transition shadow-2xs" title="{{ __('center::students.unenroll_course') }}">
+                                                    <i class="fas fa-user-minus text-[10px]"></i>
+                                                    <span>{{ __('center::students.unenroll_course') }}</span>
+                                                </button>
+                                            </form>
+
+                                            {{-- Course Link --}}
+                                            <a href="{{ route('center.courses.show', $enrollment->course_id) }}" class="p-1 text-slate-400 hover:text-brand-primary dark:hover:text-brand-300 transition rounded-md hover:bg-slate-100 dark:hover:bg-slate-700" title="عرض الكورس" target="_blank">
                                                 <i class="fas fa-external-link-alt text-xs"></i>
                                             </a>
                                         </div>
@@ -493,6 +527,42 @@
         form.action = `/courses/${courseId}/enroll`;
         form.submit();
         return true;
+    };
+
+    window.confirmUnenroll = function(formId, courseTitle) {
+        const confirmTitle = '{{ __('center::students.unenroll_confirm_title') }}';
+        const confirmText = '{{ __('center::students.unenroll_confirm_text') }}' + (courseTitle ? ` (${courseTitle})` : '');
+        const confirmBtn = '{{ __('center::students.unenroll_course') }}';
+        const cancelBtn = '{{ __('center::messages.cancel') ?? 'إلغاء' }}';
+
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                title: confirmTitle,
+                text: confirmText,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: confirmBtn,
+                cancelButtonText: cancelBtn,
+                reverseButtons: true,
+                customClass: {
+                    popup: 'rounded-2xl dark:bg-slate-800 dark:text-white',
+                    confirmButton: 'rounded-xl px-4 py-2 font-bold',
+                    cancelButton: 'rounded-xl px-4 py-2 font-bold'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const form = document.getElementById(formId);
+                    if (form) form.submit();
+                }
+            });
+        } else {
+            if (confirm(confirmTitle + '\n' + confirmText)) {
+                const form = document.getElementById(formId);
+                if (form) form.submit();
+            }
+        }
     };
 </script>
 @endpush

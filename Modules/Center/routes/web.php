@@ -199,6 +199,8 @@ $tenantRoutes = function () {
             Route::get('students/{student}/id-card', [StudentController::class, 'idCard'])->name('center.students.id-card');
             Route::get('students/{student}/statement', [StudentController::class, 'statement'])->name('center.students.statement');
             Route::post('students/{id}/restore', [StudentController::class, 'restore'])->name('center.students.restore');
+            Route::patch('students/{student}/courses/{course}/toggle-status', [StudentController::class, 'toggleCourseStatus'])->name('center.students.courses.toggle-status');
+            Route::delete('students/{student}/courses/{course}/unenroll', [StudentController::class, 'unenrollCourse'])->name('center.students.courses.unenroll');
         });
 
         Route::middleware(['can:delete students'])->group(function () {
