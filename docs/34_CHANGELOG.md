@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Status & Financial Balance Badge Organization in Students Directory (2026-09-05)**:
+  - Redesigned the "الحالة" column into "الحالة والموقف المالي" (`status_and_balance`) in `Modules/Center/resources/views/students/index.blade.php`.
+  - Disentangled academic account status (`نشط` / `متوقف`) from financial dues, presenting each as distinct visual badges.
+  - Converted raw red text balances into interactive financial pills (`متبقي: X ج.م`) with direct Quick Pay trigger on click, and clean `خالص` badges for zero-balance students.
+  - Added full trilingual localization support in Arabic, English, and French.
 - **Visual Distinction for Suspended vs Active Courses (2026-09-05)**:
   - Added dedicated amber badges, pulsing indicators, and explicit "معطل" tags for suspended courses in the main students directory table (`index.blade.php`).
   - Redesigned suspended course cards in the edit view (`edit.blade.php`) with prominent corner badges, warm amber tint, warning notice, and bold green "تنشيط الكورس" CTA button.

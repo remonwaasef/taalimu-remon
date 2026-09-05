@@ -309,7 +309,7 @@
                             <th class="px-4 py-3">{{ __('center::students.phone') }}</th>
                             <th class="px-4 py-3">{{ __('center::students.enrolled_courses') }}</th>
                             <th class="px-4 py-3 d-none d-xl-table-cell">{{ __('center::students.grade') }}</th>
-                            <th class="px-4 py-3">{{ __('center::students.status') }}</th>
+                            <th class="px-4 py-3">{{ __('center::students.status_and_balance') }}</th>
                             <th class="px-4 py-3 text-end">{{ __('center::students.actions') }}</th>
                         </tr>
                     </thead>
@@ -439,12 +439,29 @@
                                     </div>
                                 </td>
                                 <td class="px-4 py-3.5">
-                                    <div class="d-flex flex-column align-items-start">
-                                        <span class="badge bg-{{ $student->status == 'active' ? 'success' : 'danger' }} bg-opacity-10 text-{{ $student->status == 'active' ? 'success' : 'danger' }} rounded-pill px-2.5 py-1" style="font-size: 0.7rem;">
+                                    <div class="d-flex flex-column align-items-start gap-1">
+                                        {{-- Academic Status Badge --}}
+                                        <span class="badge {{ $student->status == 'active' ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 border-slate-200 dark:border-slate-700' }} border rounded-full px-2.5 py-0.5 text-xs d-inline-flex align-items-center gap-1 font-semibold">
+                                            <span class="w-1.5 h-1.5 rounded-full {{ $student->status == 'active' ? 'bg-emerald-500' : 'bg-slate-400' }}"></span>
                                             {{ $student->status == 'active' ? __('center::students.active') : __('center::students.stopped') }}
                                         </span>
+
+                                        {{-- Financial Status Badge --}}
                                         @if($student->total_balance > 0)
-                                            <span class="text-danger extra-small fw-bold mt-1">{{ number_format($student->total_balance, 0) }} {{ get_currency_symbol() }}</span>
+                                            <button type="button" 
+                                                    class="badge bg-rose-50 hover:bg-rose-100 text-rose-700 dark:bg-rose-950/60 dark:hover:bg-rose-900/80 dark:text-rose-300 border border-rose-200 dark:border-rose-800 rounded-lg px-2 py-0.5 text-xs text-decoration-none d-inline-flex align-items-center gap-1.5 transition-all cursor-pointer shadow-2xs quick-pay-btn" 
+                                                    data-id="{{ $student->id }}" 
+                                                    data-name="{{ $student->name }}" 
+                                                    data-balance="{{ $student->total_balance }}" 
+                                                    title="{{ __('center::students.quick_pay') }} ({{ number_format($student->total_balance, 0) }} {{ get_currency_symbol() }})">
+                                                <i class="fas fa-hand-holding-dollar text-rose-500 text-[10px]"></i>
+                                                <span class="fw-bold">متبقي: {{ number_format($student->total_balance, 0) }} {{ get_currency_symbol() }}</span>
+                                            </button>
+                                        @else
+                                            <span class="badge bg-slate-50 text-slate-500 dark:bg-slate-800/60 dark:text-slate-400 border border-slate-200/80 dark:border-slate-700/80 rounded-lg px-2 py-0.5 text-2xs d-inline-flex align-items-center gap-1">
+                                                <i class="fas fa-check-circle text-emerald-500 text-[10px]"></i>
+                                                <span>خالص</span>
+                                            </span>
                                         @endif
                                     </div>
                                 </td>

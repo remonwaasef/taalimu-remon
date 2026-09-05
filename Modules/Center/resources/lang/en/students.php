@@ -21,6 +21,7 @@ return [
     'parent_phone' => 'Parent Phone',
     'grade' => 'Grade',
     'status' => 'Status',
+    'status_and_balance' => 'Status & Balance',
     'actions' => 'Actions',
     'active' => 'Active',
     'inactive' => 'Inactive',

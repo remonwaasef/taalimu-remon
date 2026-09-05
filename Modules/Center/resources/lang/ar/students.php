@@ -22,6 +22,7 @@ return [
     'parent_phone' => 'ولي الأمر',
     'grade' => 'الصف',
     'status' => 'الحالة',
+    'status_and_balance' => 'الحالة والحساب',
     'actions' => 'الإجراءات',
     'active' => 'نشط',
     'inactive' => 'غير نشط',
