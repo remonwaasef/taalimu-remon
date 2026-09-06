@@ -16,8 +16,8 @@ class AdminController extends Controller
         $activeTenants = \App\Models\Tenant::withoutGlobalScopes()->where('status', 'active')->count();
         $totalStudents = \App\Models\Student::withoutGlobalScopes()->count();
         $expiringSoon = \App\Models\Subscription::withoutGlobalScopes()
-            ->where('ends_at', '<=', now()->addDays(7))
-            ->where('ends_at', '>=', now())
+            ->whereNotNull('ends_at')
+            ->whereBetween('ends_at', [now(), now()->addDays(30)])
             ->count();
 
         $totalRevenue = \App\Models\Invoice::withoutGlobalScopes()->where('status', 'paid')->sum('amount') ?? 0;

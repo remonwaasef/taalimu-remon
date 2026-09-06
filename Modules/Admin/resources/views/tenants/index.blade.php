@@ -1,4 +1,4 @@
-﻿@extends('admin::layouts.app-next')
+@extends('admin::layouts.app-next')
 
 @section('page-title', __('admin::admin.tenants.title'))
 
@@ -68,7 +68,7 @@
                     <h2 class="fw-extrabold mb-0" style="color: #92400e;">{{ $stats['expiring_soon'] }}</h2>
                     <p class="text-warning-emphasis small mt-1 opacity-75">Centers need renewal action</p>
                 </div>
-                <a href="?subscription_status=expired" class="btn btn-warning btn-sm w-100 rounded-pill mt-3 py-2 fw-bold" style="background-color: #f59e0b; color: white; border: none;">{{ __('admin::admin.tenants.filters.filter') }}</a>
+                <a href="?subscription_status=expiring_soon" class="btn btn-warning btn-sm w-100 rounded-pill mt-3 py-2 fw-bold" style="background-color: #f59e0b; color: white; border: none;">{{ __('admin::admin.tenants.filters.filter') }}</a>
             </div>
         </div>
 
@@ -103,8 +103,27 @@
     <!-- Bento Table View -->
     <div class="card border-0 p-0 overflow-hidden shadow-sm">
         <div class="card-header bg-white border-0 p-4 pb-0">
+            @if(request('subscription_status'))
+                <div class="alert alert-warning d-flex align-items-center justify-content-between py-2 px-3 mb-3 rounded-3" style="background-color: #fef3c7; border: 1px solid #fde68a;">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-funnel-fill text-warning me-2"></i>
+                        <span class="small fw-bold" style="color: #92400e;">
+                            @if(request('subscription_status') === 'expiring_soon')
+                                {{ __('admin::admin.tenants.filters.showing_expiring_soon') ?? 'عرض الاشتراكات التي تنتهي خلال 30 يوم' }}
+                            @elseif(request('subscription_status') === 'expired')
+                                {{ __('admin::admin.tenants.filters.showing_expired') ?? 'عرض الاشتراكات المنتهية' }}
+                            @elseif(request('subscription_status') === 'active')
+                                {{ __('admin::admin.tenants.filters.showing_active') ?? 'عرض الاشتراكات النشطة' }}
+                            @endif
+                        </span>
+                    </div>
+                    <a href="{{ route('admin.tenants.index') }}" class="btn btn-sm btn-outline-warning rounded-pill px-3" style="font-size: 0.7rem;">
+                        <i class="bi bi-x-lg me-1"></i>{{ __('admin::admin.tenants.filters.clear_filter') ?? 'إزالة الفلتر' }}
+                    </a>
+                </div>
+            @endif
             <form action="{{ route('admin.tenants.index') }}" method="GET" class="row g-2">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="input-group input-group-sm">
                         <span class="input-group-text bg-light border-0"><i class="bi bi-search text-muted"></i></span>
                         <input type="text" name="search" class="form-control bg-light border-0" placeholder="{{ __('admin::admin.tenants.filters.search_placeholder') }}" value="{{ request('search') }}">
@@ -115,6 +134,14 @@
                         <option value="">{{ __('admin::admin.tenants.filters.all_statuses') }}</option>
                         <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>{{ __('admin::admin.tenants.filters.active') }}</option>
                         <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>{{ __('admin::admin.tenants.filters.inactive') }}</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select name="subscription_status" class="form-select form-select-sm bg-light border-0" onchange="this.form.submit()">
+                        <option value="">{{ __('admin::admin.tenants.filters.all_subscriptions') ?? 'كل الاشتراكات' }}</option>
+                        <option value="active" {{ request('subscription_status') == 'active' ? 'selected' : '' }}>{{ __('admin::admin.tenants.filters.subscription_active') ?? 'اشتراك نشط' }}</option>
+                        <option value="expiring_soon" {{ request('subscription_status') == 'expiring_soon' ? 'selected' : '' }}>{{ __('admin::admin.tenants.filters.subscription_expiring') ?? 'ينتهي قريباً (30 يوم)' }}</option>
+                        <option value="expired" {{ request('subscription_status') == 'expired' ? 'selected' : '' }}>{{ __('admin::admin.tenants.filters.subscription_expired') ?? 'منتهي' }}</option>
                     </select>
                 </div>
                 <div class="col-md-1">
@@ -145,6 +172,8 @@
                                 
                                 $subscription = $tenant->currentSubscription;
                                 $isExpired = $subscription && $subscription->ends_at && $subscription->ends_at->isPast();
+                                $isExpiringSoon = $subscription && $subscription->ends_at && !$subscription->ends_at->isPast() && $subscription->ends_at->lte(now()->addDays(30));
+                                $daysLeft = $subscription && $subscription->ends_at && !$subscription->ends_at->isPast() ? (int) now()->diffInDays($subscription->ends_at) : null;
                                 $planName = $subscription && $subscription->package ? $subscription->package->name : ($subscription ? $subscription->type_label : 'بدون اشتراك');
                             @endphp
                             <tr class="bg-hover-light-soft">
@@ -163,7 +192,23 @@
                                     <div class="d-flex flex-column gap-1">
                                         <span class="fw-bold text-dark small" style="font-size: 0.8rem;">{{ $planName }}</span>
                                         @if($subscription && $subscription->ends_at)
-                                            <span class="text-muted x-small">{{ $subscription->ends_at->format('Y-m-d') }}</span>
+                                            @if($isExpired)
+                                                <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill x-small px-2" style="font-size: 0.65rem; border: 1px solid currentColor;">
+                                                    <i class="bi bi-x-circle me-1"></i>{{ __('admin::admin.tenants.table.expired') ?? 'منتهي' }} — {{ $subscription->ends_at->format('Y-m-d') }}
+                                                </span>
+                                            @elseif($isExpiringSoon)
+                                                <span class="badge bg-warning bg-opacity-10 text-warning rounded-pill x-small px-2" style="font-size: 0.65rem; border: 1px solid currentColor;">
+                                                    <i class="bi bi-exclamation-triangle me-1"></i>{{ __('admin::admin.tenants.table.expires_in') ?? 'ينتهي خلال' }} {{ $daysLeft }} {{ __('admin::admin.tenants.table.days') ?? 'يوم' }}
+                                                </span>
+                                            @else
+                                                <span class="text-muted x-small">{{ $subscription->ends_at->format('Y-m-d') }}</span>
+                                            @endif
+                                        @else
+                                            @if($subscription)
+                                                <span class="badge bg-success bg-opacity-10 text-success rounded-pill x-small px-2" style="font-size: 0.65rem; border: 1px solid currentColor;">
+                                                    <i class="bi bi-infinity me-1"></i>{{ __('admin::admin.tenants.table.unlimited') ?? 'غير محدود' }}
+                                                </span>
+                                            @endif
                                         @endif
                                     </div>
                                 </td>

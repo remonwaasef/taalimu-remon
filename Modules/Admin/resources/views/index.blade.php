@@ -1,4 +1,4 @@
-﻿@extends('layouts.app-next')
+@extends('layouts.app-next')
 
 @section('title', __('admin::admin.dashboard.title') ?? 'لوحة القيادة')
 
@@ -38,14 +38,16 @@
             iconColor="text-emerald-600 bg-emerald-50"
         />
 
-        <x-ui.stats-card
-            title="{{ __('admin::admin.dashboard.stats.expiring_soon') ?: 'اشتراكات تنتهي قريباً' }}"
-            value="{{ number_format($expiringSoon) }}"
-            change="Action Needed"
-            changeType="negative"
-            icon="fas fa-clock"
-            iconColor="text-amber-600 bg-amber-50"
-        />
+        <a href="{{ route('admin.tenants.index', ['subscription_status' => 'expiring_soon']) }}" class="text-decoration-none" style="display: block;">
+            <x-ui.stats-card
+                title="{{ __('admin::admin.dashboard.stats.expiring_soon') ?: 'اشتراكات تنتهي قريباً' }}"
+                value="{{ number_format($expiringSoon) }}"
+                change="Action Needed"
+                changeType="negative"
+                icon="fas fa-clock"
+                iconColor="text-amber-600 bg-amber-50"
+            />
+        </a>
 
         <x-ui.stats-card
             title="{{ __('admin::admin.dashboard.stats.total_students') ?: 'إجمالي الطلاب' }}"

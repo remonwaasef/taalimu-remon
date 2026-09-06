@@ -37,12 +37,20 @@ class TenantController extends Controller
         // Subscription Filters
         if ($request->filled('subscription_status')) {
             if ($request->subscription_status === 'active') {
-                $query->whereHas('currentSubscription');
-            } elseif ($request->subscription_status === 'expired') {
-                $query->whereDoesntHave('currentSubscription', function ($q) {
-                    $q->where('status', 'active')->where(function ($sq) {
+                $query->whereHas('currentSubscription', function ($q) {
+                    $q->where(function ($sq) {
                         $sq->whereNull('ends_at')->orWhere('ends_at', '>', now());
                     });
+                });
+            } elseif ($request->subscription_status === 'expired') {
+                $query->whereDoesntHave('currentSubscription', function ($q) {
+                    $q->where(function ($sq) {
+                        $sq->whereNull('ends_at')->orWhere('ends_at', '>', now());
+                    });
+                });
+            } elseif ($request->subscription_status === 'expiring_soon') {
+                $query->whereHas('currentSubscription', function ($q) {
+                    $q->whereNotNull('ends_at')->whereBetween('ends_at', [now(), now()->addDays(30)]);
                 });
             }
         }
@@ -59,12 +67,13 @@ class TenantController extends Controller
             'active_count' => Tenant::where('status', 'active')->count(),
             'inactive_count' => Tenant::where('status', 'inactive')->count(),
             'total_students' => \App\Models\Student::count(),
-            'active_subscriptions' => \App\Models\Subscription::where('status', 'active')
-                ->where(function ($q) {
-                    $q->whereNull('ends_at')->orWhere('ends_at', '>', now());
-                })->count(),
+            'active_subscriptions' => \App\Models\Subscription::where(function ($q) {
+                $q->where('status', 'active')->orWhere('status', 'trialing');
+            })->where(function ($q) {
+                $q->whereNull('ends_at')->orWhere('ends_at', '>', now());
+            })->count(),
             'expiring_soon' => \App\Models\Subscription::whereNotNull('ends_at')
-                ->whereBetween('ends_at', [now(), now()->addDays(7)])
+                ->whereBetween('ends_at', [now(), now()->addDays(30)])
                 ->count(),
         ];
 
