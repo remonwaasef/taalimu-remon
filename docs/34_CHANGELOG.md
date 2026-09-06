@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Fixed `RedirectIfAuthenticated` middleware accessing `$user->role` on null when guard is `admin`, causing 500 Server Error on `/admin/login`. Updated to properly retrieve `$user = Auth::guard($guard)->user()` with null checks.
   - Fixed missing `{tenant}` parameter in `resources/views/layouts/app-next.blade.php` and `resources/views/components/ui/navbar.blade.php` when rendering notifications for central admins where `app()->bound('tenant')` is false.
   - Cleaned up temporary debug code in `AdminController.php`.
+- **Admin Module Translations Fix (2026-09-06)**:
+  - Corrected the location of subscription filter & table badge translation keys from root `resources/lang/` to `Modules/Admin/lang/{ar,en,fr}/admin.php`, ensuring `admin::admin.*` namespaced keys resolve accurately across all 3 languages (Arabic, English, French).
 
 ### Added
 - **Expiring Subscriptions Filter & Visual Indicators (2026-09-06)**:
