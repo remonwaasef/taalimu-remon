@@ -16,6 +16,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Cleaned up temporary debug code in `AdminController.php`.
 
 ### Added
+- **Expiring Subscriptions Filter & Visual Indicators (2026-09-06)**:
+  - Fixed "Expiring Soon" card button linking to `?subscription_status=expired` instead of `?subscription_status=expiring_soon` in tenants index.
+  - Added `subscription_status` dropdown filter in tenants list (Active / Expiring Soon 30 days / Expired).
+  - Added active filter banner with clear filter button when subscription filter is applied.
+  - Added color-coded subscription badges in table: warning (expiring soon with days countdown), danger (expired), success (unlimited).
+  - Made dashboard "Expiring Soon" stats card clickable, linking to filtered tenants list.
+  - Added translation keys for all new UI elements in ar/en/fr.
+
+
 - **Student Profile Complete Decluttering & Visual Streamlining (2026-09-06)**:
   - Eliminated the 4 cramped, multi-colored stat boxes (12 numbers) in the student profile header (`_show-header.blade.php`), replacing them with 3 clean, high-signal metric badges (Attendance %, Active Enrolled Courses, Financial Balance status).
   - Resolved broken tab text caused by conflicting display classes in `_show-tabs-nav.blade.php`, restoring full visibility of Arabic labels alongside icons.
