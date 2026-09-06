@@ -36,8 +36,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('issue_timeline', function (Blueprint $table) {
+            $table->dropForeign(['tenant_id']);
             $table->dropIndex('idx_issue_timeline_tenant_issue');
-            $table->dropConstrainedForeignId('tenant_id');
+            $table->dropColumn('tenant_id');
         });
     }
 };
