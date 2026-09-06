@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **Admin Panel Access & 500 Server Error Resolution (2026-09-06)**:
+  - Fixed `RedirectIfAuthenticated` middleware accessing `$user->role` on null when guard is `admin`, causing 500 Server Error on `/admin/login`. Updated to properly retrieve `$user = Auth::guard($guard)->user()` with null checks.
+  - Fixed missing `{tenant}` parameter in `resources/views/layouts/app-next.blade.php` and `resources/views/components/ui/navbar.blade.php` when rendering notifications for central admins where `app()->bound('tenant')` is false.
+  - Cleaned up temporary debug code in `AdminController.php`.
+
 ### Added
 - **Student Profile Complete Decluttering & Visual Streamlining (2026-09-06)**:
   - Eliminated the 4 cramped, multi-colored stat boxes (12 numbers) in the student profile header (`_show-header.blade.php`), replacing them with 3 clean, high-signal metric badges (Attendance %, Active Enrolled Courses, Financial Balance status).
