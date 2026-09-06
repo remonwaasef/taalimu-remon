@@ -154,7 +154,7 @@
     {{-- REPORTS --}}
     @php 
         $hasFinancialReports = $tenant->getFeatureValue('financial_reports') && auth()->user()->canAny(['view sales', 'view expenses']);
-        $hasAdvancedReports = $tenant->getFeatureValue('advanced_reports') && auth()->user()->can('view reports');
+        $hasAdvancedReports = ($tenant->getFeatureValue('advanced_reports') || $tenant->getFeatureValue('financial_reports')) && auth()->user()->can('view reports');
         $isReportsActive = request()->routeIs('center.analytics.*') || request()->routeIs('center.expenses.*'); 
     @endphp
     @if($hasFinancialReports || $hasAdvancedReports)
@@ -169,6 +169,9 @@
                 </i>
             </a>
             <ul class="sub-nav collapse {{ $isReportsActive ? 'show' : '' }}" id="reportsCollapse" data-bs-parent="#sidebar-menu">
+                @if($hasAdvancedReports)
+                <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.analytics.index') ? 'active' : '' }}" href="{{ route('center.analytics.index') }}"><i class="sidenav-mini-icon">A</i><span class="item-name">{{ __('center::sidebar.advanced_reports') ?? 'التقارير والإحصائيات المتقدمة' }}</span></a></li>
+                @endif
                 @can('view expenses')
                 <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.expenses.*') ? 'active' : '' }}" href="{{ route('center.expenses.index', ['tenant' => $tenant->domain ?? 'center']) }}"><i class="sidenav-mini-icon">E</i><span class="item-name">{{ __('center::sidebar.expenses') }}</span></a></li>
                 @endcan
@@ -176,9 +179,6 @@
                 <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.analytics.finance') ? 'active' : '' }}" href="{{ route('center.analytics.finance') }}"><i class="sidenav-mini-icon">F</i><span class="item-name">{{ __('center::sidebar.financial_analytics') }}</span></a></li>
                 <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.analytics.commissions') ? 'active' : '' }}" href="{{ route('center.analytics.commissions') }}"><i class="sidenav-mini-icon">C</i><span class="item-name">{{ __('center::sidebar.financial_commissions') }}</span></a></li>
                 @endcanany
-                @if($hasAdvancedReports)
-                <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.analytics.index') ? 'active' : '' }}" href="{{ route('center.analytics.index') }}"><i class="sidenav-mini-icon">G</i><span class="item-name">{{ __('center::analytics.general') }}</span></a></li>
-                @endif
             </ul>
         </li>
     @endif

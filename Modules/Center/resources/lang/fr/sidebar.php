@@ -61,6 +61,7 @@ return [
     'finance_settings' => 'Finance & Paramètres',
     'daily_work' => 'Travail Quotidien',
     'academics' => 'Enseignement',
-    'online_classes' => 'Classes en Direct',
-    'activity_logs' => 'Journal d\'activités',
+    'online_classes' => 'Cours en direct',
+    'activity_logs' => 'Journal d\'activité',
+    'advanced_reports' => 'Analyses et rapports avancés',
 ];

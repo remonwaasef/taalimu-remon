@@ -63,4 +63,5 @@ return [
     'academics' => 'التعليم',
     'online_classes' => 'الحصص المباشرة',
     'activity_logs' => 'سجل النشاطات',
+    'advanced_reports' => 'التقارير والإحصائيات المتقدمة',
 ];

@@ -61,6 +61,7 @@ return [
     'finance_settings' => 'Finance & Settings',
     'daily_work' => 'Daily Work',
     'academics' => 'Academics',
-    'online_classes' => 'Online Classes',
+    'online_classes' => 'Live Classes',
     'activity_logs' => 'Activity Logs',
+    'advanced_reports' => 'Advanced Reports & Analytics',
 ];

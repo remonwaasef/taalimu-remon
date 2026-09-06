@@ -12,7 +12,7 @@
     $canStudents = ($tenant->getFeatureValue('max_students') != '0' && $tenant->getFeatureValue('max_students') !== false) && auth()->user()->can('view students');
     $canAttendance = $tenant->getFeatureValue('attendance_tracking') && auth()->user()->can('view attendance');
     $hasFinancialReports = $tenant->getFeatureValue('financial_reports') && auth()->user()->canAny(['view sales', 'view expenses']);
-    $hasAdvancedReports = $tenant->getFeatureValue('advanced_reports') && auth()->user()->can('view reports');
+    $hasAdvancedReports = ($tenant->getFeatureValue('advanced_reports') || $tenant->getFeatureValue('financial_reports')) && auth()->user()->can('view reports');
     $canExams = $tenant->hasFeature('manage_exams') && (auth()->user()->can('view courses') || auth()->user()->hasRole('center_admin'));
     $canOnlineClasses = $tenant->hasFeature('online_classes') && auth()->user()->can('manage schedule');
     $canAssets = $tenant->hasFeature('asset_management') && auth()->user()->can('manage schedule');
@@ -196,7 +196,7 @@
                 <a href="{{ route('center.analytics.index', ['tenant' => $domain]) }}"
                    class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs transition-colors {{ Route::currentRouteNamed('center.analytics.index') ? 'text-brand-primary dark:text-brand-300 font-bold bg-brand-50/50 dark:bg-brand-900/20' : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/40 font-medium' }}">
                     <i class="fas fa-chart-pie text-xs w-4"></i>
-                    <span>{{ __('center::analytics.general') }}</span>
+                    <span>{{ __('center::sidebar.advanced_reports') ?? 'التقارير والإحصائيات المتقدمة' }}</span>
                 </a>
                 @endif
             </div>
