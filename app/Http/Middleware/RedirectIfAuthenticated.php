@@ -20,6 +20,10 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
+                $user = Auth::guard($guard)->user();
+                if (! $user) {
+                    continue;
+                }
 
                 // Logic for Tenant Subdomains
                 $host = $request->getHost();
@@ -36,7 +40,6 @@ class RedirectIfAuthenticated
                     }
 
                     if ($tenantDomain && ! in_array($tenantDomain, ['www', 'admin', 'api', 'app'])) {
-                        $user = Auth::user();
                         if ($user->role === 'student') {
                             return redirect()->route('campus.index', ['tenant' => $tenantDomain]);
                         }
@@ -51,8 +54,7 @@ class RedirectIfAuthenticated
                 }
 
                 // Logic for Main Domain
-                $user = Auth::user();
-                if (in_array($user->role, ['super_admin', 'admin']) || $user->hasRole('super_admin') || $user->hasRole('admin')) {
+                if (in_array($user->role, ['super_admin', 'admin']) || (method_exists($user, 'hasRole') && ($user->hasRole('super_admin') || $user->hasRole('admin')))) {
                     return redirect()->route('admin.dashboard');
                 }
 

@@ -107,7 +107,7 @@
                 <x-slot name="content">
                     <div class="px-4 py-2.5 border-b border-brand-border dark:border-slate-800 flex items-center justify-between">
                         <span class="font-bold text-xs text-slate-900 dark:text-slate-100">{{ __('Notifications') }}</span>
-                        @if($unreadCount > 0 && $bellUser && Route::has('center.notifications.readAll'))
+                        @if($unreadCount > 0 && $bellUser && app()->bound('tenant') && Route::has('center.notifications.readAll'))
                             <form method="POST" action="{{ tenant_route('center.notifications.readAll', []) }}">
                                 @csrf
                                 <button type="submit" class="text-[11px] text-brand-primary font-semibold hover:underline">
@@ -119,7 +119,7 @@
                     <div class="divide-y divide-brand-border dark:divide-slate-800 max-h-80 overflow-y-auto">
                         @forelse($recentNotifications as $notification)
                             <a
-                                @if($bellUser && Route::has('center.notifications.read'))
+                                @if($bellUser && app()->bound('tenant') && Route::has('center.notifications.read'))
                                     href="{{ tenant_route('center.notifications.read', [$notification->id]) }}"
                                 @else href="#" @endif
                                 class="flex items-start gap-3 p-3 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors {{ $notification->read_at ? '' : 'bg-brand-50/60 dark:bg-brand-900/20' }}"
