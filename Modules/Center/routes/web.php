@@ -513,13 +513,7 @@ if ($mode === 'path' || $mode === 'subdomain') {
         $domain = $appUrlHost;
     }
 
-    $domains = array_unique(array_filter([
-        $domain == 'localhost' ? '{tenant}.localhost' : '{tenant}.'.$domain,
-        '{tenant}.localhost',
-        '{tenant}.taalimu.com'
-    ]));
-
-    foreach ($domains as $d) {
-        Route::domain($d)->group($tenantRoutes);
-    }
+    $tenantDomain = ($domain === 'localhost' || empty($domain)) ? '{tenant}.localhost' : '{tenant}.'.$domain;
+    Route::domain($tenantDomain)->group($tenantRoutes);
 }
+

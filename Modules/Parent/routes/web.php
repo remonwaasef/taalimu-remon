@@ -11,16 +11,12 @@ use Modules\Parent\Http\Controllers\ParentController;
 | Tenant subdomains only, protected by auth + parent_portal feature.
 */
 
-$parentDomains = array_unique(array_filter([
-    config('app.tenant_domain') == 'localhost' ? '{tenant}.localhost' : '{tenant}.'.config('app.tenant_domain'),
-    '{tenant}.localhost',
-    '{tenant}.taalimu.com'
-]));
+$tenantBase = config('app.tenant_domain', 'localhost');
+$tenantDomain = ($tenantBase === 'localhost' || empty($tenantBase)) ? '{tenant}.localhost' : '{tenant}.'.$tenantBase;
 
-foreach ($parentDomains as $d) {
-    Route::domain($d)
-        ->middleware([\App\Http\Middleware\IdentifyTenant::class])
-        ->group(function () {
+Route::domain($tenantDomain)
+    ->middleware([\App\Http\Middleware\IdentifyTenant::class])
+    ->group(function () {
             // Guest Routes — dedicated parent login page
             Route::middleware(['guest', 'prevent-back-history'])->group(function () {
                 Route::get('parent/login', [AuthController::class, 'showLoginForm'])->name('parent.login');
@@ -40,4 +36,3 @@ foreach ($parentDomains as $d) {
                 });
             });
         });
-}

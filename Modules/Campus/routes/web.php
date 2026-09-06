@@ -15,16 +15,12 @@ use Modules\Campus\Http\Controllers\StudentClassController;
 |
 */
 
-$campusDomains = array_unique(array_filter([
-    config('app.tenant_domain') == 'localhost' ? '{tenant}.localhost' : '{tenant}.'.config('app.tenant_domain'),
-    '{tenant}.localhost',
-    '{tenant}.taalimu.com'
-]));
+$tenantBase = config('app.tenant_domain', 'localhost');
+$tenantDomain = ($tenantBase === 'localhost' || empty($tenantBase)) ? '{tenant}.localhost' : '{tenant}.'.$tenantBase;
 
-foreach ($campusDomains as $d) {
-    Route::domain($d)
-        ->middleware([\App\Http\Middleware\IdentifyTenant::class, 'auth', '2fa', 'feature:student_portal'])
-        ->group(function () {
+Route::domain($tenantDomain)
+    ->middleware([\App\Http\Middleware\IdentifyTenant::class, 'auth', '2fa', 'feature:student_portal'])
+    ->group(function () {
             Route::prefix('campus')->name('campus.')->group(function () {
                 Route::get('/', [CampusController::class, 'index'])->name('index');
                 Route::get('/schedule', [CampusController::class, 'schedule'])->name('schedule');
@@ -42,4 +38,3 @@ foreach ($campusDomains as $d) {
                 Route::post('/recordings/{recording}/progress', [StudentClassController::class, 'progress'])->name('recordings.progress');
             });
         });
-}

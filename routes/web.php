@@ -189,10 +189,9 @@ $mainRoutes = function () {
     })->middleware('inertia')->name('inertia.demo');
 };
 
-// Register main domain routes explicitly on all central domains
-foreach ($centralDomains as $cd) {
-    Route::middleware(['web', 'throttle:global'])->domain($cd)->group($mainRoutes);
-}
+$centralDomain = config('app.tenant_domain') ?: parse_url(config('app.url'), PHP_URL_HOST) ?: 'localhost';
+
+Route::middleware(['web', 'throttle:global'])->domain($centralDomain)->group($mainRoutes);
 
 // Global Language Switcher (Accessible from any domain)
 Route::get('lang/{locale}', function ($locale) {
