@@ -62,4 +62,5 @@ return [
     'daily_work' => 'Daily Work',
     'academics' => 'Academics',
     'online_classes' => 'Online Classes',
+    'activity_logs' => 'Activity Logs',
 ];

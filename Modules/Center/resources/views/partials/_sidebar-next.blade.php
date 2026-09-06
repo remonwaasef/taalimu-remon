@@ -13,18 +13,22 @@
     $canAttendance = $tenant->getFeatureValue('attendance_tracking') && auth()->user()->can('view attendance');
     $hasFinancialReports = $tenant->getFeatureValue('financial_reports') && auth()->user()->canAny(['view sales', 'view expenses']);
     $hasAdvancedReports = $tenant->getFeatureValue('advanced_reports') && auth()->user()->can('view reports');
+    $canExams = $tenant->hasFeature('manage_exams') && (auth()->user()->can('view courses') || auth()->user()->hasRole('center_admin'));
+    $canOnlineClasses = $tenant->hasFeature('online_classes') && auth()->user()->can('manage schedule');
+    $canAssets = $tenant->hasFeature('asset_management') && auth()->user()->can('manage schedule');
+    $canActivityLogs = $tenant->hasFeature('audit_logs') && auth()->user()->can('manage settings');
 
     // Active state detection
     $isDashboardActive = Route::currentRouteNamed('center.dashboard');
     $isStudentsActive = Route::currentRouteNamed('center.students.*');
     $isAttendanceActive = Route::currentRouteNamed('center.attendance.*');
     $isPaymentsActive = Route::currentRouteNamed('center.sales.*');
-    $isAcademicsActive = Route::currentRouteNamed(['center.courses.*', 'center.schedules.*', 'center.classrooms.*', 'center.instructors.*', 'center.online_classes.*']);
+    $isAcademicsActive = Route::currentRouteNamed(['center.courses.*', 'center.schedules.*', 'center.classrooms.*', 'center.instructors.*', 'center.online_classes.*', 'center.quizzes.*', 'center.questions.*', 'center.leaderboard.*']);
     $isReportsActive = Route::currentRouteNamed(['center.analytics.*', 'center.expenses.*']);
-    $isSettingsActive = Route::currentRouteNamed(['center.settings.*', 'center.users.*', 'center.roles.*', 'center.branches.*', 'center.tickets.*', 'center.subscription.*', 'center.assets.*']);
+    $isSettingsActive = Route::currentRouteNamed(['center.settings.*', 'center.users.*', 'center.roles.*', 'center.branches.*', 'center.tickets.*', 'center.subscription.*', 'center.assets.*', 'center.activity-logs.*']);
 
     // Visibility flags
-    $showAcademics = ($canInstructors || $canCourses || $canClassrooms || $canSchedules) && ($tenant->type !== 'instructor');
+    $showAcademics = ($canInstructors || $canCourses || $canClassrooms || $canSchedules || $canOnlineClasses || $canExams) && ($tenant->type !== 'instructor');
     $showReports = $hasFinancialReports || $hasAdvancedReports;
     $showSettings = auth()->user()->canAny(['manage users', 'manage settings', 'manage billing']);
 
@@ -126,13 +130,30 @@
                     <span>{{ __('center::sidebar.instructors') }}</span>
                 </a>
                 @endif
-                @can('manage schedule')
+                @if($canOnlineClasses)
                 <a href="{{ route('center.online_classes.index', ['tenant' => $domain]) }}"
                    class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs transition-colors {{ Route::currentRouteNamed('center.online_classes.*') ? 'text-brand-primary dark:text-brand-300 font-bold bg-brand-50/50 dark:bg-brand-900/20' : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/40 font-medium' }}">
                     <i class="fas fa-video text-xs w-4"></i>
                     <span>{{ __('center::sidebar.online_classes') }}</span>
                 </a>
-                @endcan
+                @endif
+                @if($canExams)
+                <a href="{{ route('center.quizzes.index', ['tenant' => $domain]) }}"
+                   class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs transition-colors {{ Route::currentRouteNamed('center.quizzes.*') ? 'text-brand-primary dark:text-brand-300 font-bold bg-brand-50/50 dark:bg-brand-900/20' : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/40 font-medium' }}">
+                    <i class="fas fa-file-alt text-xs w-4"></i>
+                    <span>{{ __('center::sidebar.exams_results') }}</span>
+                </a>
+                <a href="{{ route('center.questions.index', ['tenant' => $domain]) }}"
+                   class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs transition-colors {{ Route::currentRouteNamed('center.questions.*') ? 'text-brand-primary dark:text-brand-300 font-bold bg-brand-50/50 dark:bg-brand-900/20' : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/40 font-medium' }}">
+                    <i class="fas fa-question-circle text-xs w-4"></i>
+                    <span>{{ __('center::sidebar.questions_bank') }}</span>
+                </a>
+                <a href="{{ route('center.leaderboard.index', ['tenant' => $domain]) }}"
+                   class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs transition-colors {{ Route::currentRouteNamed('center.leaderboard.*') ? 'text-brand-primary dark:text-brand-300 font-bold bg-brand-50/50 dark:bg-brand-900/20' : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/40 font-medium' }}">
+                    <i class="fas fa-trophy text-xs w-4"></i>
+                    <span>{{ __('center::sidebar.leaderboard') }}</span>
+                </a>
+                @endif
             </div>
         </div>
         @endif
@@ -247,6 +268,20 @@
                 </a>
                 @endif
                 @endcan
+                @if($canAssets)
+                <a href="{{ route('center.assets.index', ['tenant' => $domain]) }}"
+                   class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs transition-colors {{ Route::currentRouteNamed('center.assets.*') ? 'text-brand-primary dark:text-brand-300 font-bold bg-brand-50/50 dark:bg-brand-900/20' : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/40 font-medium' }}">
+                    <i class="fas fa-boxes text-xs w-4"></i>
+                    <span>{{ __('center::sidebar.assets') }}</span>
+                </a>
+                @endif
+                @if($canActivityLogs)
+                <a href="{{ route('center.activity-logs.index', ['tenant' => $domain]) }}"
+                   class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs transition-colors {{ Route::currentRouteNamed('center.activity-logs.*') ? 'text-brand-primary dark:text-brand-300 font-bold bg-brand-50/50 dark:bg-brand-900/20' : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/40 font-medium' }}">
+                    <i class="fas fa-history text-xs w-4"></i>
+                    <span>{{ __('center::sidebar.activity_logs') }}</span>
+                </a>
+                @endif
                 <a href="{{ route('center.tickets.index', ['tenant' => $domain]) }}"
                    class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs transition-colors {{ Route::currentRouteNamed('center.tickets.*') ? 'text-brand-primary dark:text-brand-300 font-bold bg-brand-50/50 dark:bg-brand-900/20' : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/40 font-medium' }}">
                     <i class="fas fa-headset text-xs w-4"></i>

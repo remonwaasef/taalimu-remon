@@ -7,12 +7,14 @@ use App\Models\User;
 
 class QuestionPolicy
 {
+    use \App\Traits\HasRoleCheck;
+
     /**
      * Determine if the user can view any questions.
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasAnyRole(['center_admin', 'instructor']);
+        return $this->hasAnyRole($user, ['center_admin', 'admin', 'center_owner', 'instructor']);
     }
 
     /**
@@ -20,7 +22,7 @@ class QuestionPolicy
      */
     public function view(User $user, Question $question): bool
     {
-        if ($user->hasRole('center_admin')) {
+        if ($this->hasAnyRole($user, ['center_admin', 'admin', 'center_owner'])) {
             return $question->tenant_id === $user->tenant_id;
         }
 
@@ -32,8 +34,6 @@ class QuestionPolicy
                 return $course && $user->instructor_id && $course->instructor_id === $user->instructor_id;
             }
 
-            // General question bank questions might need more complex logic if shared,
-            // but for now we'll allow access if they are an instructor in the same tenant
             return $question->tenant_id === $user->tenant_id;
         }
 
@@ -45,7 +45,7 @@ class QuestionPolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasAnyRole(['center_admin', 'instructor']);
+        return $this->hasAnyRole($user, ['center_admin', 'admin', 'center_owner', 'instructor']);
     }
 
     /**
@@ -53,7 +53,7 @@ class QuestionPolicy
      */
     public function update(User $user, Question $question): bool
     {
-        if ($user->hasRole('center_admin')) {
+        if ($this->hasAnyRole($user, ['center_admin', 'admin', 'center_owner'])) {
             return $question->tenant_id === $user->tenant_id;
         }
 
@@ -76,6 +76,6 @@ class QuestionPolicy
     public function delete(User $user, Question $question): bool
     {
         return $question->tenant_id === $user->tenant_id &&
-               $user->hasRole('center_admin');
+               $this->hasAnyRole($user, ['center_admin', 'admin', 'center_owner']);
     }
 }

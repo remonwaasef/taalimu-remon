@@ -62,4 +62,5 @@ return [
     'daily_work' => 'Travail Quotidien',
     'academics' => 'Enseignement',
     'online_classes' => 'Classes en Direct',
+    'activity_logs' => 'Journal d\'activités',
 ];

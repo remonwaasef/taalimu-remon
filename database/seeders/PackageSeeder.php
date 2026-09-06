@@ -33,6 +33,9 @@ class PackageSeeder extends Seeder
             ['name' => 'إدارة الامتحانات', 'code' => 'manage_exams', 'type' => 'boolean', 'category' => 'academic'],
             ['name' => 'صلاحيات متقدمة', 'code' => 'advanced_roles', 'type' => 'boolean', 'category' => 'core'],
             ['name' => 'بوابة الطالب', 'code' => 'student_portal', 'type' => 'boolean', 'category' => 'core'],
+            ['name' => 'الحصص المباشرة (أونلاين)', 'code' => 'online_classes', 'type' => 'boolean', 'category' => 'academic'],
+            ['name' => 'إدارة العهد والأصول', 'code' => 'asset_management', 'type' => 'boolean', 'category' => 'core'],
+            ['name' => 'سجل تدقيق النشاطات والأمان', 'code' => 'audit_logs', 'type' => 'boolean', 'category' => 'core'],
         ];
 
         foreach ($features as $featureData) {
@@ -81,6 +84,9 @@ class PackageSeeder extends Seeder
                     'manage_exams' => 'true',
                     'advanced_roles' => 'false',
                     'student_portal' => 'false',
+                    'online_classes' => 'false',
+                    'asset_management' => 'false',
+                    'audit_logs' => 'false',
                 ],
             ],
             [
@@ -124,6 +130,9 @@ class PackageSeeder extends Seeder
                     'manage_exams' => 'true',
                     'advanced_roles' => 'true',
                     'student_portal' => 'true',
+                    'online_classes' => 'true',
+                    'asset_management' => 'false',
+                    'audit_logs' => 'false',
                 ],
             ],
             [
@@ -165,6 +174,9 @@ class PackageSeeder extends Seeder
                     'manage_exams' => 'true',
                     'advanced_roles' => 'true',
                     'student_portal' => 'true',
+                    'online_classes' => 'true',
+                    'asset_management' => 'true',
+                    'audit_logs' => 'true',
                 ],
             ],
         ];

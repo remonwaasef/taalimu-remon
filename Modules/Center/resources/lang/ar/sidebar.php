@@ -62,4 +62,5 @@ return [
     'daily_work' => 'العمل اليومي',
     'academics' => 'التعليم',
     'online_classes' => 'الحصص المباشرة',
+    'activity_logs' => 'سجل النشاطات',
 ];

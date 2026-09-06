@@ -9,6 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Monetization Feature Flags & Package Integration (2026-09-06)**:
+  - Created and executed migration `2026_09_06_230000_add_monetization_features_to_packages` registering `online_classes`, `asset_management`, and `audit_logs` as official package features.
+  - Linked `online-classes`, `inventory` (assets), and `activity-logs` routes to `feature:` middleware protection.
+  - Configured tiered SaaS defaults: Starter (no online classes/assets/audit logs), Growth (online classes enabled), Enterprise (all enabled).
+  - Toggled dynamically via Super Admin settings dashboard (`/admin/settings`) under package limits and switches.
+- **Revealed Hidden Core Features in Center Sidebar (2026-09-06)**:
+  - Added direct navigation links to previously unlinked core modules: Exams & Results (`center.quizzes.index`), Question Bank (`center.questions.index`), Leaderboard (`center.leaderboard.index`), and Online Classes (`center.online_classes.index`) under Academics.
+  - Added direct links to Asset & Inventory Management (`center.assets.index`) and Activity Logs (`center.activity-logs.index`) under Center Settings.
+  - Synchronized both Hope UI (`hope-sidebar.blade.php`) and Next UI (`_sidebar-next.blade.php`) sidebars with active route tracking and feature gating.
+  - Enhanced `QuizPolicy` and `QuestionPolicy` to grant access to `admin` and `center_owner` roles via `HasRoleCheck` trait.
+  - Added localized strings for `activity_logs` in Arabic, English, and French.
+
 ### Fixed
 - **Admin Panel Access & 500 Server Error Resolution (2026-09-06)**:
   - Fixed `RedirectIfAuthenticated` middleware accessing `$user->role` on null when guard is `admin`, causing 500 Server Error on `/admin/login`. Updated to properly retrieve `$user = Auth::guard($guard)->user()` with null checks.

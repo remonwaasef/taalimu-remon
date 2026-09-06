@@ -31,16 +31,21 @@
         $canInstructors = ($tenant->getFeatureValue('max_instructors') != '0' && $tenant->getFeatureValue('max_instructors') !== false) && auth()->user()->can('view instructors');
         $canCourses = ($tenant->getFeatureValue('max_courses') != '0' && $tenant->getFeatureValue('max_courses') !== false) && auth()->user()->can('view courses');
         $canClassrooms = ($tenant->getFeatureValue('max_classrooms') != '0' && $tenant->getFeatureValue('max_classrooms') !== false) && auth()->user()->can('view schedule');
-        $canSchedules = $tenant->getFeatureValue('daily_schedules') === true && auth()->user()->can('view schedule');
-        $canOnlineClasses = auth()->user()->can('view schedule');
+        $canOnlineClasses = $tenant->hasFeature('online_classes') && auth()->user()->can('view schedule');
+        $canExams = $tenant->hasFeature('manage_exams') && (auth()->user()->can('view courses') || auth()->user()->hasRole('center_admin'));
+        $canAssets = $tenant->hasFeature('asset_management') && auth()->user()->can('manage schedule');
+        $canActivityLogs = $tenant->hasFeature('audit_logs') && auth()->user()->can('manage settings');
 
         $isClassesActive = request()->routeIs('center.classrooms.*') || 
                               request()->routeIs('center.instructors.*') || 
                               request()->routeIs('center.courses.*') || 
                               request()->routeIs('center.online_classes.*') || 
+                              request()->routeIs('center.quizzes.*') || 
+                              request()->routeIs('center.questions.*') || 
+                              request()->routeIs('center.leaderboard.*') || 
                               request()->routeIs('center.schedules.*');
         
-        $showClasses = ($canInstructors || $canCourses || $canClassrooms || $canSchedules || $canOnlineClasses) && ($tenant->type !== 'instructor');
+        $showClasses = ($canInstructors || $canCourses || $canClassrooms || $canSchedules || $canOnlineClasses || $canExams) && ($tenant->type !== 'instructor');
     @endphp
     
     @if($showClasses)
@@ -80,6 +85,30 @@
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('center.instructors.*') ? 'active' : '' }}" href="{{ route('center.instructors.index', ['tenant' => $tenant->domain ?? 'center']) }}">
                         <i class="sidenav-mini-icon">I</i><span class="item-name">{{ __('center::sidebar.instructors') }}</span>
+                    </a>
+                </li>
+                @endif
+                @if($canOnlineClasses)
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('center.online_classes.*') ? 'active' : '' }}" href="{{ route('center.online_classes.index', ['tenant' => $tenant->domain ?? 'center']) }}">
+                        <i class="sidenav-mini-icon">O</i><span class="item-name">{{ __('center::sidebar.online_classes') }}</span>
+                    </a>
+                </li>
+                @endif
+                @if($canExams)
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('center.quizzes.*') ? 'active' : '' }}" href="{{ route('center.quizzes.index', ['tenant' => $tenant->domain ?? 'center']) }}">
+                        <i class="sidenav-mini-icon">E</i><span class="item-name">{{ __('center::sidebar.exams_results') }}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('center.questions.*') ? 'active' : '' }}" href="{{ route('center.questions.index', ['tenant' => $tenant->domain ?? 'center']) }}">
+                        <i class="sidenav-mini-icon">Q</i><span class="item-name">{{ __('center::sidebar.questions_bank') }}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('center.leaderboard.*') ? 'active' : '' }}" href="{{ route('center.leaderboard.index', ['tenant' => $tenant->domain ?? 'center']) }}">
+                        <i class="sidenav-mini-icon">L</i><span class="item-name">{{ __('center::sidebar.leaderboard') }}</span>
                     </a>
                 </li>
                 @endif
@@ -158,6 +187,7 @@
     @canany(['manage users', 'manage settings', 'manage billing'])
     @php 
         $isSettingsActive = request()->routeIs('center.assets.*') || 
+                            request()->routeIs('center.activity-logs.*') || 
                             request()->routeIs('center.settings.*') || 
                             request()->routeIs('center.users.*') || 
                             request()->routeIs('center.roles.*') || 
@@ -196,6 +226,10 @@
                 @can('manage settings')
                 <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.settings.index') && (request('tab') == 'general' || !request('tab')) ? 'active' : '' }}" href="{{ route('center.settings.index', ['tenant' => $tenant->domain ?? 'center', 'tab' => 'general']) }}"><i class="sidenav-mini-icon">G</i><span class="item-name">{{ __('center::settings.tabs.general') }}</span></a></li>
                 @endcan
+
+                @if($canAssets)
+                <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.assets.*') ? 'active' : '' }}" href="{{ route('center.assets.index', ['tenant' => $tenant->domain ?? 'center']) }}"><i class="sidenav-mini-icon">A</i><span class="item-name">{{ __('center::sidebar.assets') }}</span></a></li>
+                @endif
                 
                 {{-- 3. Users --}}
                 @can('manage users')
@@ -209,6 +243,9 @@
                 @can('manage settings')
                 @if($tenant->getFeatureValue('multi_branch'))
                 <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.branches.*') ? 'active' : '' }}" href="{{ route('center.branches.index', ['tenant' => $tenant->domain ?? 'center']) }}"><i class="sidenav-mini-icon">B</i><span class="item-name">{{ __('center::sidebar.branches') }}</span></a></li>
+                @endif
+                @if($canActivityLogs)
+                <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.activity-logs.*') ? 'active' : '' }}" href="{{ route('center.activity-logs.index', ['tenant' => $tenant->domain ?? 'center']) }}"><i class="sidenav-mini-icon">L</i><span class="item-name">{{ __('center::sidebar.activity_logs') }}</span></a></li>
                 @endif
                 @endcan
 

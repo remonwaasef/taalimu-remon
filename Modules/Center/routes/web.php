@@ -244,7 +244,7 @@ $tenantRoutes = function () {
         });
 
         // Online Classes Management
-        Route::middleware(['can:manage schedule'])->group(function () {
+        Route::middleware(['can:manage schedule', 'feature:online_classes'])->group(function () {
             Route::get('online-classes', [\Modules\Center\Http\Controllers\OnlineClassController::class, 'index'])->name('center.online_classes.index');
             Route::delete('online-classes/{class}', [\Modules\Center\Http\Controllers\OnlineClassController::class, 'destroy'])->name('center.online_classes.destroy');
         });
@@ -427,7 +427,9 @@ $tenantRoutes = function () {
             Route::post('settings/academic/template', [SettingsController::class, 'applyAcademicTemplate'])->name('center.settings.apply-template');
             Route::post('settings/email-templates/reset', [SettingsController::class, 'resetEmailTemplates'])->name('center.settings.reset-email-templates');
             Route::post('settings/reminders', [SettingsController::class, 'updateReminders'])->name('center.settings.update-reminders');
-            Route::get('activity-logs', [\Modules\Center\Http\Controllers\ActivityLogController::class, 'index'])->name('center.activity-logs.index');
+            Route::get('activity-logs', [\Modules\Center\Http\Controllers\ActivityLogController::class, 'index'])
+                ->middleware('feature:audit_logs')
+                ->name('center.activity-logs.index');
         });
 
         // GDPR Routes (Accessible by authenticated users, primarily students)
@@ -437,6 +439,10 @@ $tenantRoutes = function () {
         // Classroom Management
         Route::middleware(['can:manage schedule'])->group(function () {
             Route::resource('classrooms', ClassroomController::class)->names('center.classrooms');
+        });
+
+        // Inventory & Asset Management
+        Route::middleware(['can:manage schedule', 'feature:asset_management'])->group(function () {
             Route::resource('inventory', AssetController::class)->names('center.assets')->parameters(['inventory' => 'asset']);
         });
 
