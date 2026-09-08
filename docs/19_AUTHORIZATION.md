@@ -2,4 +2,4 @@
 
 - **Spatie RBAC**: Roles and permissions (`roles`, `permissions`, `model_has_roles`).
 - **Custom Middleware Gates**: `CheckAdminRole` (Super Admin), `CheckSubscription` (Active plan), `CheckFeature` (Package feature flags), `CheckEnrollment` (Course access).
-- **Eloquent Policies (`app/Policies/`)**: `StudentPolicy`, `CoursePolicy`, `AttendancePolicy`, `SalePolicy`, `AssignmentPolicy`, `TenantPolicy`, `TicketPolicy`.
+- **Eloquent Policies (`app/Policies/`)**: `StudentPolicy`, `CoursePolicy`, `AttendancePolicy`, `SalePolicy`, `AssignmentPolicy`, `TenantPolicy`, `TicketPolicy`, `PublicProfilePolicy` (protects Growth profile settings and publishing for center admins, owners, instructors, and super admins).

@@ -27,9 +27,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added `EnsureGrowthTenant` middleware to bind the authenticated user's tenant into the container on central domain routes (`taalimu.com/growth/*`).
   - Updated `ProfileSettingsController::resolveProfile()` to properly detect tenant from user/instructor and grant access to `center_admin`, `admin`, `center_owner`, `super_admin`, and `instructor`.
   - Updated `PublicProfilePolicy` to authorize `center_owner` and `instructor` roles and safely cast `tenant_id` comparisons.
-  - Fixed profile public URL generation and referral links in `resources/views/growth/settings/profile.blade.php` to distinguish between instructor (`/t/`) and center (`/c/`) profiles.
-
-### Fixed
+- **Server Cache Ownership & Cron Isolation (2026-09-08)**:
+  - Fixed root-owned crontab recreating cache directories (`storage/framework/cache/data`) with `root:root` ownership, triggering `file_put_contents ... Permission denied` during Google registration.
+  - Reconfigured production crontab under `taalimu` system user (`crontab -u taalimu`).
+  - Hardened `deploy.ps1` to execute all artisan commands (`migrate`, `cache:clear`, `optimize:clear`) strictly under `sudo -u taalimu`.
+- **Database Migration Idempotency (2026-09-08)**:
+  - Fixed duplicate key failures (`payments_sale_id_index`) and missing key drops (`site_settings_key_unique`, `certificates_student_id_course_id_unique`) in historical migrations to guarantee flawless automated deployments.
 - **Admin Panel Access & 500 Server Error Resolution (2026-09-06)**:
   - Fixed `RedirectIfAuthenticated` middleware accessing `$user->role` on null when guard is `admin`, causing 500 Server Error on `/admin/login`. Updated to properly retrieve `$user = Auth::guard($guard)->user()` with null checks.
   - Fixed missing `{tenant}` parameter in `resources/views/layouts/app-next.blade.php` and `resources/views/components/ui/navbar.blade.php` when rendering notifications for central admins where `app()->bound('tenant')` is false.

@@ -20,7 +20,8 @@
 
 ---
 
-# Recent Major Work
+- **Growth Network & Central Domain Tenancy Fix (2026-09-08)**: Resolved `403 Forbidden` on `/growth/profile` on the central domain via `EnsureGrowthTenant` middleware, unified role authorization in `PublicProfilePolicy` (including `center_owner`), and added support for both instructor (`/t/`) and center (`/c/`) public profiles.
+- **Production Server Permission & Scheduler Hardening (2026-09-08)**: Fixed `Permission denied` on `storage/framework/cache/data` caused by root-owned crontab recreating cache files. Migrated crontab schedule to `taalimu` user, hardened `deploy.ps1` to execute all artisan tasks as `sudo -u taalimu`, and fixed idempotent table migrations.
 - Completed **full-text search integration**: Laravel Scout + Meilisearch wired into `SearchService` (students + courses) with hard `tenant_id` filtering, ranked results, async JSON pickers, and automatic LIKE fallback when the engine is unreachable.
 - Completed **Redis integration**: Cache/Session/Queue moved from file/database to Redis (separate Redis DBs: queue=0, cache=1, session=2) with an automatic graceful fallback to database drivers when Redis is unreachable, plus `predis/predis` for environments without the phpredis extension.
 - **Security patch**: Upgraded `dompdf` (→3.1.6) and `guzzle` (→7.15.x) to patched versions; `composer audit` reports zero advisories.
