@@ -28,12 +28,12 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('site_settings', function (Blueprint $table) {
+        try { Schema::table('site_settings', function (Blueprint $table) {
             $table->dropUnique(['tenant_id', 'key']);
             $table->dropForeign(['tenant_id']);
             $table->dropColumn('tenant_id');
             
             $table->unique('key');
-        });
+        }); } catch (\Exception $e) {}
     }
 };

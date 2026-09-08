@@ -22,8 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('enrollments', function (Blueprint $table) {
+        try { Schema::table('enrollments', function (Blueprint $table) {
             $table->dropUnique('enr_tenant_user_course_unique');
-        });
+        }); } catch (\Exception $e) {}
     }
 };

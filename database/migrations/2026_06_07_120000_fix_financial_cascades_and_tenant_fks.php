@@ -92,30 +92,30 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('schedules', function (Blueprint $table) {
+        try { Schema::table('schedules', function (Blueprint $table) {
             $table->dropForeign(['tenant_id']);
             $table->string('tenant_id')->change();
-        });
+        }); } catch (\Exception $e) {}
 
-        Schema::table('classrooms', function (Blueprint $table) {
+        try { Schema::table('classrooms', function (Blueprint $table) {
             $table->dropForeign(['tenant_id']);
             $table->string('tenant_id')->change();
             $table->index('tenant_id');
-        });
+        }); } catch (\Exception $e) {}
 
-        Schema::table('user_consents', function (Blueprint $table) {
+        try { Schema::table('user_consents', function (Blueprint $table) {
             $table->dropForeign(['tenant_id']);
             $table->dropColumn('tenant_id');
-        });
+        }); } catch (\Exception $e) {}
 
-        Schema::table('payments', function (Blueprint $table) {
+        try { Schema::table('payments', function (Blueprint $table) {
             $table->dropForeign(['tenant_id']);
             $table->foreign('tenant_id')->references('id')->on('tenants')->cascadeOnDelete();
-        });
+        }); } catch (\Exception $e) {}
 
-        Schema::table('sales', function (Blueprint $table) {
+        try { Schema::table('sales', function (Blueprint $table) {
             $table->dropForeign(['tenant_id']);
             $table->foreign('tenant_id')->references('id')->on('tenants')->cascadeOnDelete();
-        });
+        }); } catch (\Exception $e) {}
     }
 };

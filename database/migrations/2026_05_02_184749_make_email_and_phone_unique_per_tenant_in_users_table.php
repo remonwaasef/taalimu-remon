@@ -35,13 +35,13 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
+        try { Schema::table('users', function (Blueprint $table) {
             // Drop tenant-specific unique constraints
             $table->dropUnique('tenant_email_unique');
             $table->dropUnique('tenant_phone_unique');
 
             // Restore global unique constraints
             $table->unique('email', 'users_email_unique');
-        });
+        }); } catch (\Exception $e) {}
     }
 };

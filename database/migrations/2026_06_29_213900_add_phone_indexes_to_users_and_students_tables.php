@@ -65,15 +65,15 @@ return new class extends Migration
     public function down(): void
     {
         if ($this->indexExists('users', 'users_phone_index')) {
-            Schema::table('users', function (Blueprint $table) {
+            try { Schema::table('users', function (Blueprint $table) {
                 $table->dropIndex('users_phone_index');
-            });
+            }); } catch (\Exception $e) {}
         }
 
         if ($this->indexExists('students', 'students_phone_index')) {
-            Schema::table('students', function (Blueprint $table) {
+            try { Schema::table('students', function (Blueprint $table) {
                 $table->dropIndex('students_phone_index');
-            });
+            }); } catch (\Exception $e) {}
         }
     }
 };

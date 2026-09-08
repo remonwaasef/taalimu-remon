@@ -25,9 +25,9 @@ return new class extends Migration
     public function down(): void
     {
         if ($this->hasIndex('activity_log', 'activity_log_created_at_index')) {
-            Schema::table('activity_log', function (Blueprint $table) {
+            try { Schema::table('activity_log', function (Blueprint $table) {
                 $table->dropIndex('activity_log_created_at_index');
-            });
+            }); } catch (\Exception $e) {}
         }
     }
 

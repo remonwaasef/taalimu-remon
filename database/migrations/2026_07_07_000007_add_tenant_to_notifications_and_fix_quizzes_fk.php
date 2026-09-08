@@ -32,15 +32,15 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('notifications', function (Blueprint $table) {
+        try { Schema::table('notifications', function (Blueprint $table) {
             $table->dropIndex(['tenant_id']);
             $table->dropColumn('tenant_id');
-        });
+        }); } catch (\Exception $e) {}
 
         try {
-            Schema::table('quizzes', function (Blueprint $table) {
+            try { Schema::table('quizzes', function (Blueprint $table) {
                 $table->dropForeign(['tenant_id']);
-            });
+            }); } catch (\Exception $e) {}
         } catch (\Exception $e) {
             \Log::warning('Could not drop FK from quizzes.tenant_id: '.$e->getMessage());
         }

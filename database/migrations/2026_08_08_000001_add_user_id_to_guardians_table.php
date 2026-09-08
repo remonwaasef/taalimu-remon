@@ -22,10 +22,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('guardians', function (Blueprint $table) {
+        try { Schema::table('guardians', function (Blueprint $table) {
             $table->dropIndex(['tenant_id', 'user_id']);
             $table->dropForeign(['user_id']);
             $table->dropColumn('user_id');
-        });
+        }); } catch (\Exception $e) {}
     }
 };

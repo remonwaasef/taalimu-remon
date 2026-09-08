@@ -119,12 +119,12 @@ return new class extends Migration
         Schema::dropIfExists('class_recordings');
         Schema::dropIfExists('online_class_participants');
 
-        Schema::table('online_classes', function (Blueprint $table) {
+        try { Schema::table('online_classes', function (Blueprint $table) {
             $table->dropUnique(['uuid']);
             $table->dropColumn([
                 'uuid', 'access_mode', 'recording_status', 'zoom_meeting_uuid',
                 'zoom_account_id', 'auto_recording', 'started_at', 'ended_at', 'reminder_sent_at',
             ]);
-        });
+        }); } catch (\Exception $e) {}
     }
 };

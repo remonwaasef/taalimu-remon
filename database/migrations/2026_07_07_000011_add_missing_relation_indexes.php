@@ -45,28 +45,28 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('attendances', function (Blueprint $table) {
+        try { Schema::table('attendances', function (Blueprint $table) {
             $table->dropIndex('attendances_schedule_id_idx');
-        });
+        }); } catch (\Exception $e) {}
 
-        Schema::table('bookings', function (Blueprint $table) {
+        try { Schema::table('bookings', function (Blueprint $table) {
             $table->dropIndex('bookings_schedule_id_idx');
-        });
+        }); } catch (\Exception $e) {}
 
-        Schema::table('lessons', function (Blueprint $table) {
+        try { Schema::table('lessons', function (Blueprint $table) {
             $table->dropIndex('lessons_section_id_idx');
-        });
+        }); } catch (\Exception $e) {}
 
-        Schema::table('sections', function (Blueprint $table) {
+        try { Schema::table('sections', function (Blueprint $table) {
             $table->dropIndex('sections_course_id_idx');
-        });
+        }); } catch (\Exception $e) {}
 
-        Schema::table('course_instructor', function (Blueprint $table) {
+        try { Schema::table('course_instructor', function (Blueprint $table) {
             $table->dropIndex('course_instructor_inst_idx');
-        });
+        }); } catch (\Exception $e) {}
 
-        Schema::table('guardian_student', function (Blueprint $table) {
+        try { Schema::table('guardian_student', function (Blueprint $table) {
             $table->dropIndex('guardian_student_reverse_idx');
-        });
+        }); } catch (\Exception $e) {}
     }
 };

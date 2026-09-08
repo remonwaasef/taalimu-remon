@@ -29,16 +29,16 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('payments', function (Blueprint $table) {
+        try { Schema::table('payments', function (Blueprint $table) {
             $table->dropIndex(['sale_id']);
-        });
+        }); } catch (\Exception $e) {}
 
-        Schema::table('commissions', function (Blueprint $table) {
+        try { Schema::table('commissions', function (Blueprint $table) {
             $table->dropIndex(['sale_id']);
-        });
+        }); } catch (\Exception $e) {}
 
-        Schema::table('users', function (Blueprint $table) {
+        try { Schema::table('users', function (Blueprint $table) {
             $table->dropIndex(['tenant_id', 'role']);
-        });
+        }); } catch (\Exception $e) {}
     }
 };

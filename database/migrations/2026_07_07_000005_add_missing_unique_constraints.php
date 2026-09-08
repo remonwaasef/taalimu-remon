@@ -35,16 +35,16 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('enrollments', function (Blueprint $table) {
+        try { Schema::table('enrollments', function (Blueprint $table) {
             $table->dropUnique('enrollments_user_course_unique');
-        });
+        }); } catch (\Exception $e) {}
 
-        Schema::table('bookings', function (Blueprint $table) {
+        try { Schema::table('bookings', function (Blueprint $table) {
             $table->dropUnique('bookings_student_schedule_unique');
-        });
+        }); } catch (\Exception $e) {}
 
-        Schema::table('attendances', function (Blueprint $table) {
+        try { Schema::table('attendances', function (Blueprint $table) {
             $table->dropUnique('attendances_student_schedule_date_unique');
-        });
+        }); } catch (\Exception $e) {}
     }
 };

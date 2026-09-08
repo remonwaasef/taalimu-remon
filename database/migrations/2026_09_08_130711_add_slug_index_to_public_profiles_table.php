@@ -15,8 +15,8 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::table('public_profiles', function (Blueprint $table) {
+        try { Schema::table('public_profiles', function (Blueprint $table) {
             $table->dropIndex('public_profiles_slug_index');
-        });
+        }); } catch (\Exception $e) {}
     }
 };

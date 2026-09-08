@@ -59,37 +59,37 @@ return new class extends Migration
     {
         // Revert assignment_submissions unique
         try {
-            Schema::table('assignment_submissions', function (Blueprint $table) {
+            try { Schema::table('assignment_submissions', function (Blueprint $table) {
                 $table->dropUnique('submissions_assignment_user_unique');
-            });
+            }); } catch (\Exception $e) {}
         } catch (\Exception $e) {
             \Log::warning('Could not drop assignment_submissions unique: '.$e->getMessage());
         }
 
         // Revert coupons tenant_id
         if (Schema::hasColumn('coupons', 'tenant_id')) {
-            Schema::table('coupons', function (Blueprint $table) {
+            try { Schema::table('coupons', function (Blueprint $table) {
                 $table->dropIndex(['tenant_id']);
                 $table->dropColumn('tenant_id');
-            });
+            }); } catch (\Exception $e) {}
         }
 
         // Revert subscriptions FK
         try {
-            Schema::table('subscriptions', function (Blueprint $table) {
+            try { Schema::table('subscriptions', function (Blueprint $table) {
                 $table->dropForeign(['tenant_id']);
                 $table->foreign('tenant_id')->references('id')->on('tenants')->cascadeOnDelete();
-            });
+            }); } catch (\Exception $e) {}
         } catch (\Exception $e) {
             \Log::warning('Could not revert subscriptions.tenant_id FK: '.$e->getMessage());
         }
 
         // Revert online_classes FK
         try {
-            Schema::table('online_classes', function (Blueprint $table) {
+            try { Schema::table('online_classes', function (Blueprint $table) {
                 $table->dropForeign(['instructor_id']);
                 $table->foreign('instructor_id')->references('id')->on('users')->nullOnDelete();
-            });
+            }); } catch (\Exception $e) {}
         } catch (\Exception $e) {
             \Log::warning('Could not revert online_classes.instructor_id FK: '.$e->getMessage());
         }

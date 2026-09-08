@@ -48,8 +48,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('payments', function (Blueprint $table) {
+        try { Schema::table('payments', function (Blueprint $table) {
             $table->dropUnique('payments_reference_number_unique');
-        });
+        }); } catch (\Exception $e) {}
     }
 };

@@ -70,42 +70,42 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::table('invoices', function (Blueprint $table) {
+        try { Schema::table('invoices', function (Blueprint $table) {
             $table->dropIndex('idx_invoices_status');
             $table->dropIndex('idx_invoices_due_date');
             $table->dropIndex('idx_invoices_paid_at');
             $table->dropIndex('idx_invoices_subscription_id');
-        });
+        }); } catch (\Exception $e) {}
 
-        Schema::table('payments', function (Blueprint $table) {
+        try { Schema::table('payments', function (Blueprint $table) {
             $table->dropIndex('idx_payments_sale_id');
             $table->dropIndex('idx_payments_received_by');
             $table->dropIndex('idx_payments_paid_at');
             $table->dropIndex('idx_payments_payment_method');
-        });
+        }); } catch (\Exception $e) {}
 
-        Schema::table('attendances', function (Blueprint $table) {
+        try { Schema::table('attendances', function (Blueprint $table) {
             $table->dropIndex('idx_attendances_status');
             $table->dropIndex('idx_attendances_student_session');
-        });
+        }); } catch (\Exception $e) {}
 
-        Schema::table('quiz_attempts', function (Blueprint $table) {
+        try { Schema::table('quiz_attempts', function (Blueprint $table) {
             $table->dropIndex('idx_quiz_attempts_quiz_id');
             $table->dropIndex('idx_quiz_attempts_passed');
             $table->dropIndex('idx_quiz_attempts_score');
-        });
+        }); } catch (\Exception $e) {}
 
-        Schema::table('assignments', function (Blueprint $table) {
+        try { Schema::table('assignments', function (Blueprint $table) {
             $table->dropIndex('idx_assignments_due_date');
-        });
+        }); } catch (\Exception $e) {}
 
-        Schema::table('quizzes', function (Blueprint $table) {
+        try { Schema::table('quizzes', function (Blueprint $table) {
             $table->dropIndex('idx_quizzes_lesson_id');
             $table->dropIndex('idx_quizzes_category_id');
-        });
+        }); } catch (\Exception $e) {}
 
-        Schema::table('lesson_progress', function (Blueprint $table) {
+        try { Schema::table('lesson_progress', function (Blueprint $table) {
             $table->dropIndex('idx_lesson_progress_completed_at');
-        });
+        }); } catch (\Exception $e) {}
     }
 };

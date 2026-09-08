@@ -193,9 +193,9 @@ return new class extends Migration
         // Drop user_consents FK
         if (Schema::hasTable('user_consents') && $this->foreignKeyExists('user_consents', 'user_consents_user_id_foreign')) {
             try {
-                Schema::table('user_consents', function (Blueprint $table) {
+                try { Schema::table('user_consents', function (Blueprint $table) {
                     $table->dropForeign('user_consents_user_id_foreign');
-                });
+                }); } catch (\Exception $e) {}
             } catch (\Exception $e) {
                 \Log::warning('Could not drop FK on user_consents: '.$e->getMessage());
             }

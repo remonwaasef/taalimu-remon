@@ -36,29 +36,14 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::table('quiz_attempts', function (Blueprint $table) {
-            $table->dropIndex('idx_quiz_attempts_user_id');
-        });
-
-        Schema::table('point_logs', function (Blueprint $table) {
-            $table->dropIndex('idx_point_logs_created_at');
-        });
-
-        Schema::table('schedules', function (Blueprint $table) {
-            $table->dropIndex('idx_schedules_day_instructor_course');
-        });
-
-
-
-        Schema::table('courses', function (Blueprint $table) {
-            $table->dropIndex('idx_courses_registration_token');
-        });
+        try { Schema::table('quiz_attempts', function (Blueprint $table) { $table->dropIndex('idx_quiz_attempts_user_id'); }); } catch (\Exception $e) {}
+        try { Schema::table('point_logs', function (Blueprint $table) { $table->dropIndex('idx_point_logs_created_at'); }); } catch (\Exception $e) {}
+        try { Schema::table('schedules', function (Blueprint $table) { $table->dropIndex('idx_schedules_day_instructor_course'); }); } catch (\Exception $e) {}
+        try { Schema::table('courses', function (Blueprint $table) { $table->dropIndex('idx_courses_registration_token'); }); } catch (\Exception $e) {}
 
         if (Schema::hasTable('activity_log')) {
             $tableName = config('activitylog.table_name', 'activity_log');
-            Schema::table($tableName, function (Blueprint $table) {
-                $table->dropIndex('idx_activity_log_subject');
-            });
+            try { Schema::table($tableName, function (Blueprint $table) { $table->dropIndex('idx_activity_log_subject'); }); } catch (\Exception $e) {}
         }
     }
 };

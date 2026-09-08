@@ -59,38 +59,38 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('tickets', function (Blueprint $table) {
+        try { Schema::table('tickets', function (Blueprint $table) {
             $table->dropIndex('tickets_tenant_status_idx');
-        });
+        }); } catch (\Exception $e) {}
 
-        Schema::table('schedules', function (Blueprint $table) {
+        try { Schema::table('schedules', function (Blueprint $table) {
             $table->dropIndex('schedules_tenant_classroom_idx');
-        });
+        }); } catch (\Exception $e) {}
 
-        Schema::table('invoices', function (Blueprint $table) {
+        try { Schema::table('invoices', function (Blueprint $table) {
             $table->dropIndex('invoices_tenant_created_at_idx');
-        });
+        }); } catch (\Exception $e) {}
 
-        Schema::table('subscriptions', function (Blueprint $table) {
+        try { Schema::table('subscriptions', function (Blueprint $table) {
             $table->dropIndex('subscriptions_tenant_status_idx');
             $table->dropIndex('subscriptions_ends_at_status_idx');
-        });
+        }); } catch (\Exception $e) {}
 
-        Schema::table('payments', function (Blueprint $table) {
+        try { Schema::table('payments', function (Blueprint $table) {
             $table->dropIndex('payments_tenant_paid_at_idx');
             $table->dropIndex('payments_sale_paid_at_idx');
-        });
+        }); } catch (\Exception $e) {}
 
-        Schema::table('attendances', function (Blueprint $table) {
+        try { Schema::table('attendances', function (Blueprint $table) {
             $table->dropIndex('attendances_student_date_idx');
-        });
+        }); } catch (\Exception $e) {}
 
-        Schema::table('users', function (Blueprint $table) {
+        try { Schema::table('users', function (Blueprint $table) {
             $table->dropIndex('users_tenant_email_idx');
-        });
+        }); } catch (\Exception $e) {}
 
-        Schema::table('students', function (Blueprint $table) {
+        try { Schema::table('students', function (Blueprint $table) {
             $table->dropIndex('students_tenant_grade_idx');
-        });
+        }); } catch (\Exception $e) {}
     }
 };
