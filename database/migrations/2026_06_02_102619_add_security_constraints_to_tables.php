@@ -198,9 +198,13 @@ return new class extends Migration
 
         foreach ($uniqueIndexes as $table => $index) {
             if (Schema::hasTable($table) && $this->indexExists($table, $index)) {
-                Schema::table($table, function (Blueprint $t) use ($index) {
-                    $t->dropUnique($index);
-                });
+                try {
+                    Schema::table($table, function (Blueprint $t) use ($index) {
+                        $t->dropUnique($index);
+                    });
+                } catch (\Throwable $e) {
+                    // Ignored if index is needed by a foreign key
+                }
             }
         }
 
@@ -213,9 +217,13 @@ return new class extends Migration
             if (Schema::hasTable($table)) {
                 foreach ($indexes as $index) {
                     if ($this->indexExists($table, $index)) {
-                        Schema::table($table, function (Blueprint $t) use ($index) {
-                            $t->dropUnique($index);
-                        });
+                        try {
+                            Schema::table($table, function (Blueprint $t) use ($index) {
+                                $t->dropUnique($index);
+                            });
+                        } catch (\Throwable $e) {
+                            // Ignored if index is needed by a foreign key
+                        }
                     }
                 }
             }
@@ -231,9 +239,13 @@ return new class extends Migration
 
         foreach ($fks as $table => $fkName) {
             if (Schema::hasTable($table) && $this->foreignKeyExists($table, $fkName)) {
-                Schema::table($table, function (Blueprint $t) use ($fkName) {
-                    $t->dropForeign($fkName);
-                });
+                try {
+                    Schema::table($table, function (Blueprint $t) use ($fkName) {
+                        $t->dropForeign($fkName);
+                    });
+                } catch (\Throwable $e) {
+                    // Ignored if foreign key already dropped
+                }
             }
         }
     }

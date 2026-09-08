@@ -86,9 +86,13 @@ return new class extends Migration
             $indexNames = (array) $indexNames;
             foreach ($indexNames as $indexName) {
                 if ($this->hasIndex($table, $indexName)) {
-                    Schema::table($table, function (Blueprint $table) use ($indexName) {
-                        $table->dropIndex($indexName);
-                    });
+                    try {
+                        Schema::table($table, function (Blueprint $table) use ($indexName) {
+                            $table->dropIndex($indexName);
+                        });
+                    } catch (\Throwable $e) {
+                        // Ignored if index is needed by a foreign key constraint
+                    }
                 }
             }
         }
