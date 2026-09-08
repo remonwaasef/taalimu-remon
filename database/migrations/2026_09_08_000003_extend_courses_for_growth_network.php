@@ -30,20 +30,12 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('courses', function (Blueprint $table) {
-            // The up() used unique() not index(), so we must use dropUnique()
-            $sm = Schema::getConnection()->getDoctrineSchemaManager();
-            $indexes = collect($sm->listTableIndexes('courses'))->keys();
+            try { $table->dropUnique(['tenant_id', 'slug']); } catch (\Exception $e) {}
+            try { $table->dropIndex(['tenant_id', 'published']); } catch (\Exception $e) {}
+            try { $table->dropIndex(['tenant_id', 'category']); } catch (\Exception $e) {}
+        });
 
-            if ($indexes->contains('courses_tenant_id_slug_unique')) {
-                $table->dropUnique(['tenant_id', 'slug']);
-            }
-            if ($indexes->contains('courses_tenant_id_published_index')) {
-                $table->dropIndex(['tenant_id', 'published']);
-            }
-            if ($indexes->contains('courses_tenant_id_category_index')) {
-                $table->dropIndex(['tenant_id', 'category']);
-            }
-
+        Schema::table('courses', function (Blueprint $table) {
             $table->dropColumn([
                 'slug', 'level', 'category', 'delivery_mode',
                 'capacity', 'enrolled_count', 'start_date', 'end_date',

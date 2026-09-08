@@ -92,54 +92,30 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::table('coupons', function (Blueprint $table) {
-            $table->dropForeign(['tenant_id']);
-        });
+        // Wrap each drop in try/catch — some indexes may be required by FKs from other migrations
+        try { Schema::table('coupons', function (Blueprint $table) { $table->dropForeign(['tenant_id']); }); } catch (\Exception $e) {}
+        try { Schema::table('notifications', function (Blueprint $table) { $table->dropForeign(['tenant_id']); }); } catch (\Exception $e) {}
 
-        Schema::table('notifications', function (Blueprint $table) {
-            $table->dropForeign(['tenant_id']);
-        });
+        // user_consents.tenant_id index may be held by a FK — drop FK first if present
+        try { Schema::table('user_consents', function (Blueprint $table) { $table->dropForeign(['tenant_id']); }); } catch (\Exception $e) {}
+        try { Schema::table('user_consents', function (Blueprint $table) { $table->dropIndex(['tenant_id']); }); } catch (\Exception $e) {}
 
-        Schema::table('user_consents', function (Blueprint $table) {
-            $table->dropIndex(['tenant_id']);
-        });
-
-        Schema::table('questions', function (Blueprint $table) {
-            $table->dropIndex(['quiz_id']);
-            $table->dropIndex(['category_id']);
-        });
-
-        Schema::table('question_options', function (Blueprint $table) {
-            $table->dropIndex(['question_id']);
-        });
-
-        Schema::table('course_resources', function (Blueprint $table) {
-            $table->dropIndex(['lesson_id']);
-        });
-
-        Schema::table('commissions', function (Blueprint $table) {
-            $table->dropIndex(['sale_item_id']);
-        });
-
-        Schema::table('payouts', function (Blueprint $table) {
-            $table->dropIndex(['processed_by']);
-        });
-
-        Schema::table('refunds', function (Blueprint $table) {
-            $table->dropIndex(['processed_by']);
-        });
-
-        Schema::table('online_classes', function (Blueprint $table) {
-            $table->dropIndex(['status']);
-            $table->dropIndex(['start_time']);
-        });
+        try { Schema::table('questions', function (Blueprint $table) { $table->dropIndex(['quiz_id']); $table->dropIndex(['category_id']); }); } catch (\Exception $e) {}
+        try { Schema::table('question_options', function (Blueprint $table) { $table->dropIndex(['question_id']); }); } catch (\Exception $e) {}
+        try { Schema::table('course_resources', function (Blueprint $table) { $table->dropIndex(['lesson_id']); }); } catch (\Exception $e) {}
+        try { Schema::table('commissions', function (Blueprint $table) { $table->dropIndex(['sale_item_id']); }); } catch (\Exception $e) {}
+        try { Schema::table('payouts', function (Blueprint $table) { $table->dropIndex(['processed_by']); }); } catch (\Exception $e) {}
+        try { Schema::table('refunds', function (Blueprint $table) { $table->dropIndex(['processed_by']); }); } catch (\Exception $e) {}
+        try { Schema::table('online_classes', function (Blueprint $table) { $table->dropIndex(['status']); $table->dropIndex(['start_time']); }); } catch (\Exception $e) {}
 
         $tables = ['enrollments', 'quiz_attempts', 'assignment_submissions', 'attendances',
                     'bookings', 'certificates', 'tickets', 'subscriptions', 'user_consents'];
-        foreach ($tables as $table) {
-            Schema::table($table, function (Blueprint $table) {
-                $table->dropSoftDeletes();
-            });
+        foreach ($tables as $tbl) {
+            try {
+                Schema::table($tbl, function (Blueprint $table) {
+                    $table->dropSoftDeletes();
+                });
+            } catch (\Exception $e) {}
         }
     }
 };
