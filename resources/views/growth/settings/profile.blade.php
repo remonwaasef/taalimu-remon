@@ -39,7 +39,7 @@
                     <p class="text-sm text-indigo-700 mt-0.5">{{ __('Share this link to track referrals') }}</p>
                 </div>
                 <div class="flex items-center gap-2">
-                    <input type="text" id="referral-link" value="{{ url(($profile->profilable_type === \App\Models\Instructor::class ? '/t/' : '/c/') . $profile->slug . '?ref=' . $profile->referral_code) }}" readonly class="px-3 py-1.5 bg-white border border-indigo-200 rounded-lg text-sm text-slate-700 w-64">
+                    <input type="text" id="referral-link" value="{{ tenant_url('?ref=' . $profile->referral_code, $profile->tenant_id) }}" readonly class="px-3 py-1.5 bg-white border border-indigo-200 rounded-lg text-sm text-slate-700 w-64">
                     <button onclick="navigator.clipboard.writeText(document.getElementById('referral-link').value); this.textContent='Copied!'; setTimeout(() => this.textContent='Copy', 2000)" class="px-3 py-1.5 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors">{{ __('Copy') }}</button>
                 </div>
             </div>

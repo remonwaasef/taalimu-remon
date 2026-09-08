@@ -103,6 +103,11 @@ class PublicProfile extends Model
      */
     public function getUrl(): string
     {
+        $tenant = $this->tenant ?? \App\Models\Tenant::find($this->tenant_id);
+        if ($tenant) {
+            return tenant_url('', $tenant);
+        }
+
         if ($this->profilable_type === Instructor::class) {
             return route('growth.teacher.show', $this->slug);
         }

@@ -1,4 +1,4 @@
-﻿@extends('layouts.landing-new')
+@extends('layouts.landing-new')
 
 @section('content')
 <div class="min-h-screen flex items-center justify-center relative overflow-hidden bg-slate-50/50 py-6 px-4 pt-16">
@@ -23,16 +23,7 @@
         </div>
 
         @php
-            $mode = config('app.tenancy_mode', 'subdomain');
-            $protocol = request()->isSecure() ? 'https://' : 'http://';
-            $port = (request()->getPort() && !in_array(request()->getPort(), [80, 443])) ? ':' . request()->getPort() : '';
-            $domain = config('app.tenant_domain', 'localhost');
-            
-            if ($mode === 'path') {
-                $accessUrl = url('/c/' . session('tenant_domain'));
-            } else {
-                $accessUrl = $protocol . session('tenant_domain') . '.' . $domain . $port;
-            }
+            $accessUrl = tenant_url('', session('tenant_domain'));
         @endphp
 
         <!-- Center Details Glass Card - Professional Compact -->

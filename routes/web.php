@@ -167,12 +167,34 @@ $mainRoutes = function () {
     // =========================================================================
     // GROWTH NETWORK — Public Identity Routes (No Auth Required)
     // =========================================================================
-    Route::get('/t/{slug}', [\App\Http\Controllers\PublicProfileController::class, 'showTeacher'])
-        ->middleware('throttle:120,1')
-        ->name('growth.teacher.show');
-    Route::get('/c/{slug}', [\App\Http\Controllers\PublicProfileController::class, 'showCenter'])
-        ->middleware('throttle:120,1')
-        ->name('growth.center.show');
+    Route::get('/t/{slug}', function ($slug) {
+        $profile = \App\Models\PublicProfile::where('slug', $slug)
+            ->where('profilable_type', \App\Models\Instructor::class)
+            ->first();
+        if ($profile && $profile->tenant) {
+            return redirect()->to(tenant_url('', $profile->tenant), 301);
+        }
+
+        $tenant = \App\Models\Tenant::where('domain', $slug)->first();
+        if ($tenant) {
+            return redirect()->to(tenant_url('', $tenant), 301);
+        }
+
+        return app(\App\Http\Controllers\PublicProfileController::class)->showTeacher(request(), $slug);
+    })->middleware('throttle:120,1')->name('growth.teacher.show');
+    Route::get('/c/{slug}/{path?}', function ($slug, $path = '') {
+        $tenant = \App\Models\Tenant::where('domain', $slug)->first();
+        if ($tenant) {
+            return redirect()->to(tenant_url($path, $tenant), 301);
+        }
+
+        $profile = \App\Models\PublicProfile::where('slug', $slug)->first();
+        if ($profile && $profile->tenant) {
+            return redirect()->to(tenant_url($path, $profile->tenant), 301);
+        }
+
+        return app(\App\Http\Controllers\PublicProfileController::class)->showCenter(request(), $slug);
+    })->where('path', '.*')->middleware('throttle:120,1')->name('growth.center.show');
 
     // =========================================================================
     // GROWTH NETWORK — Public Program Routes (No Auth Required)

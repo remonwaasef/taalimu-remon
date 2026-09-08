@@ -51,6 +51,17 @@ class IdentifyTenant
 
             // Skip if it's 'www' or exactly the main domain
             if (in_array($host, $centralHosts, true)) {
+                // If accessed on central domain via /c/{tenant}, permanently redirect to tenant subdomain
+                $pathSegments = $request->segments();
+                if (count($pathSegments) >= 2 && $pathSegments[0] === 'c') {
+                    $tenantDomain = $pathSegments[1];
+                    $tenant = $this->resolveTenant($tenantDomain);
+                    if ($tenant) {
+                        $remainingPath = implode('/', array_slice($pathSegments, 2));
+                        return redirect()->to(tenant_url($remainingPath, $tenant), 301);
+                    }
+                }
+
                 // Even if we skip deeper tenant identification, if the route matched a {tenant} group,
                 // we should ensure URL generation doesn't break for these routes.
                 if ($request->route() && $request->route()->hasParameter('tenant')) {

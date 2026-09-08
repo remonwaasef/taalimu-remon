@@ -22,6 +22,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Enhanced `QuizPolicy` and `QuestionPolicy` to grant access to `admin` and `center_owner` roles via `HasRoleCheck` trait.
   - Added localized strings for `activity_logs` in Arabic, English, and French.
 
+- **Subdomain URL Enforcement & Universal 301 Redirection (2026-09-09)**:
+  - Enforced subdomain-based URLs (`https://{tenant}.taalimu.com/`) globally across all profiles, referral links, and success screens.
+  - Implemented automatic 301 permanent redirects in `IdentifyTenant` middleware and `routes/web.php` for any requests targeting `/c/{tenant}/*` or `/c/{slug}` or `/t/{slug}` to redirect directly to the tenant's canonical subdomain (`https://{tenant}.taalimu.com/*`).
+  - Updated `PublicProfile::getUrl()` to directly return the tenant's canonical subdomain URL.
+  - Replaced legacy `/c/` URLs in registration success and growth settings views with `tenant_url()`.
 - **Subdomain Public Landing Pages & Authentication Routing (2026-09-09)**:
   - Enabled root route `/` on tenant subdomains (`https://{tenant}.taalimu.com/`) to render the public landing page for visitors without requiring authentication.
   - Automatically selects teacher profile (`growth.public.teacher`) or center profile (`growth.public.center`) based on profile and tenant configuration.
