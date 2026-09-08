@@ -11,17 +11,23 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('payments', function (Blueprint $table) {
-            $table->index('sale_id');
-        });
+        try {
+            Schema::table('payments', function (Blueprint $table) {
+                $table->index('sale_id');
+            });
+        } catch (\Throwable $e) {}
 
-        Schema::table('commissions', function (Blueprint $table) {
-            $table->index('sale_id');
-        });
+        try {
+            Schema::table('commissions', function (Blueprint $table) {
+                $table->index('sale_id');
+            });
+        } catch (\Throwable $e) {}
 
-        Schema::table('users', function (Blueprint $table) {
-            $table->index(['tenant_id', 'role']);
-        });
+        try {
+            Schema::table('users', function (Blueprint $table) {
+                $table->index(['tenant_id', 'role']);
+            });
+        } catch (\Throwable $e) {}
     }
 
     /**

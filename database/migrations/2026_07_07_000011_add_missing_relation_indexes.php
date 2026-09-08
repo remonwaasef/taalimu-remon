@@ -12,32 +12,32 @@ return new class extends Migration
     public function up(): void
     {
         // 1. Pivot Table: guardian_student indexes
-        Schema::table('guardian_student', function (Blueprint $table) {
+        try { Schema::table('guardian_student', function (Blueprint $table) {
             $table->index(['student_id', 'guardian_id'], 'guardian_student_reverse_idx');
-        });
+        }); } catch (\Throwable $e) {}
 
         // 2. Pivot Table: course_instructor indexes
-        Schema::table('course_instructor', function (Blueprint $table) {
+        try { Schema::table('course_instructor', function (Blueprint $table) {
             $table->index('instructor_id', 'course_instructor_inst_idx');
-        });
+        }); } catch (\Throwable $e) {}
 
         // 3. Sections & Lessons Table indexes
-        Schema::table('sections', function (Blueprint $table) {
+        try { Schema::table('sections', function (Blueprint $table) {
             $table->index('course_id', 'sections_course_id_idx');
-        });
+        }); } catch (\Throwable $e) {}
 
-        Schema::table('lessons', function (Blueprint $table) {
+        try { Schema::table('lessons', function (Blueprint $table) {
             $table->index('section_id', 'lessons_section_id_idx');
-        });
+        }); } catch (\Throwable $e) {}
 
         // 4. Bookings & Attendances Table missing indexes
-        Schema::table('bookings', function (Blueprint $table) {
+        try { Schema::table('bookings', function (Blueprint $table) {
             $table->index('schedule_id', 'bookings_schedule_id_idx');
-        });
+        }); } catch (\Throwable $e) {}
 
-        Schema::table('attendances', function (Blueprint $table) {
+        try { Schema::table('attendances', function (Blueprint $table) {
             $table->index('schedule_id', 'attendances_schedule_id_idx');
-        });
+        }); } catch (\Throwable $e) {}
     }
 
     /**

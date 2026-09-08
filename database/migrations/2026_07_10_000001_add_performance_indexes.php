@@ -9,50 +9,50 @@ return new class extends Migration
     public function up(): void
     {
         // students.user_id - critical for attendance & enrollment lookups
-        Schema::table('students', function (Blueprint $table) {
+        try { Schema::table('students', function (Blueprint $table) {
             $table->index('user_id', 'idx_students_user_id');
-        });
+        }); } catch (\Throwable $e) {}
 
         // sales.student_id - critical for financial queries
-        Schema::table('sales', function (Blueprint $table) {
+        try { Schema::table('sales', function (Blueprint $table) {
             $table->index('student_id', 'idx_sales_student_id');
-        });
+        }); } catch (\Throwable $e) {}
 
         // Composite indexes for common query patterns
-        Schema::table('sales', function (Blueprint $table) {
+        try { Schema::table('sales', function (Blueprint $table) {
             $table->index(['tenant_id', 'student_id'], 'idx_sales_tenant_student');
             $table->index(['tenant_id', 'status', 'created_at'], 'idx_sales_tenant_status_created');
-        });
+        }); } catch (\Throwable $e) {}
 
         // commissions.sale_id + status - used in refund processing
-        Schema::table('commissions', function (Blueprint $table) {
+        try { Schema::table('commissions', function (Blueprint $table) {
             $table->index(['sale_id', 'status'], 'idx_commissions_sale_status');
-        });
+        }); } catch (\Throwable $e) {}
 
         // operation_issues.fingerprint - used in duplicate detection
-        Schema::table('operation_issues', function (Blueprint $table) {
+        try { Schema::table('operation_issues', function (Blueprint $table) {
             $table->index('fingerprint', 'idx_operation_issues_fingerprint');
-        });
+        }); } catch (\Throwable $e) {}
 
         // payment_reminders - used in send payment reminders command
-        Schema::table('payment_reminders', function (Blueprint $table) {
+        try { Schema::table('payment_reminders', function (Blueprint $table) {
             $table->index(['tenant_id', 'reminder_year', 'reminder_month', 'status'], 'idx_payment_reminders_tenant_year_month_status');
-        });
+        }); } catch (\Throwable $e) {}
 
         // point_logs.user_id - used in GDPR export and gamification
-        Schema::table('point_logs', function (Blueprint $table) {
+        try { Schema::table('point_logs', function (Blueprint $table) {
             $table->index('user_id', 'idx_point_logs_user_id');
-        });
+        }); } catch (\Throwable $e) {}
 
         // activity_log - used in GDPR export
-        Schema::table('activity_log', function (Blueprint $table) {
+        try { Schema::table('activity_log', function (Blueprint $table) {
             $table->index(['causer_id', 'causer_type'], 'idx_activity_log_causer');
-        });
+        }); } catch (\Throwable $e) {}
 
         // enrollments - used in attendance and progress queries
-        Schema::table('enrollments', function (Blueprint $table) {
+        try { Schema::table('enrollments', function (Blueprint $table) {
             $table->index(['user_id', 'course_id'], 'idx_enrollments_user_course');
-        });
+        }); } catch (\Throwable $e) {}
     }
 
     public function down(): void

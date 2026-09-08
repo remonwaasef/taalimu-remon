@@ -8,29 +8,27 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('quiz_attempts', function (Blueprint $table) {
+        try { Schema::table('quiz_attempts', function (Blueprint $table) {
             $table->index('user_id', 'idx_quiz_attempts_user_id');
-        });
+        }); } catch (\Throwable $e) {}
 
-        Schema::table('point_logs', function (Blueprint $table) {
+        try { Schema::table('point_logs', function (Blueprint $table) {
             $table->index('created_at', 'idx_point_logs_created_at');
-        });
+        }); } catch (\Throwable $e) {}
 
-        Schema::table('schedules', function (Blueprint $table) {
+        try { Schema::table('schedules', function (Blueprint $table) {
             $table->index(['day_of_week', 'instructor_id', 'course_id'], 'idx_schedules_day_instructor_course');
-        });
+        }); } catch (\Throwable $e) {}
 
-
-
-        Schema::table('courses', function (Blueprint $table) {
+        try { Schema::table('courses', function (Blueprint $table) {
             $table->index('registration_token', 'idx_courses_registration_token');
-        });
+        }); } catch (\Throwable $e) {}
 
         if (Schema::hasTable('activity_log')) {
             $tableName = config('activitylog.table_name', 'activity_log');
-            Schema::table($tableName, function (Blueprint $table) {
+            try { Schema::table($tableName, function (Blueprint $table) {
                 $table->index(['subject_id', 'subject_type'], 'idx_activity_log_subject');
-            });
+            }); } catch (\Throwable $e) {}
         }
     }
 

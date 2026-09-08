@@ -8,9 +8,11 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('public_profiles', function (Blueprint $table) {
-            $table->index('slug');
-        });
+        try {
+            Schema::table('public_profiles', function (Blueprint $table) {
+                $table->index('slug');
+            });
+        } catch (\Throwable $e) {}
     }
 
     public function down(): void

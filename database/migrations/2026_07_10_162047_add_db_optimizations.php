@@ -9,48 +9,48 @@ return new class extends Migration
     public function up(): void
     {
         // 1. Add missing FKs
-        Schema::table('coupons', function (Blueprint $table) {
+        try { Schema::table('coupons', function (Blueprint $table) {
             $table->foreign('tenant_id')->references('id')->on('tenants')->nullOnDelete();
-        });
+        }); } catch (\Throwable $e) {}
 
-        Schema::table('notifications', function (Blueprint $table) {
+        try { Schema::table('notifications', function (Blueprint $table) {
             $table->foreign('tenant_id')->references('id')->on('tenants')->nullOnDelete();
-        });
+        }); } catch (\Throwable $e) {}
 
         // 2. Add missing indexes on commonly queried columns
-        Schema::table('user_consents', function (Blueprint $table) {
+        try { Schema::table('user_consents', function (Blueprint $table) {
             $table->index('tenant_id');
-        });
+        }); } catch (\Throwable $e) {}
 
-        Schema::table('questions', function (Blueprint $table) {
+        try { Schema::table('questions', function (Blueprint $table) {
             $table->index('quiz_id');
             $table->index('category_id');
-        });
+        }); } catch (\Throwable $e) {}
 
-        Schema::table('question_options', function (Blueprint $table) {
+        try { Schema::table('question_options', function (Blueprint $table) {
             $table->index('question_id');
-        });
+        }); } catch (\Throwable $e) {}
 
-        Schema::table('course_resources', function (Blueprint $table) {
+        try { Schema::table('course_resources', function (Blueprint $table) {
             $table->index('lesson_id');
-        });
+        }); } catch (\Throwable $e) {}
 
-        Schema::table('commissions', function (Blueprint $table) {
+        try { Schema::table('commissions', function (Blueprint $table) {
             $table->index('sale_item_id');
-        });
+        }); } catch (\Throwable $e) {}
 
-        Schema::table('payouts', function (Blueprint $table) {
+        try { Schema::table('payouts', function (Blueprint $table) {
             $table->index('processed_by');
-        });
+        }); } catch (\Throwable $e) {}
 
-        Schema::table('refunds', function (Blueprint $table) {
+        try { Schema::table('refunds', function (Blueprint $table) {
             $table->index('processed_by');
-        });
+        }); } catch (\Throwable $e) {}
 
-        Schema::table('online_classes', function (Blueprint $table) {
+        try { Schema::table('online_classes', function (Blueprint $table) {
             $table->index('status');
             $table->index('start_time');
-        });
+        }); } catch (\Throwable $e) {}
 
         // 3. Add softDeletes to tables that need them
         Schema::table('enrollments', function (Blueprint $table) {

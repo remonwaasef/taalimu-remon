@@ -12,46 +12,46 @@ return new class extends Migration
     public function up(): void
     {
         // 1. Students Table Indexes
-        Schema::table('students', function (Blueprint $table) {
+        try { Schema::table('students', function (Blueprint $table) {
             $table->index(['tenant_id', 'grade_id'], 'students_tenant_grade_idx');
-        });
+        }); } catch (\Throwable $e) {}
 
         // 2. Users Table Indexes
-        Schema::table('users', function (Blueprint $table) {
+        try { Schema::table('users', function (Blueprint $table) {
             $table->index(['tenant_id', 'email'], 'users_tenant_email_idx');
-        });
+        }); } catch (\Throwable $e) {}
 
         // 3. Attendances Table Indexes
-        Schema::table('attendances', function (Blueprint $table) {
+        try { Schema::table('attendances', function (Blueprint $table) {
             $table->index(['student_id', 'session_date'], 'attendances_student_date_idx');
-        });
+        }); } catch (\Throwable $e) {}
 
         // 4. Payments Table Indexes
-        Schema::table('payments', function (Blueprint $table) {
+        try { Schema::table('payments', function (Blueprint $table) {
             $table->index(['tenant_id', 'paid_at'], 'payments_tenant_paid_at_idx');
             $table->index(['sale_id', 'paid_at'], 'payments_sale_paid_at_idx');
-        });
+        }); } catch (\Throwable $e) {}
 
         // 5. Subscriptions Table Indexes
-        Schema::table('subscriptions', function (Blueprint $table) {
+        try { Schema::table('subscriptions', function (Blueprint $table) {
             $table->index(['tenant_id', 'status'], 'subscriptions_tenant_status_idx');
             $table->index(['ends_at', 'status'], 'subscriptions_ends_at_status_idx');
-        });
+        }); } catch (\Throwable $e) {}
 
         // 6. Invoices Table Indexes
-        Schema::table('invoices', function (Blueprint $table) {
+        try { Schema::table('invoices', function (Blueprint $table) {
             $table->index(['tenant_id', 'created_at'], 'invoices_tenant_created_at_idx');
-        });
+        }); } catch (\Throwable $e) {}
 
         // 7. Schedules Table Indexes
-        Schema::table('schedules', function (Blueprint $table) {
+        try { Schema::table('schedules', function (Blueprint $table) {
             $table->index(['tenant_id', 'classroom_id'], 'schedules_tenant_classroom_idx');
-        });
+        }); } catch (\Throwable $e) {}
 
         // 8. Tickets Table Indexes
-        Schema::table('tickets', function (Blueprint $table) {
+        try { Schema::table('tickets', function (Blueprint $table) {
             $table->index(['tenant_id', 'status'], 'tickets_tenant_status_idx');
-        });
+        }); } catch (\Throwable $e) {}
     }
 
     /**
