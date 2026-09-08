@@ -53,6 +53,18 @@
 <body class="bg-slate-50 min-h-screen">
     {{-- Cover / Header --}}
     <div class="relative h-48 sm:h-64 bg-gradient-to-br from-indigo-600 to-purple-700">
+        {{-- Top Navigation Bar --}}
+        <div class="absolute top-4 left-4 right-4 z-20 flex justify-between items-center max-w-5xl mx-auto">
+            <a href="{{ config('app.url') }}" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/80 backdrop-blur-md text-xs font-semibold text-slate-700 shadow-sm hover:bg-white transition-all">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                {{ config('app.name', 'Taalimu') }}
+            </a>
+            <a href="{{ auth()->check() ? route('center.dashboard') : (Route::has('center.login') ? route('center.login') : url('/login')) }}" class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white/90 backdrop-blur-md text-xs font-bold text-slate-800 shadow-sm hover:bg-white hover:shadow transition-all">
+                <svg class="w-3.5 h-3.5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/></svg>
+                {{ auth()->check() ? __('لوحة التحكم') : __('تسجيل الدخول') }}
+            </a>
+        </div>
+
         @if($tenant->logo)
             <div class="absolute inset-0 flex items-center justify-center opacity-10">
                 <img src="{{ asset('storage/' . $tenant->logo) }}" alt="" class="w-64 h-64 object-contain">

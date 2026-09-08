@@ -47,6 +47,63 @@ Route::get('c/{tenant}/courses/{course}', [PublicCourseController::class, 'show'
 
 // Define the route group closure once to avoid duplication
 $tenantRoutes = function () {
+    // Public Landing Page: show profile for guests, redirect to dashboard for authenticated users
+    Route::get('/', function () {
+        $tenant = app()->bound('tenant') ? app('tenant') : null;
+        if (! $tenant) {
+            abort(404);
+        }
+
+        if (auth()->check()) {
+            $user = auth()->user();
+            if ($user->role === 'instructor' || $tenant->type === 'instructor') {
+                return redirect()->route('instructor.dashboard', ['tenant' => $tenant->domain]);
+            }
+            if ($user->role === 'student') {
+                return redirect()->route('campus.index', ['tenant' => $tenant->domain]);
+            }
+            if ($user->role === 'parent') {
+                return redirect()->route('parent.index', ['tenant' => $tenant->domain]);
+            }
+            return redirect()->route('center.dashboard.alt');
+        }
+
+        $profileService = app(\App\Services\GrowthProfileService::class);
+
+        // Check if there is an existing profile for this tenant
+        $profile = \App\Models\PublicProfile::where('tenant_id', $tenant->id)->first();
+
+        if (! $profile) {
+            $instructor = \App\Models\Instructor::where('tenant_id', $tenant->id)->first();
+            if ($tenant->type === 'instructor' && $instructor) {
+                $profile = $profileService->getOrCreateForInstructor($instructor);
+            } else {
+                $profile = $profileService->getOrCreateForCenter($tenant);
+            }
+        }
+
+        if ($profile && $profile->profilable_type === \App\Models\Instructor::class) {
+            $instructor = $profile->profilable ?? \App\Models\Instructor::find($profile->profilable_id);
+            $seoData = [
+                'title' => $profile->meta_title ?? ($profile->title . ' | ' . $tenant->name),
+                'description' => $profile->meta_description ?? ($profile->headline ?? ('Taalimu - ' . ($instructor?->name ?? $tenant->name))),
+                'canonical' => request()->url(),
+                'og_image' => $profile->photo_url,
+            ];
+
+            return view('growth.public.teacher', compact('profile', 'instructor', 'tenant', 'seoData'));
+        }
+
+        $seoData = [
+            'title' => $profile->meta_title ?? ($profile->title . ' | ' . $tenant->name),
+            'description' => $profile->meta_description ?? ($profile->headline ?? ('Taalimu - ' . $tenant->name)),
+            'canonical' => request()->url(),
+            'og_image' => $profile->photo ? asset('storage/' . $profile->photo) : null,
+        ];
+
+        return view('growth.public.center', compact('profile', 'tenant', 'seoData'));
+    })->name('center.landing');
+
     // Taalimu Design System 1.0 Showcase
     Route::get('design-system', function () {
         return view('design-system.index');
@@ -151,8 +208,8 @@ $tenantRoutes = function () {
     // Protected Routes with Subscription Check and Onboarding Check
     Route::middleware(['auth', 'subscription', 'force_password_change', 'onboarding.completed', '2fa', 'prevent-back-history'])->group(function () {
         // Dashboard
-        Route::get('/', [CenterController::class, 'index'])->name('center.dashboard');
-        Route::get('/dashboard', [CenterController::class, 'index'])->name('center.dashboard.alt');
+        Route::get('/dashboard', [CenterController::class, 'index'])->name('center.dashboard');
+        Route::get('/dashboard/alt', [CenterController::class, 'index'])->name('center.dashboard.alt');
         Route::post('/demo/seed', [\Modules\Center\Http\Controllers\DemoDataController::class, 'seed'])->name('center.demo.seed');
         Route::post('/demo/reset', [\Modules\Center\Http\Controllers\DemoDataController::class, 'destroy'])->name('center.demo.reset');
 

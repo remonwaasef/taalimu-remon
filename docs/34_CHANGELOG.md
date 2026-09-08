@@ -22,6 +22,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Enhanced `QuizPolicy` and `QuestionPolicy` to grant access to `admin` and `center_owner` roles via `HasRoleCheck` trait.
   - Added localized strings for `activity_logs` in Arabic, English, and French.
 
+- **Subdomain Public Landing Pages & Authentication Routing (2026-09-09)**:
+  - Enabled root route `/` on tenant subdomains (`https://{tenant}.taalimu.com/`) to render the public landing page for visitors without requiring authentication.
+  - Automatically selects teacher profile (`growth.public.teacher`) or center profile (`growth.public.center`) based on profile and tenant configuration.
+  - Authenticated visitors are seamlessly redirected to their role dashboard (`/dashboard`, `/instructor`, `/campus`, or `/parent`).
+  - Added modern glassmorphic top navigation bar on public profiles with quick links to login and dashboard.
 - **Path-based Tenancy & Profile Auto-Publishing (2026-09-09)**:
   - Enabled `TENANCY_MODE=path` to support path-based URLs (`https://taalimu.com/c/{tenant}/...`) alongside the public landing page (`https://taalimu.com/c/{slug}`).
   - Updated `GrowthProfileService` to default newly registered instructor and center profiles to `published = true` so public landing pages are immediately active.
