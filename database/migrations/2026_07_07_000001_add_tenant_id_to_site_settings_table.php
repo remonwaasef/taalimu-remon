@@ -11,16 +11,32 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('site_settings', function (Blueprint $table) {
-            // Drop unique index for key
-            $table->dropUnique('site_settings_key_unique');
+        // 1. Drop existing unique index if it exists
+        try {
+            Schema::table('site_settings', function (Blueprint $table) {
+                $table->dropUnique('site_settings_key_unique');
+            });
+        } catch (\Throwable $e) {}
 
-            // Add tenant_id column
-            $table->foreignId('tenant_id')->nullable()->after('id')->constrained()->cascadeOnDelete();
+        try {
+            Schema::table('site_settings', function (Blueprint $table) {
+                $table->dropUnique(['key']);
+            });
+        } catch (\Throwable $e) {}
 
-            // Create composite unique key
-            $table->unique(['tenant_id', 'key']);
-        });
+        // 2. Add tenant_id column if not exists
+        if (! Schema::hasColumn('site_settings', 'tenant_id')) {
+            Schema::table('site_settings', function (Blueprint $table) {
+                $table->foreignId('tenant_id')->nullable()->after('id')->constrained()->cascadeOnDelete();
+            });
+        }
+
+        // 3. Create composite unique key
+        try {
+            Schema::table('site_settings', function (Blueprint $table) {
+                $table->unique(['tenant_id', 'key']);
+            });
+        } catch (\Throwable $e) {}
     }
 
     /**

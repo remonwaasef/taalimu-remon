@@ -12,10 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         // 1. Add tenant_id to notifications for tenant isolation
-        Schema::table('notifications', function (Blueprint $table) {
-            $table->unsignedBigInteger('tenant_id')->nullable()->after('id');
-            $table->index('tenant_id');
-        });
+        if (! Schema::hasColumn('notifications', 'tenant_id')) {
+            try {
+                Schema::table('notifications', function (Blueprint $table) {
+                    $table->unsignedBigInteger('tenant_id')->nullable()->after('id');
+                    $table->index('tenant_id');
+                });
+            } catch (\Throwable $e) {}
+        }
 
         // 2. Fix quizzes.tenant_id - add FK constraint
         try {

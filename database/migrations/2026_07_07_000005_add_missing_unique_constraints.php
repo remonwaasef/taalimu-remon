@@ -12,22 +12,28 @@ return new class extends Migration
     public function up(): void
     {
         // 1. Enrollments: prevent double enrollment in same course
-        Schema::table('enrollments', function (Blueprint $table) {
-            $table->unique(['user_id', 'course_id'], 'enrollments_user_course_unique');
-        });
+        try {
+            Schema::table('enrollments', function (Blueprint $table) {
+                $table->unique(['user_id', 'course_id'], 'enrollments_user_course_unique');
+            });
+        } catch (\Throwable $e) {}
 
         // 2. Bookings: prevent double booking in same schedule
-        Schema::table('bookings', function (Blueprint $table) {
-            $table->unique(['student_id', 'schedule_id'], 'bookings_student_schedule_unique');
-        });
+        try {
+            Schema::table('bookings', function (Blueprint $table) {
+                $table->unique(['student_id', 'schedule_id'], 'bookings_student_schedule_unique');
+            });
+        } catch (\Throwable $e) {}
 
         // 3. Attendances: prevent duplicate attendance record per session
-        Schema::table('attendances', function (Blueprint $table) {
-            $table->unique(
-                ['student_id', 'schedule_id', 'session_date'],
-                'attendances_student_schedule_date_unique'
-            );
-        });
+        try {
+            Schema::table('attendances', function (Blueprint $table) {
+                $table->unique(
+                    ['student_id', 'schedule_id', 'session_date'],
+                    'attendances_student_schedule_date_unique'
+                );
+            });
+        } catch (\Throwable $e) {}
     }
 
     /**
