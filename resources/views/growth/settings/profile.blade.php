@@ -39,7 +39,7 @@
                     <p class="text-sm text-indigo-700 mt-0.5">{{ __('Share this link to track referrals') }}</p>
                 </div>
                 <div class="flex items-center gap-2">
-                    <input type="text" id="referral-link" value="{{ url('/t/' . $profile->slug . '?ref=' . $profile->referral_code) }}" readonly class="px-3 py-1.5 bg-white border border-indigo-200 rounded-lg text-sm text-slate-700 w-64">
+                    <input type="text" id="referral-link" value="{{ url(($profile->profilable_type === \App\Models\Instructor::class ? '/t/' : '/c/') . $profile->slug . '?ref=' . $profile->referral_code) }}" readonly class="px-3 py-1.5 bg-white border border-indigo-200 rounded-lg text-sm text-slate-700 w-64">
                     <button onclick="navigator.clipboard.writeText(document.getElementById('referral-link').value); this.textContent='Copied!'; setTimeout(() => this.textContent='Copy', 2000)" class="px-3 py-1.5 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors">{{ __('Copy') }}</button>
                 </div>
             </div>
@@ -74,7 +74,7 @@
                 <div>
                     <label for="slug" class="block text-sm font-medium text-slate-700 mb-1">Profile URL Slug</label>
                     <div class="flex items-center">
-                        <span class="text-slate-400 text-sm mr-1">{{ url('/t') }}/</span>
+                        <span class="text-slate-400 text-sm mr-1">{{ url($profile->profilable_type === \App\Models\Instructor::class ? '/t' : '/c') }}/</span>
                         <input type="text" name="slug" id="slug" value="{{ old('slug', $profile->slug) }}" required
                             class="flex-1 border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('slug') border-red-500 @enderror"
                             pattern="[a-z0-9\-]+" title="Lowercase letters, numbers, and hyphens only">

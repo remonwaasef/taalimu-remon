@@ -5,12 +5,16 @@ namespace App\Http\Controllers\Growth;
 use App\Http\Controllers\Controller;
 use App\Models\Instructor;
 use App\Models\PublicProfile;
+use App\Models\Tenant;
 use App\Services\GrowthProfileService;
+use App\Traits\HasRoleCheck;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 class ProfileSettingsController extends Controller
 {
+    use HasRoleCheck;
+
     public function __construct(
         protected GrowthProfileService $profileService
     ) {}
@@ -77,7 +81,7 @@ class ProfileSettingsController extends Controller
         $this->profileService->update($profile, $validated);
 
         return redirect()->route('growth.profile.edit')
-            ->with('success', 'Profile updated successfully.');
+            ->with('success', __('Profile updated successfully.'));
     }
 
     /**
@@ -93,7 +97,7 @@ class ProfileSettingsController extends Controller
         $this->profileService->publish($profile);
 
         return redirect()->route('growth.profile.edit')
-            ->with('success', 'Your profile is now live! Share your Taalimu link with students.');
+            ->with('success', __('Your profile is now live! Share your Taalimu link with students.'));
     }
 
     /**
@@ -109,7 +113,7 @@ class ProfileSettingsController extends Controller
         $this->profileService->unpublish($profile);
 
         return redirect()->route('growth.profile.edit')
-            ->with('success', 'Your profile has been unpublished.');
+            ->with('success', __('Your profile has been unpublished.'));
     }
 
     /**
@@ -117,18 +121,35 @@ class ProfileSettingsController extends Controller
      */
     protected function resolveProfile($user): PublicProfile
     {
+        // 1. Instructor resolution
         $instructor = $user->instructor;
 
+        if (! $instructor && ($user->role === 'instructor' || $this->hasAnyRole($user, 'instructor'))) {
+            $instructor = Instructor::where('user_id', $user->id)
+                ->orWhere('email', $user->email)
+                ->first();
+        }
+
         if ($instructor) {
+            $tenant = app()->bound('tenant') ? app('tenant') : ($user->tenant ?? Tenant::find($instructor->tenant_id));
+            if ($tenant && ! app()->bound('tenant')) {
+                app()->instance('tenant', $tenant);
+            }
+
             return $this->profileService->getOrCreateForInstructor($instructor);
         }
 
-        $tenant = app()->bound('tenant') ? app('tenant') : null;
+        // 2. Tenant / Center resolution
+        $tenant = app()->bound('tenant') ? app('tenant') : ($user->tenant ?? Tenant::find($user->tenant_id));
 
-        if ($tenant && in_array($user->role, ['center_admin', 'admin'])) {
+        if ($tenant && ($this->hasAnyRole($user, ['center_admin', 'admin', 'center_owner', 'super_admin', 'instructor']))) {
+            if (! app()->bound('tenant')) {
+                app()->instance('tenant', $tenant);
+            }
+
             return $this->profileService->getOrCreateForCenter($tenant);
         }
 
-        abort(403, 'You do not have a profile to manage.');
+        abort(403, __('You do not have a profile to manage.'));
     }
 }

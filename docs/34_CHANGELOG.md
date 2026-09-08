@@ -23,6 +23,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added localized strings for `activity_logs` in Arabic, English, and French.
 
 ### Fixed
+- **Growth Profile 403 Forbidden & Central Domain Tenant Resolution (2026-09-08)**:
+  - Added `EnsureGrowthTenant` middleware to bind the authenticated user's tenant into the container on central domain routes (`taalimu.com/growth/*`).
+  - Updated `ProfileSettingsController::resolveProfile()` to properly detect tenant from user/instructor and grant access to `center_admin`, `admin`, `center_owner`, `super_admin`, and `instructor`.
+  - Updated `PublicProfilePolicy` to authorize `center_owner` and `instructor` roles and safely cast `tenant_id` comparisons.
+  - Fixed profile public URL generation and referral links in `resources/views/growth/settings/profile.blade.php` to distinguish between instructor (`/t/`) and center (`/c/`) profiles.
+
+### Fixed
 - **Admin Panel Access & 500 Server Error Resolution (2026-09-06)**:
   - Fixed `RedirectIfAuthenticated` middleware accessing `$user->role` on null when guard is `admin`, causing 500 Server Error on `/admin/login`. Updated to properly retrieve `$user = Auth::guard($guard)->user()` with null checks.
   - Fixed missing `{tenant}` parameter in `resources/views/layouts/app-next.blade.php` and `resources/views/components/ui/navbar.blade.php` when rendering notifications for central admins where `app()->bound('tenant')` is false.

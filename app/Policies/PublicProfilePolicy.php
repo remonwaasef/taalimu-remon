@@ -15,8 +15,15 @@ class PublicProfilePolicy
      */
     public function viewSettings(User $user, PublicProfile $profile): bool
     {
-        return $user->tenant_id === $profile->tenant_id &&
-               $this->hasAnyRole($user, ['center_admin', 'admin', 'instructor']);
+        if ($this->hasAnyRole($user, 'super_admin')) {
+            return true;
+        }
+
+        if ((int) $user->tenant_id !== (int) $profile->tenant_id) {
+            return false;
+        }
+
+        return $this->hasAnyRole($user, ['center_admin', 'admin', 'center_owner', 'instructor']);
     }
 
     /**
@@ -24,8 +31,15 @@ class PublicProfilePolicy
      */
     public function update(User $user, PublicProfile $profile): bool
     {
-        return $user->tenant_id === $profile->tenant_id &&
-               $this->hasAnyRole($user, ['center_admin', 'admin', 'instructor']);
+        if ($this->hasAnyRole($user, 'super_admin')) {
+            return true;
+        }
+
+        if ((int) $user->tenant_id !== (int) $profile->tenant_id) {
+            return false;
+        }
+
+        return $this->hasAnyRole($user, ['center_admin', 'admin', 'center_owner', 'instructor']);
     }
 
     /**
@@ -33,7 +47,14 @@ class PublicProfilePolicy
      */
     public function publish(User $user, PublicProfile $profile): bool
     {
-        return $user->tenant_id === $profile->tenant_id &&
-               $this->hasAnyRole($user, ['center_admin', 'admin']);
+        if ($this->hasAnyRole($user, 'super_admin')) {
+            return true;
+        }
+
+        if ((int) $user->tenant_id !== (int) $profile->tenant_id) {
+            return false;
+        }
+
+        return $this->hasAnyRole($user, ['center_admin', 'admin', 'center_owner', 'instructor']);
     }
 }

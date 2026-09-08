@@ -202,7 +202,7 @@ $mainRoutes = function () {
         ->name('growth.demand.store');
 
     // GROWTH NETWORK — Authenticated Profile Settings
-    Route::middleware(['auth', 'verified'])->prefix('growth')->group(function () {
+    Route::middleware(['auth', \App\Http\Middleware\EnsureGrowthTenant::class])->prefix('growth')->group(function () {
         Route::get('/profile', [\App\Http\Controllers\Growth\ProfileSettingsController::class, 'edit'])
             ->name('growth.profile.edit');
         Route::put('/profile', [\App\Http\Controllers\Growth\ProfileSettingsController::class, 'update'])
