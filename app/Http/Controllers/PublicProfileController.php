@@ -24,6 +24,17 @@ class PublicProfileController extends Controller
     {
         $profile = $this->profileService->findPublishedBySlug($slug, Instructor::class);
 
+        // Allow owner/admin to preview their own profile even if unpublished
+        if (! $profile && auth()->check()) {
+            $candidate = PublicProfile::withoutGlobalScopes()
+                ->where('slug', $slug)
+                ->where('profilable_type', Instructor::class)
+                ->first();
+            if ($candidate && ((int) auth()->user()->tenant_id === (int) $candidate->tenant_id || auth()->user()->role === 'super_admin')) {
+                $profile = $candidate;
+            }
+        }
+
         if (! $profile) {
             abort(404, 'Teacher profile not found.');
         }
@@ -53,6 +64,17 @@ class PublicProfileController extends Controller
     public function showCenter(Request $request, string $slug)
     {
         $profile = $this->profileService->findPublishedBySlug($slug, Tenant::class);
+
+        // Allow owner/admin to preview their own profile even if unpublished
+        if (! $profile && auth()->check()) {
+            $candidate = PublicProfile::withoutGlobalScopes()
+                ->where('slug', $slug)
+                ->where('profilable_type', Tenant::class)
+                ->first();
+            if ($candidate && ((int) auth()->user()->tenant_id === (int) $candidate->tenant_id || auth()->user()->role === 'super_admin')) {
+                $profile = $candidate;
+            }
+        }
 
         if (! $profile) {
             abort(404, 'Center profile not found.');

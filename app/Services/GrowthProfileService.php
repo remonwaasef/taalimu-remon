@@ -58,7 +58,7 @@ class GrowthProfileService
             'bio' => $instructor->bio,
             'photo' => $instructor->image,
             'visibility' => $this->defaultVisibility(),
-            'published' => false,
+            'published' => true,
         ]);
     }
 
@@ -76,7 +76,7 @@ class GrowthProfileService
             'headline' => $tenant->description ? Str::limit(strip_tags($tenant->description), 100) : null,
             'photo' => $tenant->logo,
             'visibility' => $this->defaultVisibility(),
-            'published' => false,
+            'published' => true,
         ]);
     }
 

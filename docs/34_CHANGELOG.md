@@ -22,7 +22,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Enhanced `QuizPolicy` and `QuestionPolicy` to grant access to `admin` and `center_owner` roles via `HasRoleCheck` trait.
   - Added localized strings for `activity_logs` in Arabic, English, and French.
 
-### Fixed
+- **Path-based Tenancy & Profile Auto-Publishing (2026-09-09)**:
+  - Enabled `TENANCY_MODE=path` to support path-based URLs (`https://taalimu.com/c/{tenant}/...`) alongside the public landing page (`https://taalimu.com/c/{slug}`).
+  - Updated `GrowthProfileService` to default newly registered instructor and center profiles to `published = true` so public landing pages are immediately active.
+  - Added preview fallback in `PublicProfileController` for authenticated owners to view draft profiles without 404s.
 - **Growth Profile 403 Forbidden & Central Domain Tenant Resolution (2026-09-08)**:
   - Added `EnsureGrowthTenant` middleware to bind the authenticated user's tenant into the container on central domain routes (`taalimu.com/growth/*`).
   - Updated `ProfileSettingsController::resolveProfile()` to properly detect tenant from user/instructor and grant access to `center_admin`, `admin`, `center_owner`, `super_admin`, and `instructor`.
