@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             \Modules\Admin\Database\Seeders\AdminDatabaseSeeder::class, // Admin Panel Specific Roles
             SuperAdminSeeder::class,
             PackageSeeder::class,
+            GrowthFeaturesSeeder::class,
             FullSystemDemoSeeder::class,
         ]);
     }

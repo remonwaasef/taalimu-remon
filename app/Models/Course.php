@@ -23,6 +23,9 @@ class Course extends Model
             if (empty($course->registration_token)) {
                 $course->registration_token = \Illuminate\Support\Str::random(16);
             }
+            if (empty($course->slug) && $course->title) {
+                $course->slug = \Illuminate\Support\Str::slug($course->title);
+            }
         });
 
         static::created(function ($course) {
@@ -62,12 +65,33 @@ class Course extends Model
         'tenant_id',
         'instructor_id',
         'title',
+        'slug',
         'description',
+        'short_description',
         'price',
         'sessions_count',
         'image',
         'registration_token',
         'status',
+        'level',
+        'category',
+        'delivery_mode',
+        'capacity',
+        'enrolled_count',
+        'start_date',
+        'end_date',
+        'published',
+        'tags',
+    ];
+
+    protected $casts = [
+        'capacity' => 'integer',
+        'enrolled_count' => 'integer',
+        'price' => 'decimal:2',
+        'start_date' => 'date',
+        'end_date' => 'date',
+        'published' => 'boolean',
+        'tags' => 'array',
     ];
 
     /**
@@ -150,5 +174,46 @@ class Course extends Model
     public function resources()
     {
         return $this->hasMany(CourseResource::class);
+    }
+
+    public function waitlists()
+    {
+        return $this->hasMany(Waitlist::class);
+    }
+
+    public function demandRequests()
+    {
+        return $this->hasMany(DemandRequest::class);
+    }
+
+    public function getAvailableSeats(): ?int
+    {
+        if ($this->capacity === null) {
+            return null;
+        }
+
+        return max(0, $this->capacity - $this->enrolled_count);
+    }
+
+    public function isFull(): bool
+    {
+        return $this->capacity !== null && $this->enrolled_count >= $this->capacity;
+    }
+
+    public function availabilityStatus(): string
+    {
+        if (! $this->published) {
+            return 'coming_soon';
+        }
+
+        if ($this->isFull()) {
+            return 'full';
+        }
+
+        if ($this->capacity !== null && $this->getAvailableSeats() <= 5) {
+            return 'limited_seats';
+        }
+
+        return 'available';
     }
 }

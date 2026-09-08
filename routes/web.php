@@ -164,6 +164,98 @@ $mainRoutes = function () {
     Route::get('auth/google/complete', [App\Http\Controllers\SocialAuthController::class, 'showCompleteRegistration'])->name('google.complete-registration');
     Route::post('auth/google/complete', [App\Http\Controllers\SocialAuthController::class, 'completeRegistration'])->name('google.complete-registration.post');
 
+    // =========================================================================
+    // GROWTH NETWORK — Public Identity Routes (No Auth Required)
+    // =========================================================================
+    Route::get('/t/{slug}', [\App\Http\Controllers\PublicProfileController::class, 'showTeacher'])
+        ->middleware('throttle:120,1')
+        ->name('growth.teacher.show');
+    Route::get('/c/{slug}', [\App\Http\Controllers\PublicProfileController::class, 'showCenter'])
+        ->middleware('throttle:120,1')
+        ->name('growth.center.show');
+
+    // =========================================================================
+    // GROWTH NETWORK — Public Program Routes (No Auth Required)
+    // =========================================================================
+    Route::get('/p/{slug}/programs', [\App\Http\Controllers\Growth\ProgramController::class, 'index'])
+        ->middleware('throttle:120,1')
+        ->name('growth.programs.index');
+    Route::get('/p/{profileSlug}/programs/{courseSlug}', [\App\Http\Controllers\Growth\ProgramController::class, 'show'])
+        ->middleware('throttle:120,1')
+        ->name('growth.programs.show');
+
+    // =========================================================================
+    // GROWTH NETWORK — Public Waitlist (No Auth Required)
+    // =========================================================================
+    Route::post('/p/{profileSlug}/programs/{courseSlug}/waitlist', [\App\Http\Controllers\Growth\WaitlistController::class, 'store'])
+        ->middleware('throttle:30,1')
+        ->name('growth.waitlist.store');
+
+    // =========================================================================
+    // GROWTH NETWORK — Public Demand Request (No Auth Required)
+    // =========================================================================
+    Route::get('/p/{slug}/demand', [\App\Http\Controllers\Growth\DemandController::class, 'show'])
+        ->middleware('throttle:120,1')
+        ->name('growth.demand.show');
+    Route::post('/p/{slug}/demand', [\App\Http\Controllers\Growth\DemandController::class, 'store'])
+        ->middleware('throttle:30,1')
+        ->name('growth.demand.store');
+
+    // GROWTH NETWORK — Authenticated Profile Settings
+    Route::middleware(['auth', 'verified'])->prefix('growth')->group(function () {
+        Route::get('/profile', [\App\Http\Controllers\Growth\ProfileSettingsController::class, 'edit'])
+            ->name('growth.profile.edit');
+        Route::put('/profile', [\App\Http\Controllers\Growth\ProfileSettingsController::class, 'update'])
+            ->name('growth.profile.update');
+        Route::post('/profile/publish', [\App\Http\Controllers\Growth\ProfileSettingsController::class, 'publish'])
+            ->name('growth.profile.publish');
+        Route::post('/profile/unpublish', [\App\Http\Controllers\Growth\ProfileSettingsController::class, 'unpublish'])
+            ->name('growth.profile.unpublish');
+
+        // Growth Dashboard
+        Route::get('/dashboard', [\App\Http\Controllers\Growth\GrowthDashboardController::class, 'index'])
+            ->name('growth.dashboard');
+        Route::get('/insights', [\App\Http\Controllers\Growth\GrowthInsightsController::class, 'index'])
+            ->middleware('throttle:30,1')
+            ->name('growth.insights');
+        Route::get('/notifications', [\App\Http\Controllers\Growth\GrowthDashboardController::class, 'notifications'])
+            ->name('growth.notifications');
+        Route::post('/notifications/{id}/read', [\App\Http\Controllers\Growth\GrowthDashboardController::class, 'markNotificationRead'])
+            ->name('growth.notification.read');
+        Route::post('/notifications/read-all', [\App\Http\Controllers\Growth\GrowthDashboardController::class, 'markAllNotificationsRead'])
+            ->name('growth.notifications.read-all');
+
+        // Phase 5 — Referrals
+        Route::get('/referrals', [\App\Http\Controllers\Growth\ReferralController::class, 'index'])
+            ->name('growth.referrals');
+
+        // Phase 5 — Marketplace (create/manage)
+        Route::get('/marketplace/create', [\App\Http\Controllers\Growth\MarketplaceController::class, 'create'])
+            ->name('growth.marketplace.create');
+        Route::post('/marketplace', [\App\Http\Controllers\Growth\MarketplaceController::class, 'store'])
+            ->name('growth.marketplace.store');
+        Route::post('/marketplace/{id}/close', [\App\Http\Controllers\Growth\MarketplaceController::class, 'close'])
+            ->name('growth.marketplace.close');
+    });
+
+    // Phase 5 — Public Discovery (no auth required)
+    Route::get('/discover/teachers', [\App\Http\Controllers\Growth\DiscoveryController::class, 'teachers'])
+        ->middleware('throttle:60,1')
+        ->name('growth.discover.teachers');
+    Route::get('/discover/centers', [\App\Http\Controllers\Growth\DiscoveryController::class, 'centers'])
+        ->middleware('throttle:60,1')
+        ->name('growth.discover.centers');
+    Route::get('/discover/listings', [\App\Http\Controllers\Growth\MarketplaceController::class, 'index'])
+        ->middleware('throttle:60,1')
+        ->name('growth.discover.listings');
+
+    // Phase 5 — Reviews (public + authenticated)
+    Route::get('/p/{slug}/reviews', [\App\Http\Controllers\Growth\ReviewController::class, 'index'])
+        ->name('growth.reviews.index');
+    Route::post('/p/{slug}/reviews', [\App\Http\Controllers\Growth\ReviewController::class, 'store'])
+        ->middleware(['auth', 'verified'])
+        ->name('growth.reviews.store');
+
     // Inertia Demo Route
     Route::get('/inertia-demo', function () {
         $user = auth()->user() ?: (object)['name' => 'أستاذنا الافتراضي'];

@@ -48,6 +48,8 @@ class AuthServiceProvider extends ServiceProvider
         // Explicit registration (model moved from an anomalous namespace where
         // auto-discovery could never find this policy).
         \App\Models\Asset::class => \App\Policies\AssetPolicy::class,
+        // Growth Network
+        \App\Models\PublicProfile::class => \App\Policies\PublicProfilePolicy::class,
     ];
 
     /**

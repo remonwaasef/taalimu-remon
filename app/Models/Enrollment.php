@@ -17,6 +17,8 @@ class Enrollment extends Model
         'status',
         'progress',
         'remaining_sessions',
+        'source',
+        'campaign',
     ];
 
     protected $casts = [
