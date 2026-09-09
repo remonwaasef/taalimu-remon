@@ -31,7 +31,8 @@
         "spatie/laravel-activitylog": "^4.10",
         "spatie/laravel-backup": "^10.2",
         "spatie/laravel-permission": "^6.23",
-        "spatie/laravel-sitemap": "*"
+        "spatie/laravel-sitemap": "*",
+        "symfony/polyfill-php85": "v1.38.1"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^4.3",

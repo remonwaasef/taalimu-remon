@@ -3,12 +3,25 @@
 namespace App\Services;
 
 use App\Models\Instructor;
+use App\Models\NetworkIdentity;
 use App\Models\PublicProfile;
 use App\Models\Tenant;
 use Illuminate\Support\Str;
 
 class GrowthProfileService
 {
+    protected ?NetworkIdentityService $networkIdentityService = null;
+
+    public function __construct() {}
+
+    protected function getNetworkIdentityService(): NetworkIdentityService
+    {
+        if (! $this->networkIdentityService) {
+            $this->networkIdentityService = app(NetworkIdentityService::class);
+        }
+        return $this->networkIdentityService;
+    }
+
     /**
      * Get or create a public profile for an instructor.
      */
@@ -48,7 +61,7 @@ class GrowthProfileService
      */
     public function createForInstructor(Instructor $instructor): PublicProfile
     {
-        return PublicProfile::create([
+        $profile = PublicProfile::create([
             'tenant_id' => $instructor->tenant_id,
             'profilable_type' => Instructor::class,
             'profilable_id' => $instructor->id,
@@ -60,6 +73,15 @@ class GrowthProfileService
             'visibility' => $this->defaultVisibility(),
             'published' => true,
         ]);
+
+        // Create NetworkIdentity
+        $this->getNetworkIdentityService()->createForInstructor($instructor, [
+            'public_profile_id' => $profile->id,
+            'slug' => $profile->slug,
+            'status' => NetworkIdentity::STATUS_PUBLISHED,
+        ]);
+
+        return $profile;
     }
 
     /**
@@ -67,7 +89,7 @@ class GrowthProfileService
      */
     public function createForCenter(Tenant $tenant): PublicProfile
     {
-        return PublicProfile::create([
+        $profile = PublicProfile::create([
             'tenant_id' => $tenant->id,
             'profilable_type' => Tenant::class,
             'profilable_id' => $tenant->id,
@@ -78,6 +100,15 @@ class GrowthProfileService
             'visibility' => $this->defaultVisibility(),
             'published' => true,
         ]);
+
+        // Create NetworkIdentity
+        $this->getNetworkIdentityService()->createForCenter($tenant, [
+            'public_profile_id' => $profile->id,
+            'slug' => $profile->slug,
+            'status' => NetworkIdentity::STATUS_PUBLISHED,
+        ]);
+
+        return $profile;
     }
 
     /**
@@ -92,6 +123,17 @@ class GrowthProfileService
 
         $profile->update($data);
 
+        // Sync NetworkIdentity if slug changed
+        if (isset($data['slug'])) {
+            $identity = NetworkIdentity::where('profilable_type', $profile->profilable_type)
+                ->where('profilable_id', $profile->profilable_id)
+                ->first();
+
+            if ($identity) {
+                $identity->update(['public_slug' => $data['slug']]);
+            }
+        }
+
         return $profile->fresh();
     }
 
@@ -102,6 +144,15 @@ class GrowthProfileService
     {
         $profile->update(['published' => true]);
 
+        // Sync NetworkIdentity
+        $identity = NetworkIdentity::where('profilable_type', $profile->profilable_type)
+            ->where('profilable_id', $profile->profilable_id)
+            ->first();
+
+        if ($identity) {
+            $this->getNetworkIdentityService()->publish($identity);
+        }
+
         return $profile->fresh();
     }
 
@@ -111,6 +162,15 @@ class GrowthProfileService
     public function unpublish(PublicProfile $profile): PublicProfile
     {
         $profile->update(['published' => false]);
+
+        // Sync NetworkIdentity
+        $identity = NetworkIdentity::where('profilable_type', $profile->profilable_type)
+            ->where('profilable_id', $profile->profilable_id)
+            ->first();
+
+        if ($identity) {
+            $this->getNetworkIdentityService()->unpublish($identity);
+        }
 
         return $profile->fresh();
     }

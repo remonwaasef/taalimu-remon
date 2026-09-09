@@ -17,7 +17,7 @@ class GrowthPublicProfileTest extends TestCase
 
     private function createTenantWithInstructor(): array
     {
-        $tenant = $this->createTenant(['domain' => 'growth-test-' . uniqid()]);
+        $tenant = $this->createTenant();
 
         $user = User::create([
             'tenant_id' => $tenant->id,
@@ -314,13 +314,13 @@ class GrowthPublicProfileTest extends TestCase
 
     public function test_center_public_profile_returns_200(): void
     {
-        $tenant = $this->createTenant(['domain' => 'growth-center-' . uniqid()]);
+        $tenant = $this->createTenant();
 
         $profile = PublicProfile::create([
             'tenant_id' => $tenant->id,
             'profilable_type' => Tenant::class,
             'profilable_id' => $tenant->id,
-            'slug' => $tenant->domain,
+            'slug' => 'test-center',
             'title' => $tenant->name,
             'headline' => 'Best Education Center',
             'published' => true,

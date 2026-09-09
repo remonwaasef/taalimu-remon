@@ -168,29 +168,44 @@ $mainRoutes = function () {
     // GROWTH NETWORK — Public Identity Routes (No Auth Required)
     // =========================================================================
     Route::get('/t/{slug}', function ($slug) {
-        $profile = \App\Models\PublicProfile::where('slug', $slug)
-            ->where('profilable_type', \App\Models\Instructor::class)
+        $identity = \App\Models\NetworkIdentity::where('public_slug', $slug)
+            ->where('profile_type', \App\Models\NetworkIdentity::PROFILE_TYPE_TEACHER)
+            ->where('status', \App\Models\NetworkIdentity::STATUS_PUBLISHED)
+            ->where('network_visible', true)
             ->first();
-        if ($profile && $profile->tenant) {
-            return redirect()->to(tenant_url('', $profile->tenant), 301);
-        }
 
         $tenant = \App\Models\Tenant::where('domain', $slug)->first();
         if ($tenant) {
             return redirect()->to(tenant_url('', $tenant), 301);
         }
 
+        if ($identity && $identity->tenant && $identity->tenant->domain) {
+            $mainHost = config('app.tenant_domain') ?: parse_url(config('app.url'), PHP_URL_HOST);
+            if (in_array(request()->getHost(), [$mainHost, 'www.' . $mainHost, 'taalimu.com', 'www.taalimu.com'])) {
+                return redirect()->to(tenant_url('', $identity->tenant), 301);
+            }
+        }
+
         return app(\App\Http\Controllers\PublicProfileController::class)->showTeacher(request(), $slug);
     })->middleware('throttle:120,1')->name('growth.teacher.show');
+
     Route::get('/c/{slug}/{path?}', function ($slug, $path = '') {
+        $identity = \App\Models\NetworkIdentity::where('public_slug', $slug)
+            ->where('profile_type', \App\Models\NetworkIdentity::PROFILE_TYPE_CENTER)
+            ->where('status', \App\Models\NetworkIdentity::STATUS_PUBLISHED)
+            ->where('network_visible', true)
+            ->first();
+
         $tenant = \App\Models\Tenant::where('domain', $slug)->first();
         if ($tenant) {
             return redirect()->to(tenant_url($path, $tenant), 301);
         }
 
-        $profile = \App\Models\PublicProfile::where('slug', $slug)->first();
-        if ($profile && $profile->tenant) {
-            return redirect()->to(tenant_url($path, $profile->tenant), 301);
+        if ($identity && $identity->tenant && $identity->tenant->domain) {
+            $mainHost = config('app.tenant_domain') ?: parse_url(config('app.url'), PHP_URL_HOST);
+            if (in_array(request()->getHost(), [$mainHost, 'www.' . $mainHost, 'taalimu.com', 'www.taalimu.com'])) {
+                return redirect()->to(tenant_url($path, $identity->tenant), 301);
+            }
         }
 
         return app(\App\Http\Controllers\PublicProfileController::class)->showCenter(request(), $slug);

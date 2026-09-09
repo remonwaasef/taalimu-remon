@@ -84,6 +84,9 @@ class AppServiceProvider extends ServiceProvider
         \App\Models\Classroom::observe(\App\Observers\TenantModelObserver::class);
         \Modules\Center\Models\Branch::observe(\App\Observers\TenantModelObserver::class);
 
+        // Register PublicProfile Observer for NetworkIdentity sync
+        \App\Models\PublicProfile::observe(\App\Observers\PublicProfileObserver::class);
+
         // Blade directive for Feature Flags
         \Illuminate\Support\Facades\Blade::if('feature', function ($feature) {
             $tenant = current_tenant();

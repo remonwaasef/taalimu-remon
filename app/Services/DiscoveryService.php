@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Instructor;
+use App\Models\NetworkIdentity;
 use App\Models\PublicProfile;
 use App\Models\Review;
 use Illuminate\Support\Facades\DB;
@@ -11,8 +12,8 @@ class DiscoveryService
 {
     public function searchTeachers(array $filters, int $perPage = 20): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {
-        $query = PublicProfile::where('published', true)
-            ->where('profilable_type', Instructor::class)
+        $query = NetworkIdentity::discoverablePublic()
+            ->teachers()
             ->whereHas('profilable', fn ($q) => $q->where('status', 'active'))
             ->with('profilable');
 
@@ -23,19 +24,21 @@ class DiscoveryService
         if (! empty($filters['search'])) {
             $search = $filters['search'];
             $query->where(function ($q) use ($search) {
-                $q->where('title', 'LIKE', "%{$search}%")
+                $q->where('public_slug', 'LIKE', "%{$search}%")
                     ->orWhere('headline', 'LIKE', "%{$search}%");
             });
         }
 
-        $profiles = $query->get();
+        $identities = $query->get();
 
-        $scored = $profiles->map(function ($profile) {
+        $scored = $identities->map(function ($identity) {
+            $profile = $identity->publicProfile;
             return [
+                'identity' => $identity,
                 'profile' => $profile,
-                'score' => $this->calculateDiscoveryScore($profile),
-                'average_rating' => $this->getRating($profile),
-                'review_count' => $this->getReviewCount($profile),
+                'score' => $profile ? $this->calculateDiscoveryScore($profile) : 0,
+                'average_rating' => $profile ? $this->getRating($profile) : null,
+                'review_count' => $profile ? $this->getReviewCount($profile) : 0,
             ];
         });
 
@@ -51,27 +54,29 @@ class DiscoveryService
 
     public function searchCenters(array $filters, int $perPage = 20): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {
-        $query = PublicProfile::where('published', true)
-            ->where('profilable_type', \App\Models\Center::class)
+        $query = NetworkIdentity::discoverablePublic()
+            ->centers()
             ->whereHas('profilable', fn ($q) => $q->where('status', 'active'))
             ->with('profilable');
 
         if (! empty($filters['search'])) {
             $search = $filters['search'];
             $query->where(function ($q) use ($search) {
-                $q->where('title', 'LIKE', "%{$search}%")
+                $q->where('public_slug', 'LIKE', "%{$search}%")
                     ->orWhere('headline', 'LIKE', "%{$search}%");
             });
         }
 
-        $profiles = $query->get();
+        $identities = $query->get();
 
-        $scored = $profiles->map(function ($profile) {
+        $scored = $identities->map(function ($identity) {
+            $profile = $identity->publicProfile;
             return [
+                'identity' => $identity,
                 'profile' => $profile,
-                'score' => $this->calculateDiscoveryScore($profile),
-                'average_rating' => $this->getRating($profile),
-                'review_count' => $this->getReviewCount($profile),
+                'score' => $profile ? $this->calculateDiscoveryScore($profile) : 0,
+                'average_rating' => $profile ? $this->getRating($profile) : null,
+                'review_count' => $profile ? $this->getReviewCount($profile) : 0,
             ];
         });
 
@@ -92,10 +97,10 @@ class DiscoveryService
         $hasHeadline = ! empty($profile->headline);
         $score += $hasHeadline ? 10 : 0;
 
-        $hasAbout = ! empty($profile->about);
+        $hasAbout = ! empty($profile->bio);
         $score += $hasAbout ? 10 : 0;
 
-        $hasPhoto = ! empty($profile->photo_url);
+        $hasPhoto = ! empty($profile->photo);
         $score += $hasPhoto ? 10 : 0;
 
         $hasCourses = \App\Models\Course::where('tenant_id', $profile->tenant_id)

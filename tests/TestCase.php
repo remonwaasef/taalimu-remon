@@ -26,7 +26,7 @@ abstract class TestCase extends BaseTestCase
     protected function createTenant(array $attributes = []): Tenant
     {
         $defaults = [
-            'domain' => 'test',
+            'domain' => null,
             'name' => 'Test Center',
             'onboarding_status' => 'completed',
         ];

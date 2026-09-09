@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Instructor;
+use App\Models\NetworkIdentity;
 use App\Models\PublicProfile;
 use App\Models\Tenant;
 use App\Services\GrowthEventService;
 use App\Services\GrowthProfileService;
+use App\Services\NetworkIdentityService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -14,6 +16,7 @@ class PublicProfileController extends Controller
 {
     public function __construct(
         protected GrowthProfileService $profileService,
+        protected NetworkIdentityService $networkIdentityService,
         protected GrowthEventService $eventService
     ) {}
 
@@ -22,17 +25,31 @@ class PublicProfileController extends Controller
      */
     public function showTeacher(Request $request, string $slug)
     {
-        $profile = $this->profileService->findPublishedBySlug($slug, Instructor::class);
+        $identity = $this->networkIdentityService->findPubliclyAccessibleBySlug(
+            $slug,
+            NetworkIdentity::PROFILE_TYPE_TEACHER
+        );
 
         // Allow owner/admin to preview their own profile even if unpublished
-        if (! $profile && auth()->check()) {
-            $candidate = PublicProfile::withoutGlobalScopes()
-                ->where('slug', $slug)
-                ->where('profilable_type', Instructor::class)
+        if (! $identity && auth()->check()) {
+            $candidate = NetworkIdentity::withoutGlobalScopes()
+                ->where('public_slug', $slug)
+                ->where('profile_type', NetworkIdentity::PROFILE_TYPE_TEACHER)
                 ->first();
+
             if ($candidate && ((int) auth()->user()->tenant_id === (int) $candidate->tenant_id || auth()->user()->role === 'super_admin')) {
-                $profile = $candidate;
+                $identity = $candidate;
             }
+        }
+
+        if (! $identity) {
+            abort(404, 'Teacher profile not found.');
+        }
+
+        $profile = $identity->publicProfile;
+
+        if (! $profile) {
+            $profile = $this->profileService->findPublishedBySlug($slug, Instructor::class);
         }
 
         if (! $profile) {
@@ -45,7 +62,7 @@ class PublicProfileController extends Controller
             abort(404, 'Teacher not found.');
         }
 
-        $tenant = Tenant::findOrFail($profile->tenant_id);
+        $tenant = Tenant::findOrFail($identity->tenant_id);
 
         if ($tenant->status !== 'active') {
             abort(404, 'Center not found.');
@@ -69,24 +86,38 @@ class PublicProfileController extends Controller
      */
     public function showCenter(Request $request, string $slug)
     {
-        $profile = $this->profileService->findPublishedBySlug($slug, Tenant::class);
+        $identity = $this->networkIdentityService->findPubliclyAccessibleBySlug(
+            $slug,
+            NetworkIdentity::PROFILE_TYPE_CENTER
+        );
 
         // Allow owner/admin to preview their own profile even if unpublished
-        if (! $profile && auth()->check()) {
-            $candidate = PublicProfile::withoutGlobalScopes()
-                ->where('slug', $slug)
-                ->where('profilable_type', Tenant::class)
+        if (! $identity && auth()->check()) {
+            $candidate = NetworkIdentity::withoutGlobalScopes()
+                ->where('public_slug', $slug)
+                ->where('profile_type', NetworkIdentity::PROFILE_TYPE_CENTER)
                 ->first();
+
             if ($candidate && ((int) auth()->user()->tenant_id === (int) $candidate->tenant_id || auth()->user()->role === 'super_admin')) {
-                $profile = $candidate;
+                $identity = $candidate;
             }
+        }
+
+        if (! $identity) {
+            abort(404, 'Center profile not found.');
+        }
+
+        $profile = $identity->publicProfile;
+
+        if (! $profile) {
+            $profile = $this->profileService->findPublishedBySlug($slug, Tenant::class);
         }
 
         if (! $profile) {
             abort(404, 'Center profile not found.');
         }
 
-        $tenant = Tenant::findOrFail($profile->tenant_id);
+        $tenant = Tenant::findOrFail($identity->tenant_id);
 
         if ($tenant->status !== 'active') {
             abort(404, 'Center not found.');
