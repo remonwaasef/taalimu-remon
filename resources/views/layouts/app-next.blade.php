@@ -325,7 +325,7 @@
             </header>
 
             <!-- Main Page Content -->
-            <main id="main-content" class="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto motion-page">
+            <main id="main-content" class="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto motion-page pb-20 lg:pb-8">
                 <!-- Trial & Subscription Alerts -->
                 <x-trial-alert-banner />
                 <!-- Flash Messages -->
@@ -337,6 +337,50 @@
             </main>
         </div>
     </div>
+
+    <!-- Mobile Floating Bottom Action Dock (Thumb Zone UX) -->
+    @if(app()->bound('tenant') && !Route::is('login.*') && !Route::is('register.*'))
+        @php
+            $mDomain = app('tenant')?->domain;
+            $mIsDashboard = Route::currentRouteNamed('center.dashboard');
+            $mIsStudents = Route::currentRouteNamed('center.students.*');
+            $mIsAttendance = Route::currentRouteNamed('center.attendance.*');
+            $mIsSales = Route::currentRouteNamed('center.sales.*');
+        @endphp
+        <nav class="lg:hidden fixed bottom-0 inset-x-0 z-30 bg-white/95 dark:bg-[#101A26]/95 backdrop-blur-md border-t border-slate-200/90 dark:border-slate-800 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] px-2 py-1.5 flex items-center justify-around" aria-label="{{ __('Mobile navigation') }}">
+            <!-- 1. Home -->
+            <a href="{{ route('center.dashboard', ['tenant' => $mDomain]) }}" class="flex flex-col items-center justify-center w-14 py-1 text-center transition-colors {{ $mIsDashboard ? 'text-brand-primary dark:text-brand-300 font-bold' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800' }}">
+                <i class="fas fa-home text-base mb-1"></i>
+                <span class="text-[10px] leading-none">{{ __('center::sidebar.dashboard') }}</span>
+            </a>
+
+            <!-- 2. Students -->
+            <a href="{{ route('center.students.index', ['tenant' => $mDomain]) }}" class="flex flex-col items-center justify-center w-14 py-1 text-center transition-colors {{ $mIsStudents ? 'text-brand-primary dark:text-brand-300 font-bold' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800' }}">
+                <i class="fas fa-user-graduate text-base mb-1"></i>
+                <span class="text-[10px] leading-none">{{ __('center::sidebar.students') }}</span>
+            </a>
+
+            <!-- 3. Raised QR Scan Action Button (Centerpiece) -->
+            <a href="{{ route('center.attendance.index', ['tenant' => $mDomain]) }}" class="flex flex-col items-center justify-center -mt-5 group" title="تحضير سريع">
+                <div class="w-12 h-12 rounded-full bg-brand-primary text-white shadow-lg shadow-brand-primary/30 flex items-center justify-center text-lg group-hover:scale-105 group-active:scale-95 transition-all border-2 border-white dark:border-[#101A26]">
+                    <i class="fas fa-qrcode"></i>
+                </div>
+                <span class="text-[9px] font-bold text-slate-600 dark:text-slate-300 mt-1">حضور</span>
+            </a>
+
+            <!-- 4. Sales / Billing -->
+            <a href="{{ route('center.sales.index', ['tenant' => $mDomain]) }}" class="flex flex-col items-center justify-center w-14 py-1 text-center transition-colors {{ $mIsSales ? 'text-brand-primary dark:text-brand-300 font-bold' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800' }}">
+                <i class="fas fa-wallet text-base mb-1"></i>
+                <span class="text-[10px] leading-none">{{ __('center::sidebar.payments') }}</span>
+            </a>
+
+            <!-- 5. More Menu Toggle -->
+            <button type="button" @click="sidebarOpen = true" class="flex flex-col items-center justify-center w-14 py-1 text-center text-slate-500 dark:text-slate-400 hover:text-slate-800" aria-label="القائمة">
+                <i class="fas fa-bars text-base mb-1"></i>
+                <span class="text-[10px] leading-none">المزيد</span>
+            </button>
+        </nav>
+    @endif
 
     <!-- Global Toast Notifications Container -->
     <x-ui.toast />

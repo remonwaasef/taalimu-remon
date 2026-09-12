@@ -112,3 +112,33 @@ html.dark .card {
 .alert.rounded-4 {
     border-radius: var(--card-bento-radius, 1.25rem) !important;
 }
+
+/* Legacy Bootstrap Table Harmonization */
+.table {
+    border-color: var(--color-border, #EAEFF2) !important;
+    color: var(--color-text-main, #102033) !important;
+}
+
+.table th {
+    font-weight: 700 !important;
+    font-size: 0.75rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    color: var(--color-text-secondary, #65717F) !important;
+    background-color: rgba(248, 250, 252, 0.8) !important;
+    border-bottom: 1px solid var(--color-border, #EAEFF2) !important;
+}
+
+html.dark .table th {
+    background-color: rgba(16, 32, 51, 0.6) !important;
+    color: #94A3B8 !important;
+    border-color: #1F3248 !important;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(22, 143, 124, 0.03) !important;
+}
+
+html.dark .table-hover tbody tr:hover {
+    background-color: rgba(22, 143, 124, 0.08) !important;
+}

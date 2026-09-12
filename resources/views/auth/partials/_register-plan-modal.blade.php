@@ -33,26 +33,26 @@
 
                     <!-- Billing Cycle Toggle -->
                     <div class="flex justify-center">
-                        <div class="inline-flex bg-slate-100 p-1 rounded-xl gap-0.5" dir="ltr">
+                        <div class="inline-flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl gap-0.5" dir="ltr">
                             <button type="button" @click="billingCycle = 'monthly'" 
                                     class="px-4 py-2 rounded-lg text-xs font-bold transition-all duration-200"
                                     :class="billingCycle === 'monthly' 
-                                        ? 'bg-white text-[#2E8B83] shadow-sm' 
-                                        : 'text-slate-500 hover:text-slate-700'">
+                                        ? 'bg-white dark:bg-slate-900 text-brand-primary shadow-sm' 
+                                        : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'">
                                 {{ __('auth.billing.monthly') }}
                             </button>
                             <button type="button" @click="billingCycle = 'term'" 
                                     class="px-4 py-2 rounded-lg text-xs font-bold transition-all duration-200"
                                     :class="billingCycle === 'term' 
-                                        ? 'bg-white text-[#2E8B83] shadow-sm' 
-                                        : 'text-slate-500 hover:text-slate-700'">
+                                        ? 'bg-white dark:bg-slate-900 text-brand-primary shadow-sm' 
+                                        : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'">
                                 {{ __('auth.billing.term') }}
                             </button>
                             <button type="button" @click="billingCycle = 'yearly'" 
                                     class="px-4 py-2 rounded-lg text-xs font-bold transition-all duration-200 relative"
                                     :class="billingCycle === 'yearly' 
-                                        ? 'bg-white text-[#2E8B83] shadow-sm' 
-                                        : 'text-slate-500 hover:text-slate-700'">
+                                        ? 'bg-white dark:bg-slate-900 text-brand-primary shadow-sm' 
+                                        : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'">
                                 {{ __('auth.billing.yearly') }}
                                 <span class="absolute -top-2.5 -right-1 bg-amber-400 text-amber-900 text-[9px] font-black px-1.5 py-0.5 rounded-full leading-none whitespace-nowrap">
                                     {{ __('auth.plan_modal.save_badge') }}
@@ -71,22 +71,22 @@
                             <!-- Most Popular Badge -->
                             <div x-show="pkg.is_featured" 
                                  class="absolute -top-2.5 left-1/2 -translate-x-1/2 z-10">
-                                <span class="bg-gradient-to-r from-[#2E8B83] to-[#3BA89F] text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-sm whitespace-nowrap">
+                                <span class="bg-gradient-to-r from-brand-primary to-brand-400 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-sm whitespace-nowrap">
                                     <i class="bi bi-star-fill text-[8px] me-1"></i>{{ __('auth.plan_modal.most_popular') }}
                                 </span>
                             </div>
 
                             <div class="p-4 rounded-2xl border-2 transition-all duration-200"
                                  :class="selectedPlan === pkg.slug 
-                                     ? 'border-[#2E8B83] bg-[#2E8B83]/[0.03] shadow-md shadow-[#2E8B83]/10' 
-                                     : (pkg.is_featured ? 'border-slate-200 bg-white hover:border-[#2E8B83]/30 hover:shadow-sm mt-1' : 'border-slate-100 bg-white hover:border-slate-200 hover:shadow-sm')">
+                                     ? 'border-brand-primary bg-brand-primary/[0.03] shadow-md shadow-brand-primary/10' 
+                                     : (pkg.is_featured ? 'border-slate-200 bg-white hover:border-brand-primary/30 hover:shadow-sm mt-1' : 'border-slate-100 bg-white hover:border-slate-200 hover:shadow-sm')">
                                 
                                 <div class="flex justify-between items-start gap-3">
                                     <!-- Plan Info (Right side in RTL) -->
                                     <div class="flex items-start gap-3 flex-1 min-w-0">
                                         <!-- Radio Indicator -->
                                         <div class="w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-all duration-200"
-                                             :class="selectedPlan === pkg.slug ? 'border-[#2E8B83] bg-[#2E8B83]' : 'border-slate-300 bg-white group-hover:border-slate-400'">
+                                             :class="selectedPlan === pkg.slug ? 'border-brand-primary bg-brand-primary' : 'border-slate-300 bg-white group-hover:border-slate-400'">
                                             <svg x-show="selectedPlan === pkg.slug" class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
                                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                                             </svg>
@@ -97,7 +97,7 @@
                                             
                                             <!-- Trial Badge -->
                                             <div x-show="pkg.trial_days > 0" class="mt-1">
-                                                <span class="inline-flex items-center gap-1 bg-emerald-50 text-[#2E8B83] text-[10px] font-semibold px-2 py-0.5 rounded-full">
+                                                <span class="inline-flex items-center gap-1 bg-emerald-50 text-brand-primary text-[10px] font-semibold px-2 py-0.5 rounded-full">
                                                     <i class="bi bi-gift text-[9px]"></i>
                                                     <span x-text="pkg.trial_days + ' {{ __('auth.plan_modal.days_trial') }}'"></span>
                                                 </span>
@@ -107,7 +107,7 @@
                                             <div x-show="pkg.features && pkg.features.length > 0" class="mt-2 space-y-0.5">
                                                 <template x-for="(feat, fi) in (pkg.features || []).slice(0, 2)" :key="fi">
                                                     <div class="flex items-center gap-1.5">
-                                                        <i class="bi bi-check-circle-fill text-[#2E8B83] text-[9px] flex-shrink-0"></i>
+                                                        <i class="bi bi-check-circle-fill text-brand-primary text-[9px] flex-shrink-0"></i>
                                                         <span class="text-[11px] text-slate-500 truncate" x-text="feat"></span>
                                                     </div>
                                                 </template>
@@ -118,7 +118,7 @@
                                     <!-- Price (Left side in RTL) -->
                                     <div class="text-left flex-shrink-0" dir="ltr">
                                         <div class="font-bold text-lg leading-tight transition-colors duration-200"
-                                             :class="selectedPlan === pkg.slug ? 'text-[#2E8B83]' : 'text-slate-800'">
+                                             :class="selectedPlan === pkg.slug ? 'text-brand-primary' : 'text-slate-800'">
                                             <span x-text="(billingCycle === 'yearly' ? getPriceData(pkg).yearly : (billingCycle === 'term' ? getPriceData(pkg).term : getPriceData(pkg).amount)).toLocaleString()"></span>
                                             <span class="text-xs font-semibold text-slate-400 ms-0.5" x-text="getPriceData(pkg).currency"></span>
                                         </div>
@@ -134,7 +134,7 @@
                 <!-- Footer -->
                 <div class="px-6 py-4 bg-slate-50/80 border-t border-slate-100">
                     <button type="button" @click="showPlanModal = false" 
-                            class="w-full py-2.5 rounded-xl text-sm font-bold transition-all duration-200 bg-[#2E8B83] text-white hover:bg-[#25746D] shadow-sm shadow-[#2E8B83]/20 active:scale-[0.98]">
+                            class="w-full py-2.5 rounded-xl text-sm font-bold transition-all duration-200 bg-brand-primary text-white hover:bg-brand-600 shadow-sm shadow-brand-primary/20 active:scale-[0.98]">
                         {{ __('auth.plan_modal.confirm') }}
                     </button>
                 </div>

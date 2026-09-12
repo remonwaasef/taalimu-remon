@@ -831,3 +831,85 @@ button {
         padding: 40px 0 60px;
     }
 }
+
+/* ================= ROI Calculator & SVG Vectors ================= */
+.icon-svg {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+}
+
+.benefit-icon-svg {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--primary-light);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.step-icon-svg {
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    background: var(--primary-light);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 12px rgba(22, 143, 124, 0.12);
+}
+
+.calculator-card {
+    background: #FFFFFF;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-box);
+    padding: 48px;
+    box-shadow: 0 10px 40px -6px rgba(16, 32, 51, 0.08);
+}
+
+.calc-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 48px;
+    align-items: center;
+}
+
+.calc-slider-wrap {
+    margin: 28px 0;
+}
+
+.calc-range {
+    width: 100%;
+    height: 8px;
+    border-radius: 4px;
+    background: #EAEFF2;
+    outline: none;
+    accent-color: var(--primary);
+    cursor: pointer;
+}
+
+.calc-result-box {
+    background: linear-gradient(145deg, #F2FBF8, #FFFFFF);
+    border: 1.5px solid var(--primary-border);
+    border-radius: 20px;
+    padding: 32px;
+    box-shadow: 0 4px 20px -2px rgba(22, 143, 124, 0.08);
+}
+
+@media (max-width: 900px) {
+    .calc-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+    .calculator-card {
+        padding: 24px;
+    }
+}
