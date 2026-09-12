@@ -438,7 +438,7 @@ window.addEventListener('pageshow', (event) => {
                                 <i class="bi bi-chevron-down text-xs transition-transform duration-200" :class="openFeatures ? 'rotate-180' : ''"></i>
                             </button>
                             <div x-show="openFeatures" x-transition.opacity.duration.200ms class="space-y-2 pt-2 border-t border-slate-50">
-                                <template x-for="feature in (currentPlan.features || [])" :key="feature">
+                                <template x-for="feature in (currentPlan.features || []).filter(f => !f.toLowerCase().includes(': false') && !f.toLowerCase().endsWith('false'))" :key="feature">
                                     <div class="flex items-center gap-2 text-[11px] font-medium text-slate-600 font-arabic">
                                         <i class="bi bi-check2 text-emerald-500 flex-shrink-0"></i>
                                         <span x-text="feature"></span>

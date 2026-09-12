@@ -134,16 +134,25 @@ class Package extends Model
                     default => $p->description_en ?: '',
                 },
                 'features' => ($p->display_features && is_array($p->display_features) && count($p->display_features) > 0)
-                    ? $p->display_features
-                    : $p->features->map(function ($f) {
+                    ? array_values(array_filter($p->display_features, function ($feat) {
+                        $val = strtolower(trim((string) $feat));
+                        return ! in_array($val, ['false', '0', 'no', 'none', 'off', 'null', '']) && ! str_ends_with($val, ': false') && ! str_ends_with($val, ': 0');
+                    }))
+                    : $p->features->filter(function ($f) {
+                        $val = strtolower(trim((string) ($f->pivot->value ?? '')));
+                        return ! in_array($val, ['false', '0', 'no', 'none', 'off', 'null', '']);
+                    })->map(function ($f) {
                         $name = app()->getLocale() == 'ar' ? $f->name : ($f->name_en ?: $f->name);
-                        $value = $f->pivot->value;
+                        $value = trim((string) ($f->pivot->value ?? ''));
+                        if ($value === '-1') {
+                            return $name.': '.(app()->getLocale() == 'ar' ? 'غير محدود' : 'Unlimited');
+                        }
                         if ($value && ! in_array(strtolower($value), ['true', '1', 'yes'])) {
                             return $name.': '.$value;
                         }
 
                         return $name;
-                    })->toArray(),
+                    })->values()->toArray(),
             ];
         })->values();
     }

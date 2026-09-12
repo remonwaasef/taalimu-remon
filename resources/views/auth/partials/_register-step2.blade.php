@@ -32,7 +32,7 @@
 
 
 
-            <!-- Password & Confirm Password (Side-by-side) -->
+            <!-- Password -->
             <div class="space-y-1">
                 <div class="flex justify-between items-center px-1">
                     <label class="text-[12px] font-black text-slate-500 font-arabic">{{ __('auth.register.password') }}</label>
@@ -41,18 +41,13 @@
                         <span x-text="showPassword ? '{{ __('auth.register.hide') }}' : '{{ __('auth.register.show') }}'"></span>
                     </button>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                    <div>
-                        <input :type="showPassword ? 'text' : 'password'" name="password" x-model="password" 
-                            class="w-full h-11 px-4 bg-slate-50/50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:bg-white focus:ring-2 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all" 
-                            placeholder="{{ __('auth.register.password') }}" :required="currentStep === 2">
+                <div class="relative group">
+                    <div class="absolute inset-y-0 start-0 ps-3.5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-brand-secondary transition-colors">
+                        <i class="bi bi-shield-lock text-base"></i>
                     </div>
-                    <div>
-                        <input :type="showPassword ? 'text' : 'password'" name="password_confirmation" x-model="password_confirmation" 
-                            class="w-full h-11 px-4 bg-slate-50/50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:bg-white focus:ring-2 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all" 
-                            :class="password_confirmation.length > 0 && !isPasswordMatch ? 'border-red-300 bg-red-50' : ''" 
-                            placeholder="{{ __('auth.register.confirm_password') }}" :required="currentStep === 2">
-                    </div>
+                    <input :type="showPassword ? 'text' : 'password'" name="password" x-model="password" 
+                        class="w-full h-11 ps-10 pe-4 bg-slate-50/50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:bg-white focus:ring-2 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all" 
+                        placeholder="{{ __('auth.register.password') }}" :required="currentStep === 2">
                 </div>
 
                 <!-- Password Live Criteria Indicators -->
@@ -74,6 +69,28 @@
                             <i class="bi" :class="passwordCriteria.symbol ? 'bi-check-circle-fill' : 'bi-circle'"></i> {{ __('auth.registration_steps.symbol') }}
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="space-y-1">
+                <div class="flex justify-between items-center px-1">
+                    <label class="text-[12px] font-black text-slate-500 font-arabic">{{ __('auth.register.confirm_password') }}</label>
+                    <span x-show="password_confirmation.length > 0 && isPasswordMatch" class="text-[11px] font-bold text-emerald-600 flex items-center gap-1" x-cloak>
+                        <i class="bi bi-check-circle-fill"></i> {{ __('auth.register.password_criteria.match') }}
+                    </span>
+                    <span x-show="password_confirmation.length > 0 && !isPasswordMatch" class="text-[11px] font-bold text-red-500 flex items-center gap-1" x-cloak>
+                        <i class="bi bi-x-circle-fill"></i> {{ __('auth.register.password_not_match') ?? 'غير متطابقة' }}
+                    </span>
+                </div>
+                <div class="relative group">
+                    <div class="absolute inset-y-0 start-0 ps-3.5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-brand-secondary transition-colors">
+                        <i class="bi bi-shield-check text-base"></i>
+                    </div>
+                    <input :type="showPassword ? 'text' : 'password'" name="password_confirmation" x-model="password_confirmation" 
+                        class="w-full h-11 ps-10 pe-4 bg-slate-50/50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:bg-white focus:ring-2 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all" 
+                        :class="password_confirmation.length > 0 && !isPasswordMatch ? 'border-red-300 bg-red-50/50' : (password_confirmation.length > 0 && isPasswordMatch ? 'border-emerald-300 bg-emerald-50/30' : '')" 
+                        placeholder="{{ __('auth.register.confirm_password') }}" :required="currentStep === 2">
                 </div>
             </div>
         </div>
@@ -108,9 +125,9 @@
 
                 {{-- Key Features Highlights --}}
                 <div class="space-y-2 py-1">
-                    <template x-for="feature in (currentPlan.features || []).slice(0, 4)" :key="feature">
+                    <template x-for="feature in (currentPlan.features && currentPlan.features.length > 0 ? currentPlan.features.filter(f => !f.toLowerCase().includes(': false') && !f.toLowerCase().endsWith('false')).slice(0, 4) : ['إدارة الطلاب والفصول', 'تتبع الحضور والغياب', 'إدارة الاختبارات والدرجات', 'تقارير فورية وتنبيهات'])" :key="feature">
                         <div class="flex items-center gap-2 text-xs font-bold text-slate-700 font-arabic">
-                            <i class="bi bi-check2-circle text-emerald-500 text-sm"></i>
+                            <i class="bi bi-check2-circle text-emerald-500 text-sm flex-shrink-0"></i>
                             <span x-text="feature"></span>
                         </div>
                     </template>
@@ -201,13 +218,15 @@
     </div>
 
     <!-- Action Buttons -->
-    <div class="pt-3 flex flex-col sm:flex-row gap-3">
-        <button type="button" @click="prevStep()" class="sm:w-36 h-12 rounded-xl font-black text-sm text-slate-600 bg-slate-100 hover:bg-slate-200 transition-all border border-slate-200">
-            {{ __('auth.registration_steps.back') }}
+    <div class="pt-3 flex flex-col-reverse sm:flex-row items-center gap-3">
+        <button type="button" @click="prevStep()" class="w-full sm:w-32 h-12 rounded-xl font-bold text-sm text-slate-600 bg-slate-100 hover:bg-slate-200 transition-all border border-slate-200 flex items-center justify-center gap-1.5">
+            <i class="bi bi-arrow-right rtl:rotate-0 ltr:rotate-180"></i>
+            <span>{{ __('auth.registration_steps.back') }}</span>
         </button>
         <button type="submit" :disabled="(password.length > 0 && !isPasswordMatch)"
-                class="flex-1 h-12 rounded-xl font-black text-base text-white bg-gradient-to-r from-emerald-600 to-teal-500 shadow-lg shadow-emerald-600/20 hover:from-emerald-700 hover:to-teal-600 hover:-translate-y-0.5 active:scale-[0.98] transition-all disabled:opacity-50 disabled:grayscale disabled:pointer-events-none relative overflow-hidden group">
+                class="w-full flex-1 h-12 rounded-xl font-black text-base text-white bg-gradient-to-r from-emerald-600 to-teal-500 shadow-lg shadow-emerald-600/20 hover:from-emerald-700 hover:to-teal-600 hover:-translate-y-0.5 active:scale-[0.98] transition-all disabled:opacity-50 disabled:grayscale disabled:pointer-events-none relative overflow-hidden group flex items-center justify-center gap-2">
             <div class="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-white opacity-20 group-hover:animate-[shine_1s] group-hover:left-full transition-all duration-700 ease-in-out"></div>
+            <i class="bi bi-rocket-takeoff text-lg"></i>
             <span class="relative z-10" x-text="currentPlan.trial_days > 0 ? ({{ Js::from(__('auth.google_registration.start_free_trial')) }}) : (finalPrice === 0 ? '{{ __('auth.register.cta_main') }}' : '{{ __('auth.registration_steps.pay_complete_short') }}')"></span>
         </button>
     </div>

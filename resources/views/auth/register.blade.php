@@ -63,22 +63,51 @@
                 <input type="hidden" name="country_code" x-model="userCountry">
                 <input type="hidden" name="currency" x-model="selectedCurrency">
 
-                {{-- STEP 1: Fast & Intuitive Onboarding --}}
-                <div x-show="currentStep === 1" x-cloak>
-                    <!-- Progress: Step 1 of 2 -->
-                    <div class="mb-4">
-                        <div class="flex justify-between mb-1 px-0.5">
-                            <span class="text-[11px] font-black uppercase tracking-[0.15em] text-brand-secondary">
-                                {{ __('auth.registration_steps.step_1') }}
-                            </span>
-                            <span class="text-[11px] font-bold text-slate-300 uppercase tracking-[0.15em]">
-                                {{ __('auth.registration_steps.personal_details') }}
-                            </span>
+                <!-- Unified Visual Stepper -->
+                <div class="mb-5 pb-4 border-b border-slate-100">
+                    <div class="flex items-center justify-between max-w-md mx-auto px-2">
+                        <!-- Step 1 -->
+                        <div class="flex items-center gap-2.5 transition-all" :class="currentStep === 2 ? 'cursor-pointer hover:opacity-80' : ''" @click="if(currentStep === 2) prevStep()">
+                            <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-black transition-all"
+                                 :class="currentStep === 1 ? 'bg-brand-secondary text-white shadow-md shadow-brand-secondary/20 ring-4 ring-brand-secondary/10' : 'bg-emerald-500 text-white'">
+                                <template x-if="currentStep > 1"><i class="bi bi-check-lg text-sm"></i></template>
+                                <template x-if="currentStep === 1"><span>1</span></template>
+                            </div>
+                            <div class="text-start">
+                                <span class="text-xs font-black block leading-tight font-arabic" :class="currentStep === 1 ? 'text-slate-900' : 'text-slate-500'">
+                                    {{ __('auth.registration_steps.center_info') }}
+                                </span>
+                                <span class="text-[10px] font-bold block leading-tight font-arabic" :class="currentStep === 1 ? 'text-brand-secondary' : 'text-emerald-600'">
+                                    <span x-show="currentStep === 1">{{ __('auth.registration_steps.step_1') }}</span>
+                                    <span x-show="currentStep > 1">مكتملة ✓</span>
+                                </span>
+                            </div>
                         </div>
-                        <div class="h-1 w-full bg-slate-100 rounded-full overflow-hidden">
-                            <div class="h-full w-1/2 bg-brand-secondary rounded-full"></div>
+
+                        <!-- Connector Line -->
+                        <div class="flex-1 mx-3 sm:mx-4 h-0.5 rounded-full transition-all duration-500"
+                             :class="currentStep === 2 ? 'bg-emerald-500' : 'bg-slate-200'"></div>
+
+                        <!-- Step 2 -->
+                        <div class="flex items-center gap-2.5 transition-all">
+                            <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-black transition-all"
+                                 :class="currentStep === 2 ? 'bg-brand-secondary text-white shadow-md shadow-brand-secondary/20 ring-4 ring-brand-secondary/10' : 'bg-slate-100 text-slate-400'">
+                                <span>2</span>
+                            </div>
+                            <div class="text-start">
+                                <span class="text-xs font-black block leading-tight font-arabic" :class="currentStep === 2 ? 'text-slate-900' : 'text-slate-400'">
+                                    {{ __('auth.registration_steps.personal_details') }}
+                                </span>
+                                <span class="text-[10px] font-bold block leading-tight font-arabic" :class="currentStep === 2 ? 'text-brand-secondary' : 'text-slate-300'">
+                                    {{ __('auth.registration_steps.last_step') }}
+                                </span>
+                            </div>
                         </div>
                     </div>
+                </div>
+
+                {{-- STEP 1: Fast & Intuitive Onboarding --}}
+                <div x-show="currentStep === 1" x-cloak>
 
                     <!-- Main Header + Clear Login Link at TOP -->
                     <div class="text-center mb-4">
@@ -201,19 +230,6 @@
 
                 {{-- STEP 2 CONTAINER --}}
                 <div x-show="currentStep === 2" x-cloak>
-                    <div class="mb-4">
-                        <div class="flex justify-between mb-1 px-0.5">
-                            <span class="text-[11px] font-bold text-emerald-500 uppercase tracking-[0.15em]">
-                                {{ __('auth.registration_steps.center_info') }} ✓
-                            </span>
-                            <span class="text-[11px] font-black uppercase tracking-[0.15em] text-brand-secondary">
-                                {{ __('auth.registration_steps.step_2') }}
-                            </span>
-                        </div>
-                        <div class="h-1 w-full bg-slate-100 rounded-full overflow-hidden">
-                            <div class="h-full w-full bg-brand-secondary rounded-full"></div>
-                        </div>
-                    </div>
                     <div class="text-center mb-4">
                         <h1 class="text-xl font-black text-slate-900 mb-1 font-arabic leading-tight">
                             {{ __('auth.registration_steps.enter_details') }}

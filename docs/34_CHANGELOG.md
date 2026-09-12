@@ -9,7 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
+### Fixed & Improved
+- **Registration UX Simplification & Package Features Display Fix (2026-09-12)**:
+  - Fixed `Package::getDisplayData()` to strictly filter out disabled features (`false`, `0`, `no`, `none`, `off`) so raw boolean strings like `بوابة الطالب: false` are never rendered as positive benefits in the UI.
+  - Formatted `-1` quotas to render cleanly as `غير محدود` (Unlimited) rather than raw integers.
+  - Simplified registration Step 2 layout: stacked password and confirmation fields with dedicated icons (`bi-shield-lock`, `bi-shield-check`), matching status indicators, and clean toggle buttons.
+  - Introduced a persistent, unified 2-step visual progress bar at the top of the registration card replacing separate and misaligned progress bars.
+  - Enhanced CTA hierarchy: prominent primary button with rocket icon (`bi-rocket-takeoff`) and a clean secondary back button.
+
 - **UI/UX Pro Max Skill & Bento Box Architecture Transformation (2026-09-12)**:
   - Installed full UI/UX Pro Max intelligence skill suite (`ui-ux-pro-max`, `design-system`, `ui-styling`, `design`, `brand`) into `.agents/skills/`.
   - Added fast local Node.js query runner (`.agents/skills/ui-ux-pro-max/scripts/search.mjs`) for searching UI styles, palettes, and stack guidelines.
