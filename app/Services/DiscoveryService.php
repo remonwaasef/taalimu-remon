@@ -6,91 +6,111 @@ use App\Models\Instructor;
 use App\Models\NetworkIdentity;
 use App\Models\PublicProfile;
 use App\Models\Review;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pagination\LengthAwarePaginator as Paginator;
 
 class DiscoveryService
 {
-    public function searchTeachers(array $filters, int $perPage = 20): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    public function searchTeachers(array $filters, int $perPage = 20): LengthAwarePaginator
     {
-        $query = NetworkIdentity::discoverablePublic()
-            ->teachers()
-            ->whereHas('profilable', fn ($q) => $q->where('status', 'active'))
-            ->with('profilable');
+        $query = $this->buildTeacherQuery();
 
         if (! empty($filters['subject'])) {
-            $query->whereHas('profilable', fn ($q) => $q->where('specialization', 'LIKE', '%' . $filters['subject'] . '%'));
+            $query->whereHas('profilable', fn (Builder $q) => $q->where('specialization', 'LIKE', '%' . $filters['subject'] . '%'));
         }
 
         if (! empty($filters['search'])) {
             $search = $filters['search'];
-            $query->where(function ($q) use ($search) {
+            $query->where(function (Builder $q) use ($search) {
                 $q->where('public_slug', 'LIKE', "%{$search}%")
                     ->orWhere('headline', 'LIKE', "%{$search}%");
             });
         }
 
-        $identities = $query->get();
+        $query->with(['profilable', 'publicProfile.profilable'])
+            ->orderByDesc('published_at')
+            ->orderByDesc('created_at');
 
-        $scored = $identities->map(function ($identity) {
-            $profile = $identity->publicProfile;
+        $paginator = $query->paginate($perPage, ['*'], 'page', $filters['page'] ?? 1);
+
+        // Transform to include profile data for backward compatibility with views
+        $transformed = $paginator->getCollection()->map(function ($identity) {
             return [
                 'identity' => $identity,
-                'profile' => $profile,
-                'score' => $profile ? $this->calculateDiscoveryScore($profile) : 0,
-                'average_rating' => $profile ? $this->getRating($profile) : null,
-                'review_count' => $profile ? $this->getReviewCount($profile) : 0,
+                'profile' => $identity->publicProfile,
+                'score' => $identity->publicProfile ? $this->calculateDiscoveryScore($identity->publicProfile) : 0,
+                'average_rating' => $identity->publicProfile ? $this->getRating($identity->publicProfile) : null,
+                'review_count' => $identity->publicProfile ? $this->getReviewCount($identity->publicProfile) : 0,
             ];
         });
 
-        $sorted = $scored->sortByDesc('score')->values();
-
-        return new \Illuminate\Pagination\LengthAwarePaginator(
-            $sorted->slice(($filters['page'] ?? 1) - 1, $perPage),
-            $sorted->count(),
-            $perPage,
-            $filters['page'] ?? 1
+        return new Paginator(
+            $transformed,
+            $paginator->total(),
+            $paginator->perPage(),
+            $paginator->currentPage(),
+            ['path' => $paginator->path(), 'query' => request()->query()]
         );
     }
 
-    public function searchCenters(array $filters, int $perPage = 20): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    public function searchCenters(array $filters, int $perPage = 20): LengthAwarePaginator
     {
-        $query = NetworkIdentity::discoverablePublic()
-            ->centers()
-            ->whereHas('profilable', fn ($q) => $q->where('status', 'active'))
-            ->with('profilable');
+        $query = $this->buildCenterQuery();
 
         if (! empty($filters['search'])) {
             $search = $filters['search'];
-            $query->where(function ($q) use ($search) {
+            $query->where(function (Builder $q) use ($search) {
                 $q->where('public_slug', 'LIKE', "%{$search}%")
                     ->orWhere('headline', 'LIKE', "%{$search}%");
             });
         }
 
-        $identities = $query->get();
+        $query->with(['profilable', 'publicProfile.profilable'])
+            ->orderByDesc('published_at')
+            ->orderByDesc('created_at');
 
-        $scored = $identities->map(function ($identity) {
-            $profile = $identity->publicProfile;
+        $paginator = $query->paginate($perPage, ['*'], 'page', $filters['page'] ?? 1);
+
+        $transformed = $paginator->getCollection()->map(function ($identity) {
             return [
                 'identity' => $identity,
-                'profile' => $profile,
-                'score' => $profile ? $this->calculateDiscoveryScore($profile) : 0,
-                'average_rating' => $profile ? $this->getRating($profile) : null,
-                'review_count' => $profile ? $this->getReviewCount($profile) : 0,
+                'profile' => $identity->publicProfile,
+                'score' => $identity->publicProfile ? $this->calculateDiscoveryScore($identity->publicProfile) : 0,
+                'average_rating' => $identity->publicProfile ? $this->getRating($identity->publicProfile) : null,
+                'review_count' => $identity->publicProfile ? $this->getReviewCount($identity->publicProfile) : 0,
             ];
         });
 
-        $sorted = $scored->sortByDesc('score')->values();
-
-        return new \Illuminate\Pagination\LengthAwarePaginator(
-            $sorted->slice(($filters['page'] ?? 1) - 1, $perPage),
-            $sorted->count(),
-            $perPage,
-            $filters['page'] ?? 1
+        return new Paginator(
+            $transformed,
+            $paginator->total(),
+            $paginator->perPage(),
+            $paginator->currentPage(),
+            ['path' => $paginator->path(), 'query' => request()->query()]
         );
     }
 
-    protected function calculateDiscoveryScore(PublicProfile $profile): int
+    protected function buildTeacherQuery(): Builder
+    {
+        // Discovery is intentionally cross-tenant: public profiles are visible
+        // network-wide, so the tenant scope (and the nested Instructor scope)
+        // must be bypassed explicitly here.
+        return NetworkIdentity::withoutGlobalScope(\App\Scopes\TenantScope::class)
+            ->discoverablePublic()
+            ->teachers()
+            ->whereHas('profilable', fn (Builder $q) => $q->withoutGlobalScope(\App\Scopes\TenantScope::class)->where('status', 'active'));
+    }
+
+    protected function buildCenterQuery(): Builder
+    {
+        return NetworkIdentity::withoutGlobalScope(\App\Scopes\TenantScope::class)
+            ->discoverablePublic()
+            ->centers()
+            ->whereHas('profilable', fn (Builder $q) => $q->withoutGlobalScope(\App\Scopes\TenantScope::class)->where('status', 'active'));
+    }
+
+    public function calculateDiscoveryScore(PublicProfile $profile): int
     {
         $score = 0;
 

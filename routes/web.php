@@ -168,46 +168,10 @@ $mainRoutes = function () {
     // GROWTH NETWORK — Public Identity Routes (No Auth Required)
     // =========================================================================
     Route::get('/t/{slug}', function ($slug) {
-        $identity = \App\Models\NetworkIdentity::where('public_slug', $slug)
-            ->where('profile_type', \App\Models\NetworkIdentity::PROFILE_TYPE_TEACHER)
-            ->where('status', \App\Models\NetworkIdentity::STATUS_PUBLISHED)
-            ->where('network_visible', true)
-            ->first();
-
-        $tenant = \App\Models\Tenant::where('domain', $slug)->first();
-        if ($tenant) {
-            return redirect()->to(tenant_url('', $tenant), 301);
-        }
-
-        if ($identity && $identity->tenant && $identity->tenant->domain) {
-            $mainHost = config('app.tenant_domain') ?: parse_url(config('app.url'), PHP_URL_HOST);
-            if (in_array(request()->getHost(), [$mainHost, 'www.' . $mainHost, 'taalimu.com', 'www.taalimu.com'])) {
-                return redirect()->to(tenant_url('', $identity->tenant), 301);
-            }
-        }
-
         return app(\App\Http\Controllers\PublicProfileController::class)->showTeacher(request(), $slug);
     })->middleware('throttle:120,1')->name('growth.teacher.show');
 
     Route::get('/c/{slug}/{path?}', function ($slug, $path = '') {
-        $identity = \App\Models\NetworkIdentity::where('public_slug', $slug)
-            ->where('profile_type', \App\Models\NetworkIdentity::PROFILE_TYPE_CENTER)
-            ->where('status', \App\Models\NetworkIdentity::STATUS_PUBLISHED)
-            ->where('network_visible', true)
-            ->first();
-
-        $tenant = \App\Models\Tenant::where('domain', $slug)->first();
-        if ($tenant) {
-            return redirect()->to(tenant_url($path, $tenant), 301);
-        }
-
-        if ($identity && $identity->tenant && $identity->tenant->domain) {
-            $mainHost = config('app.tenant_domain') ?: parse_url(config('app.url'), PHP_URL_HOST);
-            if (in_array(request()->getHost(), [$mainHost, 'www.' . $mainHost, 'taalimu.com', 'www.taalimu.com'])) {
-                return redirect()->to(tenant_url($path, $identity->tenant), 301);
-            }
-        }
-
         return app(\App\Http\Controllers\PublicProfileController::class)->showCenter(request(), $slug);
     })->where('path', '.*')->middleware('throttle:120,1')->name('growth.center.show');
 
@@ -273,6 +237,57 @@ $mainRoutes = function () {
             ->name('growth.marketplace.store');
         Route::post('/marketplace/{id}/close', [\App\Http\Controllers\Growth\MarketplaceController::class, 'close'])
             ->name('growth.marketplace.close');
+    });
+
+    // Phase 3 — Opportunity & Matching (authenticated)
+    Route::middleware(['auth', \App\Http\Middleware\EnsureGrowthTenant::class])->prefix('growth')->group(function () {
+        // Opportunity Management (Center/Admin)
+        Route::get('/opportunities', [\App\Http\Controllers\Growth\OpportunityController::class, 'index'])
+            ->name('growth.opportunities.index');
+        Route::get('/opportunities/create', [\App\Http\Controllers\Growth\OpportunityController::class, 'create'])
+            ->name('growth.opportunities.create');
+        Route::post('/opportunities', [\App\Http\Controllers\Growth\OpportunityController::class, 'store'])
+            ->name('growth.opportunities.store');
+        Route::get('/opportunities/{opportunity}', [\App\Http\Controllers\Growth\OpportunityController::class, 'show'])
+            ->name('growth.opportunities.show');
+        Route::post('/opportunities/{opportunity}/accept', [\App\Http\Controllers\Growth\OpportunityController::class, 'accept'])
+            ->name('growth.opportunities.accept');
+        Route::post('/opportunities/{opportunity}/decline', [\App\Http\Controllers\Growth\OpportunityController::class, 'decline'])
+            ->name('growth.opportunities.decline');
+        Route::post('/opportunities/{opportunity}/start-group', [\App\Http\Controllers\Growth\OpportunityController::class, 'startGroupFormation'])
+            ->name('growth.opportunities.start-group');
+        Route::post('/opportunities/{opportunity}/complete-group', [\App\Http\Controllers\Growth\OpportunityController::class, 'completeGroupFormation'])
+            ->name('growth.opportunities.complete-group');
+        Route::post('/opportunities/{opportunity}/groups', [\App\Http\Controllers\Growth\OpportunityController::class, 'createGroup'])
+            ->name('growth.opportunities.groups.store');
+        Route::get('/opportunities/{opportunity}/groups/{group}', [\App\Http\Controllers\Growth\OpportunityController::class, 'showGroup'])
+            ->name('growth.opportunities.groups.show');
+        Route::post('/opportunities/{opportunity}/groups/{group}/students', [\App\Http\Controllers\Growth\OpportunityController::class, 'addStudent'])
+            ->name('growth.opportunities.groups.students.store');
+        Route::delete('/opportunities/{opportunity}/groups/{group}/students/{student}', [\App\Http\Controllers\Growth\OpportunityController::class, 'removeStudent'])
+            ->name('growth.opportunities.groups.students.destroy');
+        Route::post('/opportunities/{opportunity}/groups/{group}/complete', [\App\Http\Controllers\Growth\OpportunityController::class, 'completeGroup'])
+            ->name('growth.opportunities.groups.complete');
+
+        // Teacher Matching (Teacher-facing)
+        // NOTE: static segments must be registered before {opportunity},
+        // otherwise /matching/matched etc. are captured as opportunity IDs.
+        Route::get('/matching', [\App\Http\Controllers\Growth\TeacherMatchingController::class, 'index'])
+            ->name('growth.matching.index');
+        Route::get('/matching/matched', [\App\Http\Controllers\Growth\TeacherMatchingController::class, 'matched'])
+            ->name('growth.matching.matched');
+        Route::get('/matching/group-forming', [\App\Http\Controllers\Growth\TeacherMatchingController::class, 'groupForming'])
+            ->name('growth.matching.group-forming');
+        Route::get('/matching/group-formed', [\App\Http\Controllers\Growth\TeacherMatchingController::class, 'groupFormed'])
+            ->name('growth.matching.group-formed');
+        Route::get('/matching/stats', [\App\Http\Controllers\Growth\TeacherMatchingController::class, 'stats'])
+            ->name('growth.matching.stats');
+        Route::get('/matching/{opportunity}', [\App\Http\Controllers\Growth\TeacherMatchingController::class, 'show'])
+            ->name('growth.matching.show');
+        Route::post('/matching/{opportunity}/accept', [\App\Http\Controllers\Growth\TeacherMatchingController::class, 'accept'])
+            ->name('growth.matching.accept');
+        Route::post('/matching/{opportunity}/decline', [\App\Http\Controllers\Growth\TeacherMatchingController::class, 'decline'])
+            ->name('growth.matching.decline');
     });
 
     // Phase 5 — Public Discovery (no auth required)

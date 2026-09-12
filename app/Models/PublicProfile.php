@@ -82,12 +82,14 @@ class PublicProfile extends Model
 
     /**
      * Check if a field is visible on the public profile.
+     *
+     * Fail-closed: unknown or unset fields are hidden. Explicit opt-in only.
      */
     public function isFieldVisible(string $field): bool
     {
         $visibility = $this->visibility ?? [];
 
-        return $visibility[$field] ?? true;
+        return (bool) ($visibility[$field] ?? false);
     }
 
     /**
@@ -95,24 +97,39 @@ class PublicProfile extends Model
      */
     public function isPubliclyVisible(): bool
     {
-        return $this->published && !$this->isFieldVisible('published');
+        return $this->published;
     }
 
     /**
-     * Get the public URL for this profile.
+     * Get the canonical public network URL for this profile.
      */
-    public function getUrl(): string
+    public function getPublicNetworkUrl(): string
     {
-        $tenant = $this->tenant ?? \App\Models\Tenant::find($this->tenant_id);
-        if ($tenant) {
-            return tenant_url('', $tenant);
-        }
-
         if ($this->profilable_type === Instructor::class) {
             return route('growth.teacher.show', $this->slug);
         }
 
         return route('growth.center.show', $this->slug);
+    }
+
+    /**
+     * Get the tenant workspace URL for this profile.
+     */
+    public function getTenantWorkspaceUrl(): ?string
+    {
+        $tenant = $this->tenant ?? \App\Models\Tenant::find($this->tenant_id);
+        if ($tenant) {
+            return tenant_url('', $tenant);
+        }
+        return null;
+    }
+
+    /**
+     * @deprecated Use getPublicNetworkUrl() or getTenantWorkspaceUrl() instead.
+     */
+    public function getUrl(): string
+    {
+        return $this->getPublicNetworkUrl();
     }
 
     /**

@@ -39,7 +39,7 @@ class OpportunityScoringService
         return $opportunities;
     }
 
-    protected function scoreOpportunity(int $tenantId, string $subject, ?string $level): array
+    public function scoreOpportunity(int $tenantId, string $subject, ?string $level): array
     {
         $demandVolume = $this->scoreDemandVolume($tenantId, $subject);
         $capacity = $this->scoreAvailableCapacity($tenantId, $subject);

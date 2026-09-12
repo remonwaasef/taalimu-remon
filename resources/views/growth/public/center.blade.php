@@ -59,7 +59,7 @@
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
                 {{ config('app.name', 'Taalimu') }}
             </a>
-            <a href="{{ auth()->check() ? route('center.dashboard') : (Route::has('center.login') ? route('center.login') : url('/login')) }}" class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white/90 backdrop-blur-md text-xs font-bold text-slate-800 shadow-sm hover:bg-white hover:shadow transition-all">
+            <a href="{{ auth()->check() ? route('center.dashboard') : (app()->bound('tenant') && app('tenant') ? route('center.login', ['tenant' => app('tenant')->domain]) : url('/login')) }}" class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white/90 backdrop-blur-md text-xs font-bold text-slate-800 shadow-sm hover:bg-white hover:shadow transition-all">
                 <svg class="w-3.5 h-3.5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/></svg>
                 {{ auth()->check() ? __('لوحة التحكم') : __('تسجيل الدخول') }}
             </a>
@@ -128,7 +128,7 @@
         </div>
 
         {{-- Description --}}
-        @if($profile->bio)
+        @if($profile->bio && $profile->isFieldVisible('bio'))
             <div class="bg-white rounded-2xl shadow-lg p-6 sm:p-8 mt-6">
                 <h2 class="text-lg font-bold text-slate-900 mb-4">{{ __('About Us') }}</h2>
                 <div class="prose prose-slate max-w-none">

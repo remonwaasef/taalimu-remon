@@ -71,6 +71,18 @@ return [
             'desc' => 'For large educational institutions and branches',
         ],
     ],
+    'trial_expired_alert' => 'Your center\'s free trial has ended. Please choose a plan and make the payment to continue using the platform services.',
+    'trial_expired_title' => '⚠️ Your Free Trial Has Ended',
+    'trial_expired_message' => 'The free trial for :package package has expired. Pay your subscription now to activate all center features.',
+    'trial_expired_mail_subject' => 'Notice: Your free trial has ended on :app',
+    'greeting_name' => 'Hello :name,',
+    'trial_expired_mail_body' => 'We would like to inform you that the free trial for your center (:center) on :package package has expired.',
+    'renewal_amount' => 'Subscription renewal amount: :amount',
+    'pay_and_activate_now' => 'Pay & Activate Subscription Now',
+    'thank_you_note' => 'Thank you for trusting our educational platform!',
+    'trial_expiring_banner' => '⏳ Only :days days remaining in your free trial. Pay your subscription now to ensure uninterrupted service.',
+    'trial_expired_banner' => '⚠️ Your free trial has ended. Your center features are currently suspended until subscription is paid and activated.',
+    'pay_now' => 'Pay Subscription Now',
     'values' => [
         'إيميل' => 'Email',
         'أولوية' => 'Priority',
@@ -78,3 +90,4 @@ return [
         'basic' => 'Basic',
     ],
 ];
+

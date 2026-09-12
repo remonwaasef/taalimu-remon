@@ -15,8 +15,8 @@ class CheckSubscription
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Skip subscription checks in testing environment
-        if (app()->environment('testing')) {
+        // Skip subscription checks in testing environment unless explicitly enforced by the test
+        if (app()->environment('testing') && ! config('subscription.enforce_in_testing', false)) {
             return $next($request);
         }
 
@@ -34,9 +34,14 @@ class CheckSubscription
         $subscription = $tenant->activeSubscription;
 
         if (! $subscription) {
+            $message = __('center::subscription.trial_expired_alert');
+            if ($message === 'center::subscription.trial_expired_alert') {
+                $message = __('subscription.expired');
+            }
+
             // Redirect to billing/subscription page
             return redirect()->route('center.subscription.index', ['tenant' => $tenant->domain])
-                ->with('error', __('subscription.expired'));
+                ->with('error', $message);
         }
 
         return $next($request);

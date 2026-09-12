@@ -54,6 +54,8 @@ class GrowthNetworkTest extends TestCase
             'referral_code' => strtoupper(uniqid()),
         ]);
 
+        // NetworkIdentity is created automatically by PublicProfileObserver
+
         return compact('tenant', 'user', 'instructor', 'profile');
     }
 
@@ -246,6 +248,15 @@ class GrowthNetworkTest extends TestCase
     {
         $result1 = $this->createTeacherWithProfile();
         $result2 = $this->createTeacherWithProfile();
+
+        // Use unique slugs for proper isolation
+        $slug1 = $result1['profile']->slug . '-1';
+        $slug2 = $result2['profile']->slug . '-2';
+
+        $result1['profile']->update(['slug' => $slug1]);
+        $result2['profile']->update(['slug' => $slug2]);
+
+        // NetworkIdentity slugs are updated automatically by PublicProfileObserver
 
         $response = $this->get(route('growth.discover.teachers'));
 

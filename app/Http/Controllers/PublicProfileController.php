@@ -68,12 +68,6 @@ class PublicProfileController extends Controller
             abort(404, 'Center not found.');
         }
 
-        // If on central domain, redirect to tenant subdomain
-        $mainHost = config('app.tenant_domain') ?: parse_url(config('app.url'), PHP_URL_HOST);
-        if ($tenant->domain && in_array($request->getHost(), [$mainHost, 'www.' . $mainHost, 'taalimu.com', 'www.taalimu.com'])) {
-            return redirect()->to(tenant_url('', $tenant), 301);
-        }
-
         $this->trackView($profile, $request);
 
         $seoData = $this->buildSeoData($profile, $tenant, 'teacher');
@@ -121,12 +115,6 @@ class PublicProfileController extends Controller
 
         if ($tenant->status !== 'active') {
             abort(404, 'Center not found.');
-        }
-
-        // If on central domain, redirect to tenant subdomain
-        $mainHost = config('app.tenant_domain') ?: parse_url(config('app.url'), PHP_URL_HOST);
-        if ($tenant->domain && in_array($request->getHost(), [$mainHost, 'www.' . $mainHost, 'taalimu.com', 'www.taalimu.com'])) {
-            return redirect()->to(tenant_url('', $tenant), 301);
         }
 
         $this->trackView($profile, $request);

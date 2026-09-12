@@ -81,7 +81,8 @@ class BackfillNetworkIdentities extends Command
                     continue;
                 }
 
-                $existing = NetworkIdentity::where('profilable_type', $profile->profilable_type)
+                $existing = NetworkIdentity::where('tenant_id', $profile->tenant_id)
+                    ->where('profilable_type', $profile->profilable_type)
                     ->where('profilable_id', $profile->profilable_id)
                     ->first();
 

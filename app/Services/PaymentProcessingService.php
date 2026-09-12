@@ -89,6 +89,7 @@ class PaymentProcessingService
             $endsAt = $startsAt->copy()->addDays($days);
 
             $subscriptionData = [
+                'package_id' => $package?->id,
                 'gateway' => $gateway,
                 'stripe_id' => "sub_{$gateway}_".($transactionId ?: Str::random(10)),
                 'stripe_status' => 'active',

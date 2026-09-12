@@ -44,6 +44,7 @@ class ReviewController extends Controller
         $data = request()->validate([
             'rating' => 'required|integer|min:1|max:5',
             'comment' => 'nullable|string|max:1000',
+            'enrollment_id' => 'nullable|integer|exists:enrollments,id',
         ]);
 
         $existingReview = \App\Models\Review::where('tenant_id', $profile->tenant_id)
@@ -57,8 +58,22 @@ class ReviewController extends Controller
                 ->with('error', __('You have already reviewed this profile.'));
         }
 
+        // Optional evidence link: only the reviewer's own enrollment in this
+        // tenant counts (silently ignored otherwise — no existence leak).
+        $enrollmentId = null;
+        if (!empty($data['enrollment_id'])) {
+            $owned = \App\Models\Enrollment::where('id', $data['enrollment_id'])
+                ->where('tenant_id', $profile->tenant_id)
+                ->where('user_id', auth()->id())
+                ->exists();
+            if ($owned) {
+                $enrollmentId = (int) $data['enrollment_id'];
+            }
+        }
+
         $this->reviewService->createReview([
             'reviewer_id' => auth()->id(),
+            'enrollment_id' => $enrollmentId,
             'reviewable_type' => $profile->profilable_type,
             'reviewable_id' => $profile->profilable_id,
             'rating' => $data['rating'],

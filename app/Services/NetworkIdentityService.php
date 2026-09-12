@@ -199,7 +199,10 @@ class NetworkIdentityService
 
     protected function slugExists(string $slug, string $profileType, ?int $excludeId = null): bool
     {
-        $query = NetworkIdentity::where('profile_type', $profileType)
+        // Slugs live in a GLOBAL namespace (public URLs /t/{slug}, /c/{slug}),
+        // so uniqueness must be checked across all tenants.
+        $query = NetworkIdentity::withoutGlobalScope(\App\Scopes\TenantScope::class)
+            ->where('profile_type', $profileType)
             ->where('public_slug', $slug);
 
         if ($excludeId) {
@@ -233,14 +236,17 @@ class NetworkIdentityService
 
     public function findBySlug(string $slug, string $profileType): ?NetworkIdentity
     {
-        return NetworkIdentity::where('public_slug', $slug)
+        // Public URL resolution is cross-tenant by design.
+        return NetworkIdentity::withoutGlobalScope(\App\Scopes\TenantScope::class)
+            ->where('public_slug', $slug)
             ->where('profile_type', $profileType)
             ->first();
     }
 
     public function findPubliclyAccessibleBySlug(string $slug, string $profileType): ?NetworkIdentity
     {
-        return NetworkIdentity::publiclyAccessible()
+        return NetworkIdentity::withoutGlobalScope(\App\Scopes\TenantScope::class)
+            ->publiclyAccessible()
             ->where('public_slug', $slug)
             ->where('profile_type', $profileType)
             ->first();
@@ -248,7 +254,8 @@ class NetworkIdentityService
 
     public function findDiscoverableBySlug(string $slug, string $profileType): ?NetworkIdentity
     {
-        return NetworkIdentity::discoverablePublic()
+        return NetworkIdentity::withoutGlobalScope(\App\Scopes\TenantScope::class)
+            ->discoverablePublic()
             ->where('public_slug', $slug)
             ->where('profile_type', $profileType)
             ->first();
@@ -256,7 +263,10 @@ class NetworkIdentityService
 
     public function getOrCreateForInstructor(Instructor $instructor): NetworkIdentity
     {
-        $existing = NetworkIdentity::where('profilable_type', Instructor::class)
+        // Owner-scoped: explicit tenant match keeps this correct with or
+        // without a bound tenant (e.g. console backfills).
+        $existing = NetworkIdentity::where('tenant_id', $instructor->tenant_id)
+            ->where('profilable_type', Instructor::class)
             ->where('profilable_id', $instructor->id)
             ->first();
 
@@ -311,7 +321,8 @@ class NetworkIdentityService
 
     public function getOrCreateForCenter(Tenant $tenant): NetworkIdentity
     {
-        $existing = NetworkIdentity::where('profilable_type', Tenant::class)
+        $existing = NetworkIdentity::where('tenant_id', $tenant->id)
+            ->where('profilable_type', Tenant::class)
             ->where('profilable_id', $tenant->id)
             ->first();
 
@@ -375,7 +386,8 @@ class NetworkIdentityService
             return null;
         }
 
-        $identity = NetworkIdentity::where('profilable_type', $publicProfile->profilable_type)
+        $identity = NetworkIdentity::where('tenant_id', $publicProfile->tenant_id)
+            ->where('profilable_type', $publicProfile->profilable_type)
             ->where('profilable_id', $publicProfile->profilable_id)
             ->first();
 

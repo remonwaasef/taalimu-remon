@@ -125,7 +125,8 @@ class GrowthProfileService
 
         // Sync NetworkIdentity if slug changed
         if (isset($data['slug'])) {
-            $identity = NetworkIdentity::where('profilable_type', $profile->profilable_type)
+            $identity = NetworkIdentity::where('tenant_id', $profile->tenant_id)
+                ->where('profilable_type', $profile->profilable_type)
                 ->where('profilable_id', $profile->profilable_id)
                 ->first();
 
@@ -145,7 +146,8 @@ class GrowthProfileService
         $profile->update(['published' => true]);
 
         // Sync NetworkIdentity
-        $identity = NetworkIdentity::where('profilable_type', $profile->profilable_type)
+        $identity = NetworkIdentity::where('tenant_id', $profile->tenant_id)
+            ->where('profilable_type', $profile->profilable_type)
             ->where('profilable_id', $profile->profilable_id)
             ->first();
 
@@ -164,7 +166,8 @@ class GrowthProfileService
         $profile->update(['published' => false]);
 
         // Sync NetworkIdentity
-        $identity = NetworkIdentity::where('profilable_type', $profile->profilable_type)
+        $identity = NetworkIdentity::where('tenant_id', $profile->tenant_id)
+            ->where('profilable_type', $profile->profilable_type)
             ->where('profilable_id', $profile->profilable_id)
             ->first();
 
@@ -257,6 +260,8 @@ class GrowthProfileService
             'image' => true,
             'location' => true,
             'experience_years' => true,
+            'teaching_levels' => true,
+            'delivery_modes' => true,
             'published' => true,
         ];
     }

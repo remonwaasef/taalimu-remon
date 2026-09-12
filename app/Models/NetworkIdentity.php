@@ -10,12 +10,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class NetworkIdentity extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, \App\Traits\BelongsToTenant;
 
     protected $fillable = [
         'tenant_id',
         'profilable_type',
         'profilable_id',
+        'public_profile_id',
         'public_slug',
         'profile_type',
         'status',

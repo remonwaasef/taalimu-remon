@@ -326,6 +326,8 @@
 
             <!-- Main Page Content -->
             <main id="main-content" class="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto motion-page">
+                <!-- Trial & Subscription Alerts -->
+                <x-trial-alert-banner />
                 <!-- Flash Messages -->
                 <x-flash-messages />
                 <div class="motion-page" style="animation-delay: 60ms">

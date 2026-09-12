@@ -106,4 +106,16 @@ class GrowthNotificationService
             ->whereNull('read_at')
             ->update(['read_at' => now()]);
     }
+
+    public function send(int $tenantId, int $userId, string $type, array $data = []): void
+    {
+        \App\Models\TeacherNotification::create([
+            'tenant_id' => $tenantId,
+            'user_id' => $userId,
+            'type' => $type,
+            'title' => $data['title'] ?? 'Notification',
+            'message' => $data['message'] ?? '',
+            'data' => $data,
+        ]);
+    }
 }

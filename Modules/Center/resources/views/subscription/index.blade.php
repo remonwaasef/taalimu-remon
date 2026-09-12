@@ -1,4 +1,4 @@
-﻿@extends('center::layouts.app-next')
+@extends('center::layouts.app-next')
 
 @section('title', __('center::subscription.page_title'))
 
@@ -11,13 +11,15 @@
 @section('page-actions')
     @php
         $subStatus = $subscription?->stripe_status ?? 'none';
-        $isActive  = in_array($subStatus, ['active', 'trialing']);
+        $isPaidActive = ($subscription && $subscription->status === 'active' && ($subscription->ends_at === null || $subscription->ends_at > now()));
+        $isTrialing = ($subscription && ($subscription->status === 'trialing' || $subStatus === 'trialing') && $subscription->ends_at && $subscription->ends_at > now());
+        $isExpired = ! $isPaidActive && ! $isTrialing;
     @endphp
-    @if($subStatus === 'trialing')
+    @if($isTrialing)
         <span class="badge bg-warning text-dark px-3 py-2 rounded-pill shadow-sm">
             <i class="fas fa-hourglass-half me-1"></i> {{ __('center::subscription.trial_badge') }}
         </span>
-    @elseif($isActive)
+    @elseif($isPaidActive)
         <span class="badge bg-white text-success px-3 py-2 rounded-pill shadow-sm d-inline-flex align-items-center gap-2">
             <span class="pulse-dot" style="background: #22c55e;"></span> {{ __('center::subscription.active_badge') }}
         </span>
@@ -42,6 +44,25 @@
         <div class="alert alert-danger alert-dismissible fade show rounded-3 border-0 shadow-sm mb-4" role="alert">
             <i class="fas fa-exclamation-circle me-2"></i>{{ session('error') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+    @if($isExpired)
+        <div class="alert alert-warning border-0 rounded-3 shadow-sm p-3 p-md-4 mb-4 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+            <div class="d-flex align-items-center gap-3">
+                <div class="rounded-circle bg-warning text-dark d-flex align-items-center justify-content-center shrink-0" style="width: 44px; height: 44px;">
+                    <i class="fas fa-exclamation-triangle fs-5"></i>
+                </div>
+                <div>
+                    <h5 class="fw-bold mb-1 text-dark">{{ __('center::subscription.trial_expired_title') }}</h5>
+                    <p class="mb-0 text-muted small">{{ __('center::subscription.trial_expired_alert') }}</p>
+                </div>
+            </div>
+            @if($currentPackage)
+                <a href="{{ route('center.subscription.checkout', ['tenant' => $tenant->domain, 'package' => $currentPackage->id]) }}?cycle={{ $subscription?->billing_cycle ?? 'term' }}&payment_gateway=paymob" 
+                   class="btn btn-primary rounded-pill px-4 py-2 fw-bold text-nowrap shadow-sm">
+                    <i class="fas fa-credit-card me-1"></i> {{ __('center::subscription.pay_and_activate_now') }}
+                </a>
+            @endif
         </div>
     @endif
 
@@ -289,11 +310,18 @@
 
                     {{-- CTA Button --}}
                     <div class="mt-auto">
-                        @if($isCurrent)
+                        @if($isCurrent && $isPaidActive)
                             <button class="btn btn-light w-100 rounded-pill fw-bold" disabled>
                                 <i class="fas fa-check me-1"></i> {{ __('center::subscription.current_plan') }}
                             </button>
-                        @elseif($package->stripe_price_id)
+                        @elseif($isCurrent && ! $isPaidActive)
+                            <a href="{{ route('center.subscription.checkout', ['tenant' => $tenant->domain, 'package' => $package->id]) }}?cycle={{ $initialCycle }}&payment_gateway=paymob"
+                               class="btn btn-primary shadow-sm w-100 rounded-pill fw-bold plan-checkout-btn"
+                               data-base-url="{{ route('center.subscription.checkout', ['tenant' => $tenant->domain, 'package' => $package->id]) }}"
+                               data-name="{{ addslashes($package->name) }}">
+                                <i class="fas fa-credit-card me-1"></i> {{ __('center::subscription.pay_and_activate_now') }}
+                            </a>
+                        @elseif($package->price > 0 || $package->yearly_price > 0 || $package->stripe_price_id)
                             <a href="{{ route('center.subscription.checkout', ['tenant' => $tenant->domain, 'package' => $package->id]) }}?cycle={{ $initialCycle }}&payment_gateway=paymob"
                                class="btn w-100 rounded-pill fw-bold plan-checkout-btn {{ $isFeatured ? 'btn-primary shadow-sm' : 'btn-outline-primary' }}"
                                data-base-url="{{ route('center.subscription.checkout', ['tenant' => $tenant->domain, 'package' => $package->id]) }}"

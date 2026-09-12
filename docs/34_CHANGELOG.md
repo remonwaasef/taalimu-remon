@@ -10,6 +10,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Free Trial Expiration Notifications & In-Dashboard Payment Alerts (2026-09-12)**:
+  - Created `TrialExpiredNotification` delivering database bell notifications and emails to center admins with direct checkout links when their free trial expires.
+  - Added `<x-trial-alert-banner />` component in center layout (`resources/views/layouts/app-next.blade.php`) displaying prominent countdown and expired warnings with immediate CTA buttons to pay.
+  - Enhanced `SendSubscriptionReminders` command to monitor both active and trialing subscriptions expiring in 3 days, as well as sending instant notifications for newly expired trials.
+  - Fixed subscription index view (`Modules/Center/resources/views/subscription/index.blade.php`) so users on an expired trial can pay for their current package rather than the button being disabled.
+  - Ensured `package_id` is explicitly set during subscription activation in `PaymentProcessingService` and `PaymobWebhookController`.
+  - Added comprehensive automated feature tests in `TrialExpirationAndPaymentTest.php` validating notification delivery, middleware redirection, plan card CTA buttons, and payment processing.
+
 - **Monetization Feature Flags & Package Integration (2026-09-06)**:
   - Created and executed migration `2026_09_06_230000_add_monetization_features_to_packages` registering `online_classes`, `asset_management`, and `audit_logs` as official package features.
   - Linked `online-classes`, `inventory` (assets), and `activity-logs` routes to `feature:` middleware protection.

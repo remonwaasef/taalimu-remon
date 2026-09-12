@@ -71,6 +71,18 @@ return [
             'desc' => 'Pour les grandes institutions et les succursales',
         ],
     ],
+    'trial_expired_alert' => 'La période d\'essai gratuit de votre centre est terminée. Veuillez choisir un forfait et procéder au paiement pour continuer à utiliser les services.',
+    'trial_expired_title' => '⚠️ Votre période d\'essai gratuit est terminée',
+    'trial_expired_message' => 'L\'essai gratuit du forfait :package est expiré. Réglez votre abonnement dès maintenant pour réactiver toutes les fonctionnalités.',
+    'trial_expired_mail_subject' => 'Avis : Votre période d\'essai est terminée sur :app',
+    'greeting_name' => 'Bonjour :name,',
+    'trial_expired_mail_body' => 'Nous vous informons que la période d\'essai gratuit de votre centre (:center) pour le forfait :package est terminée.',
+    'renewal_amount' => 'Montant du renouvellement à régler : :amount',
+    'pay_and_activate_now' => 'Payer et activer l\'abonnement maintenant',
+    'thank_you_note' => 'Merci pour votre confiance en notre plateforme éducative !',
+    'trial_expiring_banner' => '⏳ Il ne reste que :days jour(s) d\'essai gratuit. Réglez votre abonnement pour assurer la continuité du service sans interruption.',
+    'trial_expired_banner' => '⚠️ Votre période d\'essai gratuit est terminée. Les fonctionnalités de votre centre sont actuellement suspendues jusqu\'au paiement de l\'abonnement.',
+    'pay_now' => 'Régler l\'abonnement maintenant',
     'values' => [
         'إيميل' => 'E-mail',
         'أولوية' => 'Priorité',
@@ -78,3 +90,4 @@ return [
         'basic' => 'Basique',
     ],
 ];
+

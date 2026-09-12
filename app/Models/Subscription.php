@@ -86,6 +86,13 @@ class Subscription extends CashierSubscription
      */
     public function getResolvedPackageAttribute()
     {
+        if ($this->package_id) {
+            $pkg = Package::find($this->package_id);
+            if ($pkg) {
+                return $pkg;
+            }
+        }
+
         $package = $this->package;
         if ($package) {
             return $package;

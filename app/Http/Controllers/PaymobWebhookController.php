@@ -154,6 +154,7 @@ class PaymobWebhookController extends Controller
                 $tenant->subscriptions()->updateOrCreate(
                     ['name' => 'default'],
                     [
+                        'package_id' => $package?->id,
                         'gateway' => 'paymob',
                         'stripe_id' => 'sub_paymob_'.$transactionId,
                         'stripe_status' => 'active',
