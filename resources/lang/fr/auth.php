@@ -47,6 +47,8 @@ return [
         'payment_method' => 'Mode de paiement',
         'secure' => 'Sécurisé et Chiffré',
         'flexible' => 'Sans Engagement',
+        'password_min_6' => 'Au moins 6 caractères',
+        'password_not_match' => 'Les mots de passe ne correspondent pas',
         'password_criteria' => [
             'chars' => '8+ caractères',
             'upper' => 'Majuscule',

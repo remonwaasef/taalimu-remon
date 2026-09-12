@@ -66,6 +66,8 @@ return [
         'payment_method' => 'طريقة الدفع',
         'secure' => 'آمن ومشفر',
         'flexible' => 'بدون التزام',
+        'password_min_6' => '٦ أحرف على الأقل',
+        'password_not_match' => 'كلمتا المرور غير متطابقتين',
         'password_criteria' => [
             'chars' => '8+ رموز',
             'upper' => 'حرف كبير',

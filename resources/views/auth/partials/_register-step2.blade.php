@@ -50,26 +50,11 @@
                         placeholder="{{ __('auth.register.password') }}" :required="currentStep === 2">
                 </div>
 
-                <!-- Password Live Criteria Indicators -->
-                <div x-show="password.length > 0" x-collapse x-cloak class="px-1 pt-1">
-                    <div class="flex flex-wrap gap-x-3 gap-y-1">
-                        <div class="flex items-center gap-1 text-[10px] font-black font-arabic transition-all duration-300" :class="passwordCriteria.length ? 'text-emerald-500' : 'text-slate-400'">
-                            <i class="bi" :class="passwordCriteria.length ? 'bi-check-circle-fill' : 'bi-circle'"></i> {{ __('auth.registration_steps.chars_8') }}
-                        </div>
-                        <div class="flex items-center gap-1 text-[10px] font-black font-arabic transition-all duration-300" :class="passwordCriteria.upper ? 'text-emerald-500' : 'text-slate-400'">
-                            <i class="bi" :class="passwordCriteria.upper ? 'bi-check-circle-fill' : 'bi-circle'"></i> {{ __('auth.registration_steps.uppercase') }}
-                        </div>
-                        <div class="flex items-center gap-1 text-[10px] font-black font-arabic transition-all duration-300" :class="passwordCriteria.lower ? 'text-emerald-500' : 'text-slate-400'">
-                            <i class="bi" :class="passwordCriteria.lower ? 'bi-check-circle-fill' : 'bi-circle'"></i> {{ __('auth.registration_steps.lowercase') }}
-                        </div>
-                        <div class="flex items-center gap-1 text-[10px] font-black font-arabic transition-all duration-300" :class="passwordCriteria.number ? 'text-emerald-500' : 'text-slate-400'">
-                            <i class="bi" :class="passwordCriteria.number ? 'bi-check-circle-fill' : 'bi-circle'"></i> {{ __('auth.registration_steps.number') }}
-                        </div>
-                        <div class="flex items-center gap-1 text-[10px] font-black font-arabic transition-all duration-300" :class="passwordCriteria.symbol ? 'text-emerald-500' : 'text-slate-400'">
-                            <i class="bi" :class="passwordCriteria.symbol ? 'bi-check-circle-fill' : 'bi-circle'"></i> {{ __('auth.registration_steps.symbol') }}
-                        </div>
-                    </div>
-                </div>
+                <!-- Password Simple Hint -->
+                <p class="text-[11px] text-slate-400 font-arabic px-1 pt-1 flex items-center gap-1.5">
+                    <i class="bi text-xs transition-colors" :class="password.length >= 6 ? 'bi-check-circle-fill text-emerald-500' : 'bi-shield-lock text-slate-400'"></i>
+                    <span class="transition-colors" :class="password.length >= 6 ? 'text-emerald-600 font-bold' : ''">{{ __('auth.register.password_min_6') }}</span>
+                </p>
             </div>
 
             <!-- Confirm Password -->
@@ -223,7 +208,7 @@
             <i class="bi bi-arrow-right rtl:rotate-0 ltr:rotate-180"></i>
             <span>{{ __('auth.registration_steps.back') }}</span>
         </button>
-        <button type="submit" :disabled="(password.length > 0 && !isPasswordMatch)"
+        <button type="submit" :disabled="(password.length > 0 && (!isPasswordMatch || password.length < 6))"
                 class="w-full flex-1 h-12 rounded-xl font-black text-base text-white bg-gradient-to-r from-emerald-600 to-teal-500 shadow-lg shadow-emerald-600/20 hover:from-emerald-700 hover:to-teal-600 hover:-translate-y-0.5 active:scale-[0.98] transition-all disabled:opacity-50 disabled:grayscale disabled:pointer-events-none relative overflow-hidden group flex items-center justify-center gap-2">
             <div class="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-white opacity-20 group-hover:animate-[shine_1s] group-hover:left-full transition-all duration-700 ease-in-out"></div>
             <i class="bi bi-rocket-takeoff text-lg"></i>

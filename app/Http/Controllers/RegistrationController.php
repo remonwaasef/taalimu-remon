@@ -48,15 +48,7 @@ class RegistrationController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email',
             'phone' => 'nullable|string|max:20|unique:users,phone',
-            'password' => [
-                'required',
-                'string',
-                \Illuminate\Validation\Rules\Password::min(8)
-                    ->mixedCase()
-                    ->numbers()
-                    ->symbols()
-                    ->uncompromised(),
-            ],
+            'password' => ['required', 'string', 'min:6'],
             'plan' => 'required|exists:packages,slug',
             'billing_cycle' => 'required|in:monthly,term,yearly',
             'currency' => 'nullable|in:EGP,USD,EUR',

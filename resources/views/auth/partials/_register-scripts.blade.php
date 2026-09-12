@@ -149,7 +149,7 @@ document.addEventListener('alpine:init', () => {
         },
 
         get isPasswordMatch() {
-            return this.password === this.password_confirmation && this.password.length > 0;
+            return this.password === this.password_confirmation && this.password.length >= 6;
         },
 
         get passwordCriteria() {

@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Formatted `-1` quotas to render cleanly as `غير محدود` (Unlimited) rather than raw integers.
   - Simplified registration Step 2 layout: stacked password and confirmation fields with dedicated icons (`bi-shield-lock`, `bi-shield-check`), matching status indicators, and clean toggle buttons.
   - Introduced a persistent, unified 2-step visual progress bar at the top of the registration card replacing separate and misaligned progress bars.
+  - Simplified password requirements for new registrations: reduced from strict rules (mixed case, numbers, symbols, uncompromised check) to a frictionless minimum of 6 characters.
+  - Replaced the 5-point intimidating password checklist with a clean, reassuring inline hint (`٦ أحرف على الأقل`).
   - Enhanced CTA hierarchy: prominent primary button with rocket icon (`bi-rocket-takeoff`) and a clean secondary back button.
 
 - **UI/UX Pro Max Skill & Bento Box Architecture Transformation (2026-09-12)**:

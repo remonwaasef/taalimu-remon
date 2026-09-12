@@ -66,6 +66,8 @@ return [
         'payment_method' => 'Payment Method',
         'secure' => 'Secure & Encrypted',
         'flexible' => 'Cancel Anytime',
+        'password_min_6' => 'At least 6 characters',
+        'password_not_match' => 'Passwords do not match',
         'password_criteria' => [
             'chars' => '8+ Chars',
             'upper' => 'ABC',
