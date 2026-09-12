@@ -10,6 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **UI/UX Pro Max Skill & Bento Box Architecture Transformation (2026-09-12)**:
+  - Installed full UI/UX Pro Max intelligence skill suite (`ui-ux-pro-max`, `design-system`, `ui-styling`, `design`, `brand`) into `.agents/skills/`.
+  - Added fast local Node.js query runner (`.agents/skills/ui-ux-pro-max/scripts/search.mjs`) for searching UI styles, palettes, and stack guidelines.
+  - Enhanced design tokens (`resources/css/design-tokens.css`) with multi-layer elevation shadows, Bento grid radius, and micro-transitions (`--transition-fast`, `--transition-smooth`).
+  - Added Bento Card & Glass Panel utility classes to `resources/css/global-components.css` and harmonized Bootstrap form controls in `resources/css/bootstrap-compat.css`.
+  - Redesigned the Center Dashboard (`Modules/Center/resources/views/index.blade.php`) into a modern Bento Box layout with glassmorphic hero header, sleek KPI metrics, and instant action tiles.
+
 - **Free Trial Expiration Notifications & In-Dashboard Payment Alerts (2026-09-12)**:
   - Created `TrialExpiredNotification` delivering database bell notifications and emails to center admins with direct checkout links when their free trial expires.
   - Added `<x-trial-alert-banner />` component in center layout (`resources/views/layouts/app-next.blade.php`) displaying prominent countdown and expired warnings with immediate CTA buttons to pay.

@@ -3,37 +3,51 @@
 @section('title', __('center::dashboard.title'))
 
 @section('panel-content')
-    <!-- Dashboard Header: Welcome Greeting & Executive Actions -->
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6 pb-2">
-        <div>
-            <div class="flex items-center gap-2.5">
-                <span class="text-2xl animate-bounce">👋</span>
-                <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight leading-tight">
-                    {{ __('center::dashboard.welcome_back', ['name' => '']) }}
-                    <bdi class="text-brand-primary dark:text-brand-300">{{ auth()->user()->name ?? 'Manager' }}</bdi>
-                </h1>
-            </div>
-            <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1.5 font-medium flex flex-wrap items-center gap-2">
-                <span class="inline-flex items-center gap-1.5 font-bold text-slate-700 dark:text-slate-300">
-                    <i class="fas fa-school text-brand-primary text-xs"></i>
-                    {{ $tenant->name ?? 'Educational Center' }}
-                </span>
-                <span class="text-slate-300 dark:text-slate-700">•</span>
-                <span class="inline-flex items-center gap-1.5 text-slate-500 dark:text-slate-400">
-                    <i class="far fa-calendar-alt text-xs text-slate-400"></i>
-                    {{ now()->translatedFormat('l، d F Y') }}
-                </span>
-            </p>
-        </div>
+    <!-- Dashboard Bento Hero: Welcome Greeting & Quick Hub -->
+    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-white via-emerald-50/30 to-teal-50/40 dark:from-[#102033] dark:via-[#0F1B2B] dark:to-[#13253A] border border-slate-200/80 dark:border-slate-800/90 p-5 sm:p-6 shadow-xs mb-6 transition-all duration-200">
+        <!-- Subtle ambient brand glow in background -->
+        <div class="absolute -end-16 -top-16 w-56 h-56 rounded-full bg-brand-primary/10 dark:bg-brand-primary/15 blur-3xl pointer-events-none" aria-hidden="true"></div>
 
-        <!-- Quick Primary Actions -->
-        <div class="flex items-center gap-2.5 shrink-0">
-            <x-ui.button variant="outline" icon="fas fa-qrcode" size="md" href="{{ route('center.attendance.index', ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}" class="shadow-2xs">
-                {{ __('center::dashboard.smart_attendance_btn') }}
-            </x-ui.button>
-            <x-ui.button variant="primary" icon="fas fa-user-plus" size="md" @click="$dispatch('open-modal', 'quick-student-modal')" class="shadow-sm">
-                {{ __('center::dashboard.add_new_student') }}
-            </x-ui.button>
+        <div class="relative flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+            <div>
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-brand-50 dark:bg-brand-900/40 text-brand-primary dark:text-brand-300 flex items-center justify-center text-lg shadow-2xs border border-brand-100/60 dark:border-brand-800/40">
+                        <i class="fas fa-sparkles"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl sm:text-2xl lg:text-3xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight leading-tight">
+                            {{ __('center::dashboard.welcome_back', ['name' => '']) }}
+                            <bdi class="text-brand-primary dark:text-brand-300">{{ auth()->user()->name ?? 'Manager' }}</bdi>
+                        </h1>
+                        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 font-medium flex flex-wrap items-center gap-2.5">
+                            <span class="inline-flex items-center gap-1.5 font-bold text-slate-700 dark:text-slate-300">
+                                <i class="fas fa-school text-brand-primary text-xs"></i>
+                                {{ $tenant->name ?? 'Educational Center' }}
+                            </span>
+                            <span class="text-slate-300 dark:text-slate-700">•</span>
+                            <span class="inline-flex items-center gap-1.5 text-slate-500 dark:text-slate-400">
+                                <i class="far fa-calendar-alt text-xs text-slate-400"></i>
+                                {{ now()->translatedFormat('l، d F Y') }}
+                            </span>
+                            <span class="text-slate-300 dark:text-slate-700">•</span>
+                            <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-200/50 dark:border-emerald-800/30">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                نظام نشط
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Primary Actions Dock -->
+            <div class="flex items-center gap-2.5 shrink-0">
+                <x-ui.button variant="outline" icon="fas fa-qrcode" size="md" href="{{ route('center.attendance.index', ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}" class="shadow-2xs hover:border-brand-primary hover:text-brand-primary transition-all">
+                    {{ __('center::dashboard.smart_attendance_btn') }}
+                </x-ui.button>
+                <x-ui.button variant="primary" icon="fas fa-user-plus" size="md" @click="$dispatch('open-modal', 'quick-student-modal')" class="shadow-sm hover:shadow-md transition-all">
+                    {{ __('center::dashboard.add_new_student') }}
+                </x-ui.button>
+            </div>
         </div>
     </div>
 
@@ -41,8 +55,8 @@
         @include('center::partials.launchpad')
     @endif
 
-    <!-- Top Key Metrics Grid (4 High-Value KPI Cards) -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    <!-- Bento Top Key Metrics Grid (4 High-Value KPI Cards) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 mb-7">
         <!-- 1. Active Students -->
         <x-ui.stats-card
             title="{{ __('center::dashboard.active_students') }}"
@@ -92,66 +106,81 @@
         />
     </div>
 
-    <!-- Smart Compact Quick Actions Dock -->
+    <!-- Smart Bento Quick Actions Dock -->
     <div class="mb-8">
-        <div class="flex items-center gap-2 mb-3">
-            <span class="w-2 h-2 rounded-full bg-brand-primary"></span>
-            <h3 class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                {{ __('center::dashboard.center_quick_actions') }}
-            </h3>
+        <div class="flex items-center justify-between gap-2 mb-3.5">
+            <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-brand-primary"></span>
+                <h3 class="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
+                    {{ __('center::dashboard.center_quick_actions') }}
+                </h3>
+            </div>
+            <span class="text-[11px] text-slate-400 dark:text-slate-500 font-medium">إجراءات سريعة بنقرة واحدة</span>
         </div>
 
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5 sm:gap-4">
             <!-- 1. Quick Add Student (Modal) -->
-            <button type="button" @click="$dispatch('open-modal', 'quick-student-modal')" class="p-3.5 rounded-xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-brand-primary/40 dark:hover:border-brand-primary/40 hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 text-start group">
-                <div class="w-10 h-10 rounded-lg bg-brand-50 dark:bg-brand-900/30 text-brand-primary dark:text-brand-300 flex items-center justify-center text-base shrink-0 group-hover:scale-105 transition-transform">
-                    <i class="fas fa-user-plus"></i>
+            <button type="button" @click="$dispatch('open-modal', 'quick-student-modal')" class="p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-900/90 shadow-xs hover:shadow-bento hover:border-brand-primary/50 hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-between text-start group">
+                <div class="flex items-center gap-3 min-w-0">
+                    <div class="w-10 h-10 rounded-xl bg-brand-50 dark:bg-brand-900/40 text-brand-primary dark:text-brand-300 flex items-center justify-center text-base shrink-0 group-hover:scale-110 transition-transform duration-200 shadow-2xs border border-brand-100/50 dark:border-brand-800/30">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <span class="block text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-brand-primary dark:group-hover:text-brand-300 transition-colors truncate">
+                            {{ __('center::dashboard.add_new_student') }}
+                        </span>
+                        <span class="block text-[11px] text-slate-400 dark:text-slate-500 truncate">تسجيل فوري لطالب</span>
+                    </div>
                 </div>
-                <div class="min-w-0">
-                    <span class="block text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-brand-primary dark:group-hover:text-brand-300 transition-colors truncate">
-                        {{ __('center::dashboard.add_new_student') }}
-                    </span>
-                    <span class="block text-[11px] text-slate-400 dark:text-slate-500 truncate">تسجيل فوري لطالب جديد</span>
-                </div>
+                <i class="fas fa-chevron-left text-[10px] text-slate-300 dark:text-slate-600 group-hover:text-brand-primary group-hover:-translate-x-0.5 transition-all rtl:rotate-0 ltr:rotate-180 shrink-0 ms-1 hidden sm:block"></i>
             </button>
 
             <!-- 2. Quick Create Group (Modal) -->
-            <button type="button" @click="$dispatch('open-modal', 'quick-course-modal')" class="p-3.5 rounded-xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-sky-500/40 dark:hover:border-sky-500/40 hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 text-start group">
-                <div class="w-10 h-10 rounded-lg bg-sky-50 dark:bg-sky-950/40 text-sky-600 dark:text-sky-400 flex items-center justify-center text-base shrink-0 group-hover:scale-105 transition-transform">
-                    <i class="fas fa-folder-plus"></i>
+            <button type="button" @click="$dispatch('open-modal', 'quick-course-modal')" class="p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-900/90 shadow-xs hover:shadow-bento hover:border-sky-500/50 hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-between text-start group">
+                <div class="flex items-center gap-3 min-w-0">
+                    <div class="w-10 h-10 rounded-xl bg-sky-50 dark:bg-sky-950/50 text-sky-600 dark:text-sky-400 flex items-center justify-center text-base shrink-0 group-hover:scale-110 transition-transform duration-200 shadow-2xs border border-sky-100/50 dark:border-sky-800/30">
+                        <i class="fas fa-folder-plus"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <span class="block text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors truncate">
+                            {{ __('center::dashboard.create_new_group') }}
+                        </span>
+                        <span class="block text-[11px] text-slate-400 dark:text-slate-500 truncate">فصل ومجموعة جديدة</span>
+                    </div>
                 </div>
-                <div class="min-w-0">
-                    <span class="block text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors truncate">
-                        {{ __('center::dashboard.create_new_group') }}
-                    </span>
-                    <span class="block text-[11px] text-slate-400 dark:text-slate-500 truncate">فصل ومجموعة جديدة</span>
-                </div>
+                <i class="fas fa-chevron-left text-[10px] text-slate-300 dark:text-slate-600 group-hover:text-sky-600 group-hover:-translate-x-0.5 transition-all rtl:rotate-0 ltr:rotate-180 shrink-0 ms-1 hidden sm:block"></i>
             </button>
 
             <!-- 3. Smart Attendance -->
-            <a href="{{ route('center.attendance.index', ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}" class="p-3.5 rounded-xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-emerald-500/40 dark:hover:border-emerald-500/40 hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 text-start group">
-                <div class="w-10 h-10 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-base shrink-0 group-hover:scale-105 transition-transform">
-                    <i class="fas fa-qrcode"></i>
+            <a href="{{ route('center.attendance.index', ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}" class="p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-900/90 shadow-xs hover:shadow-bento hover:border-emerald-500/50 hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-between text-start group">
+                <div class="flex items-center gap-3 min-w-0">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-base shrink-0 group-hover:scale-110 transition-transform duration-200 shadow-2xs border border-emerald-100/50 dark:border-emerald-800/30">
+                        <i class="fas fa-qrcode"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <span class="block text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors truncate">
+                            {{ __('center::dashboard.smart_attendance_btn') }}
+                        </span>
+                        <span class="block text-[11px] text-slate-400 dark:text-slate-500 truncate">مسح الباركود والغياب</span>
+                    </div>
                 </div>
-                <div class="min-w-0">
-                    <span class="block text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors truncate">
-                        {{ __('center::dashboard.smart_attendance_btn') }}
-                    </span>
-                    <span class="block text-[11px] text-slate-400 dark:text-slate-500 truncate">مسح الباركود والغياب</span>
-                </div>
+                <i class="fas fa-chevron-left text-[10px] text-slate-300 dark:text-slate-600 group-hover:text-emerald-600 group-hover:-translate-x-0.5 transition-all rtl:rotate-0 ltr:rotate-180 shrink-0 ms-1 hidden sm:block"></i>
             </a>
 
             <!-- 4. Collect Fees -->
-            <a href="{{ route('center.sales.index', ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}" class="p-3.5 rounded-xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-amber-500/40 dark:hover:border-amber-500/40 hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 text-start group">
-                <div class="w-10 h-10 rounded-lg bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 flex items-center justify-center text-base shrink-0 group-hover:scale-105 transition-transform">
-                    <i class="fas fa-receipt"></i>
+            <a href="{{ route('center.sales.index', ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}" class="p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-900/90 shadow-xs hover:shadow-bento hover:border-amber-500/50 hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-between text-start group">
+                <div class="flex items-center gap-3 min-w-0">
+                    <div class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 flex items-center justify-center text-base shrink-0 group-hover:scale-110 transition-transform duration-200 shadow-2xs border border-amber-100/50 dark:border-amber-800/30">
+                        <i class="fas fa-receipt"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <span class="block text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors truncate">
+                            {{ __('center::dashboard.collect_fees_btn') }}
+                        </span>
+                        <span class="block text-[11px] text-slate-400 dark:text-slate-500 truncate">سند قبض وفواتير</span>
+                    </div>
                 </div>
-                <div class="min-w-0">
-                    <span class="block text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors truncate">
-                        {{ __('center::dashboard.collect_fees_btn') }}
-                    </span>
-                    <span class="block text-[11px] text-slate-400 dark:text-slate-500 truncate">سند قبض وفواتير</span>
-                </div>
+                <i class="fas fa-chevron-left text-[10px] text-slate-300 dark:text-slate-600 group-hover:text-amber-600 group-hover:-translate-x-0.5 transition-all rtl:rotate-0 ltr:rotate-180 shrink-0 ms-1 hidden sm:block"></i>
             </a>
         </div>
     </div>
@@ -159,7 +188,7 @@
     <!-- Operational Split Grid: Recent Registrations & Active Study Groups -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <!-- 1. Recent Student Registrations -->
-        <x-ui.card noPadding="true" class="border border-slate-200/90 dark:border-slate-800 shadow-xs">
+        <x-ui.card noPadding="true" variant="bento">
             <x-slot name="header">
                 <div class="px-6 py-4.5 border-b border-slate-100 dark:border-slate-800/80 flex items-center justify-between">
                     <div class="flex items-center gap-2.5">
@@ -236,7 +265,7 @@
         </x-ui.card>
 
         <!-- 2. Active Center Groups -->
-        <x-ui.card noPadding="true" class="border border-slate-200/90 dark:border-slate-800 shadow-xs">
+        <x-ui.card noPadding="true" variant="bento">
             <x-slot name="header">
                 <div class="px-6 py-4.5 border-b border-slate-100 dark:border-slate-800/80 flex items-center justify-between">
                     <div class="flex items-center gap-2.5">

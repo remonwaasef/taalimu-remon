@@ -99,6 +99,37 @@
     transform: translateY(-2px);
 }
 
+/* UI/UX Pro Max Bento Box System */
+.card-bento {
+    background-color: var(--card-bento-bg);
+    border: 1px solid var(--card-bento-border);
+    border-radius: var(--card-bento-radius);
+    box-shadow: var(--shadow-bento);
+    transition: var(--transition-smooth);
+    position: relative;
+    overflow: hidden;
+}
+
+.card-bento-hover:hover {
+    box-shadow: var(--shadow-bento-hover);
+    transform: translateY(-2px);
+    border-color: rgba(22, 143, 124, 0.35);
+}
+
+.glass-panel {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(229, 236, 233, 0.8);
+    box-shadow: var(--shadow-sm);
+}
+
+.dark .glass-panel {
+    background: rgba(18, 26, 36, 0.85);
+    border-color: rgba(31, 50, 72, 0.8);
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.3);
+}
+
 /* --------------------------------------------------------------------------
    3. Global Input System (نظام الحقول والمدخلات)
    -------------------------------------------------------------------------- */
