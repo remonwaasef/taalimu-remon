@@ -54,8 +54,17 @@ class RegistrationController extends Controller
             'currency' => 'nullable|in:EGP,USD,EUR',
             'coupon_code' => 'nullable|string|exists:coupons,code',
             'country_code' => 'nullable|string|max:2',
+            'subdomain' => ['nullable', 'string', 'min:2', 'max:50', 'regex:/^[a-z0-9\-]+$/', 'unique:tenants,domain'],
             'payment_gateway' => 'required|in:'.$allowedGateways,
         ]);
+
+        $effectiveSubdomain = ! empty($request->input('subdomain'))
+            ? strtolower(preg_replace('/[^a-z0-9-]/', '', $request->input('subdomain')))
+            : \App\Services\TenantRegistrationService::generateSubdomain($request->input('center_name'));
+
+        if (\App\Models\Tenant::where('domain', $effectiveSubdomain)->exists()) {
+            return back()->withErrors(['subdomain' => __('auth.validation.subdomain_taken')])->withInput();
+        }
 
         $currency = $request->input('currency', 'EGP');
 
@@ -200,6 +209,9 @@ class RegistrationController extends Controller
 
             return redirect()->away($redirectUrl);
 
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            session()->forget($submissionKey);
+            return back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
             // Release submission lock on failure so user can try again
             session()->forget($submissionKey);

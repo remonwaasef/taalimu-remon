@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added & Improved
+- **Enforce Explicit Subdomain Validation & Halt on Duplicates (2026-09-20)**:
+  - Eliminated silent auto-numbering (`while` loop adding `-1`, `-2`) in `TenantRegistrationService`.
+  - Enforced explicit `unique:tenants,domain` and reserved subdomain validation in `RegistrationController` and `SocialAuthController`.
+  - Preserved field-level `ValidationException` errors on `subdomain` / `center_name` with clear user feedback in Arabic, English, and French.
+  - Added Arabic transliteration map in client-side `generateSlug` so typing in Arabic generates instant slugs and triggers live availability validation before submission.
+
 - **Multi-Tenancy Cross-Tenant Routing & Instructor Registration Fix (2026-09-20)**:
   - Enhanced `AssertTenantIdentity` to gracefully redirect cross-tenant authenticated requests to the user's actual tenant dashboard instead of throwing an unexpected 403 Forbidden.
   - Automatically synchronized stale `tenant_id` session variables when navigating within the authenticated user's tenant.

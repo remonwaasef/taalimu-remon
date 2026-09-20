@@ -136,9 +136,21 @@ document.addEventListener('alpine:init', () => {
         },
 
         generateSlug(text) {
-            return text.toString().toLowerCase()
+            if (!text) return '';
+            const transliteration = {
+                'ا': 'a', 'أ': 'a', 'إ': 'a', 'آ': 'a',
+                'ب': 'b', 'ت': 't', 'ث': 'th', 'ج': 'g', 'ح': 'h', 'خ': 'kh',
+                'د': 'd', 'ذ': 'dh', 'ر': 'r', 'ز': 'z', 'س': 's', 'ش': 'sh',
+                'ص': 's', 'ض': 'd', 'ط': 't', 'ظ': 'z', 'ع': 'a', 'غ': 'gh',
+                'ف': 'f', 'ق': 'k', 'ك': 'k', 'ل': 'l', 'م': 'm', 'ن': 'n',
+                'ه': 'h', 'و': 'w', 'ي': 'y', 'ة': 'h', 'ى': 'a', 'ئ': 'e',
+                'ء': 'a', 'ؤ': 'o'
+            };
+            let str = text.toString().toLowerCase();
+            str = str.split('').map(c => transliteration[c] || c).join('');
+            return str
                 .replace(/\s+/g, '-')
-                .replace(/[^\w\-]+/g, '')
+                .replace(/[^a-z0-9\-]+/g, '')
                 .replace(/\-\-+/g, '-')
                 .replace(/^-+/, '')
                 .replace(/-+$/, '');

@@ -72,12 +72,18 @@ class TenantRegistrationService
                 $subdomain = self::generateSubdomain($data['center_name']);
             }
 
-            // Ensure Subdomain uniqueness
-            $base = $subdomain;
-            $counter = 1;
-            while (Tenant::where('domain', $subdomain)->exists()) {
-                $subdomain = $base . '-' . $counter;
-                $counter++;
+            // Validate Subdomain uniqueness explicitly — never silently auto-suffix
+            $forbidden = ['admin', 'www', 'api', 'app', 'dev', 'test', 'mail', 'webmail', 'portal', 'dashboard', 'edu', 'cdn', 'localhost'];
+            if (in_array($subdomain, $forbidden, true)) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'subdomain' => [__('messages.subdomain_reserved')],
+                ]);
+            }
+
+            if (Tenant::where('domain', $subdomain)->exists()) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'subdomain' => [__('auth.validation.subdomain_taken')],
+                ]);
             }
 
             // 1. Create Tenant
@@ -229,14 +235,6 @@ class TenantRegistrationService
         // Fallback if empty
         if (empty($slug)) {
             $slug = 'center-'.time();
-        }
-
-        $originalSlug = $slug;
-        $counter = 1;
-
-        while (Tenant::where('domain', $slug)->exists()) {
-            $slug = $originalSlug.'-'.$counter;
-            $counter++;
         }
 
         return $slug;

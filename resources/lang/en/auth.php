@@ -255,7 +255,7 @@ return [
     'validation' => [
         'invalid_phone' => 'Please enter a valid phone number',
         'error_occurred' => 'An error occurred. Please try again.',
-        'subdomain_taken' => 'This subdomain is already taken',
+        'subdomain_taken' => 'Sorry, this link is already taken by another teacher or center. Please choose another name or custom link.',
         'enter_center_name' => 'Please enter center name and subdomain',
     ],
 

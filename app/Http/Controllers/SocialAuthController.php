@@ -216,7 +216,7 @@ class SocialAuthController extends Controller
         $validated = $request->validate([
             'account_type' => 'required|in:center,instructor',
             'center_name' => 'required|string|max:255',
-            'subdomain' => 'nullable|string|min:2|max:50',
+            'subdomain' => ['nullable', 'string', 'min:2', 'max:50', 'regex:/^[a-z0-9\-]+$/', 'unique:tenants,domain'],
             'phone' => 'nullable|string|max:20',
             'country_code' => 'nullable|string|max:5',
             'plan' => 'required|exists:packages,slug',
@@ -225,6 +225,14 @@ class SocialAuthController extends Controller
             'payment_gateway' => 'nullable|in:paypal,paymob,test',
             'coupon_code' => 'nullable|string|exists:coupons,code',
         ]);
+
+        $effectiveSubdomain = ! empty($request->input('subdomain'))
+            ? strtolower(preg_replace('/[^a-z0-9-]/', '', $request->input('subdomain')))
+            : \App\Services\TenantRegistrationService::generateSubdomain($request->input('center_name'));
+
+        if (\App\Models\Tenant::where('domain', $effectiveSubdomain)->exists()) {
+            return back()->withErrors(['subdomain' => __('auth.validation.subdomain_taken')])->withInput();
+        }
 
         // Format phone if provided
         $fullPhone = null;
@@ -346,6 +354,10 @@ class SocialAuthController extends Controller
                 return redirect()->away($redirectUrl);
             }
 
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            session()->forget($submissionKey);
+            session()->save();
+            return back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
             // Release submission lock on failure so user can try again
             session()->forget($submissionKey);

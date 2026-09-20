@@ -194,7 +194,7 @@ return [
     'validation' => [
         'invalid_phone' => 'Veuillez entrer un numéro de téléphone valide',
         'error_occurred' => 'Une erreur s\'est produite. Veuillez réessayer.',
-        'subdomain_taken' => 'Ce sous-domaine est déjà pris',
+        'subdomain_taken' => 'Désolé, ce lien est déjà réservé pour un autre enseignant ou centre. Veuillez choisir un autre nom ou lien.',
         'enter_center_name' => 'Veuillez entrer le nom du centre et le sous-domaine',
     ],
     'show_hide' => [
