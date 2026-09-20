@@ -303,6 +303,7 @@ $tenantRoutes = function () {
         // Online Classes Management
         Route::middleware(['can:manage schedule', 'feature:online_classes'])->group(function () {
             Route::get('online-classes', [\Modules\Center\Http\Controllers\OnlineClassController::class, 'index'])->name('center.online_classes.index');
+            Route::redirect('online_classes', 'online-classes');
             Route::delete('online-classes/{class}', [\Modules\Center\Http\Controllers\OnlineClassController::class, 'destroy'])->name('center.online_classes.destroy');
         });
 

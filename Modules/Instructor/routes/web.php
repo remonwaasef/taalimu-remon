@@ -75,6 +75,7 @@ $instructorRoutes = function () {
 
         // Online Classes
         Route::resource('online-classes', OnlineClassController::class)->names('instructor.online_classes');
+        Route::redirect('online_classes', 'online-classes');
 
         // Live Session Controls (AJAX)
         Route::prefix('online-classes/{onlineClass}')->group(function () {
