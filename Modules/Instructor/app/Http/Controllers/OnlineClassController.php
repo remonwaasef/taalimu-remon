@@ -38,8 +38,9 @@ class OnlineClassController extends Controller
         $instructor = auth()->user()->instructor;
 
         $courses = $instructor ? $instructor->courses()->with('students')->get() : Course::with('students')->get();
+        $zoomConfigured = app(ZoomService::class)->isConfigured();
 
-        return view('instructor::online_classes.create', compact('courses'));
+        return view('instructor::online_classes.create', compact('courses', 'zoomConfigured'));
     }
 
     public function store(Request $request)
@@ -93,8 +94,9 @@ class OnlineClassController extends Controller
         $selectedStudentIds = $onlineClass->access_mode === 'selected'
             ? $onlineClass->participants()->pluck('student_id')->toArray()
             : [];
+        $zoomConfigured = app(ZoomService::class)->isConfigured();
 
-        return view('instructor::online_classes.edit', compact('onlineClass', 'courses', 'selectedStudentIds'));
+        return view('instructor::online_classes.edit', compact('onlineClass', 'courses', 'selectedStudentIds', 'zoomConfigured'));
     }
 
     public function update(Request $request, OnlineClass $onlineClass)
@@ -124,7 +126,7 @@ class OnlineClassController extends Controller
         try {
             $this->service->updateClass($onlineClass, $validated);
 
-            return redirect()->route('instructor.online_classes.index')
+            return redirect()->route('instructor.online_classes.show', $onlineClass)
                 ->with('success', __('instructor::dashboard.online_class_updated', ['default' => 'تم تحديث الحصة بنجاح.']));
         } catch (\Throwable $e) {
             Log::error('Online class update failed', ['error' => $e->getMessage()]);

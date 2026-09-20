@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- **Live Classroom Quick Stream Link & Provider Status Handling (2026-09-21)**:
+  - Added `updateLink` endpoint in `OnlineClassSessionController` and route `instructor.online_classes.update_link` to allow setting or changing stream links directly from inside the active classroom canvas.
+  - Added inline Google Meet / Zoom link input form directly into the live classroom canvas when no link is present, allowing instructors to launch streams instantly without leaving the room.
+  - Added `zoomConfigured` detection in `OnlineClassController` and updated `create.blade.php` and `edit.blade.php` to inform instructors when Zoom API keys are unconfigured and recommend direct links (Google Meet, Teams, external Zoom).
+  - Updated `OnlineClassController::update()` to redirect directly back to classroom `show` view after editing.
+
 - **Live Classroom Action Buttons & Direct Meeting Link Handling (2026-09-20)**:
   - Exposed `startClass()` and `endClass()` globally on `window` and bound explicit DOM event listeners to solve unresponsive buttons.
   - Enhanced classroom live canvas to support direct meeting joins and active session indicators when status transitions to `in_progress`.

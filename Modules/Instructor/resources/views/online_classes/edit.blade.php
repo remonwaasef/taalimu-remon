@@ -55,11 +55,21 @@
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('instructor::online_classes.stream_platform') }} <span class="text-danger">*</span></label>
                                 <select name="platform" id="platformSelect" class="form-select rounded-pill px-3 @error('platform') is-invalid @enderror" required>
-                                    <option value="zoom" {{ old('platform', $onlineClass->platform) == 'zoom' ? 'selected' : '' }}>Zoom (مدمج مع التسجيل التلقائي)</option>
-                                    <option value="manual" {{ old('platform', $onlineClass->platform) == 'manual' ? 'selected' : '' }}>رابط يدوي (Google Meet, Teams, غير ذلك)</option>
+                                    <option value="manual" {{ old('platform', $onlineClass->platform) == 'manual' ? 'selected' : '' }}>
+                                        رابط مباشر (Google Meet, Zoom خارجي, Teams) {{ !($zoomConfigured ?? false) ? '— (موصى به)' : '' }}
+                                    </option>
+                                    <option value="zoom" {{ old('platform', $onlineClass->platform) == 'zoom' ? 'selected' : '' }}>
+                                        Zoom مدمج {{ !($zoomConfigured ?? false) ? '(يتطلب مفاتيح API في السيرفر)' : '(مدمج مع التسجيل التلقائي)' }}
+                                    </option>
                                 </select>
                                 @error('platform') <span class="invalid-feedback">{{ $message }}</span> @enderror
-                                <div class="form-text" id="platformHelp">{{ __('instructor::online_classes.platform_help') }}</div>
+                                <div class="form-text" id="platformHelp">
+                                    @if(!($zoomConfigured ?? false))
+                                        <span class="text-warning"><i class="fas fa-exclamation-triangle me-1"></i> حساب Zoom API غير مفعّل على السيرفر حالياً. يُرجى اختيار "رابط مباشر" واستخدام رابط Google Meet أو Zoom.</span>
+                                    @else
+                                        {{ __('instructor::online_classes.platform_help') }}
+                                    @endif
+                                </div>
                             </div>
 
                             <div class="col-md-12" id="manualLinkFields">

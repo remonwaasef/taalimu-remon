@@ -81,6 +81,7 @@ $instructorRoutes = function () {
         Route::prefix('online-classes/{onlineClass}')->group(function () {
             Route::post('start', [OnlineClassSessionController::class, 'start'])->name('instructor.online_classes.start');
             Route::post('end', [OnlineClassSessionController::class, 'end'])->name('instructor.online_classes.end');
+            Route::post('update-link', [OnlineClassSessionController::class, 'updateLink'])->name('instructor.online_classes.update_link');
             Route::get('join-token', [OnlineClassSessionController::class, 'joinToken'])->name('instructor.online_classes.join_token');
         });
 

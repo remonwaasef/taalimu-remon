@@ -63,12 +63,33 @@
                     @elseif($onlineClass->status === 'in_progress')
                         {{-- In progress without direct link --}}
                         <div class="d-flex align-items-center justify-content-center h-100 text-white p-4">
-                            <div class="text-center">
+                            <div class="text-center" style="max-width: 540px;">
                                 <span class="badge bg-danger text-white rounded-pill px-3 py-2 mb-3 animate__animated animate__pulse animate__infinite">
                                     <i class="fas fa-circle me-1"></i> {{ __('instructor::online_classes.in_progress') }}
                                 </span>
-                                <h4 class="fw-bold mb-2">الحصة قيد التشغيل حالياً</h4>
-                                <p class="text-muted">الدرس المباشر يعمل حالياً ويمكنك متابعة حضور الطلاب على اليمين.</p>
+                                <h4 class="fw-bold mb-2">الحصة بدأت بنجاح</h4>
+                                <p class="text-muted mb-3">لم يتم تعيين رابط بث مباشر لهذه الحصة بعد (أو حساب Zoom غير مفعّل API).</p>
+                                
+                                <div class="card bg-dark border-secondary p-3 rounded-4 mb-3 text-start">
+                                    <label class="form-label text-white small fw-bold mb-2">
+                                        <i class="fas fa-video text-success me-1"></i> أدخل رابط الاجتماع (Google Meet أو Zoom):
+                                    </label>
+                                    <form id="quickLinkForm" onsubmit="saveMeetingLink(event)">
+                                        <div class="input-group">
+                                            <input type="url" id="inputMeetingLink" class="form-control rounded-start-pill px-3" placeholder="https://meet.google.com/xxx-xxxx-xxx" required>
+                                            <button class="btn btn-success rounded-end-pill px-3 fw-bold" type="submit" id="btnSaveLink">
+                                                <i class="fas fa-save me-1"></i> حفظ وبدء البث
+                                            </button>
+                                        </div>
+                                    </form>
+                                    <div class="text-muted extra-small mt-2">
+                                        <i class="fas fa-info-circle text-info me-1"></i> يمكنك نسخ رابط مكالمة من Google Meet أو Zoom ولصقه هنا وسينتقل الطلاب إليه مباشرة.
+                                    </div>
+                                </div>
+
+                                <a href="{{ route('instructor.online_classes.edit', $onlineClass) }}" class="btn btn-outline-light rounded-pill px-4 btn-sm">
+                                    <i class="fas fa-cog me-1"></i> تعديل كامل إعدادات الحصة
+                                </a>
                             </div>
                         </div>
                     @elseif($onlineClass->meeting_link && $onlineClass->platform !== 'zoom')
@@ -245,6 +266,43 @@ async function endClass() {
 
 window.startClass = startClass;
 window.endClass = endClass;
+
+async function saveMeetingLink(e) {
+    e.preventDefault();
+    const input = document.getElementById('inputMeetingLink');
+    const btn = document.getElementById('btnSaveLink');
+    if (!input || !btn) return;
+    const link = input.value.trim();
+    if (!link) return;
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> جاري الحفظ...';
+
+    try {
+        const res = await fetch('{{ route("instructor.online_classes.update_link", $onlineClass) }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ meeting_link: link })
+        });
+        const data = await res.json();
+        if (data.success) {
+            window.location.reload();
+        } else {
+            alert(data.message || 'تعذر حفظ الرابط');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-save me-1"></i> حفظ وبدء البث';
+        }
+    } catch (err) {
+        alert('حدث خطأ أثناء الاتصال بالخادم.');
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-save me-1"></i> حفظ وبدء البث';
+    }
+}
+window.saveMeetingLink = saveMeetingLink;
 
 document.addEventListener('DOMContentLoaded', function() {
     const btnStart = document.getElementById('btnStart');

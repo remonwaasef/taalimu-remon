@@ -66,4 +66,23 @@ class OnlineClassSessionController extends Controller
 
         return response()->json($context);
     }
+
+    /**
+     * Quickly update the meeting link directly from the classroom.
+     */
+    public function updateLink(Request $request, OnlineClass $onlineClass)
+    {
+        $this->authorize('update', $onlineClass);
+
+        $validated = $request->validate([
+            'meeting_link' => 'required|url|max:500',
+        ]);
+
+        $onlineClass->forceFill([
+            'meeting_link' => $validated['meeting_link'],
+            'platform' => 'manual',
+        ])->save();
+
+        return response()->json(['success' => true, 'meeting_link' => $onlineClass->meeting_link]);
+    }
 }
