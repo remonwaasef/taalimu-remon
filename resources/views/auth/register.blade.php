@@ -109,31 +109,26 @@
                 {{-- STEP 1: Fast & Intuitive Onboarding --}}
                 <div x-show="currentStep === 1" x-cloak>
 
-                    <!-- Main Header + Clear Login Link at TOP -->
-                    <div class="text-center mb-4">
-                        <h1 class="text-xl font-black text-slate-900 mb-1 font-arabic leading-tight">
+                    <!-- Main Header -->
+                    <div class="text-center mb-3">
+                        <h1 class="text-lg sm:text-xl font-black text-slate-900 mb-0.5 font-arabic">
                             <span x-show="accountType === 'center'">{{ __('auth.registration_steps.start_free_trial') }}</span>
-                            <span x-show="accountType === 'instructor'">{{ __('auth.registration_steps.start_instructor_platform') }}</span>
+                            <span x-show="accountType === 'instructor'">أطلق منصتك التعليمية مجاناً</span>
                         </h1>
-                        <p class="text-xs text-slate-500 font-arabic font-semibold">
-                            <span x-show="accountType === 'instructor'" class="text-emerald-700 font-bold block mb-1">
-                                {{ __('auth.registration_steps.instructor_tagline') }}
-                            </span>
-                            {{ __('auth.login.no_account_link') }}
-                            <a href="{{ route('login.portal') }}" class="text-brand-secondary font-black hover:underline me-1 bg-brand-secondary/5 px-2 py-0.5 rounded-full border border-brand-secondary/10">
-                                {{ __('auth.login.title') }}
-                            </a>
+                        <p class="text-xs text-slate-500 font-arabic">
+                            <span x-show="accountType === 'center'">أنشئ منصة مركزك في دقيقتين وابدأ التجربة</span>
+                            <span x-show="accountType === 'instructor'">احمِ فيديوهاتك، اختبر طلابك، وحصّل أرباحك بسهولة</span>
                         </p>
                     </div>
 
-                    <!-- Account Type Selector (First Interaction Step) -->
+                    <!-- Account Type Selector (Clean Segmented Tab) -->
                     @include('auth.partials._register-account-type')
 
-                    <!-- Google Fast Registration (Right After Account Type Selection) -->
-                    <div class="mb-4">
+                    <!-- Google Fast Registration -->
+                    <div class="mb-3">
                         <a :href="'{{ route('auth.google') }}?plan=' + selectedPlan + '&cycle=' + billingCycle + '&account_type=' + (accountType || 'center')" 
-                           class="w-full flex items-center justify-center gap-3 py-2.5 px-6 border-2 border-slate-200 rounded-xl text-sm font-black text-slate-800 bg-white hover:bg-slate-50 hover:border-brand-secondary/40 hover:shadow-md transition-all group">
-                            <svg class="w-5 h-5 group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
+                           class="w-full flex items-center justify-center gap-2.5 py-2 px-4 border border-slate-200 rounded-xl text-xs font-black text-slate-700 bg-white hover:bg-slate-50 hover:border-slate-300 hover:shadow-sm transition-all group">
+                            <svg class="w-4 h-4 group-hover:scale-105 transition-transform" viewBox="0 0 24 24">
                                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                                 <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
                                 <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
@@ -144,10 +139,10 @@
                     </div>
 
                     <!-- Divider -->
-                    <div class="relative my-4 px-6">
+                    <div class="relative my-3 px-6">
                         <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-100"></div></div>
-                        <div class="relative flex justify-center text-[11px] uppercase">
-                            <span class="bg-white px-4 text-slate-400 font-bold tracking-[0.15em]">
+                        <div class="relative flex justify-center text-[10px]">
+                            <span class="bg-white px-3 text-slate-400 font-bold uppercase tracking-wider">
                                 {{ __('auth.registration_steps.or_fill_below') }}
                             </span>
                         </div>
@@ -206,28 +201,33 @@
                         <i class="bi bi-arrow-left text-base rtl:rotate-0 ltr:rotate-180 group-hover:-translate-x-1 rtl:group-hover:-translate-x-1 transition-transform"></i>
                     </button>
 
-                    <!-- Trust Signals -->
-                    <template x-if="currentPlan.trial_days > 0">
-                        <div class="flex items-center justify-center gap-3 text-[11px] text-slate-400 font-bold mb-2">
-                            <span class="flex items-center gap-1">
-                                <i class="bi bi-shield-check text-emerald-500"></i>
-                                <span x-text="currentPlan.trial_days"></span> {{ __('auth.registration_steps.days_free_trial') }}
-                            </span>
-                            <span class="text-slate-200">|</span>
-                            <span class="flex items-center gap-1">
-                                <i class="bi bi-credit-card text-slate-300"></i>
-                                {{ __('auth.registration_steps.no_credit_card') }}
-                            </span>
-                        </div>
-                    </template>
+                    <!-- Trust Signals & Login Link -->
+                    <div class="pt-1 text-center space-y-1.5">
+                        <template x-if="currentPlan.trial_days > 0">
+                            <div class="flex items-center justify-center gap-2 text-[11px] text-slate-400 font-bold">
+                                <span class="flex items-center gap-1 text-emerald-600">
+                                    <i class="bi bi-shield-check"></i>
+                                    <span x-text="currentPlan.trial_days"></span> {{ __('auth.registration_steps.days_free_trial') }}
+                                </span>
+                                <span class="text-slate-300">•</span>
+                                <span>{{ __('auth.registration_steps.no_credit_card') }}</span>
+                            </div>
+                        </template>
 
-                    <!-- Footer Terms -->
-                    <div class="mt-2 text-center pb-1">
-                        <p class="text-[11px] text-slate-400 font-arabic">
+                        <!-- Clean Login Link -->
+                        <p class="text-xs text-slate-500 font-arabic">
+                            {{ __('auth.login.no_account_link') }}
+                            <a href="{{ route('login.portal') }}" class="text-brand-secondary font-black hover:underline">
+                                {{ __('auth.login.title') }}
+                            </a>
+                        </p>
+
+                        <!-- Footer Terms -->
+                        <p class="text-[10px] text-slate-400 font-arabic">
                             {{ __('auth.register.terms_prefix') }}
-                            <a href="{{ route('terms') }}" class="text-slate-600 font-black hover:underline">{{ __('auth.register.terms_of_service') }}</a> 
+                            <a href="{{ route('terms') }}" class="text-slate-500 font-bold hover:underline">{{ __('auth.register.terms_of_service') }}</a> 
                             {{ __('auth.register.and') }} 
-                            <a href="{{ route('privacy') }}" class="text-slate-600 font-black hover:underline">{{ __('auth.register.privacy_policy') }}</a>
+                            <a href="{{ route('privacy') }}" class="text-slate-500 font-bold hover:underline">{{ __('auth.register.privacy_policy') }}</a>
                         </p>
                     </div>
                 </div>

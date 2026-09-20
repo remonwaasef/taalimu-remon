@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added & Improved
+- **Registration UX Streamlining & Instructor Adaptive Flow (2026-09-20)**:
+  - Streamlined Step 1 registration card to eliminate vertical clutter and visual noise.
+  - Redesigned account type selector into sleek, compact segmented tabs (`[مدرس مستقل | مركز تعليمي]`).
+  - Added dynamic reactive copywriting, placeholders, and icons adapting seamlessly when switching between center and instructor modes.
+  - Relocated login link and secondary terms to the bottom footer for breathing room and higher conversion.
+  - Optimized Google fast registration button and divider spacing.
+
 ### Fixed & Improved
 - **Registration UX Simplification & Package Features Display Fix (2026-09-12)**:
   - Fixed `Package::getDisplayData()` to strictly filter out disabled features (`false`, `0`, `no`, `none`, `off`) so raw boolean strings like `بوابة الطالب: false` are never rendered as positive benefits in the UI.
