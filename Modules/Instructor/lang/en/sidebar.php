@@ -24,4 +24,7 @@ return [
     'cancel' => 'Cancel',
     'back' => 'Back',
     'save' => 'Save',
+    'upgrade_title' => 'Upgrade to Premium 👑',
+    'upgrade_desc' => 'Unlock online classes & automated WhatsApp alerts.',
+    'upgrade_btn' => 'Upgrade Now',
 ];

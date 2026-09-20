@@ -8,12 +8,12 @@
 
 @section('content')
     <x-ui.page-header
-        title="Good afternoon, {{ auth()->user()->name ?? 'Remon' }}! ðŸ‘‹"
-        subtitle="Here's what's happening with your school today."
+        title="{{ __('instructor::dashboard.greeting', ['name' => auth()->user()->name ?? '']) }}"
+        subtitle="{{ __('instructor::dashboard.greeting_subtitle') }}"
     >
         <x-slot name="actions">
             <x-ui.button variant="primary" icon="fas fa-plus" size="md" href="{{ route('instructor.students.create') }}">
-                Add New Student
+                {{ __('instructor::dashboard.add_new_student_btn') }}
             </x-ui.button>
         </x-slot>
     </x-ui.page-header>
@@ -25,7 +25,7 @@
                 <div class="space-y-2 max-w-xl">
                     <x-ui.badge variant="brand" size="sm" dot="true">{{ __('instructor::dashboard.getting_started_title') }}</x-ui.badge>
                     <h3 class="text-xl font-extrabold text-slate-900 dark:text-slate-100 font-inter">{{ __('instructor::dashboard.getting_started_desc') }}</h3>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">Complete setup steps to start inviting students and tracking attendance.</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">{{ __('instructor::dashboard.getting_started_sub') }}</p>
                     
                     <div class="flex items-center gap-3 pt-2">
                         <x-ui.button variant="primary" size="sm" icon="fas fa-folder-plus" href="{{ route('instructor.groups.create') }}">
@@ -51,7 +51,7 @@
             value="{{ number_format($totalStudents) }}"
             change="{{ $totalStudents > 0 ? '+'.$totalStudents : '0' }}"
             changeType="{{ $totalStudents > 0 ? 'positive' : 'neutral' }}"
-            changeLabel="enrolled students"
+            changeLabel="{{ __('instructor::dashboard.enrolled_students') }}"
             icon="fas fa-user-graduate"
             iconColor="text-brand-primary bg-brand-50"
         />
@@ -61,27 +61,27 @@
             value="{{ number_format($totalCourses) }}"
             change="{{ $totalCourses > 0 ? $totalCourses : '0' }}"
             changeType="{{ $totalCourses > 0 ? 'positive' : 'neutral' }}"
-            changeLabel="running groups"
+            changeLabel="{{ __('instructor::dashboard.running_groups') }}"
             icon="fas fa-users"
             iconColor="text-emerald-600 bg-emerald-50"
         />
 
         <x-ui.stats-card
             title="{{ __('instructor::dashboard.monthly_revenue') }}"
-            value="{{ number_format($monthlyRevenue) }} {{ app('tenant')->settings['currency'] ?? 'EGP' }}"
-            change="{{ $monthlyRevenue > 0 ? 'Active' : '0' }}"
+            value="{{ number_format($monthlyRevenue) }} {{ app()->getLocale() === 'ar' ? 'ج.م' : (app('tenant')->settings['currency'] ?? 'EGP') }}"
+            change="{{ $monthlyRevenue > 0 ? __('instructor::dashboard.active_badge') : '0' }}"
             changeType="{{ $monthlyRevenue > 0 ? 'positive' : 'neutral' }}"
-            changeLabel="this month"
+            changeLabel="{{ __('instructor::dashboard.this_month') }}"
             icon="fas fa-wallet"
             iconColor="text-amber-600 bg-amber-50"
         />
 
         <x-ui.stats-card
-            title="Attendance Rate"
+            title="{{ __('instructor::dashboard.attendance_rate') }}"
             value="{{ $totalAttendanceCount > 0 ? $attendanceRate.'%' : '0%' }}"
             change="{{ $totalAttendanceCount > 0 ? $totalAttendanceCount : '0' }}"
             changeType="{{ $totalAttendanceCount > 0 ? 'positive' : 'neutral' }}"
-            changeLabel="recorded logs"
+            changeLabel="{{ __('instructor::dashboard.recorded_logs') }}"
             icon="fas fa-chart-pie"
             iconColor="text-sky-600 bg-sky-50"
         />
@@ -91,9 +91,9 @@
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8">
         <!-- Today's Schedule (5 cols) -->
         <div class="lg:col-span-5">
-            <x-ui.card title="Today's Schedule" subtitle="Upcoming & in-progress sessions">
+            <x-ui.card title="{{ __('instructor::dashboard.todays_schedule') }}" subtitle="{{ __('instructor::dashboard.todays_schedule_sub') }}">
                 <x-slot name="action">
-                    <a href="{{ route('instructor.schedules.index') }}" class="text-xs font-semibold text-brand-primary hover:underline">View full &rarr;</a>
+                    <a href="{{ route('instructor.schedules.index') }}" class="text-xs font-semibold text-brand-primary hover:underline">{{ __('instructor::dashboard.view_all') }}</a>
                 </x-slot>
 
                 <div class="space-y-3">
@@ -105,16 +105,16 @@
                                     <span class="block text-[11px] text-slate-400">{{ $sched->end_time ? \Carbon\Carbon::parse($sched->end_time)->format('H:i') : '--:--' }}</span>
                                 </div>
                                 <div>
-                                    <h4 class="text-sm font-bold text-slate-800 dark:text-slate-200">{{ $sched->course->title ?? 'Session' }}</h4>
-                                    <p class="text-xs text-slate-400">{{ $sched->room ?? 'Main Hall' }}</p>
+                                    <h4 class="text-sm font-bold text-slate-800 dark:text-slate-200">{{ $sched->course->title ?? __('instructor::dashboard.group') }}</h4>
+                                    <p class="text-xs text-slate-400">{{ $sched->room ?? '' }}</p>
                                 </div>
                             </div>
-                            <x-ui.badge variant="success" size="sm">Active</x-ui.badge>
+                            <x-ui.badge variant="success" size="sm">{{ __('instructor::dashboard.active_badge') }}</x-ui.badge>
                         </div>
                     @empty
                         <div class="text-center py-8 text-slate-400 text-xs font-medium">
                             <i class="far fa-calendar-times text-3xl block mb-2 opacity-40"></i>
-                            <span>No sessions scheduled for today</span>
+                            <span>{{ __('instructor::dashboard.no_sessions_today') }}</span>
                         </div>
                     @endforelse
                 </div>
@@ -123,7 +123,7 @@
 
         <!-- Quick Actions (4 cols) -->
         <div class="lg:col-span-4">
-            <x-ui.card title="{{ __('instructor::dashboard.quick_links') }}" subtitle="Frequently used tasks">
+            <x-ui.card title="{{ __('instructor::dashboard.quick_links') }}" subtitle="{{ __('instructor::dashboard.frequently_used') }}">
                 <div class="grid grid-cols-2 gap-3">
                     <a href="{{ route('instructor.students.create') }}" class="p-4 rounded-xl border border-brand-border dark:border-slate-800 hover:border-brand-primary/40 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all text-center flex flex-col items-center justify-center group">
                         <div class="w-10 h-10 rounded-xl bg-brand-50 dark:bg-brand-900/30 text-brand-primary flex items-center justify-center text-base mb-2 group-hover:scale-110 transition-transform">
@@ -150,7 +150,7 @@
                         <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 text-emerald-500 flex items-center justify-center text-base mb-2 group-hover:scale-110 transition-transform">
                             <i class="fab fa-whatsapp"></i>
                         </div>
-                        <span class="text-xs font-bold text-slate-800 dark:text-slate-200 leading-tight">WhatsApp API</span>
+                        <span class="text-xs font-bold text-slate-800 dark:text-slate-200 leading-tight">{{ __('instructor::dashboard.whatsapp_auto') }}</span>
                     </a>
                 </div>
             </x-ui.card>
@@ -158,7 +158,7 @@
 
         <!-- Setup Progress (3 cols) -->
         <div class="lg:col-span-3">
-            <x-ui.card title="Setup Progress" subtitle="Completion indicator">
+            <x-ui.card title="{{ __('instructor::dashboard.setup_progress') }}" subtitle="{{ __('instructor::dashboard.completion_indicator') }}">
                 <div class="text-center my-2">
                     <div class="inline-flex items-center justify-center relative">
                         <svg class="w-24 h-24" viewBox="0 0 36 36">
@@ -171,15 +171,15 @@
                 <div class="space-y-1.5 text-xs">
                     <div class="flex items-center gap-2 {{ $hasProfile ? 'text-emerald-600 font-semibold' : 'text-slate-400' }}">
                         <i class="{{ $hasProfile ? 'fas fa-check-circle' : 'far fa-circle' }} text-xs"></i>
-                        <span>Profile Information</span>
+                        <span>{{ __('instructor::dashboard.profile_info') }}</span>
                     </div>
                     <div class="flex items-center gap-2 {{ $hasGroup ? 'text-emerald-600 font-semibold' : 'text-slate-400' }}">
                         <i class="{{ $hasGroup ? 'fas fa-check-circle' : 'far fa-circle' }} text-xs"></i>
-                        <span>Group Creation</span>
+                        <span>{{ __('instructor::dashboard.group_creation') }}</span>
                     </div>
                     <div class="flex items-center gap-2 {{ $hasStudents ? 'text-emerald-600 font-semibold' : 'text-slate-400' }}">
                         <i class="{{ $hasStudents ? 'fas fa-check-circle' : 'far fa-circle' }} text-xs"></i>
-                        <span>Add Students</span>
+                        <span>{{ __('instructor::dashboard.add_students_step') }}</span>
                     </div>
                 </div>
             </x-ui.card>
@@ -194,10 +194,10 @@
                     <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
                         <td class="px-6 py-4 font-semibold text-slate-900 dark:text-slate-100">
                             <div>{{ $course->title }}</div>
-                            <span class="text-xs text-slate-400 font-normal">{{ $course->schedules->count() }} sessions</span>
+                            <span class="text-xs text-slate-400 font-normal">{{ __('instructor::dashboard.sessions_count', ['count' => $course->schedules->count()]) }}</span>
                         </td>
                         <td class="px-6 py-4">
-                            <x-ui.badge variant="brand" size="sm">{{ $course->enrollments_count ?? 0 }} enrolled</x-ui.badge>
+                            <x-ui.badge variant="brand" size="sm">{{ __('instructor::dashboard.enrolled_count', ['count' => $course->enrollments_count ?? 0]) }}</x-ui.badge>
                         </td>
                         <td class="px-6 py-4">
                             @if($course->registration_token)
@@ -213,7 +213,7 @@
                         </td>
                         <td class="px-6 py-4 text-end">
                             <x-ui.button variant="outline" size="sm" icon="fas fa-qrcode" href="{{ route('instructor.scanner', $course->id) }}">
-                                QR Scanner
+                                {{ __('instructor::dashboard.qr_scanner_btn') }}
                             </x-ui.button>
                         </td>
                     </tr>
@@ -221,13 +221,13 @@
             </x-ui.table>
         @else
             <x-ui.empty-state
-                title="No Groups Created Yet"
-                description="Create your first study group to start registering students."
+                title="{{ __('instructor::dashboard.no_groups_created_yet') }}"
+                description="{{ __('instructor::dashboard.no_groups_created_desc') }}"
                 icon="fas fa-users"
             >
                 <x-slot name="action">
                     <x-ui.button variant="primary" icon="fas fa-plus" href="{{ route('instructor.groups.create') }}">
-                        Create First Group
+                        {{ __('instructor::dashboard.create_first_group_btn') }}
                     </x-ui.button>
                 </x-slot>
             </x-ui.empty-state>

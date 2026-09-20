@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added & Improved
+- **Instructor Dashboard Localization, Encoding & UI Polish (2026-09-20)**:
+  - Eliminated hardcoded English strings from `Modules/Instructor/resources/views/index.blade.php`.
+  - Fixed UTF-8 broken emoji glitch (`'ðŸ’<`) in page header greeting and replaced with localized clean greeting.
+  - Adapted context copywriting from generic school terms to solo instructor workflow (groups, sessions, students).
+  - Fully localized key metrics, today's schedule, quick actions, setup progress, active groups, empty states, and sidebar footer upgrade card across Arabic, English, and French.
+
 - **Enforce Explicit Subdomain Validation & Halt on Duplicates (2026-09-20)**:
   - Eliminated silent auto-numbering (`while` loop adding `-1`, `-2`) in `TenantRegistrationService`.
   - Enforced explicit `unique:tenants,domain` and reserved subdomain validation in `RegistrationController` and `SocialAuthController`.

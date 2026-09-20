@@ -113,11 +113,11 @@
         <div class="p-3 rounded-2xl bg-brand-50/60 dark:bg-brand-900/20 border border-brand-100 dark:border-brand-800/40">
             <div class="flex items-center gap-2 mb-1">
                 <i class="fas fa-crown text-brand-primary text-xs"></i>
-                <span class="font-bold text-xs text-brand-primary">Upgrade to Premium</span>
+                <span class="font-bold text-xs text-brand-primary">{{ __('instructor::sidebar.upgrade_title') }}</span>
             </div>
-            <p class="text-[11px] text-slate-500 mb-2 leading-tight">Unlock online classes & automated WhatsApp alerts.</p>
+            <p class="text-[11px] text-slate-500 mb-2 leading-tight">{{ __('instructor::sidebar.upgrade_desc') }}</p>
             <x-ui.button variant="primary" size="sm" class="w-full" href="{{ route('instructor.billing') }}">
-                Upgrade Now
+                {{ __('instructor::sidebar.upgrade_btn') }}
             </x-ui.button>
         </div>
     </x-slot>

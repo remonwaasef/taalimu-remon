@@ -24,4 +24,7 @@ return [
     'cancel' => 'Annuler',
     'back' => 'Retour',
     'save' => 'Enregistrer',
+    'upgrade_title' => 'Passer à Premium 👑',
+    'upgrade_desc' => 'Débloquez les cours en ligne et les alertes WhatsApp automatiques.',
+    'upgrade_btn' => 'Mettre à niveau',
 ];
