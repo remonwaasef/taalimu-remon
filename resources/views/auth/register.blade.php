@@ -75,7 +75,7 @@
                             </div>
                             <div class="text-start">
                                 <span class="text-xs font-black block leading-tight font-arabic" :class="currentStep === 1 ? 'text-slate-900' : 'text-slate-500'">
-                                    {{ __('auth.registration_steps.center_info') }}
+                                    <span x-text="accountType === 'center' ? '{{ __('auth.registration_steps.center_info') }}' : '{{ __('auth.registration_steps.teacher_info') }}'"></span>
                                 </span>
                                 <span class="text-[10px] font-bold block leading-tight font-arabic" :class="currentStep === 1 ? 'text-brand-secondary' : 'text-emerald-600'">
                                     <span x-show="currentStep === 1">{{ __('auth.registration_steps.step_1') }}</span>
@@ -112,9 +112,13 @@
                     <!-- Main Header + Clear Login Link at TOP -->
                     <div class="text-center mb-4">
                         <h1 class="text-xl font-black text-slate-900 mb-1 font-arabic leading-tight">
-                            {{ __('auth.registration_steps.start_free_trial') }}
+                            <span x-show="accountType === 'center'">{{ __('auth.registration_steps.start_free_trial') }}</span>
+                            <span x-show="accountType === 'instructor'">{{ __('auth.registration_steps.start_instructor_platform') }}</span>
                         </h1>
                         <p class="text-xs text-slate-500 font-arabic font-semibold">
+                            <span x-show="accountType === 'instructor'" class="text-emerald-700 font-bold block mb-1">
+                                {{ __('auth.registration_steps.instructor_tagline') }}
+                            </span>
                             {{ __('auth.login.no_account_link') }}
                             <a href="{{ route('login.portal') }}" class="text-brand-secondary font-black hover:underline me-1 bg-brand-secondary/5 px-2 py-0.5 rounded-full border border-brand-secondary/10">
                                 {{ __('auth.login.title') }}
@@ -159,13 +163,13 @@
                             </label>
                             <div class="relative group">
                                 <div class="absolute inset-y-0 start-0 ps-4 flex items-center pointer-events-none text-slate-300 group-focus-within:text-brand-secondary transition-colors">
-                                    <i class="bi bi-building text-lg"></i>
+                                    <i class="bi text-lg" :class="accountType === 'center' ? 'bi-building' : 'bi-person-badge'"></i>
                                 </div>
                                 <input type="text" name="center_name" x-model="centerName"
                                     x-ref="centerNameInput"
                                     @input="if(!manuallyEditedSubdomain) { subdomain = generateSlug(centerName); checkSubdomain(); }"
                                     class="w-full h-11 ps-11 pe-4 bg-white border border-slate-200 rounded-xl text-sm font-bold font-arabic focus:outline-none focus:ring-2 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all"
-                                    placeholder="{{ __('auth.register.center_name_placeholder') }}" :required="currentStep === 1">
+                                    :placeholder="accountType === 'center' ? '{{ __('auth.register.center_name_placeholder') }}' : '{{ __('auth.registration_steps.teacher_name_placeholder') }}'" :required="currentStep === 1">
                             </div>
                         </div>
 
@@ -180,7 +184,7 @@
                                     @input="manuallyEditedSubdomain = true; subdomain = cleanSlug(subdomain);"
                                     @input.debounce.500ms="checkSubdomain()"
                                     class="w-full h-9 pl-[60px] pr-[92px] sm:pl-[70px] sm:pr-[110px] bg-slate-50/80 border border-slate-200 rounded-xl text-sm font-bold font-sans focus:outline-none focus:bg-white focus:ring-2 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all"
-                                    placeholder="center-name" :required="currentStep === 1">
+                                    :placeholder="accountType === 'center' ? 'center-name' : '{{ __('auth.registration_steps.teacher_subdomain_placeholder') }}'" :required="currentStep === 1">
                                 <div class="absolute right-0 inset-y-0 flex items-center pr-3 pointer-events-none text-slate-400 font-bold text-[11px] gap-2 z-10">
                                     <span>.taalimu.com</span>
                                     <div class="flex items-center justify-center w-4 h-4">

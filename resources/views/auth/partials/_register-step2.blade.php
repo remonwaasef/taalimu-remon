@@ -110,7 +110,7 @@
 
                 {{-- Key Features Highlights --}}
                 <div class="space-y-2 py-1">
-                    <template x-for="feature in (currentPlan.features && currentPlan.features.length > 0 ? currentPlan.features.filter(f => !f.toLowerCase().includes(': false') && !f.toLowerCase().endsWith('false')).slice(0, 4) : ['إدارة الطلاب والفصول', 'تتبع الحضور والغياب', 'إدارة الاختبارات والدرجات', 'تقارير فورية وتنبيهات'])" :key="feature">
+                    <template x-for="feature in (currentPlan.features && currentPlan.features.length > 0 ? currentPlan.features.filter(f => !f.toLowerCase().includes(': false') && !f.toLowerCase().endsWith('false')).slice(0, 4) : (accountType === 'instructor' ? ['حماية الفيديوهات من التسريب', 'امتحانات إلكترونية وتصحيح آلي', 'تحصيل بفودافون كاش وإنستاباي', 'تقارير درجات واشتراكات الطلاب'] : ['إدارة الطلاب والفصول', 'تتبع الحضور والغياب', 'إدارة الاختبارات والدرجات', 'تقارير فورية وتنبيهات']))" :key="feature">
                         <div class="flex items-center gap-2 text-xs font-bold text-slate-700 font-arabic">
                             <i class="bi bi-check2-circle text-emerald-500 text-sm flex-shrink-0"></i>
                             <span x-text="feature"></span>
