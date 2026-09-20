@@ -40,7 +40,10 @@ class OnlineClassController extends Controller
         $courses = $instructor ? $instructor->courses()->with('students')->get() : Course::with('students')->get();
         $zoomConfigured = app(ZoomService::class)->isConfigured();
 
-        return view('instructor::online_classes.create', compact('courses', 'zoomConfigured'));
+        $tenantSettings = app('tenant')?->settings ?? [];
+        $defaultMeetingLink = $instructor?->default_meeting_link ?? ($tenantSettings['default_meeting_link'] ?? null);
+
+        return view('instructor::online_classes.create', compact('courses', 'zoomConfigured', 'defaultMeetingLink'));
     }
 
     public function store(Request $request)
@@ -159,7 +162,9 @@ class OnlineClassController extends Controller
         }
 
         $participants = $onlineClass->participants()->with('student')->get();
+        $tenantSettings = app('tenant')?->settings ?? [];
+        $defaultMeetingLink = auth()->user()->instructor?->default_meeting_link ?? ($tenantSettings['default_meeting_link'] ?? null);
 
-        return view('instructor::online_classes.show', compact('onlineClass', 'joinContext', 'participants'));
+        return view('instructor::online_classes.show', compact('onlineClass', 'joinContext', 'participants', 'defaultMeetingLink'));
     }
 }

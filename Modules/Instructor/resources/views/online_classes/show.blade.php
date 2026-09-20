@@ -76,7 +76,7 @@
                                     </label>
                                     <form id="quickLinkForm" onsubmit="saveMeetingLink(event)">
                                         <div class="input-group">
-                                            <input type="url" id="inputMeetingLink" class="form-control rounded-start-pill px-3" placeholder="https://meet.google.com/xxx-xxxx-xxx" required>
+                                            <input type="url" id="inputMeetingLink" class="form-control rounded-start-pill px-3" value="{{ $defaultMeetingLink ?? '' }}" placeholder="https://meet.google.com/xxx-xxxx-xxx" required>
                                             <button class="btn btn-success rounded-end-pill px-3 fw-bold" type="submit" id="btnSaveLink">
                                                 <i class="fas fa-save me-1"></i> حفظ وبدء البث
                                             </button>

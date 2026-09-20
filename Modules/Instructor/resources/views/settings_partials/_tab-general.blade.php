@@ -38,6 +38,17 @@
                                                 </select>
                                             </div>
                                             <div class="col-md-12">
+                                                <label class="form-label fw-bold small text-muted">
+                                                    <i class="fas fa-video text-primary me-1"></i> رابط البث المباشر الافتراضي (Google Meet / Zoom)
+                                                </label>
+                                                <input type="url" name="default_meeting_link" class="form-control bg-white border rounded-3" 
+                                                       value="{{ ($tenant->settings ?? [])['default_meeting_link'] ?? (auth()->user()->instructor?->default_meeting_link ?? '') }}" 
+                                                       placeholder="https://meet.google.com/xxx-xxxx-xxx أو رابط اجتماع Zoom الدائم">
+                                                <div class="form-text x-small text-muted">
+                                                    <i class="fas fa-info-circle text-info me-1"></i> سيتم إدراج هذا الرابط تلقائياً عند جدولة أي حصة أونلاين جديدة دون الحاجة لكتابته كل مرة.
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
                                                 <label class="form-label fw-bold small text-muted">{{ __('instructor::settings.address') }}</label>
                                                 <input type="text" name="address" class="form-control bg-white border rounded-3" value="{{ $tenant->address }}">
                                             </div>

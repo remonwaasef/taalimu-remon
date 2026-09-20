@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- **Default Meeting Link for Instructors & Live Classes (2026-09-21)**:
+  - Added migration `2026_09_21_003000_add_default_meeting_link_to_instructors_table.php` adding `default_meeting_link` column to `instructors`.
+  - Added `default_meeting_link` field in General Settings tab (`settings_partials/_tab-general.blade.php`) and handled persistence in `SettingsController::updateGeneral()`.
+  - Automatically pre-fills `default_meeting_link` into `create.blade.php` and the live classroom canvas `show.blade.php` quick link form, eliminating manual link entry on every session.
+
 - **Live Classroom Quick Stream Link & Provider Status Handling (2026-09-21)**:
   - Added `updateLink` endpoint in `OnlineClassSessionController` and route `instructor.online_classes.update_link` to allow setting or changing stream links directly from inside the active classroom canvas.
   - Added inline Google Meet / Zoom link input form directly into the live classroom canvas when no link is present, allowing instructors to launch streams instantly without leaving the room.

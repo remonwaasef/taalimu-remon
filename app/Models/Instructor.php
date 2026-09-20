@@ -61,6 +61,7 @@ class Instructor extends Model
         'gender',
         'hiring_date',
         'bio',
+        'default_meeting_link',
         'is_co_instructor',
         'image',
     ];

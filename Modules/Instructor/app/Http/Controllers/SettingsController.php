@@ -71,6 +71,7 @@ class SettingsController extends Controller
             'address' => 'nullable|string|max:500',
             'description' => 'nullable|string|max:1000',
             'currency' => 'nullable|string|max:10',
+            'default_meeting_link' => 'nullable|url|max:500',
             'logo' => 'nullable|image|max:2048',
         ]);
 
@@ -83,7 +84,14 @@ class SettingsController extends Controller
 
         $settings = $tenant->settings ?? [];
         $settings['currency'] = $request->currency ?? 'EGP';
+        $settings['default_meeting_link'] = $request->default_meeting_link;
         $tenant->settings = $settings;
+
+        if ($this->instructor) {
+            $this->instructor->update([
+                'default_meeting_link' => $request->default_meeting_link,
+            ]);
+        }
 
         if ($request->hasFile('logo')) {
             $logoFile = $request->file('logo');

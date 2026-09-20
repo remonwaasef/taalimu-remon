@@ -73,8 +73,11 @@
 
                             <div class="col-md-12" id="manualLinkFields">
                                 <label class="form-label fw-bold">{{ __('instructor::online_classes.meeting_link') }} <span class="text-danger">*</span></label>
-                                <input type="url" name="meeting_link" class="form-control rounded-pill px-3 @error('meeting_link') is-invalid @enderror" value="{{ old('meeting_link') }}" placeholder="{{ __('instructor::online_classes.enter_link_placeholder') }}">
+                                <input type="url" name="meeting_link" class="form-control rounded-pill px-3 @error('meeting_link') is-invalid @enderror" value="{{ old('meeting_link', $defaultMeetingLink ?? '') }}" placeholder="{{ __('instructor::online_classes.enter_link_placeholder') }}">
                                 @error('meeting_link') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                                @if(!empty($defaultMeetingLink))
+                                    <div class="form-text text-success small"><i class="fas fa-check-circle me-1"></i> تم ملء رابط البث الافتراضي المسجل في إعداداتك تلقائياً.</div>
+                                @endif
                             </div>
 
                             <div class="col-md-12" id="zoomAutoFields" style="display:none;">
