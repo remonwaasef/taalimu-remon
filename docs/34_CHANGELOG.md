@@ -9,7 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Fixed & Improved
+- **Course Students Relation & Safe Access in Online Classes (2026-09-20)**:
+  - Added `students()` `hasManyThrough` relationship from `Course` through `Enrollment` to `Student`.
+  - Added null-safe checks on `$course->students` in `online_classes/create.blade.php` and `online_classes/edit.blade.php`.
+  - Eager loaded `students` in `OnlineClassController::create()` and `edit()` to prevent null relation exceptions and N+1 queries.
+  - Resolved `500 Server Error: Call to a member function count() on null` when loading `/instructor/online-classes/create`.
+
 - **Container Interface Binding for Online Classes (2026-09-20)**:
   - Bound `\App\Interfaces\VideoProviderInterface` to `\App\Services\ZoomService` in `AppServiceProvider::register()`.
   - Bound `\App\Interfaces\VideoStorageInterface` to `VideoStorageManager::default()` in `AppServiceProvider::register()`.

@@ -171,6 +171,18 @@ class Course extends Model
         return $this->hasMany(Enrollment::class);
     }
 
+    public function students()
+    {
+        return $this->hasManyThrough(
+            Student::class,
+            Enrollment::class,
+            'course_id',
+            'user_id',
+            'id',
+            'user_id'
+        );
+    }
+
     public function resources()
     {
         return $this->hasMany(CourseResource::class);

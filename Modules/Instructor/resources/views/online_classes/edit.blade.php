@@ -90,7 +90,7 @@
                                 <label class="form-label fw-bold">{{ __('instructor::online_classes.selected_students') }}</label>
                                 <select name="selected_student_ids[]" id="selectedStudents" class="form-select rounded-pill px-3" multiple style="min-height: 120px;">
                                     @foreach($courses as $course)
-                                        @if($course->students->count())
+                                        @if($course->students && $course->students->count())
                                             <optgroup label="{{ $course->title }}">
                                                 @foreach($course->students as $student)
                                                     <option value="{{ $student->id }}" {{ in_array($student->id, $selectedStudentIds) ? 'selected' : '' }}>{{ $student->name }} ({{ $student->code }})</option>

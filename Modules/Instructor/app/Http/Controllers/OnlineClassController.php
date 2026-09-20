@@ -37,7 +37,7 @@ class OnlineClassController extends Controller
     {
         $instructor = auth()->user()->instructor;
 
-        $courses = $instructor ? $instructor->courses : Course::select('id', 'title')->get();
+        $courses = $instructor ? $instructor->courses()->with('students')->get() : Course::with('students')->get();
 
         return view('instructor::online_classes.create', compact('courses'));
     }
@@ -88,7 +88,7 @@ class OnlineClassController extends Controller
 
         $instructor = auth()->user()->instructor;
 
-        $courses = $instructor ? $instructor->courses : Course::select('id', 'title')->get();
+        $courses = $instructor ? $instructor->courses()->with('students')->get() : Course::with('students')->get();
 
         $selectedStudentIds = $onlineClass->access_mode === 'selected'
             ? $onlineClass->participants()->pluck('student_id')->toArray()
