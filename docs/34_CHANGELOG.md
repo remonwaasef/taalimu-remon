@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- **Live Classroom Show View Blade Syntax Fix (2026-09-20)**:
+  - Fixed syntax error in `Modules/Instructor/resources/views/online_classes/show.blade.php` where `@foreach` was used with `@empty` and `@endforeach`.
+  - Converted loop to `@forelse` and `@endforelse`, verified with `artisan view:cache`.
+  - Resolved `500 Server Error: syntax error, unexpected token "endforeach"` when entering live class room (`/instructor/online-classes/{id}`).
+
 - **Online Classes Description Column & Migration Idempotency (2026-09-20)**:
   - Created migration `2026_09_20_235000_add_description_to_online_classes_table.php` adding nullable `description` column to `online_classes`.
   - Made September 2026 opportunities and demand tables migrations idempotent with `hasTable` guards to ensure clean production migration runs.

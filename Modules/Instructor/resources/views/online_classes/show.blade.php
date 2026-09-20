@@ -90,7 +90,7 @@
                 </div>
                 <div class="card-body p-0" style="max-height: 500px; overflow-y: auto;">
                     <div class="list-group list-group-flush" id="participantsList">
-                        @foreach($participants as $p)
+                        @forelse($participants as $p)
                             <div class="list-group-item px-3 py-2 d-flex align-items-center justify-content-between participant-row" data-user-id="{{ $p->user_id }}" data-status="{{ $p->status }}">
                                 <div class="d-flex align-items-center gap-2">
                                     <div class="avatar-circle shadow-sm" style="width:36px;height:36px;font-size:0.8rem;">
@@ -109,7 +109,7 @@
                             <div class="list-group-item text-center text-muted py-4">
                                 {{ __('instructor::online_classes.no_participants') }}
                             </div>
-                        @endforeach
+                        @endforelse
                     </div>
                 </div>
             </div>
