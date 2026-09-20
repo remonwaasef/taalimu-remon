@@ -17,7 +17,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(
+            \App\Interfaces\VideoProviderInterface::class,
+            \App\Services\ZoomService::class
+        );
+
+        $this->app->bind(
+            \App\Interfaces\VideoStorageInterface::class,
+            fn () => \App\Services\VideoStorage\VideoStorageManager::default()
+        );
     }
 
     /**

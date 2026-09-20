@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed & Improved
+- **Container Interface Binding for Online Classes (2026-09-20)**:
+  - Bound `\App\Interfaces\VideoProviderInterface` to `\App\Services\ZoomService` in `AppServiceProvider::register()`.
+  - Bound `\App\Interfaces\VideoStorageInterface` to `VideoStorageManager::default()` in `AppServiceProvider::register()`.
+  - Resolved `500 Server Error` on instructor live classes (`/instructor/online-classes`) caused by uninstantiable interface dependency in `OnlineClassService`.
+
 ### Added & Improved
 - **Instructor Dashboard Localization, Encoding & UI Polish (2026-09-20)**:
   - Eliminated hardcoded English strings from `Modules/Instructor/resources/views/index.blade.php`.
