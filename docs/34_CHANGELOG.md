@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- **Online Classes Description Column & Migration Idempotency (2026-09-20)**:
+  - Created migration `2026_09_20_235000_add_description_to_online_classes_table.php` adding nullable `description` column to `online_classes`.
+  - Made September 2026 opportunities and demand tables migrations idempotent with `hasTable` guards to ensure clean production migration runs.
+  - Resolved `Unknown column 'description' in 'field list'` error preventing instructor live class creation.
+
 - **Course Students Relation & Safe Access in Online Classes (2026-09-20)**:
   - Added `students()` `hasManyThrough` relationship from `Course` through `Enrollment` to `Student`.
   - Added null-safe checks on `$course->students` in `online_classes/create.blade.php` and `online_classes/edit.blade.php`.

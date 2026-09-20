@@ -11,17 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('opportunity_groups', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('opportunity_id')->constrained('opportunities')->cascadeOnDelete();
-            $table->foreignId('course_id')->constrained('courses')->cascadeOnDelete();
-            $table->unsignedInteger('student_count')->default(0);
-            $table->enum('status', ['forming', 'filled', 'cancelled'])->default('forming');
-            $table->timestamps();
+        if (! Schema::hasTable('opportunity_groups')) {
+            Schema::create('opportunity_groups', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('opportunity_id')->constrained('opportunities')->cascadeOnDelete();
+                $table->foreignId('course_id')->constrained('courses')->cascadeOnDelete();
+                $table->unsignedInteger('student_count')->default(0);
+                $table->enum('status', ['forming', 'filled', 'cancelled'])->default('forming');
+                $table->timestamps();
 
-            $table->index(['opportunity_id', 'status']);
-            $table->index(['course_id', 'status']);
-        });
+                $table->index(['opportunity_id', 'status']);
+                $table->index(['course_id', 'status']);
+            });
+        }
     }
 
     /**

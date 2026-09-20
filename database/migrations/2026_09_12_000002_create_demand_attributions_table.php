@@ -17,19 +17,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('demand_attributions', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('tenant_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('demand_request_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('opportunity_id')->nullable()->constrained()->nullOnDelete();
-            $table->foreignId('enrollment_id')->nullable()->constrained()->nullOnDelete();
-            $table->timestamp('converted_at')->useCurrent();
-            $table->timestamps();
+        if (! Schema::hasTable('demand_attributions')) {
+            Schema::create('demand_attributions', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('tenant_id')->constrained()->cascadeOnDelete();
+                $table->foreignId('demand_request_id')->constrained()->cascadeOnDelete();
+                $table->foreignId('opportunity_id')->nullable()->constrained()->nullOnDelete();
+                $table->foreignId('enrollment_id')->nullable()->constrained()->nullOnDelete();
+                $table->timestamp('converted_at')->useCurrent();
+                $table->timestamps();
 
-            $table->unique('demand_request_id');
-            $table->index(['tenant_id', 'opportunity_id']);
-            $table->index(['tenant_id', 'demand_request_id']);
-        });
+                $table->unique('demand_request_id');
+                $table->index(['tenant_id', 'opportunity_id']);
+                $table->index(['tenant_id', 'demand_request_id']);
+            });
+        }
     }
 
     /**

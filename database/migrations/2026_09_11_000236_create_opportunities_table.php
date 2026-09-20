@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('opportunities', function (Blueprint $table) {
+        if (! Schema::hasTable('opportunities')) {
+            Schema::create('opportunities', function (Blueprint $table) {
             $table->id();
             $table->foreignId('tenant_id')->constrained()->cascadeOnDelete();
             $table->foreignId('demand_aggregation_id')->nullable()->constrained('demand_aggregations')->nullOnDelete();
@@ -39,6 +40,7 @@ return new class extends Migration
             $table->index(['tenant_id', 'subject', 'status']);
             $table->index(['matched_teacher_id', 'status']);
         });
+        }
     }
 
     /**

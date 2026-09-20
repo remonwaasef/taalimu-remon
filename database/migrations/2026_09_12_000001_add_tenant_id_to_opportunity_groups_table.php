@@ -20,9 +20,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('opportunity_groups', function (Blueprint $table) {
-            $table->foreignId('tenant_id')->nullable()->after('course_id')->constrained()->cascadeOnDelete();
-        });
+        if (Schema::hasTable('opportunity_groups') && ! Schema::hasColumn('opportunity_groups', 'tenant_id')) {
+            Schema::table('opportunity_groups', function (Blueprint $table) {
+                $table->foreignId('tenant_id')->nullable()->after('course_id')->constrained()->cascadeOnDelete();
+            });
+        }
 
         // Backfill from parent opportunities (no-op on fresh installs).
         // Portable chunked loop: SQLite does not support UPDATE..JOIN.
@@ -43,9 +45,13 @@ return new class extends Migration
                 }
             });
 
-        Schema::table('opportunity_groups', function (Blueprint $table) {
-            $table->index(['tenant_id', 'status']);
-        });
+        try {
+            Schema::table('opportunity_groups', function (Blueprint $table) {
+                $table->index(['tenant_id', 'status']);
+            });
+        } catch (\Throwable $e) {
+            // Index already exists
+        }
     }
 
     /**
