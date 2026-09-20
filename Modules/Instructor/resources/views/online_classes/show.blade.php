@@ -43,6 +43,34 @@
                     @if($joinContext && $onlineClass->status === 'in_progress')
                         {{-- Zoom Meeting SDK Embed --}}
                         <div id="zmmtg-root" style="width:100%; height:100%;"></div>
+                    @elseif($onlineClass->status === 'in_progress' && $onlineClass->meeting_link)
+                        {{-- Live meeting link available --}}
+                        <div class="d-flex align-items-center justify-content-center h-100 text-white p-4">
+                            <div class="text-center">
+                                <div class="mb-3">
+                                    <span class="badge bg-danger text-white rounded-pill px-3 py-2 animate__animated animate__pulse animate__infinite">
+                                        <i class="fas fa-circle me-1"></i> {{ __('instructor::online_classes.in_progress') }}
+                                    </span>
+                                </div>
+                                <i class="fas fa-video fa-4x mb-3 text-success"></i>
+                                <h4 class="fw-bold mb-2">قاعة الدرس بدأت بنجاح</h4>
+                                <p class="text-muted mb-4">يمكنك الانضمام مباشرة إلى الاجتماع عبر الزر أدناه:</p>
+                                <a href="{{ $onlineClass->meeting_link }}" target="_blank" class="btn btn-success rounded-pill px-5 py-2 fw-bold shadow">
+                                    <i class="fas fa-arrow-up-right-from-square me-2"></i> دخول الاجتماع
+                                </a>
+                            </div>
+                        </div>
+                    @elseif($onlineClass->status === 'in_progress')
+                        {{-- In progress without direct link --}}
+                        <div class="d-flex align-items-center justify-content-center h-100 text-white p-4">
+                            <div class="text-center">
+                                <span class="badge bg-danger text-white rounded-pill px-3 py-2 mb-3 animate__animated animate__pulse animate__infinite">
+                                    <i class="fas fa-circle me-1"></i> {{ __('instructor::online_classes.in_progress') }}
+                                </span>
+                                <h4 class="fw-bold mb-2">الحصة قيد التشغيل حالياً</h4>
+                                <p class="text-muted">الدرس المباشر يعمل حالياً ويمكنك متابعة حضور الطلاب على اليمين.</p>
+                            </div>
+                        </div>
                     @elseif($onlineClass->meeting_link && $onlineClass->platform !== 'zoom')
                         {{-- Fallback: external link --}}
                         <div class="d-flex align-items-center justify-content-center h-100 text-white">
@@ -139,133 +167,133 @@
 @endsection
 
 @push('scripts')
+@if($joinContext && $onlineClass->status === 'in_progress')
 <script src="https://source.zoom.us/2.18.0/zoom-meeting-2.18.0.min.js"></script>
+@endif
 <script>
+// Start/End Class Actions - Globally available
+async function startClass() {
+    const btn = document.getElementById('btnStart');
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> {{ __("instructor::online_classes.starting", ["default" => "جاري البدء..."]) }}';
+    }
+
+    try {
+        const res = await fetch('{{ route("instructor.online_classes.start", $onlineClass) }}', {
+            method: 'POST',
+            headers: { 
+                'X-CSRF-TOKEN': '{{ csrf_token() }}', 
+                'Content-Type': 'application/json',
+                'Accept': 'application/json' 
+            },
+        });
+        const data = await res.json();
+        if (data.success) {
+            window.location.reload();
+        } else {
+            alert(data.message || 'فشل بدء الحصة');
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-play me-2"></i> {{ __("instructor::online_classes.start_class") }}';
+            }
+        }
+    } catch (e) {
+        alert('حدث خطأ أثناء الاتصال بالخادم. يرجى إعادة المحاولة.');
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-play me-2"></i> {{ __("instructor::online_classes.start_class") }}';
+        }
+    }
+}
+
+async function endClass() {
+    if (!confirm('{{ __("instructor::online_classes.confirm_end", ["default" => "هل أنت متأكد من إنهاء الحصة الآن؟"]) }}')) return;
+    const btn = document.getElementById('btnEnd');
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> {{ __("instructor::online_classes.ending", ["default" => "جاري الإنهاء..."]) }}';
+    }
+
+    try {
+        const res = await fetch('{{ route("instructor.online_classes.end", $onlineClass) }}', {
+            method: 'POST',
+            headers: { 
+                'X-CSRF-TOKEN': '{{ csrf_token() }}', 
+                'Content-Type': 'application/json',
+                'Accept': 'application/json' 
+            },
+        });
+        const data = await res.json();
+        if (data.success) {
+            window.location.reload();
+        } else {
+            alert(data.message || 'فشل إنهاء الحصة');
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-stop me-2"></i> {{ __("instructor::online_classes.end_class") }}';
+            }
+        }
+    } catch (e) {
+        alert('حدث خطأ أثناء الاتصال بالخادم.');
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-stop me-2"></i> {{ __("instructor::online_classes.end_class") }}';
+        }
+    }
+}
+
+window.startClass = startClass;
+window.endClass = endClass;
+
 document.addEventListener('DOMContentLoaded', function() {
+    const btnStart = document.getElementById('btnStart');
+    if (btnStart) {
+        btnStart.addEventListener('click', startClass);
+    }
+
+    const btnEnd = document.getElementById('btnEnd');
+    if (btnEnd) {
+        btnEnd.addEventListener('click', endClass);
+    }
+
     const joinContext = @json($joinContext ?? null);
-    const classId = {{ $onlineClass->id }};
-    let zmClient = null;
 
     async function initZoom() {
-        if (!joinContext) {
-            console.warn('No Zoom join context available');
-            return;
-        }
+        if (!joinContext) return;
 
         try {
-            // Check if ZoomMtg is available
             if (typeof ZoomMtg === 'undefined') {
-                console.error('Zoom SDK not loaded');
+                console.warn('Zoom SDK not loaded');
                 return;
             }
 
-            // Initialize SDK
             ZoomMtg.setZoomJSLib('https://source.zoom.us/2.18.0/lib', '/av');
             ZoomMtg.preLoadWasm();
             ZoomMtg.prepareJssdk();
 
-            const signature = joinContext.signature;
-            const meetingNumber = joinContext.meeting_number;
-            const sdkKey = joinContext.sdk_key;
-            const userName = '{{ auth()->user()->name }} (مدرس)';
-            const userEmail = '{{ auth()->user()->email }}';
-            const role = joinContext.role; // 1 = host
-
-            const result = await ZoomMtg.init({
+            ZoomMtg.init({
                 leaveUrl: window.location.origin + '{{ route("instructor.online_classes.index") }}',
                 isSupportAV: true,
-                success: (res) => {
-                    console.log('Zoom init success', res);
-                    joinMeeting();
+                success: () => {
+                    ZoomMtg.join({
+                        signature: joinContext.signature,
+                        meetingNumber: joinContext.meeting_number,
+                        sdkKey: joinContext.sdk_key,
+                        userName: '{{ auth()->user()->name }} (مدرس)',
+                        userEmail: '{{ auth()->user()->email }}',
+                        passWord: joinContext.password || '',
+                        role: joinContext.role || 1,
+                        error: (res) => console.error('Join meeting error', res)
+                    });
                 },
-                error: (res) => {
-                    console.error('Zoom init error', res);
-                    showError('فشل تهيئة Zoom SDK: ' + JSON.stringify(res));
-                }
+                error: (res) => console.error('Zoom init error', res)
             });
         } catch (e) {
             console.error('Zoom SDK exception', e);
-            showError('استثناء في Zoom SDK: ' + e.message);
         }
     }
 
-    function joinMeeting() {
-        ZoomMtg.join({
-            signature: joinContext.signature,
-            meetingNumber: joinContext.meeting_number,
-            sdkKey: joinContext.sdk_key,
-            userName: '{{ auth()->user()->name }} (مدرس) ',
-            userEmail: '{{ auth()->user()->email }}',
-            passWord: '',
-            role: joinContext.role,
-            success: (res) => {
-                console.log('Join meeting success', res);
-            },
-            error: (res) => {
-                console.error('Join meeting error', res);
-                showError('فشل الانضمام للاجتماع: ' + JSON.stringify(res));
-            }
-        });
-    }
-
-    function showError(msg) {
-        const root = document.getElementById('zmmtg-root');
-        if (root) {
-            root.innerHTML = '<div class="d-flex align-items-center justify-content-center h-100 text-white"><div class="text-center"><i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i><h5>تعذر تحميل الحصة</h5><p class="text-muted">' + msg + '</p></div></div>';
-        }
-    }
-
-    // Start/End Class AJAX
-    async function startClass() {
-        const btn = document.getElementById('btnStart');
-        btn.disabled = true;
-        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> جاري البدء...';
-
-        try {
-            const res = await fetch('{{ route("instructor.online_classes.start", $onlineClass) }}', {
-                method: 'POST',
-                headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' },
-            });
-            const data = await res.json();
-            if (data.success) {
-                window.location.reload();
-            } else {
-                alert(data.message || 'فشل البدء');
-            }
-        } catch (e) {
-            alert('خطأ في الشبكة');
-        } finally {
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-play me-2"></i> بدء الحصة';
-        }
-    }
-
-    async function endClass() {
-        if (!confirm('{{ __('instructor::online_classes.confirm_end') }}')) return;
-        const btn = document.getElementById('btnEnd');
-        btn.disabled = true;
-        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> جاري الإنهاء...';
-
-        try {
-            const res = await fetch('{{ route("instructor.online_classes.end", $onlineClass) }}', {
-                method: 'POST',
-                headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' },
-            });
-            const data = await res.json();
-            if (data.success) {
-                window.location.reload();
-            } else {
-                alert(data.message || 'فشل الإنهاء');
-            }
-        } catch (e) {
-            alert('خطأ في الشبكة');
-        } finally {
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-stop me-2"></i> إنهاء الحصة';
-        }
-    }
-
-    // Auto-init when status becomes live (polling fallback)
     if (joinContext && '{{ $onlineClass->status }}' === 'in_progress') {
         initZoom();
     }

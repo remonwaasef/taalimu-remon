@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- **Live Classroom Action Buttons & Direct Meeting Link Handling (2026-09-20)**:
+  - Exposed `startClass()` and `endClass()` globally on `window` and bound explicit DOM event listeners to solve unresponsive buttons.
+  - Enhanced classroom live canvas to support direct meeting joins and active session indicators when status transitions to `in_progress`.
+  - Conditionalized Zoom Meeting SDK script loading to only when an active Zoom join context is present.
+
 - **Live Classroom Show View Blade Syntax Fix (2026-09-20)**:
   - Fixed syntax error in `Modules/Instructor/resources/views/online_classes/show.blade.php` where `@foreach` was used with `@empty` and `@endforeach`.
   - Converted loop to `@forelse` and `@endforelse`, verified with `artisan view:cache`.
