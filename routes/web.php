@@ -43,7 +43,9 @@ $mainRoutes = function () {
                 $targetHost = parse_url($targetUrl, PHP_URL_HOST);
 
                 if ($currentHost === $targetHost) {
-                    return redirect()->route('center.dashboard');
+                    return ($user->role === 'instructor' || $tenant->type === 'instructor')
+                        ? redirect()->route('instructor.dashboard')
+                        : redirect()->route('center.dashboard');
                 }
 
                 return redirect()->away($targetUrl);

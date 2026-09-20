@@ -42,7 +42,17 @@ class AssertTenantIdentity
         // issued the login. A mismatch indicates a stale or hijacked session.
         $sessionTenantId = $request->session()->get('tenant_id');
         if ($sessionTenantId !== null && (int) $sessionTenantId !== (int) $tenantId) {
-            abort(403, 'Unauthorized tenant access.');
+            // If the user belongs to the current tenant, refresh stale session tenant_id
+            if ((int) $user->tenant_id === (int) $tenantId) {
+                $request->session()->put('tenant_id', $tenantId);
+            } else {
+                // If user belongs to another tenant, redirect them to their own tenant dashboard/page
+                if ($user->tenant) {
+                    $targetPath = $request->path() === '/' ? '' : $request->path();
+                    return redirect()->away(tenant_url($targetPath, $user->tenant));
+                }
+                abort(403, 'Unauthorized tenant access.');
+            }
         }
 
         if ($user->tenant_id === null) {
@@ -50,6 +60,11 @@ class AssertTenantIdentity
         }
 
         if ((int) $user->tenant_id !== (int) $tenantId) {
+            // If authenticated user belongs to another tenant, gracefully redirect to their own tenant
+            if ($user->tenant) {
+                $targetPath = $request->path() === '/' ? '' : $request->path();
+                return redirect()->away(tenant_url($targetPath, $user->tenant));
+            }
             abort(403, 'Unauthorized tenant access.');
         }
 

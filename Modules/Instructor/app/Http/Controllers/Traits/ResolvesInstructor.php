@@ -35,7 +35,10 @@ trait ResolvesInstructor
         $instructor = $user->instructor;
 
         if (! $instructor) {
-            if ($user->hasRole(['instructor', 'center_admin'])) {
+            $allowedRoles = ['instructor', 'center_admin', 'center_owner', 'admin'];
+            $hasAllowedRole = in_array(strtolower((string) $user->role), $allowedRoles, true) || $user->hasAnyRole($allowedRoles);
+
+            if ($hasAllowedRole) {
                 $instructor = \App\Models\Instructor::create([
                     'tenant_id' => $user->tenant_id,
                     'user_id' => $user->id,

@@ -127,6 +127,18 @@ class TenantRegistrationService
 
             $user = User::create($userData);
 
+            // Create Instructor profile if account type is instructor
+            if (($data['account_type'] ?? '') === 'instructor') {
+                \App\Models\Instructor::create([
+                    'tenant_id' => $tenant->id,
+                    'user_id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'phone' => $user->phone,
+                    'status' => 'active',
+                ]);
+            }
+
             // 3. Subscription & Billing
             $finalPrice = max(0, $basePrice - $discountAmount);
             $isTrialPlan = $package && $package->trial_days > 0;

@@ -10,6 +10,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added & Improved
+- **Multi-Tenancy Cross-Tenant Routing & Instructor Registration Fix (2026-09-20)**:
+  - Enhanced `AssertTenantIdentity` to gracefully redirect cross-tenant authenticated requests to the user's actual tenant dashboard instead of throwing an unexpected 403 Forbidden.
+  - Automatically synchronized stale `tenant_id` session variables when navigating within the authenticated user's tenant.
+  - Auto-created `Instructor` model profile upon registration when `account_type === 'instructor'` in `TenantRegistrationService`.
+  - Updated `ResolvesInstructor` trait to check `$user->role` column directly as a fallback to Spatie roles.
+  - Fixed `/dashboard` central route to redirect instructor accounts to `instructor.dashboard` instead of `center.dashboard`.
+  - Ensured `tenant_id` is persisted to session during Google trial registration in `SocialAuthController`.
+
 - **Registration UX Streamlining & Instructor Adaptive Flow (2026-09-20)**:
   - Streamlined Step 1 registration card to eliminate vertical clutter and visual noise.
   - Redesigned account type selector into sleek, compact segmented tabs (`[مدرس مستقل | مركز تعليمي]`).

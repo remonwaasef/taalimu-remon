@@ -307,6 +307,7 @@ class SocialAuthController extends Controller
                 session([
                     'registration_success' => true,
                     'tenant_domain' => $subdomain,
+                    'tenant_id' => $tenant->id,
                     'admin_email' => $googleData['email'],
                     'center_name' => $request->center_name,
                     'billing_cycle' => $billingCycle,
