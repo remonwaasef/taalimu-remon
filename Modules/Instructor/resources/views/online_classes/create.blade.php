@@ -54,20 +54,19 @@
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('instructor::online_classes.stream_platform') }} <span class="text-danger">*</span></label>
                                 <select name="platform" id="platformSelect" class="form-select rounded-pill px-3 @error('platform') is-invalid @enderror" required>
-                                    <option value="manual" {{ old('platform', ($zoomConfigured ?? false) ? 'zoom' : 'manual') == 'manual' ? 'selected' : '' }}>
-                                        رابط مباشر (Google Meet, Zoom خارجي, Teams) {{ !($zoomConfigured ?? false) ? '— (موصى به)' : '' }}
+                                    <option value="in_app" {{ old('platform', 'in_app') == 'in_app' ? 'selected' : '' }}>
+                                        استوديو تعليمو المدمج (فيديو تفاعلي، شات، أسئلة وأجوبة Q&A) — موصى به ⭐
                                     </option>
-                                    <option value="zoom" {{ old('platform', ($zoomConfigured ?? false) ? 'zoom' : 'manual') == 'zoom' ? 'selected' : '' }}>
-                                        Zoom مدمج {{ !($zoomConfigured ?? false) ? '(يتطلب مفاتيح API في السيرفر)' : '(مدمج مع التسجيل التلقائي)' }}
+                                    <option value="manual" {{ old('platform') == 'manual' ? 'selected' : '' }}>
+                                        رابط خارجي (Google Meet, Zoom خارجي)
+                                    </option>
+                                    <option value="zoom" {{ old('platform') == 'zoom' ? 'selected' : '' }}>
+                                        Zoom API مدمج {{ !($zoomConfigured ?? false) ? '(يتطلب مفاتيح API في السيرفر)' : '(مدمج مع التسجيل التلقائي)' }}
                                     </option>
                                 </select>
                                 @error('platform') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                 <div class="form-text" id="platformHelp">
-                                    @if(!($zoomConfigured ?? false))
-                                        <span class="text-warning"><i class="fas fa-exclamation-triangle me-1"></i> حساب Zoom API غير مفعّل على السيرفر حالياً. يُرجى اختيار "رابط مباشر" واستخدام رابط Google Meet أو Zoom.</span>
-                                    @else
-                                        {{ __('instructor::online_classes.platform_help') }}
-                                    @endif
+                                    <span id="inAppNotice" class="text-success"><i class="fas fa-check-circle me-1"></i> يتم إنشاء قاعة الاستوديو المدمجة تلقائياً داخل المنصة بكامل الشاشة ومجهزة بنظام الدردشة والأسئلة والأجوبة.</span>
                                 </div>
                             </div>
 
@@ -161,14 +160,22 @@ document.addEventListener('DOMContentLoaded', function() {
     const studentContainer = document.getElementById('selectedStudentsContainer');
 
     function updatePlatformFields() {
-        if (platformSelect.value === 'zoom') {
+        const inAppNotice = document.getElementById('inAppNotice');
+        if (platformSelect.value === 'in_app') {
             manualFields.style.display = 'none';
-            manualFields.querySelector('input').required = false;
+            if (manualFields.querySelector('input')) manualFields.querySelector('input').required = false;
+            zoomFields.style.display = 'none';
+            if (inAppNotice) inAppNotice.style.display = 'inline-block';
+        } else if (platformSelect.value === 'zoom') {
+            manualFields.style.display = 'none';
+            if (manualFields.querySelector('input')) manualFields.querySelector('input').required = false;
             zoomFields.style.display = 'block';
+            if (inAppNotice) inAppNotice.style.display = 'none';
         } else {
             manualFields.style.display = 'block';
-            manualFields.querySelector('input').required = true;
+            if (manualFields.querySelector('input')) manualFields.querySelector('input').required = true;
             zoomFields.style.display = 'none';
+            if (inAppNotice) inAppNotice.style.display = 'none';
         }
     }
 

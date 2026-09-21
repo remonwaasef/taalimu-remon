@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- **In-App Virtual Classroom Studio with Interactive Q&A, Chat, and Hand Raises (2026-09-21)**:
+  - Built an integrated virtual classroom studio (`Modules/Instructor/resources/views/online_classes/show.blade.php`) embedding a full-screen WebRTC video engine (Jitsi Meet Web API) directly inside the platform without third-party app requirements, popups, or floating mini-windows.
+  - Added interactive classroom side hub with 4 dynamic tabs:
+    1. **Live Chat (الدردشة الحية)**: Real-time chat with auto-scroll, teacher badges, and instructor controls.
+    2. **Q&A System (الأسئلة والأجوبة)**: Dedicated questions list with upvoting (`👍`), waiting status, and teacher toggle (`تمت الإجابة ✓`).
+    3. **Hand Raise (طلبات التحدث ورفع اليد ✋)**: Real-time student hand-raise notifications with sound/visual cue and teacher acknowledgement.
+    4. **Smart Attendance (الحضور الذكي)**: Real-time participant tracker with auto-attendance duration counter.
+  - Added database migration `2026_09_21_223000_create_online_class_interactive_tables.php` creating `online_class_messages`, `online_class_questions`, and `online_class_hand_raises` with full tenant isolation and cascade foreign keys.
+  - Created Eloquent models `OnlineClassMessage`, `OnlineClassQuestion`, and `OnlineClassHandRaise`.
+  - Added REST/JSON interactive endpoints in `OnlineClassController` and `Modules/Instructor/routes/web.php`.
+  - Updated `create.blade.php`, `edit.blade.php`, and `_onboarding-modals.blade.php` to promote the In-App Studio as the default, recommended classroom option.
+
 - **Instructor 4-Step Interactive Dashboard Onboarding Setup (2026-09-21)**:
   - Implemented an interactive 4-step onboarding checklist on the instructor dashboard (`Modules/Instructor/resources/views/index.blade.php`) to guide new teachers immediately after registration:
     1. **Step 1 - Teaching & Education System**: Configures teaching mode (`online`, `in_person`, `hybrid`) and education curriculum (`general` Egyptian, `azhar` Al-Azhar, `languages` Experimental/Language schools, `international` IGCSE/SAT/IB).

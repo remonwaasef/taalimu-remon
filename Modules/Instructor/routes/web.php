@@ -85,6 +85,17 @@ $instructorRoutes = function () {
             Route::post('end', [OnlineClassSessionController::class, 'end'])->name('instructor.online_classes.end');
             Route::post('update-link', [OnlineClassSessionController::class, 'updateLink'])->name('instructor.online_classes.update_link');
             Route::get('join-token', [OnlineClassSessionController::class, 'joinToken'])->name('instructor.online_classes.join_token');
+
+            // Interactive Classroom Endpoints (Chat, Q&A, Hand Raises)
+            Route::get('messages', [OnlineClassController::class, 'getMessages'])->name('instructor.online_classes.messages');
+            Route::post('messages', [OnlineClassController::class, 'sendMessage'])->name('instructor.online_classes.send_message');
+            Route::get('questions', [OnlineClassController::class, 'getQuestions'])->name('instructor.online_classes.questions');
+            Route::post('questions', [OnlineClassController::class, 'askQuestion'])->name('instructor.online_classes.ask_question');
+            Route::post('questions/{question}/upvote', [OnlineClassController::class, 'upvoteQuestion'])->name('instructor.online_classes.upvote_question');
+            Route::post('questions/{question}/toggle-answer', [OnlineClassController::class, 'toggleAnswerQuestion'])->name('instructor.online_classes.toggle_answer_question');
+            Route::get('hand-raises', [OnlineClassController::class, 'getHandRaises'])->name('instructor.online_classes.hand_raises');
+            Route::post('hand-raises', [OnlineClassController::class, 'raiseHand'])->name('instructor.online_classes.raise_hand');
+            Route::post('hand-raises/{handRaise}/acknowledge', [OnlineClassController::class, 'acknowledgeHandRaise'])->name('instructor.online_classes.acknowledge_hand_raise');
         });
 
         // Recordings & Analytics

@@ -414,8 +414,10 @@ class InstructorController extends Controller
     {
         $rawLink = trim($request->input('default_meeting_link', ''));
         
-        // Auto-normalize meeting codes (e.g. abc-defg-hij -> https://meet.google.com/abc-defg-hij)
-        if (preg_match('/^[a-z]{3}-[a-z]{4}-[a-z]{3}$/i', $rawLink)) {
+        if ($rawLink === 'in_app') {
+            $rawLink = route('instructor.online_classes.index');
+        } elseif (preg_match('/^[a-z]{3}-[a-z]{4}-[a-z]{3}$/i', $rawLink)) {
+            // Auto-normalize meeting codes (e.g. abc-defg-hij -> https://meet.google.com/abc-defg-hij)
             $rawLink = 'https://meet.google.com/' . strtolower($rawLink);
         } elseif (preg_match('/^\d{9,11}$/', str_replace([' ', '-'], '', $rawLink))) {
             // Zoom PMI (e.g. 1234567890 -> https://zoom.us/j/1234567890)

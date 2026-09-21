@@ -91,6 +91,21 @@ class OnlineClass extends Model
         return $this->hasMany(ClassRecording::class);
     }
 
+    public function messages()
+    {
+        return $this->hasMany(OnlineClassMessage::class)->latest();
+    }
+
+    public function questions()
+    {
+        return $this->hasMany(OnlineClassQuestion::class)->orderByDesc('upvotes_count')->latest();
+    }
+
+    public function handRaises()
+    {
+        return $this->hasMany(OnlineClassHandRaise::class)->where('status', 'raised')->latest();
+    }
+
     public function readyRecording()
     {
         return $this->hasOne(ClassRecording::class)->where('status', ClassRecording::STATUS_READY)->latestOfMany();
