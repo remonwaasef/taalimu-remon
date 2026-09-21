@@ -101,19 +101,33 @@
                     </div>
 
                     {{-- Interactive Unblock Helper Popup --}}
-                    <div id="unblockGuideBox" class="p-3 bg-slate-900 border-bottom border-amber-500/30 d-none text-xs font-arabic text-slate-200">
+                    <div id="unblockGuideBox" class="p-3.5 bg-slate-900 border-bottom border-amber-500/30 d-none text-xs font-arabic text-slate-200">
                         <div class="d-flex align-items-start gap-2.5">
-                            <i class="fas fa-exclamation-triangle text-amber-400 fs-5 mt-0.5 shrink-0"></i>
+                            <div class="w-8 h-8 rounded-circle bg-amber-500/20 text-amber-400 d-flex align-items-center justify-content-center shrink-0 fs-6">
+                                <i class="fas fa-sliders-h"></i>
+                            </div>
                             <div class="flex-grow-1">
-                                <span class="fw-bold text-amber-400 d-block mb-1">كيفية تفعيل الكاميرا إذا كانت محظورة في شريط المتصفح:</span>
-                                <ol class="mb-2 pe-3 ps-0 text-slate-300 leading-relaxed text-[11px]">
-                                    <li class="mb-1">انظر إلى <strong>أعلى شريط المتصفح (شريط العنوان)</strong> بجانب رابط <code>ra3yc.taalimu.com</code>.</li>
-                                    <li class="mb-1">اضغط على <strong>أيقونة الكاميرا عليها علامة خط أحمر 🚫</strong> أو <strong>أيقونة القفل / الإعدادات 🔒</strong>.</li>
-                                    <li class="mb-1">اختر <strong>السماح دائماً (Always allow)</strong> للكاميرا والميكروفون ثم اضغط <strong>تم (Done)</strong>.</li>
-                                    <li>اضغط على <strong>F5</strong> أو الزر أدناه لإعادة تشغيل الكاميرا فوراً!</li>
-                                </ol>
-                                <button type="button" onclick="triggerBrowserPermissionPrompt()" class="btn btn-sm btn-primary text-white rounded-pill px-3 text-[11px] fw-bold" style="background: var(--primary-color);">
-                                    <i class="fas fa-redo me-1"></i> إعادة طلب الإذن بعد السماح
+                                <span class="fw-bold text-amber-400 d-block mb-1.5" id="permissionErrorDetails">
+                                    تفعيل الكاميرا من شريط المتصفح:
+                                </span>
+                                <div class="p-2.5 rounded-3 bg-slate-800/80 border border-slate-700/60 mb-2 leading-relaxed text-xs">
+                                    <p class="mb-1 text-slate-200 fw-bold">
+                                        انظر إلى شريط العنوان في أعلى المتصفح (حيث يكتب الرابط <code>ra3yc.taalimu.com</code>):
+                                    </p>
+                                    <ul class="mb-0 pe-3 ps-0 text-slate-300">
+                                        <li class="mb-1.5">
+                                            على <strong>يسار كلمة ra3yc</strong> مباشرة، اضغط على <strong>أيقونة المؤشرات/المفتاحين (تظهر كدائرة فيها خطان ومنزلقان 🎚️)</strong>.
+                                        </li>
+                                        <li class="mb-1.5">
+                                            ستفتح لك نافذة صغيرة فوراً تحتوي على: <strong>الكاميرا (Camera)</strong> و <strong>الميكروفون (Microphone)</strong>.
+                                        </li>
+                                        <li class="mb-0">
+                                            قم بتفعيل المفتاح بجانب الكاميرا (ليصبح أزرق / مفعلاً)، ثم اضغط زر إعادة المحاولة أدناه!
+                                        </li>
+                                    </ul>
+                                </div>
+                                <button type="button" onclick="triggerBrowserPermissionPrompt()" class="btn btn-sm btn-success rounded-pill px-3.5 py-1.5 text-xs fw-bold">
+                                    <i class="fas fa-redo me-1"></i> إعادة المحاولة وتشغيل الكاميرا الآن 📹
                                 </button>
                             </div>
                             <button type="button" onclick="toggleUnblockInstructions()" class="btn-close btn-close-white text-xs"></button>
@@ -508,12 +522,40 @@ async function triggerBrowserPermissionPrompt() {
 
     } catch (err) {
         console.error('Permission error:', err);
+        
+        let errorMsg = '';
+        if (err.name === 'NotAllowedError') {
+            errorMsg = '⛔ المتصفح حظر الكاميرا لهذا الموقع. يجب فتح إعدادات الموقع من شريط العنوان يدوياً.';
+        } else if (err.name === 'NotFoundError') {
+            errorMsg = '⚠️ لم يتم العثور على كاميرا أو ميكروفون متصل بالجهاز.';
+        } else if (err.name === 'NotReadableError' || err.name === 'AbortError') {
+            errorMsg = '⚠️ الكاميرا مستخدمة حالياً بواسطة برنامج آخر. أغلق أي تطبيق يستخدم الكاميرا (مثل Google Meet أو Zoom) ثم أعد المحاولة.';
+        } else {
+            errorMsg = '❌ خطأ غير متوقع: ' + (err.message || err.name);
+        }
+        
         if (btnText) btnText.innerText = 'إظهار نافذة الإذن والضغط عليها 📹';
+        
+        const errorDetails = document.getElementById('permissionErrorDetails');
+        if (errorDetails) {
+            errorDetails.innerHTML = errorMsg + '<br><a href="chrome://settings/content/camera" target="_blank" class="text-info text-decoration-underline mt-1 d-inline-block" style="font-size: 11px;">أو افتح إعدادات الكاميرا في كروم مباشرة ←</a>';
+        }
+        
         if (guideBox) {
             guideBox.classList.remove('d-none');
         }
     }
 }
+
+// Auto-trigger permission prompt on page load for live classes
+document.addEventListener('DOMContentLoaded', function() {
+    if (document.getElementById('permissionNoticeBanner')) {
+        // Small delay to let the page render first
+        setTimeout(function() {
+            triggerBrowserPermissionPrompt();
+        }, 1500);
+    }
+});
 
 function toggleUnblockInstructions() {
     const guideBox = document.getElementById('unblockGuideBox');
