@@ -66,7 +66,10 @@ class InstructorController extends Controller
         // Onboarding & Setup Progress (4 Essential Steps)
         $tenant = current_tenant() ?? auth()->user()?->tenant;
         $tenantSettings = is_array($tenant?->settings) ? $tenant->settings : (json_decode($tenant?->settings ?? '[]', true) ?? []);
-        $teachingMode = $tenantSettings['teaching_mode'] ?? null;
+        $accountType = $tenantSettings['account_type'] ?? ($tenant?->type ?? 'instructor');
+        $teachingMode = $tenantSettings['teaching_mode'] ?? 'online_independent';
+        $centerRelation = $tenantSettings['center_relation'] ?? null;
+        $centerNames = $tenantSettings['center_names'] ?? '';
         $educationSystem = $tenantSettings['education_system'] ?? null;
         $defaultMeetingLink = $tenantSettings['default_meeting_link'] ?? ($instructor?->default_meeting_link ?? '');
 
@@ -108,7 +111,10 @@ class InstructorController extends Controller
             'hasLiveStream',
             'hasGroup',
             'hasStudents',
+            'accountType',
             'teachingMode',
+            'centerRelation',
+            'centerNames',
             'educationSystem',
             'defaultMeetingLink',
             'firstGroupRegistrationUrl',
@@ -367,13 +373,19 @@ class InstructorController extends Controller
     public function updateTeachingSystem(Request $request)
     {
         $validated = $request->validate([
-            'teaching_mode' => 'required|string|in:online,in_person,hybrid',
+            'account_type' => 'nullable|string|in:instructor,center',
+            'teaching_mode' => 'required|string|in:online,in_person,hybrid,online_independent,in_centers,private_hall,center_in_person,center_online,center_hybrid',
+            'center_relation' => 'nullable|string|in:single_center,multiple_centers,private_hall',
+            'center_names' => 'nullable|string|max:500',
             'education_system' => 'required|string|in:general,azhar,languages,international',
         ]);
 
         $tenant = current_tenant() ?? auth()->user()?->tenant;
         $settings = is_array($tenant?->settings) ? $tenant->settings : (json_decode($tenant?->settings ?? '[]', true) ?? []);
+        $settings['account_type'] = $validated['account_type'] ?? ($tenant?->type ?? 'instructor');
         $settings['teaching_mode'] = $validated['teaching_mode'];
+        $settings['center_relation'] = $validated['center_relation'] ?? null;
+        $settings['center_names'] = $validated['center_names'] ?? null;
         $settings['education_system'] = $validated['education_system'];
         if ($tenant) {
             $tenant->settings = $settings;
@@ -384,7 +396,10 @@ class InstructorController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => __('messages.saved_successfully') ?? 'تم حفظ نظام التدريس والتعليم بنجاح',
+                'account_type' => $settings['account_type'],
                 'teaching_mode' => $validated['teaching_mode'],
+                'center_relation' => $settings['center_relation'],
+                'center_names' => $settings['center_names'],
                 'education_system' => $validated['education_system'],
             ]);
         }
