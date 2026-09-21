@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     4. **Step 4 - Share Student Registration Link**: Interactive modal with one-click URL copy, WhatsApp direct sharing, and Telegram sharing.
   - Added backend endpoints `updateTeachingSystem` and `updateMeetingLink` to `InstructorController` and matching routes in `Modules/Instructor/routes/web.php`.
   - Added clean modal component `Modules/Instructor/resources/views/partials/_onboarding-modals.blade.php` styled with Taalimu design tokens and zero visual clutter.
+  - Replaced the large 400px noisy onboarding banner with an ultra-sleek, compact horizontal setup strip (~48px height) with 4 clickable step pills, removing text overload and emoji clutter while preserving full interactive functionality.
   - Linked the dashboard's circular progress gauge (0%, 25%, 50%, 75%, 100%) dynamically to these 4 real setup milestones.
 
   - Streamlined Step 1 of the onboarding page (`resources/views/auth/register.blade.php`) into an ultra-clean, minimalist presentation.

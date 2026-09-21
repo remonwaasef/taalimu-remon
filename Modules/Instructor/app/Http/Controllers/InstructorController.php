@@ -64,8 +64,8 @@ class InstructorController extends Controller
         $todaySchedules = $todaySchedulesQuery->get();
 
         // Onboarding & Setup Progress (4 Essential Steps)
-        $tenant = app('tenant');
-        $tenantSettings = $tenant->settings ?? [];
+        $tenant = current_tenant() ?? auth()->user()?->tenant;
+        $tenantSettings = is_array($tenant?->settings) ? $tenant->settings : (json_decode($tenant?->settings ?? '[]', true) ?? []);
         $teachingMode = $tenantSettings['teaching_mode'] ?? null;
         $educationSystem = $tenantSettings['education_system'] ?? null;
         $defaultMeetingLink = $tenantSettings['default_meeting_link'] ?? ($instructor?->default_meeting_link ?? '');
@@ -74,7 +74,7 @@ class InstructorController extends Controller
         $hasLiveStream = !empty($defaultMeetingLink);
         $hasGroup = $totalCourses > 0;
         $hasStudents = $totalStudents > 0;
-        $hasProfile = !empty(auth()->user()->name);
+        $hasProfile = !empty(auth()->user()?->name);
 
         $completedSteps = ($hasTeachingSystem ? 1 : 0) + ($hasLiveStream ? 1 : 0) + ($hasGroup ? 1 : 0) + ($hasStudents ? 1 : 0);
         $setupProgress = round(($completedSteps / 4) * 100);
@@ -112,6 +112,7 @@ class InstructorController extends Controller
             'educationSystem',
             'defaultMeetingLink',
             'firstGroupRegistrationUrl',
+            'completedSteps',
             'setupProgress',
             'attendanceData',
             'days'
