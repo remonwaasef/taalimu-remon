@@ -69,9 +69,11 @@ return [
     'attendance_hint' => 'مسح الـ QR لتسجيل الحضور',
 
     // New dashboard UI keys
-    'greeting' => 'مرحباً، :name! 👋',
-    'greeting_subtitle' => 'إليك ملخص نشاط مجموعاتك وحصصك اليوم.',
+    'greeting' => 'مرحباً، :name',
+    'greeting_subtitle' => 'ملخص نشاط مجموعاتك وحصصك اليوم.',
     'add_new_student_btn' => 'إضافة طالب جديد',
+    'account_setup' => 'إعداد الحساب',
+    'steps_completed_ratio' => ':completed من :total خطوات مكتملة',
     'getting_started_sub' => 'أكمل خطوات الإعداد لبدء دعوة طلابك وتسجيل حضورهم بكل سهولة.',
     'enrolled_students' => 'طالب مسجل',
     'running_groups' => 'مجموعة نشطة',

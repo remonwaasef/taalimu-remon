@@ -69,9 +69,11 @@ return [
     'attendance_hint' => 'Scan QR to record attendance',
 
     // New dashboard UI keys
-    'greeting' => 'Welcome, :name! 👋',
-    'greeting_subtitle' => "Here's an overview of your groups and students today.",
+    'greeting' => 'Welcome, :name',
+    'greeting_subtitle' => "Overview of your groups and sessions today.",
     'add_new_student_btn' => 'Add New Student',
+    'account_setup' => 'Account Setup',
+    'steps_completed_ratio' => ':completed of :total steps completed',
     'getting_started_sub' => 'Complete setup steps to start inviting students and tracking attendance.',
     'enrolled_students' => 'enrolled students',
     'running_groups' => 'running groups',
