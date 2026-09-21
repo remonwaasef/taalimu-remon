@@ -18,129 +18,45 @@
         </x-slot>
     </x-ui.page-header>
 
-    <!-- Getting Started 4-Step Interactive Guide (If setup is not 100%) -->
+    <!-- Setup Progress Checklist Bar (Shown only when setup < 100%) -->
     @if($setupProgress < 100)
-        <x-ui.card glass="true" class="mb-8 border-brand-primary/20 bg-gradient-to-r from-brand-50/50 via-emerald-50/20 to-teal-50/30 dark:from-slate-900 dark:to-slate-900">
-            <div class="space-y-4">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-brand-primary/10">
-                    <div class="space-y-1">
-                        <div class="flex items-center gap-2">
-                            <x-ui.badge variant="brand" size="sm" dot="true">{{ __('instructor::dashboard.getting_started_title') }}</x-ui.badge>
-                            <span class="text-xs font-bold text-brand-primary font-mono">{{ $setupProgress }}% مكتمل</span>
-                        </div>
-                        <h3 class="text-lg font-black text-slate-900 dark:text-slate-100 font-arabic">{{ __('instructor::dashboard.getting_started_desc') }}</h3>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 font-arabic">{{ __('instructor::dashboard.getting_started_sub') }}</p>
-                    </div>
-                </div>
-
-                <!-- 4 Steps Interactive Grid -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-1">
-                    <!-- Step 1: Teaching & Education System -->
-                    <div class="p-3.5 rounded-2xl border transition-all flex flex-col justify-between {{ $hasTeachingSystem ? 'bg-emerald-50/50 border-emerald-200 dark:bg-emerald-950/20 dark:border-emerald-800' : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-brand-primary/40 shadow-xs' }}">
-                        <div>
-                            <div class="flex items-center justify-between mb-2">
-                                <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-black {{ $hasTeachingSystem ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300' }}">
-                                    @if($hasTeachingSystem) <i class="fas fa-check text-[10px]"></i> @else 1 @endif
-                                </span>
-                                <span class="text-[10px] font-bold {{ $hasTeachingSystem ? 'text-emerald-700 dark:text-emerald-300' : 'text-slate-400' }}">
-                                    {{ $hasTeachingSystem ? 'مكتملة ✓' : 'الخطوة 1' }}
-                                </span>
-                            </div>
-                            <h4 class="text-xs font-black text-slate-800 dark:text-slate-200 mb-1 font-arabic">نظام التدريس والتعليم</h4>
-                            <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-3 line-clamp-2">
-                                @if($hasTeachingSystem)
-                                    @php
-                                        $modeNames = ['online' => 'أونلاين', 'in_person' => 'حضوري', 'hybrid' => 'هجين'];
-                                        $sysNames = ['general' => 'عام (مصري)', 'azhar' => 'أزهري', 'languages' => 'لغات وتجريبي', 'international' => 'دولي'];
-                                    @endphp
-                                    <span class="font-bold text-emerald-700 dark:text-emerald-400">{{ $modeNames[$teachingMode] ?? $teachingMode }} • {{ $sysNames[$educationSystem] ?? $educationSystem }}</span>
-                                @else
-                                    حدد نمط الحصص (أونلاين/حضوري) والمنهج (مصري/أزهري..)
-                                @endif
-                            </p>
-                        </div>
-                        <button type="button" onclick="openTeachingSystemModal()" class="w-full py-2 px-3 rounded-xl text-xs font-bold transition-all cursor-pointer {{ $hasTeachingSystem ? 'bg-emerald-100/70 hover:bg-emerald-200/80 text-emerald-800' : 'bg-brand-primary text-white hover:bg-brand-primary/90 shadow-xs' }}">
-                            {{ $hasTeachingSystem ? 'تعديل النظام' : 'تحديد النظام ←' }}
-                        </button>
-                    </div>
-
-                    <!-- Step 2: Live Stream Link -->
-                    <div class="p-3.5 rounded-2xl border transition-all flex flex-col justify-between {{ $hasLiveStream ? 'bg-emerald-50/50 border-emerald-200 dark:bg-emerald-950/20 dark:border-emerald-800' : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-brand-primary/40 shadow-xs' }}">
-                        <div>
-                            <div class="flex items-center justify-between mb-2">
-                                <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-black {{ $hasLiveStream ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300' }}">
-                                    @if($hasLiveStream) <i class="fas fa-check text-[10px]"></i> @else 2 @endif
-                                </span>
-                                <span class="text-[10px] font-bold {{ $hasLiveStream ? 'text-emerald-700 dark:text-emerald-300' : 'text-slate-400' }}">
-                                    {{ $hasLiveStream ? 'مكتملة ✓' : 'الخطوة 2' }}
-                                </span>
-                            </div>
-                            <h4 class="text-xs font-black text-slate-800 dark:text-slate-200 mb-1 font-arabic">ربط البث المباشر</h4>
-                            <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-3 line-clamp-2">
-                                @if($hasLiveStream)
-                                    <span class="font-mono text-emerald-700 dark:text-emerald-400 truncate block text-[10px]" dir="ltr">{{ Str::limit($defaultMeetingLink, 25) }}</span>
-                                @else
-                                    رابط Google Meet أو Zoom الدائم للحصص بنقرة واحدة
-                                @endif
-                            </p>
-                        </div>
-                        <button type="button" onclick="openMeetingLinkModal()" class="w-full py-2 px-3 rounded-xl text-xs font-bold transition-all cursor-pointer {{ $hasLiveStream ? 'bg-emerald-100/70 hover:bg-emerald-200/80 text-emerald-800' : 'bg-brand-primary text-white hover:bg-brand-primary/90 shadow-xs' }}">
-                            {{ $hasLiveStream ? 'تغيير الرابط' : 'ربط الرابط ←' }}
-                        </button>
-                    </div>
-
-                    <!-- Step 3: Create First Group -->
-                    <div class="p-3.5 rounded-2xl border transition-all flex flex-col justify-between {{ $hasGroup ? 'bg-emerald-50/50 border-emerald-200 dark:bg-emerald-950/20 dark:border-emerald-800' : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-brand-primary/40 shadow-xs' }}">
-                        <div>
-                            <div class="flex items-center justify-between mb-2">
-                                <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-black {{ $hasGroup ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300' }}">
-                                    @if($hasGroup) <i class="fas fa-check text-[10px]"></i> @else 3 @endif
-                                </span>
-                                <span class="text-[10px] font-bold {{ $hasGroup ? 'text-emerald-700 dark:text-emerald-300' : 'text-slate-400' }}">
-                                    {{ $hasGroup ? 'مكتملة ✓' : 'الخطوة 3' }}
-                                </span>
-                            </div>
-                            <h4 class="text-xs font-black text-slate-800 dark:text-slate-200 mb-1 font-arabic">إنشاء أول مجموعة / كورس</h4>
-                            <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-3 line-clamp-2">
-                                @if($hasGroup)
-                                    <span class="font-bold text-emerald-700 dark:text-emerald-400">{{ $totalCourses }} مجموعة نشطة جاهزة</span>
-                                @else
-                                    حدد اسم الصف والمواعيد وقيمة الاشتراك
-                                @endif
-                            </p>
-                        </div>
-                        <a href="{{ route('instructor.groups.create') }}" class="w-full inline-flex items-center justify-center py-2 px-3 rounded-xl text-xs font-bold transition-all cursor-pointer {{ $hasGroup ? 'bg-emerald-100/70 hover:bg-emerald-200/80 text-emerald-800' : 'bg-brand-primary text-white hover:bg-brand-primary/90 shadow-xs' }}">
-                            {{ $hasGroup ? '+ مجموعة جديدة' : 'إنشاء مجموعة ←' }}
-                        </a>
-                    </div>
-
-                    <!-- Step 4: Share Registration Link -->
-                    <div class="p-3.5 rounded-2xl border transition-all flex flex-col justify-between {{ $hasStudents ? 'bg-emerald-50/50 border-emerald-200 dark:bg-emerald-950/20 dark:border-emerald-800' : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-brand-primary/40 shadow-xs' }}">
-                        <div>
-                            <div class="flex items-center justify-between mb-2">
-                                <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-black {{ $hasStudents ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300' }}">
-                                    @if($hasStudents) <i class="fas fa-check text-[10px]"></i> @else 4 @endif
-                                </span>
-                                <span class="text-[10px] font-bold {{ $hasStudents ? 'text-emerald-700 dark:text-emerald-300' : 'text-slate-400' }}">
-                                    {{ $hasStudents ? 'مكتملة ✓' : 'الخطوة 4' }}
-                                </span>
-                            </div>
-                            <h4 class="text-xs font-black text-slate-800 dark:text-slate-200 mb-1 font-arabic">مشاركة رابط التسجيل</h4>
-                            <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-3 line-clamp-2">
-                                @if($hasStudents)
-                                    <span class="font-bold text-emerald-700 dark:text-emerald-400">{{ $totalStudents }} طالب مسجل بالمنصة</span>
-                                @else
-                                    شارك الرابط المباشر مع طلابك ليسجلوا أنفسهم
-                                @endif
-                            </p>
-                        </div>
-                        <button type="button" onclick="openShareLinkModal()" class="w-full py-2 px-3 rounded-xl text-xs font-bold transition-all cursor-pointer {{ $hasStudents ? 'bg-emerald-100/70 hover:bg-emerald-200/80 text-emerald-800' : 'bg-emerald-600 text-white hover:bg-emerald-700 shadow-xs' }}">
-                            {{ $hasStudents ? 'مشاركة الرابط' : 'مشاركة الرابط 📤' }}
-                        </button>
-                    </div>
+        <div class="mb-6 px-4 py-3 bg-white dark:bg-slate-800/80 rounded-2xl border border-slate-200 dark:border-slate-700/80 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <span class="w-8 h-8 rounded-xl bg-brand-50 dark:bg-brand-900/30 text-brand-primary flex items-center justify-center font-bold text-xs font-mono">
+                    {{ $setupProgress }}%
+                </span>
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-bold text-slate-800 dark:text-slate-200 font-arabic">{{ __('instructor::dashboard.account_setup') }}</span>
+                    <span class="text-[11px] text-slate-400 font-arabic">({{ __('instructor::dashboard.steps_completed_ratio', ['completed' => $completedSteps, 'total' => 4]) }})</span>
                 </div>
             </div>
-        </x-ui.card>
+
+            <div class="flex flex-wrap items-center gap-2">
+                <!-- Step 1 -->
+                <button type="button" onclick="openTeachingSystemModal()" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer {{ $hasTeachingSystem ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/30 dark:border-emerald-800' : 'bg-slate-50 text-slate-700 border border-slate-200 hover:border-brand-primary dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700' }}">
+                    <i class="{{ $hasTeachingSystem ? 'fas fa-check text-emerald-600' : 'far fa-circle text-slate-400' }} text-[10px]"></i>
+                    <span class="font-arabic">1. نظام التعليم</span>
+                </button>
+
+                <!-- Step 2 -->
+                <button type="button" onclick="openMeetingLinkModal()" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer {{ $hasLiveStream ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/30 dark:border-emerald-800' : 'bg-slate-50 text-slate-700 border border-slate-200 hover:border-brand-primary dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700' }}">
+                    <i class="{{ $hasLiveStream ? 'fas fa-check text-emerald-600' : 'far fa-circle text-slate-400' }} text-[10px]"></i>
+                    <span class="font-arabic">2. البث المباشر</span>
+                </button>
+
+                <!-- Step 3 -->
+                <a href="{{ route('instructor.groups.create') }}" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-medium transition-all {{ $hasGroup ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/30 dark:border-emerald-800' : 'bg-slate-50 text-slate-700 border border-slate-200 hover:border-brand-primary dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700' }}">
+                    <i class="{{ $hasGroup ? 'fas fa-check text-emerald-600' : 'far fa-circle text-slate-400' }} text-[10px]"></i>
+                    <span class="font-arabic">3. أول مجموعة</span>
+                </a>
+
+                <!-- Step 4 -->
+                <button type="button" onclick="openShareLinkModal()" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer {{ $hasStudents ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/30 dark:border-emerald-800' : 'bg-slate-50 text-slate-700 border border-slate-200 hover:border-brand-primary dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700' }}">
+                    <i class="{{ $hasStudents ? 'fas fa-check text-emerald-600' : 'far fa-circle text-slate-400' }} text-[10px]"></i>
+                    <span class="font-arabic">4. رابط التسجيل</span>
+                </button>
+            </div>
+        </div>
     @endif
 
     <!-- Top Key Metrics Grid -->
