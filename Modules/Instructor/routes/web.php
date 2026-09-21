@@ -14,6 +14,8 @@ use Modules\Instructor\Http\Controllers\StudentController;
 $instructorRoutes = function () {
     Route::middleware(['auth', '2fa', 'verified', 'subscription', 'instructor.role'])->prefix('instructor')->group(function () {
         Route::get('/', [InstructorController::class, 'index'])->name('instructor.dashboard');
+        Route::post('/quick-setup/teaching-system', [InstructorController::class, 'updateTeachingSystem'])->name('instructor.quick-setup.teaching-system');
+        Route::post('/quick-setup/meeting-link', [InstructorController::class, 'updateMeetingLink'])->name('instructor.quick-setup.meeting-link');
         Route::get('/set-locale/{locale}', [SettingsController::class, 'setLocale'])->name('instructor.set-locale');
         Route::get('/scanner/{course}', [InstructorController::class, 'scanner'])->name('instructor.scanner');
         Route::post('/scan/{course}', [InstructorController::class, 'scan'])->name('instructor.scan');

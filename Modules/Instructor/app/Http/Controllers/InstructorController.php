@@ -63,13 +63,23 @@ class InstructorController extends Controller
         }
         $todaySchedules = $todaySchedulesQuery->get();
 
-        // Real Setup Progress
-        $hasProfile = !empty(auth()->user()->name);
+        // Onboarding & Setup Progress (4 Essential Steps)
+        $tenant = app('tenant');
+        $tenantSettings = $tenant->settings ?? [];
+        $teachingMode = $tenantSettings['teaching_mode'] ?? null;
+        $educationSystem = $tenantSettings['education_system'] ?? null;
+        $defaultMeetingLink = $tenantSettings['default_meeting_link'] ?? ($instructor?->default_meeting_link ?? '');
+
+        $hasTeachingSystem = !empty($teachingMode) && !empty($educationSystem);
+        $hasLiveStream = !empty($defaultMeetingLink);
         $hasGroup = $totalCourses > 0;
         $hasStudents = $totalStudents > 0;
-        
-        $completedSteps = ($hasProfile ? 1 : 0) + ($hasGroup ? 1 : 0) + ($hasStudents ? 1 : 0);
-        $setupProgress = round(($completedSteps / 3) * 100);
+        $hasProfile = !empty(auth()->user()->name);
+
+        $completedSteps = ($hasTeachingSystem ? 1 : 0) + ($hasLiveStream ? 1 : 0) + ($hasGroup ? 1 : 0) + ($hasStudents ? 1 : 0);
+        $setupProgress = round(($completedSteps / 4) * 100);
+
+        $firstGroupRegistrationUrl = $courses->first()?->getRegistrationUrl() ?? tenant_url('/');
 
         // Attendance Analytics (Last 7 Days)
         $attendanceData = [];
@@ -94,8 +104,14 @@ class InstructorController extends Controller
             'totalAttendanceCount',
             'todaySchedules',
             'hasProfile',
+            'hasTeachingSystem',
+            'hasLiveStream',
             'hasGroup',
             'hasStudents',
+            'teachingMode',
+            'educationSystem',
+            'defaultMeetingLink',
+            'firstGroupRegistrationUrl',
             'setupProgress',
             'attendanceData',
             'days'
@@ -342,5 +358,66 @@ class InstructorController extends Controller
         $totalBalance = $students->sum('balance');
 
         return view('instructor::reports.payments', compact('students', 'totalDue', 'totalPaid', 'totalBalance'));
+    }
+
+    /**
+     * Quick Setup: Update Teaching System & Mode from Dashboard
+     */
+    public function updateTeachingSystem(Request $request)
+    {
+        $validated = $request->validate([
+            'teaching_mode' => 'required|string|in:online,in_person,hybrid',
+            'education_system' => 'required|string|in:general,azhar,languages,international',
+        ]);
+
+        $tenant = app('tenant');
+        $settings = $tenant->settings ?? [];
+        $settings['teaching_mode'] = $validated['teaching_mode'];
+        $settings['education_system'] = $validated['education_system'];
+        $tenant->settings = $settings;
+        $tenant->save();
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => __('messages.saved_successfully') ?? 'تم حفظ نظام التدريس والتعليم بنجاح',
+                'teaching_mode' => $validated['teaching_mode'],
+                'education_system' => $validated['education_system'],
+            ]);
+        }
+
+        return back()->with('success', 'تم حفظ نظام التدريس والتعليم بنجاح');
+    }
+
+    /**
+     * Quick Setup: Update Default Meeting Link from Dashboard
+     */
+    public function updateMeetingLink(Request $request)
+    {
+        $validated = $request->validate([
+            'default_meeting_link' => 'required|url|max:500',
+        ]);
+
+        $tenant = app('tenant');
+        $settings = $tenant->settings ?? [];
+        $settings['default_meeting_link'] = $validated['default_meeting_link'];
+        $tenant->settings = $settings;
+        $tenant->save();
+
+        if ($this->instructor) {
+            $this->instructor->update([
+                'default_meeting_link' => $validated['default_meeting_link'],
+            ]);
+        }
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => __('messages.saved_successfully') ?? 'تم ربط رابط البث المباشر بنجاح',
+                'meeting_link' => $validated['default_meeting_link'],
+            ]);
+        }
+
+        return back()->with('success', 'تم ربط رابط البث المباشر بنجاح');
     }
 }

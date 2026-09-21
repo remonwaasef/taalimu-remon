@@ -9,7 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- **Registration Flow Polish & Minimalist Separation (2026-09-21)**:
+- **Instructor 4-Step Interactive Dashboard Onboarding Setup (2026-09-21)**:
+  - Implemented an interactive 4-step onboarding checklist on the instructor dashboard (`Modules/Instructor/resources/views/index.blade.php`) to guide new teachers immediately after registration:
+    1. **Step 1 - Teaching & Education System**: Configures teaching mode (`online`, `in_person`, `hybrid`) and education curriculum (`general` Egyptian, `azhar` Al-Azhar, `languages` Experimental/Language schools, `international` IGCSE/SAT/IB).
+    2. **Step 2 - Permanent Live Stream Link**: One-click Google Meet / Zoom permanent meeting link modal directly from the dashboard, saving to both `$tenant->settings` and `$instructor->default_meeting_link`.
+    3. **Step 3 - First Group / Course**: Direct shortcut to create the first group or course.
+    4. **Step 4 - Share Student Registration Link**: Interactive modal with one-click URL copy, WhatsApp direct sharing, and Telegram sharing.
+  - Added backend endpoints `updateTeachingSystem` and `updateMeetingLink` to `InstructorController` and matching routes in `Modules/Instructor/routes/web.php`.
+  - Added clean modal component `Modules/Instructor/resources/views/partials/_onboarding-modals.blade.php` styled with Taalimu design tokens and zero visual clutter.
+  - Linked the dashboard's circular progress gauge (0%, 25%, 50%, 75%, 100%) dynamically to these 4 real setup milestones.
+
   - Streamlined Step 1 of the onboarding page (`resources/views/auth/register.blade.php`) into an ultra-clean, minimalist presentation.
   - Removed cluttered cards, badges, and explanatory clutter in favor of a sleek Google signup button paired with a subtle, clear divider (`أو بالبريد الإلكتروني` / `or with email`).
   - Added the account type segmented tab (`[مركز تعليمي]` vs `[مدرس مستقل]`) to the Google registration completion page (`resources/views/auth/complete-google-registration.blade.php`), resolving the issue where users were forced to default to "center" and allowing dynamic switching with appropriate labels and placeholders.
