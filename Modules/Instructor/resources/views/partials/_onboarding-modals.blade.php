@@ -181,15 +181,17 @@
 
 <!-- Modal 2: Connect Live Stream (Meet / Zoom) -->
 <div id="meetingLinkModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-    <div class="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-100 dark:border-slate-800 overflow-hidden transform transition-all animate-fade-in-up" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
+    <div class="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-100 dark:border-slate-800 overflow-hidden transform transition-all animate-fade-in-up" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
+        
+        <!-- Modal Header -->
         <div class="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
             <div class="flex items-center gap-2.5">
-                <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 dark:bg-emerald-950/30 dark:text-emerald-400 flex items-center justify-center text-base">
+                <div class="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 dark:bg-emerald-950/30 dark:text-emerald-400 flex items-center justify-center text-lg">
                     <i class="fas fa-video"></i>
                 </div>
                 <div>
                     <h3 class="text-base font-black text-slate-900 dark:text-slate-100 font-arabic">ربط البث المباشر</h3>
-                    <p class="text-xs text-slate-400 font-arabic">رابط Google Meet أو Zoom الدائم لحصصك</p>
+                    <p class="text-xs text-slate-400 font-arabic">ربط سريع ومباشر لحصصك عبر Google Meet أو Zoom</p>
                 </div>
             </div>
             <button type="button" onclick="closeMeetingLinkModal()" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 hover:text-slate-600 flex items-center justify-center text-sm transition-colors cursor-pointer">
@@ -197,40 +199,111 @@
             </button>
         </div>
 
-        <form id="meetingLinkForm" onsubmit="saveMeetingLink(event)" class="p-5 space-y-4">
-            @csrf
+        <div class="p-5 space-y-4">
+            
+            <!-- Direct Connection Buttons (أزرار الربط المباشر) -->
             <div>
-                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 font-arabic mb-1.5">
-                    الرابط الافتراضي للبث المباشر (Google Meet أو Zoom)
+                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 font-arabic mb-2">
+                    الخطوة الأولى: فتح مزود البث بنقرة واحدة:
                 </label>
-                <div class="relative group" dir="ltr">
-                    <input type="url" name="default_meeting_link" id="default_meeting_link_input" 
-                           value="{{ $defaultMeetingLink ?? '' }}"
-                           required
-                           placeholder="https://meet.google.com/xxx-xxxx-xxx"
-                           class="w-full h-11 px-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-xs font-mono text-slate-800 dark:text-slate-200 focus:outline-none focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    <!-- Google Meet Direct Button -->
+                    <div class="p-3.5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50/60 dark:bg-slate-800/40 hover:border-emerald-500/40 transition-all flex flex-col justify-between">
+                        <div class="flex items-center gap-2.5 mb-2.5">
+                            <div class="w-8 h-8 rounded-xl bg-white dark:bg-slate-700 shadow-xs flex items-center justify-center shrink-0">
+                                <i class="fab fa-google text-red-500 text-sm"></i>
+                            </div>
+                            <div>
+                                <span class="block text-xs font-black text-slate-800 dark:text-slate-200 font-arabic">Google Meet</span>
+                                <span class="block text-[10px] text-slate-400">رابط اجتماع فوري</span>
+                            </div>
+                        </div>
+                        <button type="button" onclick="openAndCreateGoogleMeet()" class="w-full py-2 px-3 bg-white dark:bg-slate-800 hover:bg-emerald-50 dark:hover:bg-emerald-950/30 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-xs cursor-pointer">
+                            <i class="fas fa-external-link-alt text-[10px]"></i>
+                            <span>فتح وإنشاء رابط Meet ↗</span>
+                        </button>
+                    </div>
+
+                    <!-- Zoom Direct Button -->
+                    <div class="p-3.5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50/60 dark:bg-slate-800/40 hover:border-blue-500/40 transition-all flex flex-col justify-between">
+                        <div class="flex items-center gap-2.5 mb-2.5">
+                            <div class="w-8 h-8 rounded-xl bg-white dark:bg-slate-700 shadow-xs flex items-center justify-center shrink-0">
+                                <i class="fas fa-video text-blue-500 text-sm"></i>
+                            </div>
+                            <div>
+                                <span class="block text-xs font-black text-slate-800 dark:text-slate-200 font-arabic">Zoom Meeting</span>
+                                <span class="block text-[10px] text-slate-400">الغرفة الشخصية (PMI)</span>
+                            </div>
+                        </div>
+                        <button type="button" onclick="openZoomMeeting()" class="w-full py-2 px-3 bg-white dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-950/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800/60 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-xs cursor-pointer">
+                            <i class="fas fa-external-link-alt text-[10px]"></i>
+                            <span>فتح غرفة Zoom ↗</span>
+                        </button>
+                    </div>
                 </div>
-                <p class="text-[11px] text-slate-400 mt-1.5 leading-relaxed font-arabic">
-                    💡 سيتم إدراج هذا الرابط تلقائياً لطلابك في كل حصة مباشرة دون الحاجة لإنشاء رابط جديد في كل مرة.
+            </div>
+
+            <!-- Instant 1-Click Connect Button -->
+            <div>
+                <button type="button" onclick="pasteAndAutoSave()" class="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black transition-all flex items-center justify-center gap-2 shadow-md shadow-emerald-600/20 cursor-pointer">
+                    <i class="fas fa-bolt text-yellow-300 text-sm"></i>
+                    <span>⚡ زر الربط المباشر (لصق وحفظ الرابط فوراً بنقرة واحدة)</span>
+                </button>
+                <p id="pasteNotice" class="hidden text-center text-[11px] text-emerald-600 font-bold mt-1 font-arabic">
+                    جاري فحص الحافظة وحفظ الرابط...
                 </p>
             </div>
 
-            <!-- Quick template buttons -->
-            <div class="flex items-center gap-2 pt-1">
-                <span class="text-[11px] font-bold text-slate-400 font-arabic">أمثلة:</span>
-                <button type="button" onclick="document.getElementById('default_meeting_link_input').value='https://meet.google.com/new'" class="text-[11px] px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-brand-primary font-bold transition-colors">
-                    <i class="fab fa-google text-red-500 me-1"></i> Google Meet
-                </button>
-                <button type="button" onclick="document.getElementById('default_meeting_link_input').value='https://zoom.us/j/'" class="text-[11px] px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-blue-500 font-bold transition-colors">
-                    <i class="fas fa-video text-blue-500 me-1"></i> Zoom
-                </button>
-            </div>
+            <!-- Manual Input Form -->
+            <form id="meetingLinkForm" onsubmit="saveMeetingLink(event)" class="space-y-3 pt-1 border-t border-slate-100 dark:border-slate-800">
+                @csrf
+                <div>
+                    <div class="flex items-center justify-between mb-1.5">
+                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 font-arabic">
+                            أو الصق الرابط الدائم هنا مباشرة:
+                        </label>
+                        <button type="button" onclick="pasteAndAutoFill()" class="text-[11px] font-bold text-brand-primary hover:underline flex items-center gap-1 cursor-pointer">
+                            <i class="fas fa-paste text-xs"></i>
+                            <span>لصق من الحافظة</span>
+                        </button>
+                    </div>
+                    <div class="relative flex items-center" dir="ltr">
+                        <span class="absolute start-3 text-slate-400 text-xs">
+                            <i class="fas fa-link"></i>
+                        </span>
+                        <input type="text" name="default_meeting_link" id="default_meeting_link_input" 
+                               value="{{ $defaultMeetingLink ?? '' }}"
+                               required
+                               placeholder="https://meet.google.com/xxx-xxxx-xxx أو كود الاجتماع"
+                               class="w-full h-11 ps-9 pe-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-xs font-mono text-slate-800 dark:text-slate-200 focus:outline-none focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
+                    </div>
+                    <p class="text-[10.5px] text-slate-400 mt-1 font-arabic">
+                        💡 يدعم روابط Google Meet الكاملة، أكواد الاجتماع (مثل abc-defg-hij)، وروابط Zoom أو رقم الـ PMI.
+                    </p>
+                </div>
 
-            <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2">
-                <button type="button" onclick="closeMeetingLinkModal()" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">إلغاء</button>
-                <button type="submit" id="saveMeetingLinkBtn" class="px-5 py-2 rounded-xl bg-emerald-600 text-white text-xs font-black shadow-md shadow-emerald-600/20 hover:bg-emerald-700 transition-all">حفظ الرابط الدائم ✓</button>
-            </div>
-        </form>
+                @if(!empty($defaultMeetingLink))
+                    <div class="p-2.5 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/20 border border-emerald-200/80 dark:border-emerald-800/40 flex items-center justify-between">
+                        <div class="flex items-center gap-2 overflow-hidden">
+                            <i class="fas fa-check-circle text-emerald-600 text-xs shrink-0"></i>
+                            <span class="text-[11px] font-bold text-emerald-800 dark:text-emerald-300 shrink-0 font-arabic">متصل حالياً:</span>
+                            <span class="text-[11px] text-slate-600 dark:text-slate-300 truncate font-mono" dir="ltr">{{ $defaultMeetingLink }}</span>
+                        </div>
+                        <a href="{{ $defaultMeetingLink }}" target="_blank" class="text-xs text-brand-primary hover:underline font-bold shrink-0 ms-2">
+                            تجربة الرابط ↗
+                        </a>
+                    </div>
+                @endif
+
+                <div class="pt-2 flex items-center justify-end gap-2">
+                    <button type="button" onclick="closeMeetingLinkModal()" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">إلغاء</button>
+                    <button type="submit" id="saveMeetingLinkBtn" class="px-5 py-2 rounded-xl bg-emerald-600 text-white text-xs font-black shadow-md shadow-emerald-600/20 hover:bg-emerald-700 transition-all flex items-center gap-1.5">
+                        <i class="fas fa-check text-xs"></i>
+                        <span>حفظ وتفعيل الرابط</span>
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
@@ -412,11 +485,76 @@ async function saveTeachingSystem(e) {
     }
 }
 
+function openAndCreateGoogleMeet() {
+    window.open('https://meet.google.com/new', '_blank');
+}
+
+function openZoomMeeting() {
+    window.open('https://zoom.us/start/videomeeting', '_blank');
+}
+
+async function pasteAndAutoFill() {
+    try {
+        const text = await navigator.clipboard.readText();
+        if (text) {
+            let clean = text.trim();
+            if (clean) {
+                document.getElementById('default_meeting_link_input').value = clean;
+            }
+        } else {
+            document.getElementById('default_meeting_link_input').focus();
+        }
+    } catch(err) {
+        document.getElementById('default_meeting_link_input').focus();
+    }
+}
+
+async function pasteAndAutoSave() {
+    const notice = document.getElementById('pasteNotice');
+    try {
+        if (notice) notice.classList.remove('hidden');
+        const text = await navigator.clipboard.readText();
+        if (text && text.trim()) {
+            document.getElementById('default_meeting_link_input').value = text.trim();
+            if (notice) notice.innerText = 'تم لصق الرابط من الحافظة! جاري الحفظ والتفعيل...';
+            // Submit the form
+            document.getElementById('saveMeetingLinkBtn').click();
+        } else {
+            if (notice) {
+                notice.innerText = 'يرجى نسخ الرابط أولاً من Google Meet أو Zoom، ثم الضغط على هذا الزر';
+                setTimeout(() => notice.classList.add('hidden'), 4000);
+            }
+            document.getElementById('default_meeting_link_input').focus();
+        }
+    } catch(err) {
+        if (notice) {
+            notice.innerText = 'يرجى لصق الرابط يدوياً في الخانة أدناه';
+            setTimeout(() => notice.classList.add('hidden'), 3000);
+        }
+        document.getElementById('default_meeting_link_input').focus();
+    }
+}
+
 async function saveMeetingLink(e) {
     e.preventDefault();
     const btn = document.getElementById('saveMeetingLinkBtn');
     btn.disabled = true;
     btn.innerText = 'جاري الحفظ...';
+
+    const input = document.getElementById('default_meeting_link_input');
+    if (input && input.value) {
+        let val = input.value.trim();
+        if (val && !val.startsWith('http://') && !val.startsWith('https://')) {
+            // Check if it's a 10-char meet code or digits
+            if (/^[a-z]{3}-[a-z]{4}-[a-z]{3}$/i.test(val)) {
+                input.value = 'https://meet.google.com/' + val.toLowerCase();
+            } else if (/^\d{9,11}$/.test(val.replace(/[\s-]/g, ''))) {
+                input.value = 'https://zoom.us/j/' + val.replace(/[\s-]/g, '');
+            } else {
+                input.value = 'https://' + val;
+            }
+        }
+    }
 
     const form = document.getElementById('meetingLinkForm');
     const formData = new FormData(form);
@@ -434,14 +572,15 @@ async function saveMeetingLink(e) {
         if (res.ok) {
             window.location.reload();
         } else {
-            alert('حدث خطأ أثناء الحفظ. تأكد من إدخال رابط صحيح (http:// أو https://)');
+            const data = await res.json().catch(() => null);
+            alert(data?.message || 'حدث خطأ أثناء الحفظ. تأكد من إدخال رابط صحيح (Google Meet أو Zoom)');
             btn.disabled = false;
-            btn.innerText = 'حفظ الرابط الدائم ✓';
+            btn.innerText = 'حفظ وتفعيل الرابط';
         }
     } catch(err) {
         console.error(err);
         btn.disabled = false;
-        btn.innerText = 'حفظ الرابط الدائم ✓';
+        btn.innerText = 'حفظ وتفعيل الرابط';
     }
 }
 
