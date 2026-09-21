@@ -201,28 +201,10 @@
 
         <div class="p-5 space-y-4">
             
-            <!-- Recommended: In-App Classroom Studio -->
-            <div class="p-3.5 rounded-2xl border-2 border-emerald-500/40 bg-emerald-50/40 dark:bg-emerald-950/20 flex items-center justify-between gap-3">
-                <div class="flex items-center gap-2.5">
-                    <div class="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-base shrink-0 shadow-xs">
-                        <i class="fas fa-satellite-dish"></i>
-                    </div>
-                    <div>
-                        <span class="block text-xs font-black text-slate-800 dark:text-slate-100 font-arabic">
-                            استوديو تعليمو المدمج ⭐ <span class="text-[10px] text-emerald-600 font-bold bg-emerald-100 dark:bg-emerald-900/60 px-1.5 py-0.5 rounded-md">موصى به</span>
-                        </span>
-                        <span class="block text-[11px] text-slate-500 dark:text-slate-400">بث مباشر، شات، وأسئلة Q&A داخل المنصة دون برامج خارجية</span>
-                    </div>
-                </div>
-                <button type="button" onclick="activateInAppStudio()" class="py-2 px-3.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black transition-all shrink-0 shadow-xs cursor-pointer">
-                    تفعيل الاستوديو ✓
-                </button>
-            </div>
-
             <!-- Direct External Connection Options -->
             <div>
                 <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 font-arabic mb-2">
-                    أو ربط مزود بث خارجي بنقرة واحدة:
+                    الخطوة الأولى: فتح مزود البث بنقرة واحدة:
                 </label>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                     <!-- Google Meet Direct Button -->
@@ -501,11 +483,6 @@ async function saveTeachingSystem(e) {
         btn.disabled = false;
         btn.innerText = 'حفظ ومتابعة ←';
     }
-}
-
-function activateInAppStudio() {
-    document.getElementById('default_meeting_link_input').value = 'in_app';
-    document.getElementById('saveMeetingLinkBtn').click();
 }
 
 function openAndCreateGoogleMeet() {

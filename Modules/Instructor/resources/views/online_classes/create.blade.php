@@ -54,11 +54,8 @@
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('instructor::online_classes.stream_platform') }} <span class="text-danger">*</span></label>
                                 <select name="platform" id="platformSelect" class="form-select rounded-pill px-3 @error('platform') is-invalid @enderror" required>
-                                    <option value="in_app" {{ old('platform', 'in_app') == 'in_app' ? 'selected' : '' }}>
-                                        استوديو تعليمو المدمج (فيديو تفاعلي، شات، أسئلة وأجوبة Q&A) — موصى به ⭐
-                                    </option>
-                                    <option value="manual" {{ old('platform') == 'manual' ? 'selected' : '' }}>
-                                        رابط خارجي (Google Meet, Zoom خارجي)
+                                    <option value="manual" {{ old('platform', 'manual') == 'manual' ? 'selected' : '' }}>
+                                        Google Meet أو Zoom (رابط مباشر فائق الجودة) — موصى به ⭐
                                     </option>
                                     <option value="zoom" {{ old('platform') == 'zoom' ? 'selected' : '' }}>
                                         Zoom API مدمج {{ !($zoomConfigured ?? false) ? '(يتطلب مفاتيح API في السيرفر)' : '(مدمج مع التسجيل التلقائي)' }}
@@ -66,7 +63,7 @@
                                 </select>
                                 @error('platform') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                 <div class="form-text" id="platformHelp">
-                                    <span id="inAppNotice" class="text-success"><i class="fas fa-check-circle me-1"></i> يتم إنشاء قاعة الاستوديو المدمجة تلقائياً داخل المنصة بكامل الشاشة ومجهزة بنظام الدردشة والأسئلة والأجوبة.</span>
+                                    <span class="text-success"><i class="fas fa-check-circle me-1"></i> يتم فتح قاعة الشرح بكامل الشاشة مباشرة للطلاب والمدرس مع الحضور التلقائي.</span>
                                 </div>
                             </div>
 
