@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Registration Flow Polish & Minimalist Separation (2026-09-21)**:
   - Streamlined Step 1 of the onboarding page (`resources/views/auth/register.blade.php`) into an ultra-clean, minimalist presentation.
   - Removed cluttered cards, badges, and explanatory clutter in favor of a sleek Google signup button paired with a subtle, clear divider (`أو بالبريد الإلكتروني` / `or with email`).
+  - Added the account type segmented tab (`[مركز تعليمي]` vs `[مدرس مستقل]`) to the Google registration completion page (`resources/views/auth/complete-google-registration.blade.php`), resolving the issue where users were forced to default to "center" and allowing dynamic switching with appropriate labels and placeholders.
   - Restored clean typography and button states for an uncluttered, high-converting SaaS onboarding experience.
 
 - **Default Meeting Link for Instructors & Live Classes (2026-09-21)**:

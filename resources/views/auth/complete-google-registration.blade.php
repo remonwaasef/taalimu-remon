@@ -492,19 +492,41 @@ window.addEventListener('pageshow', (event) => {
                     <input type="hidden" name="billing_cycle" :value="billingCycle">
                     <input type="hidden" name="currency" x-model="selectedCurrency">
 
-                    {{-- Center Name --}}
+                    <!-- Account Type: Clean Segmented Tab -->
+                    <div class="flex items-center justify-center mb-2">
+                        <div class="inline-flex p-1 bg-slate-100/80 rounded-xl border border-slate-200/60 shadow-inner">
+                            <button type="button" @click="accountType = 'instructor'"
+                                    class="flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 cursor-pointer"
+                                    :class="accountType === 'instructor' 
+                                        ? 'bg-white text-emerald-800 shadow-sm font-black ring-1 ring-slate-200/80' 
+                                        : 'text-slate-500 hover:text-slate-700'">
+                                <i class="bi bi-person-video3 text-sm"></i>
+                                {{ __('auth.registration_steps.tutor') }}
+                            </button>
+                            <button type="button" @click="accountType = 'center'"
+                                    class="flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 cursor-pointer"
+                                    :class="accountType === 'center' 
+                                        ? 'bg-white text-emerald-800 shadow-sm font-black ring-1 ring-slate-200/80' 
+                                        : 'text-slate-500 hover:text-slate-700'">
+                                <i class="bi bi-building text-sm"></i>
+                                {{ __('auth.registration_steps.center') }}
+                            </button>
+                        </div>
+                    </div>
+
+                    {{-- Center / Teacher Name --}}
                     <div class="space-y-1.5">
                         <label class="block text-xs font-bold text-slate-700 font-arabic">
-                            <span x-text="accountType === 'center' ? '{{ __('auth.register.center_name') }}' : ({{ Js::from(__('auth.registration_steps.teacher_name')) }})"></span>
+                            <span x-text="accountType === 'center' ? '{{ __('auth.register.center_name') }}' : '{{ __('auth.registration_steps.teacher_name') }}'"></span>
                         </label>
                         <div class="relative group">
                             <div class="absolute inset-y-0 start-0 ps-3.5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-brand-primary transition-colors">
-                                <i class="bi bi-building text-base"></i>
+                                <i class="bi text-base" :class="accountType === 'center' ? 'bi-building' : 'bi-person-badge'"></i>
                             </div>
                             <input type="text" name="center_name" x-model="centerName"
                                 @input="if(!manuallyEditedSubdomain) { subdomain = generateSlug(centerName); checkSubdomain(); }"
                                 class="w-full h-11 ps-10 pe-4 bg-slate-50/50 border border-slate-200 rounded-xl text-sm font-bold font-arabic focus:outline-none focus:bg-white focus:ring-2 focus:ring-brand-primary/10 focus:border-brand-primary transition-all shadow-inner"
-                                placeholder="{{ __('auth.register.center_name_placeholder') }}" required autofocus>
+                                :placeholder="accountType === 'center' ? '{{ __('auth.register.center_name_placeholder') }}' : '{{ __('auth.registration_steps.teacher_name_placeholder') }}'" required autofocus>
                         </div>
                     </div>
 
@@ -517,7 +539,7 @@ window.addEventListener('pageshow', (event) => {
                                 @input="manuallyEditedSubdomain = true; subdomain = cleanSlug(subdomain);"
                                 @input.debounce.500ms="checkSubdomain()"
                                 class="w-full h-11 pl-[60px] pr-[92px] sm:pl-[70px] sm:pr-[110px] bg-slate-50/50 border border-slate-200 rounded-xl text-sm font-bold font-sans focus:outline-none focus:bg-white focus:ring-2 focus:ring-brand-primary/10 focus:border-brand-primary transition-all shadow-inner"
-                                placeholder="center-name" required>
+                                :placeholder="accountType === 'center' ? 'center-name' : '{{ __('auth.registration_steps.teacher_subdomain_placeholder') }}'" required>
                             <div class="absolute right-0 inset-y-0 flex items-center pr-3 pointer-events-none text-slate-400 font-bold text-xs gap-2">
                                 <span>.taalimu.com</span>
                                 <div class="flex items-center justify-center w-4 h-4">
