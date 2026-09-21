@@ -21,125 +21,111 @@
         <form id="teachingSystemForm" onsubmit="saveTeachingSystem(event)" class="p-5 space-y-4">
             @csrf
 
-            <!-- Account Profile Segmented Switch -->
-            <div>
-                <label class="block text-xs font-black text-slate-700 dark:text-slate-300 font-arabic mb-2">
-                    <i class="fas fa-user-tag text-brand-primary me-1"></i> نوع وطبيعة النشاط
-                </label>
-                <div class="grid grid-cols-2 p-1 bg-slate-100 dark:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700/80">
-                    <label class="flex items-center justify-center gap-2 py-2 px-3 rounded-xl cursor-pointer transition-all text-xs font-black font-arabic text-center account-type-tab" id="tab_instructor_label">
-                        <input type="radio" name="account_type" value="instructor" class="sr-only" {{ ($accountType ?? 'instructor') === 'instructor' ? 'checked' : '' }} onchange="switchAccountTypeTab('instructor')">
-                        <i class="fas fa-chalkboard-teacher"></i>
-                        <span>مدرس مستقل</span>
-                    </label>
-                    <label class="flex items-center justify-center gap-2 py-2 px-3 rounded-xl cursor-pointer transition-all text-xs font-black font-arabic text-center account-type-tab" id="tab_center_label">
-                        <input type="radio" name="account_type" value="center" class="sr-only" {{ ($accountType ?? '') === 'center' ? 'checked' : '' }} onchange="switchAccountTypeTab('center')">
-                        <i class="fas fa-school"></i>
-                        <span>مركز تعليمي / سنتر</span>
-                    </label>
-                </div>
-            </div>
+            <!-- Hidden Account Profile based on registration choice -->
+            <input type="hidden" name="account_type" value="{{ $accountType ?? 'instructor' }}">
 
-            <!-- Section 1A: Instructor Teaching Modes (When "مدرس مستقل") -->
-            <div id="instructor_teaching_modes_container">
-                <label class="block text-xs font-black text-slate-700 dark:text-slate-300 font-arabic mb-2">
-                    <i class="fas fa-laptop-house text-brand-primary me-1"></i> طريقة وتواجد تدريس المدرس
-                </label>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    <label class="relative flex flex-col p-3 rounded-2xl border cursor-pointer transition-all teaching-mode-card hover:border-brand-primary/60 border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50">
-                        <input type="radio" name="teaching_mode" value="online_independent" class="sr-only" {{ in_array(($teachingMode ?? 'online_independent'), ['online', 'online_independent']) ? 'checked' : '' }} onchange="handleTeachingModeChange('online_independent')">
-                        <div class="flex items-center gap-2 mb-1">
-                            <i class="fas fa-laptop text-brand-primary text-sm"></i>
-                            <span class="text-xs font-black text-slate-800 dark:text-slate-200 font-arabic">أونلاين مستقل (منصتي الخاصة)</span>
-                        </div>
-                        <span class="text-[10px] text-slate-400 leading-tight">بث مباشر، تسجيلات ومجموعات افتراضية خاصة بي</span>
+            @if(($accountType ?? 'instructor') === 'center')
+                <!-- Center Management Modes (When registered as Center) -->
+                <div>
+                    <label class="block text-xs font-black text-slate-700 dark:text-slate-300 font-arabic mb-2">
+                        <i class="fas fa-school text-brand-primary me-1"></i> نمط تشغيل وإدارة المركز
                     </label>
-
-                    <label class="relative flex flex-col p-3 rounded-2xl border cursor-pointer transition-all teaching-mode-card hover:border-brand-primary/60 border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50">
-                        <input type="radio" name="teaching_mode" value="in_centers" class="sr-only" {{ in_array(($teachingMode ?? ''), ['in_person', 'in_centers']) ? 'checked' : '' }} onchange="handleTeachingModeChange('in_centers')">
-                        <div class="flex items-center gap-2 mb-1">
-                            <i class="fas fa-store-alt text-emerald-600 text-sm"></i>
-                            <span class="text-xs font-black text-slate-800 dark:text-slate-200 font-arabic">أدرّس داخل مراكز وسناتر</span>
-                        </div>
-                        <span class="text-[10px] text-slate-400 leading-tight">حصص حضورية داخل سناتر ومراكز تعليمية</span>
-                    </label>
-
-                    <label class="relative flex flex-col p-3 rounded-2xl border cursor-pointer transition-all teaching-mode-card hover:border-brand-primary/60 border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50">
-                        <input type="radio" name="teaching_mode" value="private_hall" class="sr-only" {{ ($teachingMode ?? '') === 'private_hall' ? 'checked' : '' }} onchange="handleTeachingModeChange('private_hall')">
-                        <div class="flex items-center gap-2 mb-1">
-                            <i class="fas fa-door-open text-purple-600 text-sm"></i>
-                            <span class="text-xs font-black text-slate-800 dark:text-slate-200 font-arabic">قاعة خاصة بي (دروس خصوصية)</span>
-                        </div>
-                        <span class="text-[10px] text-slate-400 leading-tight">مقر ومجموعات خاصة بإشرافي وحضور بالباركود</span>
-                    </label>
-
-                    <label class="relative flex flex-col p-3 rounded-2xl border cursor-pointer transition-all teaching-mode-card hover:border-brand-primary/60 border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50">
-                        <input type="radio" name="teaching_mode" value="hybrid" class="sr-only" {{ ($teachingMode ?? '') === 'hybrid' ? 'checked' : '' }} onchange="handleTeachingModeChange('hybrid')">
-                        <div class="flex items-center gap-2 mb-1">
-                            <i class="fas fa-sync-alt text-amber-500 text-sm"></i>
-                            <span class="text-xs font-black text-slate-800 dark:text-slate-200 font-arabic">نظام هجين (سنتر + أونلاين)</span>
-                        </div>
-                        <span class="text-[10px] text-slate-400 leading-tight">الجمع بين حصص السنتر والمتابعة وبث الحصص أونلاين</span>
-                    </label>
-                </div>
-
-                <!-- Sub-Section: Centers System & Details -->
-                <div id="centers_system_details" class="mt-3 p-3.5 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200/80 dark:border-emerald-800/60 space-y-2.5 transition-all">
-                    <label class="block text-xs font-black text-emerald-900 dark:text-emerald-200 font-arabic">
-                        <i class="fas fa-building text-emerald-600 me-1"></i> اختيار وتحديد نظام المراكز
-                    </label>
-                    <div class="grid grid-cols-2 gap-2">
-                        <label class="relative flex items-center gap-2 p-2.5 rounded-xl border cursor-pointer transition-all bg-white dark:bg-slate-900 text-xs font-bold border-slate-200 dark:border-slate-700 center-relation-card">
-                            <input type="radio" name="center_relation" value="single_center" class="sr-only" {{ ($centerRelation ?? 'single_center') === 'single_center' ? 'checked' : '' }} onchange="highlightCenterRelationCards()">
-                            <i class="fas fa-check-circle text-emerald-600 text-xs"></i>
-                            <span class="text-slate-800 dark:text-slate-200">سنتر رئيسي واحد</span>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        <label class="relative flex flex-col p-3 rounded-2xl border cursor-pointer transition-all teaching-mode-card hover:border-brand-primary/60 border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50">
+                            <input type="radio" name="teaching_mode" value="center_in_person" class="sr-only" {{ ($teachingMode ?? '') === 'center_in_person' ? 'checked' : '' }} onchange="highlightSelectedCards()">
+                            <div class="flex items-center gap-2 mb-1">
+                                <i class="fas fa-building text-emerald-600 text-sm"></i>
+                                <span class="text-xs font-black text-slate-800 dark:text-slate-200 font-arabic">سنتر وقاعات</span>
+                            </div>
+                            <span class="text-[10px] text-slate-400 leading-tight">إدارة قاعات، بوابات باركود وحسابات معلمين</span>
                         </label>
-                        <label class="relative flex items-center gap-2 p-2.5 rounded-xl border cursor-pointer transition-all bg-white dark:bg-slate-900 text-xs font-bold border-slate-200 dark:border-slate-700 center-relation-card">
-                            <input type="radio" name="center_relation" value="multiple_centers" class="sr-only" {{ ($centerRelation ?? '') === 'multiple_centers' ? 'checked' : '' }} onchange="highlightCenterRelationCards()">
-                            <i class="fas fa-check-circle text-emerald-600 text-xs"></i>
-                            <span class="text-slate-800 dark:text-slate-200">عدة سناتر ومراكز</span>
+
+                        <label class="relative flex flex-col p-3 rounded-2xl border cursor-pointer transition-all teaching-mode-card hover:border-brand-primary/60 border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50">
+                            <input type="radio" name="teaching_mode" value="center_online" class="sr-only" {{ ($teachingMode ?? '') === 'center_online' ? 'checked' : '' }} onchange="highlightSelectedCards()">
+                            <div class="flex items-center gap-2 mb-1">
+                                <i class="fas fa-globe text-brand-primary text-sm"></i>
+                                <span class="text-xs font-black text-slate-800 dark:text-slate-200 font-arabic">أكاديمية أونلاين</span>
+                            </div>
+                            <span class="text-[10px] text-slate-400 leading-tight">فصول افتراضية وبث مباشر لكادر المعلمين</span>
+                        </label>
+
+                        <label class="relative flex flex-col p-3 rounded-2xl border cursor-pointer transition-all teaching-mode-card hover:border-brand-primary/60 border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50">
+                            <input type="radio" name="teaching_mode" value="center_hybrid" class="sr-only" {{ ($teachingMode ?? '') === 'center_hybrid' ? 'checked' : '' }} onchange="highlightSelectedCards()">
+                            <div class="flex items-center gap-2 mb-1">
+                                <i class="fas fa-layer-group text-amber-500 text-sm"></i>
+                                <span class="text-xs font-black text-slate-800 dark:text-slate-200 font-arabic">مركز هجين متكامل</span>
+                            </div>
+                            <span class="text-[10px] text-slate-400 leading-tight">قاعات فعلية + منصة تعليم إلكتروني موحدة</span>
                         </label>
                     </div>
-                    <div>
-                        <input type="text" name="center_names" value="{{ $centerNames ?? '' }}" placeholder="اسم السنتر أو المراكز التي تدرّس بها (مثال: سنتر الأوائل، سنتر النور)" class="w-full h-9 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all font-arabic">
+                </div>
+            @else
+                <!-- Instructor Teaching Modes (When registered as Instructor) -->
+                <div>
+                    <label class="block text-xs font-black text-slate-700 dark:text-slate-300 font-arabic mb-2">
+                        <i class="fas fa-laptop-house text-brand-primary me-1"></i> نمط وطريقة تدريس المدرس
+                    </label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <label class="relative flex flex-col p-3 rounded-2xl border cursor-pointer transition-all teaching-mode-card hover:border-brand-primary/60 border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50">
+                            <input type="radio" name="teaching_mode" value="online_independent" class="sr-only" {{ in_array(($teachingMode ?? 'online_independent'), ['online', 'online_independent']) ? 'checked' : '' }} onchange="handleTeachingModeChange('online_independent')">
+                            <div class="flex items-center gap-2 mb-1">
+                                <i class="fas fa-laptop text-brand-primary text-sm"></i>
+                                <span class="text-xs font-black text-slate-800 dark:text-slate-200 font-arabic">أونلاين مستقل (منصتي الخاصة)</span>
+                            </div>
+                            <span class="text-[10px] text-slate-400 leading-tight">بث مباشر، تسجيلات ومجموعات افتراضية خاصة بي</span>
+                        </label>
+
+                        <label class="relative flex flex-col p-3 rounded-2xl border cursor-pointer transition-all teaching-mode-card hover:border-brand-primary/60 border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50">
+                            <input type="radio" name="teaching_mode" value="in_centers" class="sr-only" {{ in_array(($teachingMode ?? ''), ['in_person', 'in_centers']) ? 'checked' : '' }} onchange="handleTeachingModeChange('in_centers')">
+                            <div class="flex items-center gap-2 mb-1">
+                                <i class="fas fa-store-alt text-emerald-600 text-sm"></i>
+                                <span class="text-xs font-black text-slate-800 dark:text-slate-200 font-arabic">أدرّس داخل مراكز وسناتر</span>
+                            </div>
+                            <span class="text-[10px] text-slate-400 leading-tight">حصص حضورية داخل سناتر ومراكز تعليمية</span>
+                        </label>
+
+                        <label class="relative flex flex-col p-3 rounded-2xl border cursor-pointer transition-all teaching-mode-card hover:border-brand-primary/60 border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50">
+                            <input type="radio" name="teaching_mode" value="private_hall" class="sr-only" {{ ($teachingMode ?? '') === 'private_hall' ? 'checked' : '' }} onchange="handleTeachingModeChange('private_hall')">
+                            <div class="flex items-center gap-2 mb-1">
+                                <i class="fas fa-door-open text-purple-600 text-sm"></i>
+                                <span class="text-xs font-black text-slate-800 dark:text-slate-200 font-arabic">قاعة خاصة بي (دروس خصوصية)</span>
+                            </div>
+                            <span class="text-[10px] text-slate-400 leading-tight">مقر ومجموعات خاصة بإشرافي وحضور بالباركود</span>
+                        </label>
+
+                        <label class="relative flex flex-col p-3 rounded-2xl border cursor-pointer transition-all teaching-mode-card hover:border-brand-primary/60 border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50">
+                            <input type="radio" name="teaching_mode" value="hybrid" class="sr-only" {{ ($teachingMode ?? '') === 'hybrid' ? 'checked' : '' }} onchange="handleTeachingModeChange('hybrid')">
+                            <div class="flex items-center gap-2 mb-1">
+                                <i class="fas fa-sync-alt text-amber-500 text-sm"></i>
+                                <span class="text-xs font-black text-slate-800 dark:text-slate-200 font-arabic">نظام هجين (سنتر + أونلاين)</span>
+                            </div>
+                            <span class="text-[10px] text-slate-400 leading-tight">الجمع بين حصص السنتر والمتابعة وبث الحصص أونلاين</span>
+                        </label>
+                    </div>
+
+                    <!-- Sub-Section: Centers System & Details (Shows when in_centers or hybrid) -->
+                    <div id="centers_system_details" class="{{ in_array(($teachingMode ?? ''), ['in_person', 'in_centers', 'hybrid']) ? '' : 'hidden' }} mt-3 p-3.5 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200/80 dark:border-emerald-800/60 space-y-2.5 transition-all">
+                        <label class="block text-xs font-black text-emerald-900 dark:text-emerald-200 font-arabic">
+                            <i class="fas fa-building text-emerald-600 me-1"></i> اختيار وتحديد نظام المراكز
+                        </label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <label class="relative flex items-center gap-2 p-2.5 rounded-xl border cursor-pointer transition-all bg-white dark:bg-slate-900 text-xs font-bold border-slate-200 dark:border-slate-700 center-relation-card">
+                                <input type="radio" name="center_relation" value="single_center" class="sr-only" {{ ($centerRelation ?? 'single_center') === 'single_center' ? 'checked' : '' }} onchange="highlightCenterRelationCards()">
+                                <i class="fas fa-check-circle text-emerald-600 text-xs"></i>
+                                <span class="text-slate-800 dark:text-slate-200">سنتر رئيسي واحد</span>
+                            </label>
+                            <label class="relative flex items-center gap-2 p-2.5 rounded-xl border cursor-pointer transition-all bg-white dark:bg-slate-900 text-xs font-bold border-slate-200 dark:border-slate-700 center-relation-card">
+                                <input type="radio" name="center_relation" value="multiple_centers" class="sr-only" {{ ($centerRelation ?? '') === 'multiple_centers' ? 'checked' : '' }} onchange="highlightCenterRelationCards()">
+                                <i class="fas fa-check-circle text-emerald-600 text-xs"></i>
+                                <span class="text-slate-800 dark:text-slate-200">عدة سناتر ومراكز</span>
+                            </label>
+                        </div>
+                        <div>
+                            <input type="text" name="center_names" value="{{ $centerNames ?? '' }}" placeholder="اسم السنتر أو المراكز التي تدرّس بها (مثال: سنتر الأوائل، سنتر النور)" class="w-full h-9 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all font-arabic">
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Section 1B: Center Management Modes (When "مركز تعليمي / سنتر") -->
-            <div id="center_teaching_modes_container" class="hidden">
-                <label class="block text-xs font-black text-slate-700 dark:text-slate-300 font-arabic mb-2">
-                    <i class="fas fa-school text-brand-primary me-1"></i> نمط تشغيل وإدارة المركز
-                </label>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                    <label class="relative flex flex-col p-3 rounded-2xl border cursor-pointer transition-all teaching-mode-card hover:border-brand-primary/60 border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50">
-                        <input type="radio" name="teaching_mode" value="center_in_person" class="sr-only" {{ ($teachingMode ?? '') === 'center_in_person' ? 'checked' : '' }} onchange="highlightSelectedCards()">
-                        <div class="flex items-center gap-2 mb-1">
-                            <i class="fas fa-building text-emerald-600 text-sm"></i>
-                            <span class="text-xs font-black text-slate-800 dark:text-slate-200 font-arabic">سنتر وقاعات</span>
-                        </div>
-                        <span class="text-[10px] text-slate-400 leading-tight">إدارة قاعات، بوابات باركود وحسابات معلمين</span>
-                    </label>
-
-                    <label class="relative flex flex-col p-3 rounded-2xl border cursor-pointer transition-all teaching-mode-card hover:border-brand-primary/60 border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50">
-                        <input type="radio" name="teaching_mode" value="center_online" class="sr-only" {{ ($teachingMode ?? '') === 'center_online' ? 'checked' : '' }} onchange="highlightSelectedCards()">
-                        <div class="flex items-center gap-2 mb-1">
-                            <i class="fas fa-globe text-brand-primary text-sm"></i>
-                            <span class="text-xs font-black text-slate-800 dark:text-slate-200 font-arabic">أكاديمية أونلاين</span>
-                        </div>
-                        <span class="text-[10px] text-slate-400 leading-tight">فصول افتراضية وبث مباشر لكادر المعلمين</span>
-                    </label>
-
-                    <label class="relative flex flex-col p-3 rounded-2xl border cursor-pointer transition-all teaching-mode-card hover:border-brand-primary/60 border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50">
-                        <input type="radio" name="teaching_mode" value="center_hybrid" class="sr-only" {{ ($teachingMode ?? '') === 'center_hybrid' ? 'checked' : '' }} onchange="highlightSelectedCards()">
-                        <div class="flex items-center gap-2 mb-1">
-                            <i class="fas fa-layer-group text-amber-500 text-sm"></i>
-                            <span class="text-xs font-black text-slate-800 dark:text-slate-200 font-arabic">مركز هجين متكامل</span>
-                        </div>
-                        <span class="text-[10px] text-slate-400 leading-tight">قاعات فعلية + منصة تعليم إلكتروني موحدة</span>
-                    </label>
-                </div>
-            </div>
+            @endif
 
             <!-- Section 2: Education Curriculum / System -->
             <div>
@@ -307,45 +293,6 @@
 </div>
 
 <script>
-function switchAccountTypeTab(type) {
-    const instructorContainer = document.getElementById('instructor_teaching_modes_container');
-    const centerContainer = document.getElementById('center_teaching_modes_container');
-    const instructorTabLabel = document.getElementById('tab_instructor_label');
-    const centerTabLabel = document.getElementById('tab_center_label');
-
-    if (!instructorContainer || !centerContainer) return;
-
-    if (type === 'instructor') {
-        instructorContainer.classList.remove('hidden');
-        centerContainer.classList.add('hidden');
-        
-        instructorTabLabel.classList.add('bg-white', 'dark:bg-slate-900', 'text-brand-primary', 'shadow-xs');
-        instructorTabLabel.classList.remove('text-slate-500');
-        
-        centerTabLabel.classList.remove('bg-white', 'dark:bg-slate-900', 'text-brand-primary', 'shadow-xs');
-        centerTabLabel.classList.add('text-slate-500');
-
-        const activeMode = instructorContainer.querySelector('input[name="teaching_mode"]:checked')?.value || 'online_independent';
-        handleTeachingModeChange(activeMode);
-    } else {
-        instructorContainer.classList.add('hidden');
-        centerContainer.classList.remove('hidden');
-        
-        centerTabLabel.classList.add('bg-white', 'dark:bg-slate-900', 'text-brand-primary', 'shadow-xs');
-        centerTabLabel.classList.remove('text-slate-500');
-        
-        instructorTabLabel.classList.remove('bg-white', 'dark:bg-slate-900', 'text-brand-primary', 'shadow-xs');
-        instructorTabLabel.classList.add('text-slate-500');
-
-        const checked = centerContainer.querySelector('input[name="teaching_mode"]:checked');
-        if (!checked) {
-            const first = centerContainer.querySelector('input[name="teaching_mode"]');
-            if (first) { first.checked = true; }
-        }
-    }
-    highlightSelectedCards();
-}
-
 function handleTeachingModeChange(mode) {
     const centersBox = document.getElementById('centers_system_details');
     if (centersBox) {
@@ -398,8 +345,6 @@ function highlightSelectedCards() {
 
 function openTeachingSystemModal() {
     document.getElementById('teachingSystemModal').classList.remove('hidden');
-    const activeType = document.querySelector('input[name="account_type"]:checked')?.value || 'instructor';
-    switchAccountTypeTab(activeType);
     highlightSelectedCards();
     highlightCenterRelationCards();
 }
