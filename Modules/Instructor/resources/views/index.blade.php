@@ -27,7 +27,7 @@
                 </span>
                 <div class="flex items-center gap-2">
                     <span class="text-xs font-bold text-slate-800 dark:text-slate-200 font-arabic">{{ __('instructor::dashboard.account_setup') }}</span>
-                    <span class="text-[11px] text-slate-400 font-arabic">({{ __('instructor::dashboard.steps_completed_ratio', ['completed' => $completedSteps, 'total' => 4]) }})</span>
+                    <span class="text-[11px] text-slate-400 font-arabic">({{ __('instructor::dashboard.steps_completed_ratio', ['completed' => $completedSteps ?? 0, 'total' => 4]) }})</span>
                 </div>
             </div>
 

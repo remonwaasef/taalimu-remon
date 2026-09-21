@@ -371,12 +371,14 @@ class InstructorController extends Controller
             'education_system' => 'required|string|in:general,azhar,languages,international',
         ]);
 
-        $tenant = app('tenant');
-        $settings = $tenant->settings ?? [];
+        $tenant = current_tenant() ?? auth()->user()?->tenant;
+        $settings = is_array($tenant?->settings) ? $tenant->settings : (json_decode($tenant?->settings ?? '[]', true) ?? []);
         $settings['teaching_mode'] = $validated['teaching_mode'];
         $settings['education_system'] = $validated['education_system'];
-        $tenant->settings = $settings;
-        $tenant->save();
+        if ($tenant) {
+            $tenant->settings = $settings;
+            $tenant->save();
+        }
 
         if ($request->wantsJson() || $request->ajax()) {
             return response()->json([
@@ -399,11 +401,13 @@ class InstructorController extends Controller
             'default_meeting_link' => 'required|url|max:500',
         ]);
 
-        $tenant = app('tenant');
-        $settings = $tenant->settings ?? [];
+        $tenant = current_tenant() ?? auth()->user()?->tenant;
+        $settings = is_array($tenant?->settings) ? $tenant->settings : (json_decode($tenant?->settings ?? '[]', true) ?? []);
         $settings['default_meeting_link'] = $validated['default_meeting_link'];
-        $tenant->settings = $settings;
-        $tenant->save();
+        if ($tenant) {
+            $tenant->settings = $settings;
+            $tenant->save();
+        }
 
         if ($this->instructor) {
             $this->instructor->update([
