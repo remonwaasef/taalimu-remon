@@ -357,6 +357,7 @@
                     </x-ui.button>
                 </x-slot>
             </x-ui.empty-state>
+        @endif
     </x-ui.card>
 
     @include('instructor::partials._onboarding-modals')

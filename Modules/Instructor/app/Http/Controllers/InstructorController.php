@@ -26,14 +26,14 @@ class InstructorController extends Controller
         $instructor = $this->instructor;
 
         if (! $instructor) {
-            $courses = Course::take(5)->get();
+            $courses = Course::with('schedules')->take(5)->get();
             $totalStudents = Student::count();
             $totalCourses = Course::count();
             $monthlyRevenue = Sale::whereMonth('created_at', now()->month)
                 ->whereYear('created_at', now()->year)
                 ->sum('paid_amount');
         } else {
-            $courses = $instructor->courses()->withCount('enrollments')->get();
+            $courses = $instructor->courses()->with('schedules')->withCount('enrollments')->get();
             $totalStudents = Student::whereHas('enrollments', function ($q) use ($instructor) {
                 $q->whereIn('course_id', $instructor->courses->pluck('id'));
             })->count();
