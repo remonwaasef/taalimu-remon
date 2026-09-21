@@ -124,28 +124,51 @@
                     <!-- Account Type Selector (Clean Segmented Tab) -->
                     @include('auth.partials._register-account-type')
 
-                    <!-- Google Fast Registration -->
-                    <div class="mb-3">
+                    <!-- OPTION 1: Fast One-Click Sign Up via Google -->
+                    <div class="mb-4 p-3 sm:p-3.5 rounded-2xl bg-gradient-to-br from-slate-50 to-emerald-50/30 border border-slate-200/80 shadow-xs relative overflow-hidden group">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <span class="text-xs font-black text-slate-800 font-arabic flex items-center gap-1.5">
+                                <i class="bi bi-lightning-charge-fill text-amber-500 text-xs"></i>
+                                {{ __('auth.registration_steps.fast_google_signup') }}
+                            </span>
+                            <span class="text-[10px] font-bold text-emerald-700 bg-emerald-100/70 border border-emerald-200/50 px-2 py-0.5 rounded-full font-arabic">
+                                {{ __('auth.registration_steps.fast_google_badge') }}
+                            </span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 font-arabic mb-2.5 leading-relaxed">
+                            {{ __('auth.registration_steps.fast_google_signup_subtitle') }}
+                        </p>
                         <a :href="'{{ route('auth.google') }}?plan=' + selectedPlan + '&cycle=' + billingCycle + '&account_type=' + (accountType || 'center')" 
-                           class="w-full flex items-center justify-center gap-2.5 py-2 px-4 border border-slate-200 rounded-xl text-xs font-black text-slate-700 bg-white hover:bg-slate-50 hover:border-slate-300 hover:shadow-sm transition-all group">
+                           class="w-full flex items-center justify-center gap-2.5 py-2.5 px-4 border border-slate-200 rounded-xl text-xs font-black text-slate-700 bg-white hover:bg-slate-50 hover:border-slate-300 hover:shadow-sm transition-all group-hover:border-emerald-200">
                             <svg class="w-4 h-4 group-hover:scale-105 transition-transform" viewBox="0 0 24 24">
                                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                                 <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
                                 <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
                                 <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
                             </svg>
-                            <span>{{ __('auth.register.google_signup') }}</span>
+                            <span>{{ __('auth.registration_steps.google_button_label') }}</span>
                         </a>
                     </div>
 
-                    <!-- Divider -->
-                    <div class="relative my-3 px-6">
-                        <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-100"></div></div>
-                        <div class="relative flex justify-center text-[10px]">
-                            <span class="bg-white px-3 text-slate-400 font-bold uppercase tracking-wider">
-                                {{ __('auth.registration_steps.or_fill_below') }}
+                    <!-- OPTION 2 Divider: Manual Registration -->
+                    <div class="relative my-4 px-2">
+                        <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-200"></div></div>
+                        <div class="relative flex justify-center">
+                            <span class="bg-white px-3 py-0.5 text-[10px] sm:text-[11px] font-black text-slate-500 font-arabic border border-slate-200 rounded-full shadow-xs">
+                                {{ __('auth.registration_steps.or_manual_registration') }}
                             </span>
                         </div>
+                    </div>
+
+                    <!-- Manual Step 1 Intro Label -->
+                    <div class="flex items-center justify-between mb-2 px-1">
+                        <span class="text-xs font-black text-slate-800 font-arabic flex items-center gap-1.5">
+                            <i class="bi bi-pencil-square text-brand-secondary text-xs"></i>
+                            {{ __('auth.registration_steps.manual_step1_badge') }}
+                        </span>
+                        <span class="text-[10px] font-bold text-slate-400 font-arabic">
+                            {{ __('auth.registration_steps.step_1') }}
+                        </span>
                     </div>
 
                     <!-- Center / Platform Name Input -->
@@ -197,7 +220,7 @@
                     <!-- Continue Button -->
                     <button type="button" @click="nextStep()"
                         class="w-full h-11 rounded-xl flex items-center justify-center gap-2 group bg-gradient-to-r from-emerald-600 to-teal-500 text-white shadow-lg shadow-emerald-600/20 hover:from-emerald-700 hover:to-teal-600 hover:-translate-y-0.5 active:scale-[0.98] transition-all mb-3">
-                        <span class="text-sm font-black font-arabic">{{ __('auth.registration_steps.next_personal') }}</span>
+                        <span class="text-sm font-black font-arabic">{{ __('auth.registration_steps.next_manual_step2') }}</span>
                         <i class="bi bi-arrow-left text-base rtl:rotate-0 ltr:rotate-180 group-hover:-translate-x-1 rtl:group-hover:-translate-x-1 transition-transform"></i>
                     </button>
 
@@ -235,11 +258,21 @@
                 {{-- STEP 2 CONTAINER --}}
                 <div x-show="currentStep === 2" x-cloak>
                     <div class="text-center mb-4">
+                        <div class="inline-flex items-center gap-1.5 bg-slate-100 text-slate-600 text-[10px] font-black px-2.5 py-0.5 rounded-full mb-1.5 font-arabic">
+                            <i class="bi bi-pencil-square text-brand-secondary"></i>
+                            {{ __('auth.registration_steps.manual_step2_title') }}
+                        </div>
                         <h1 class="text-xl font-black text-slate-900 mb-1 font-arabic leading-tight">
                             {{ __('auth.registration_steps.enter_details') }}
                         </h1>
                         <p class="text-xs text-slate-400 font-arabic font-medium">
                             {{ __('auth.registration_steps.last_step') }}
+                            <span class="mx-1">•</span>
+                            <span class="text-slate-500">{{ __('auth.registration_steps.prefer_google') }}</span>
+                            <a :href="'{{ route('auth.google') }}?plan=' + selectedPlan + '&cycle=' + billingCycle + '&account_type=' + (accountType || 'center')" 
+                               class="text-brand-secondary font-black hover:underline inline-flex items-center gap-1 ms-1">
+                                {{ __('auth.registration_steps.signup_with_google_link') }}
+                            </a>
                         </p>
                     </div>
 
