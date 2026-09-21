@@ -35,23 +35,24 @@ class ContentSecurityPolicy
             // مؤقتاً لأن القوالب تعتمد عليها (خطة لاحقة: نقلها إلى Vite + nonce).
             $cdn = 'cdn.jsdelivr.net cdnjs.cloudflare.com unpkg.com';
             $fonts = 'fonts.googleapis.com fonts.gstatic.com fonts.bunny.net';
-            // Zoom Meeting SDK domains (script, connect/media/frame for iframe)
+            // Zoom & Jitsi Classroom video domains
             $zoom = 'source.zoom.us *.zoom.us *.zoomgov.com ws: wss:';
+            $jitsi = 'https://meet.jit.si https://*.jitsi.net wss://meet.jit.si wss://*.jitsi.net';
 
             $csp = [
                 "default-src 'self'",
                 // unsafe-eval مطلوب لـ Alpine.js (يستخدم new Function() لتقييم التعبيرات)
                 // خطة لاحقة: الانتقال إلى @alpinejs/csp build لإزالة unsafe-eval
-                "script-src 'self' 'unsafe-inline' 'unsafe-eval' {$cdn} https://static.cloudflareinsights.com https://source.zoom.us",
-                "style-src 'self' 'unsafe-inline' {$cdn} {$fonts} https://source.zoom.us",
+                "script-src 'self' 'unsafe-inline' 'unsafe-eval' {$cdn} https://static.cloudflareinsights.com https://source.zoom.us https://meet.jit.si",
+                "style-src 'self' 'unsafe-inline' {$cdn} {$fonts} https://source.zoom.us https://meet.jit.si",
                 "font-src 'self' data: {$cdn} {$fonts}",
                 "img-src 'self' data: blob: https:",
-                "connect-src 'self' https://ipapi.co https://get.geojs.io https://cloudflareinsights.com https://source.zoom.us wss://*.zoom.us wss://*.zoomgov.com",
-                "media-src 'self' https://assets.mixkit.co https://source.zoom.us",
+                "connect-src 'self' https://ipapi.co https://get.geojs.io https://cloudflareinsights.com https://source.zoom.us wss://*.zoom.us wss://*.zoomgov.com {$jitsi}",
+                "media-src 'self' blob: data: https://assets.mixkit.co https://source.zoom.us https://meet.jit.si",
                 "worker-src 'self' blob:",
                 "manifest-src 'self'",
                 "frame-ancestors 'none'",
-                "frame-src 'self' https://www.youtube.com https://player.vimeo.com https://js.stripe.com https://source.zoom.us",
+                "frame-src 'self' https://www.youtube.com https://player.vimeo.com https://js.stripe.com https://source.zoom.us https://meet.jit.si",
                 "base-uri 'self'",
                 "form-action 'self' https://taalimu.com https://*.taalimu.com",
             ];

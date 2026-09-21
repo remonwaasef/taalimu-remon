@@ -53,23 +53,27 @@
     <div class="row g-3">
         {{-- Video Canvas Area (70%) --}}
         <div class="col-lg-8">
-            <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100" style="background:#090d16; min-height: 560px;">
-                <div class="card-body p-0 position-relative d-flex flex-column" style="min-height: 560px;">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100" style="background:#090d16 !important; min-height: 580px;">
+                <div class="card-body p-0 position-relative d-flex flex-column h-100" style="min-height: 580px; background:#090d16 !important;">
                     
                     @if($onlineClass->status === 'in_progress')
                         @if($onlineClass->platform === 'zoom' && $joinContext)
                             {{-- Zoom Meeting SDK Embed --}}
-                            <div id="zmmtg-root" style="width:100%; height:100%; min-height: 560px;"></div>
+                            <div id="zmmtg-root" style="width:100%; height:100%; min-height: 580px;"></div>
                         @else
-                            {{-- In-App Embedded Jitsi Studio --}}
-                            <div id="classroom-video-container" style="width:100%; height:100%; min-height: 560px; flex: 1;">
-                                <div class="d-flex align-items-center justify-content-center h-100 text-white p-4">
-                                    <div class="text-center">
-                                        <div class="spinner-border text-emerald-500 mb-3" role="status"></div>
-                                        <h5 class="fw-bold">جاري تحميل استوديو البث المباشر...</h5>
-                                        <p class="text-muted small">يتم تهيئة الكاميرا والصوت وشاشة المشاركة تلقائياً</p>
-                                    </div>
-                                </div>
+                            {{-- In-App Embedded Video Studio --}}
+                            @php
+                                $roomName = 'taalimu_' . $onlineClass->tenant_id . '_' . ($onlineClass->uuid ?? $onlineClass->id);
+                                $userName = auth()->user()->name . ' (المدرس)';
+                                $jitsiUrl = "https://meet.jit.si/{$roomName}#config.defaultLanguage='ar'&config.prejoinPageEnabled=false&config.startWithAudioMuted=false&config.startWithVideoMuted=false&config.toolbarButtons=['camera','microphone','desktop','fullscreen','fodeviceselection','hangup','profile','recording','livestreaming','settings','raisehand','videoquality','filmstrip','tileview','mute-everyone']&userInfo.displayName=" . urlencode($userName);
+                            @endphp
+                            <div id="classroom-video-container" class="w-100 h-100 d-flex flex-column flex-grow-1" style="min-height: 580px; background:#090d16 !important;">
+                                <iframe src="{{ $jitsiUrl }}" 
+                                        allow="camera *; microphone *; display-capture *; fullscreen *; autoplay *; clipboard-write *;" 
+                                        style="width: 100%; height: 100%; min-height: 580px; border: 0; background:#090d16;" 
+                                        class="w-100 flex-grow-1"
+                                        id="jitsiClassroomIframe">
+                                </iframe>
                             </div>
                         @endif
                     @else
@@ -305,66 +309,8 @@
 @endif
 
 <script>
-let jitsiApi = null;
-
-// Initialize Embedded Classroom Studio
-function initInAppStudio() {
-    const container = document.querySelector('#classroom-video-container');
-    if (!container || typeof JitsiMeetExternalAPI === 'undefined') return;
-
-    container.innerHTML = ''; // clear loading spinner
-
-    const tenantId = '{{ $onlineClass->tenant_id }}';
-    const classUuid = '{{ $onlineClass->uuid ?? $onlineClass->id }}';
-    const roomName = 'taalimu_' + tenantId + '_' + classUuid;
-    const instructorName = '{{ auth()->user()->name }} (المدرس)';
-
-    const domain = 'meet.jit.si';
-    const options = {
-        roomName: roomName,
-        width: '100%',
-        height: '100%',
-        parentNode: container,
-        userInfo: {
-            displayName: instructorName,
-            email: '{{ auth()->user()->email }}'
-        },
-        configOverwrite: {
-            startWithAudioMuted: false,
-            startWithVideoMuted: false,
-            prejoinPageEnabled: false,
-            disableDeepLinking: true,
-            enableWelcomePage: false,
-            defaultLanguage: 'ar',
-            toolbarButtons: [
-                'camera', 'microphone', 'desktop', 'fullscreen',
-                'fodeviceselection', 'hangup', 'profile',
-                'recording', 'livestreaming', 'etherpad', 'sharedvideo',
-                'settings', 'raisehand', 'videoquality', 'filmstrip',
-                'tileview', 'select-background', 'stats', 'mute-everyone'
-            ]
-        },
-        interfaceConfigOverwrite: {
-            SHOW_JITSI_WATERMARK: false,
-            SHOW_WATERMARK_FOR_GUESTS: false,
-            SHOW_BRAND_WATERMARK: false,
-            DEFAULT_BACKGROUND: '#090d16',
-            TOOLBAR_ALWAYS_VISIBLE: true
-        }
-    };
-
-    try {
-        jitsiApi = new JitsiMeetExternalAPI(domain, options);
-        jitsiApi.addEventListener('videoConferenceLeft', () => {
-            console.log('Classroom conference ended');
-        });
-    } catch(err) {
-        console.error('Failed to init classroom studio:', err);
-    }
-}
-
 function toggleClassroomFullscreen() {
-    const elem = document.querySelector('#classroom-video-container') || document.documentElement;
+    const elem = document.querySelector('#classroom-video-container') || document.querySelector('#jitsiClassroomIframe') || document.documentElement;
     if (!document.fullscreenElement) {
         elem.requestFullscreen().catch(err => alert('تعذر تفعيل وضع ملء الشاشة: ' + err.message));
     } else {
@@ -676,11 +622,6 @@ function escapeHtml(str) {
 // Background polling for real-time interaction during live class
 document.addEventListener('DOMContentLoaded', function() {
     const isLive = '{{ $onlineClass->status }}' === 'in_progress';
-    const isZoom = '{{ $onlineClass->platform }}' === 'zoom';
-
-    if (isLive && !isZoom) {
-        initInAppStudio();
-    }
 
     if (isLive) {
         // Poll for new messages, questions, and hand raises every 4 seconds
