@@ -24,9 +24,8 @@
                     <span class="badge {{ $onlineClass->status === 'in_progress' ? 'bg-danger animate__animated animate__pulse animate__infinite' : ($onlineClass->status === 'scheduled' ? 'bg-warning text-dark' : 'bg-secondary') }} rounded-pill px-3 py-1 text-xs">
                         <i class="fas {{ $onlineClass->status === 'in_progress' ? 'fa-circle' : 'fa-clock' }} me-1"></i>
                         {{ __('instructor::online_classes.'.$onlineClass->status) }}
-                    </span>
-                    <span class="badge {{ $isZoom ? 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/30 dark:text-blue-300' : 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-300' }} border rounded-pill px-2.5 py-1 text-xs font-bold font-arabic">
-                        <i class="{{ $isZoom ? 'fas fa-video' : 'fab fa-google' }} me-1"></i> {{ $isZoom ? 'قاعة Zoom' : 'Google Meet' }}
+                            <span class="badge bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-300 border rounded-pill px-2.5 py-1 text-xs font-bold font-arabic">
+                        <i class="fas fa-satellite-dish me-1"></i> استوديو تعليمو المدمج
                     </span>
                 </div>
                 <div class="d-flex flex-wrap gap-3 text-muted small mt-1">
@@ -43,9 +42,9 @@
                     <i class="fas fa-play me-1.5"></i> بدء الحصة
                 </button>
             @else
-                <a href="{{ $meetingUrl }}" target="_blank" onclick="window.open(this.href, '_blank'); return false;" class="btn btn-outline-success rounded-pill px-3.5 py-2 fw-bold text-xs d-inline-flex align-items-center gap-1.5">
-                    <i class="fas fa-external-link-alt"></i> فتح القاعة ↗
-                </a>
+                <button type="button" onclick="toggleClassroomFullscreen()" class="btn btn-outline-secondary rounded-pill px-3.5 py-2 fw-bold text-xs d-inline-flex align-items-center gap-1.5">
+                    <i class="fas fa-expand"></i> تكبير الشاشة
+                </button>
                 <button class="btn btn-danger rounded-pill px-4 py-2 fw-black shadow-sm" id="btnEnd" onclick="endClass()">
                     <i class="fas fa-stop me-1.5"></i> إنهاء الحصة
                 </button>
@@ -57,85 +56,62 @@
     <div class="row g-3">
         {{-- Video Canvas / Live Broadcast Hub (70%) --}}
         <div class="col-lg-8">
-            <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800" style="min-height: 560px;">
-                <div class="card-body p-4 p-lg-5 d-flex flex-column justify-content-between h-100">
-                    
-                    @if($onlineClass->status === 'in_progress')
-                        {{-- Live In-Progress Classroom Hub --}}
-                        <div>
-                            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-4 pb-3 border-bottom border-slate-100 dark:border-slate-800">
-                                <div class="d-flex align-items-center gap-2.5">
-                                    <div class="w-12 h-12 rounded-2xl {{ $isZoom ? 'bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400' : 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400' }} d-flex align-items-center justify-center fs-4 shadow-xs" style="width: 48px; height: 48px;">
-                                        <i class="{{ $isZoom ? 'fas fa-video' : 'fab fa-google' }}"></i>
-                                    </div>
-                                    <div>
-                                        <h5 class="fw-black text-slate-900 dark:text-slate-100 font-arabic mb-0.5">
-                                            {{ $isZoom ? 'قاعة Zoom المباشرة' : 'قاعة Google Meet المباشرة' }}
-                                        </h5>
-                                        <p class="text-xs text-muted mb-0 font-arabic">بث مباشر فائق الجودة والسرعة متصل بطلابك</p>
-                                    </div>
-                                </div>
-                                <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 rounded-pill px-3 py-1.5 text-xs font-bold animate__animated animate__pulse animate__infinite">
-                                    <i class="fas fa-broadcast-tower me-1"></i> البث قيد الانعقاد الآن
-                                </span>
-                            </div>
-
-                            {{-- Hero Action Center --}}
-                            <div class="p-4 p-lg-5 rounded-3xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/80 text-center my-3">
-                                <div class="w-16 h-16 mx-auto rounded-3xl {{ $isZoom ? 'bg-blue-600 text-white' : 'bg-emerald-600 text-white' }} d-flex align-items-center justify-center fs-2 mb-3 shadow-md">
-                                    <i class="{{ $isZoom ? 'fas fa-video' : 'fab fa-google' }}"></i>
-                                </div>
-                                <h4 class="fw-black text-slate-900 dark:text-slate-100 font-arabic mb-2">قاعة الشرح المباشر جاهزة</h4>
-                                <p class="text-xs text-slate-500 dark:text-slate-400 font-arabic max-w-md mx-auto mb-4 leading-relaxed">
-                                    اضغط على الزر أدناه لفتح قاعة الشرح في نافذة كاملة الشاشة مكبّرة بدقة HD مع دعم الكاميرا، المايكروفون، ومشاركة الشاشة.
-                                </p>
-
-                                <a href="{{ $meetingUrl }}" target="_blank" 
-                                   onclick="window.open(this.href, '_blank'); return false;"
-                                   class="btn {{ $isZoom ? 'btn-primary' : 'btn-success' }} btn-lg rounded-pill px-5 py-3 fw-black shadow-lg d-inline-flex align-items-center gap-2 text-sm">
-                                    <i class="fas fa-external-link-alt"></i>
-                                    <span>فتح قاعة الشرح (بكامل الشاشة) ↗</span>
+            @if($onlineClass->status === 'in_progress')
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100 bg-slate-950 d-flex flex-column border border-slate-800" style="min-height: 600px;">
+                    {{-- Video Studio Header Bar --}}
+                    <div class="px-4 py-2.5 bg-slate-900 border-bottom border-slate-800 d-flex flex-wrap align-items-center justify-content-between gap-2">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge bg-danger rounded-pill px-3 py-1.5 text-xs font-bold animate__animated animate__pulse animate__infinite">
+                                <i class="fas fa-circle me-1" style="font-size: 8px;"></i> بث مباشر داخل المنصة
+                            </span>
+                            <span class="text-xs text-slate-200 font-arabic fw-bold">{{ $onlineClass->title }}</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <button type="button" onclick="toggleClassroomFullscreen()" class="btn btn-dark btn-sm rounded-pill px-3 text-xs border-slate-700 text-slate-200">
+                                <i class="fas fa-expand me-1"></i> تكبير الشاشة
+                            </button>
+                            @if($meetingUrl && !str_contains($meetingUrl, 'meet.jit.si'))
+                                <a href="{{ $meetingUrl }}" target="_blank" class="btn btn-outline-light btn-sm rounded-pill px-2.5 text-[11px] border-slate-700 text-slate-400 hover:text-white" title="فتح كبديل خارجي">
+                                    <i class="fas fa-external-link-alt me-1"></i> رابط خارجي بديل
                                 </a>
-                            </div>
+                            @endif
                         </div>
+                    </div>
 
-                        {{-- Link Box & Actions --}}
-                        <div class="pt-3 border-top border-slate-100 dark:border-slate-800">
-                            <label class="block text-xs font-bold text-slate-600 dark:text-slate-300 font-arabic mb-1.5">
-                                <i class="fas fa-link me-1 text-emerald-600"></i> رابط دخول الحصة لطلابك:
-                            </label>
-                            <div class="input-group">
-                                <input type="text" id="liveMeetingUrlInput" value="{{ $meetingUrl }}" readonly dir="ltr" class="form-control rounded-start-pill px-3 text-xs font-mono bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700">
-                                <button type="button" onclick="copyMeetingUrl()" id="btnCopyMeetingUrl" class="btn btn-primary rounded-end-pill px-4 fw-bold text-xs d-flex align-items-center gap-1.5" style="background: var(--primary-color);">
-                                    <i class="fas fa-copy"></i>
-                                    <span id="copyUrlText">نسخ الرابط</span>
-                                </button>
-                            </div>
-                            <div class="d-flex flex-wrap justify-content-between align-items-center mt-2 text-xs text-muted">
-                                <span><i class="fas fa-info-circle text-info me-1"></i> ينتقل الطلاب تلقائياً لهذا الرابط فور ضغطهم على "دخول الحصة" من حساباتهم.</span>
-                            </div>
-                        </div>
-                    @else
-                        {{-- Waiting / Ready to Start Screen --}}
-                        <div class="d-flex align-items-center justify-content-center h-100 text-center my-auto py-5">
-                            <div class="max-w-md mx-auto">
-                                <div class="w-20 h-20 mx-auto rounded-circle bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400 d-flex align-items-center justify-content-center fs-1 mb-3">
-                                    <i class="fas fa-chalkboard-teacher"></i>
-                                </div>
-                                <h4 class="fw-black text-slate-900 dark:text-slate-100 font-arabic mb-2">الحصة جاهزة للبدء</h4>
-                                <p class="text-xs text-slate-500 dark:text-slate-400 font-arabic mb-4 leading-relaxed">
-                                    اضغط على زر "بدء الحصة" لفتح قاعة Google Meet أو Zoom وتفعيل الحضور التلقائي للطلاب.
-                                </p>
-                                <button type="button" onclick="startClass()" class="btn btn-success btn-lg rounded-pill px-5 py-3 fw-black shadow-lg d-inline-flex align-items-center gap-2">
-                                    <i class="fas fa-play"></i>
-                                    <span>بدء الحصة الآن 🚀</span>
-                                </button>
-                            </div>
-                        </div>
-                    @endif
+                    {{-- Embedded Video Container --}}
+                    <div class="flex-grow-1 position-relative bg-black d-flex align-items-center justify-content-center" id="inapp-video-wrapper" style="min-height: 520px;">
+                        <div id="classroom-video-container" class="w-100 h-100"></div>
+                    </div>
 
+                    {{-- Bottom Bar with Student Link --}}
+                    <div class="px-3 py-2 bg-slate-900 border-top border-slate-800 d-flex flex-wrap align-items-center justify-content-between gap-2 text-xs">
+                        <div class="d-flex align-items-center gap-2 text-slate-300">
+                            <i class="fas fa-link text-emerald-400"></i>
+                            <span>رابط دخول الطلاب للحصة:</span>
+                            <code class="text-slate-300 font-mono text-xs px-2 py-0.5 rounded bg-slate-800" id="studentJoinLinkUrl">{{ url()->current() }}</code>
+                        </div>
+                        <button type="button" onclick="copyStudentLink()" class="btn btn-sm btn-primary rounded-pill px-3 text-xs fw-bold" style="background: var(--primary-color);">
+                            <i class="fas fa-copy me-1"></i> <span id="copyStudentLinkText">نسخ الرابط</span>
+                        </button>
+                    </div>
                 </div>
-            </div>
+            @else
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800" style="min-height: 560px;">
+                    <div class="card-body p-4 p-lg-5 d-flex flex-column justify-content-center align-items-center text-center h-100">
+                        <div class="w-20 h-20 mx-auto rounded-circle bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400 d-flex align-items-center justify-center fs-1 mb-3">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <h4 class="fw-black text-slate-900 dark:text-slate-100 font-arabic mb-2">استوديو الحصة الافتراضية المدمج</h4>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 font-arabic mb-4 max-w-md mx-auto leading-relaxed">
+                            اضغط على "بدء الحصة" لتشغيل الكاميرا والميكروفون فوراً داخل هذه الشاشة ومشاركة الشاشة مع طلابك دون مغادرة المنصة.
+                        </p>
+                        <button type="button" onclick="startClass()" class="btn btn-success btn-lg rounded-pill px-5 py-3 fw-black shadow-lg d-inline-flex align-items-center gap-2">
+                            <i class="fas fa-play"></i>
+                            <span>بدء الحصة الآن في المنصة 🚀</span>
+                        </button>
+                    </div>
+                </div>
+            @endif
         </div>
 
         {{-- Interactive Classroom Hub (Right - 30%) --}}
@@ -333,12 +309,123 @@
 </div>
 @endsection
 
+@push('styles')
+<style>
+    #classroom-video-container iframe {
+        width: 100% !important;
+        height: 100% !important;
+        min-height: 520px !important;
+        border: 0 !important;
+        display: block !important;
+    }
+</style>
+@endpush
+
 @push('scripts')
+@if($onlineClass->status === 'in_progress')
+<script src="https://meet.jit.si/external_api.js"></script>
+@endif
 @if($joinContext && $onlineClass->status === 'in_progress')
 <script src="https://source.zoom.us/2.18.0/zoom-meeting-2.18.0.min.js"></script>
 @endif
 
 <script>
+let jitsiApiInstance = null;
+
+function initInAppClassroom() {
+    const container = document.getElementById('classroom-video-container');
+    if (!container || typeof JitsiMeetExternalAPI === 'undefined') return;
+
+    const roomName = 'taalimu_live_{{ $onlineClass->tenant_id }}_{{ $onlineClass->id }}_{{ substr(md5($onlineClass->id . "taalimu_secure_hash"), 0, 8) }}';
+    const domain = 'meet.jit.si';
+
+    const options = {
+        roomName: roomName,
+        width: '100%',
+        height: '100%',
+        parentNode: container,
+        lang: 'ar',
+        userInfo: {
+            displayName: @json(auth()->user()->name ?? 'المدرس'),
+            email: @json(auth()->user()->email ?? '')
+        },
+        configOverwrite: {
+            prejoinPageEnabled: false,
+            prejoinConfig: { enabled: false },
+            startWithAudioMuted: false,
+            startWithVideoMuted: false,
+            defaultLanguage: 'ar',
+            enableWelcomePage: false,
+            enableClosePage: false,
+            disableDeepLinking: true,
+            disableInviteFunctions: true,
+            doNotStoreRoom: true,
+            hideConferenceSubject: false,
+            toolbarButtons: [
+                'camera',
+                'microphone',
+                'desktop',
+                'chat',
+                'participants-pane',
+                'raisehand',
+                'mute-everyone',
+                'tileview',
+                'toggle-camera',
+                'videoquality',
+                'whiteboard',
+                'fullscreen',
+                'settings'
+            ]
+        },
+        interfaceConfigOverwrite: {
+            SHOW_JITSI_WATERMARK: false,
+            SHOW_WATERMARK_FOR_GUESTS: false,
+            SHOW_BRAND_WATERMARK: false,
+            SHOW_POWERED_BY: false,
+            DEFAULT_BACKGROUND: '#0b0f19',
+            DEFAULT_REMOTE_DISPLAY_NAME: 'طالب',
+            TOOLBAR_ALWAYS_VISIBLE: true,
+            DISABLE_JOIN_LEAVE_NOTIFICATIONS: false,
+            MOBILE_APP_PROMO: false,
+            HIDE_INVITE_MORE_HEADER: true
+        }
+    };
+
+    try {
+        jitsiApiInstance = new JitsiMeetExternalAPI(domain, options);
+    } catch(err) {
+        console.error('Failed to init classroom:', err);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    if (typeof JitsiMeetExternalAPI !== 'undefined') {
+        initInAppClassroom();
+    }
+});
+
+function toggleClassroomFullscreen() {
+    const elem = document.getElementById('inapp-video-wrapper') || document.getElementById('classroom-video-container');
+    if (!elem) return;
+    if (!document.fullscreenElement) {
+        elem.requestFullscreen().catch(err => console.warn(err));
+    } else {
+        document.exitFullscreen();
+    }
+}
+
+function copyStudentLink() {
+    const text = document.getElementById('studentJoinLinkUrl')?.innerText || window.location.href;
+    navigator.clipboard.writeText(text).then(() => {
+        const btnText = document.getElementById('copyStudentLinkText');
+        if (btnText) {
+            const orig = btnText.innerText;
+            btnText.innerText = 'تم النسخ ✓';
+            setTimeout(() => btnText.innerText = orig, 2000);
+        }
+    });
+}
+
 function copyMeetingUrl() {
     const input = document.getElementById('liveMeetingUrlInput');
     if (!input) return;

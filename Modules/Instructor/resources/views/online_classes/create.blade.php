@@ -54,8 +54,11 @@
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('instructor::online_classes.stream_platform') }} <span class="text-danger">*</span></label>
                                 <select name="platform" id="platformSelect" class="form-select rounded-pill px-3 @error('platform') is-invalid @enderror" required>
-                                    <option value="manual" {{ old('platform', 'manual') == 'manual' ? 'selected' : '' }}>
-                                        Google Meet أو Zoom (رابط مباشر فائق الجودة) — موصى به ⭐
+                                    <option value="in_app" {{ old('platform', 'in_app') == 'in_app' ? 'selected' : '' }}>
+                                        استوديو تعليمو المدمج في المنصة (فيديو وشاشة وشات) — موصى به ⭐
+                                    </option>
+                                    <option value="manual" {{ old('platform') == 'manual' ? 'selected' : '' }}>
+                                        Google Meet أو Zoom (رابط خارجي)
                                     </option>
                                     <option value="zoom" {{ old('platform') == 'zoom' ? 'selected' : '' }}>
                                         Zoom API مدمج {{ !($zoomConfigured ?? false) ? '(يتطلب مفاتيح API في السيرفر)' : '(مدمج مع التسجيل التلقائي)' }}
@@ -63,7 +66,7 @@
                                 </select>
                                 @error('platform') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                 <div class="form-text" id="platformHelp">
-                                    <span class="text-success"><i class="fas fa-check-circle me-1"></i> يتم فتح قاعة الشرح بكامل الشاشة مباشرة للطلاب والمدرس مع الحضور التلقائي.</span>
+                                    <span class="text-success" id="inAppNotice"><i class="fas fa-check-circle me-1"></i> يتم تشغيل استوديو البث مباشرة داخل المنصة مع الكاميرا والمايك ومشاركة الشاشة دون مغادرة الصفحة.</span>
                                 </div>
                             </div>
 
