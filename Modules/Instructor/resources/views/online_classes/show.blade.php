@@ -78,9 +78,72 @@
                         </div>
                     </div>
 
+                    {{-- Camera & Microphone Permission Trigger Banner --}}
+                    <div id="permissionNoticeBanner" class="p-3 bg-slate-900 border-bottom border-slate-800 d-flex flex-wrap align-items-center justify-content-between gap-2">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="w-8 h-8 rounded-circle bg-amber-500/20 text-amber-400 d-flex align-items-center justify-content-center text-sm shrink-0">
+                                <i class="fas fa-video"></i>
+                            </span>
+                            <div>
+                                <span class="text-xs fw-bold text-slate-100 font-arabic d-block">إذن تشغيل الكاميرا والميكروفون</span>
+                                <span class="text-[11px] text-slate-400 font-arabic">اضغط على الزر أدناه لإظهار نافذة المتصفح والموافقة على تشغيل الكاميرا والصوت</span>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <button type="button" onclick="triggerBrowserPermissionPrompt()" id="btnRequestPermission" class="btn btn-warning btn-sm rounded-pill px-3.5 py-1.5 fw-black text-xs shadow-sm d-inline-flex align-items-center gap-1.5">
+                                <i class="fas fa-hand-pointer"></i>
+                                <span id="permissionBtnText">إظهار نافذة الإذن والضغط عليها 📹</span>
+                            </button>
+                            <button type="button" onclick="toggleUnblockInstructions()" class="btn btn-outline-light btn-sm rounded-pill px-2.5 py-1.5 text-xs text-slate-300">
+                                <i class="fas fa-question-circle me-1"></i> الكاميرا محظورة؟
+                            </button>
+                        </div>
+                    </div>
+
+                    {{-- Interactive Unblock Helper Popup --}}
+                    <div id="unblockGuideBox" class="p-3 bg-slate-900 border-bottom border-amber-500/30 d-none text-xs font-arabic text-slate-200">
+                        <div class="d-flex align-items-start gap-2.5">
+                            <i class="fas fa-exclamation-triangle text-amber-400 fs-5 mt-0.5 shrink-0"></i>
+                            <div class="flex-grow-1">
+                                <span class="fw-bold text-amber-400 d-block mb-1">كيفية تفعيل الكاميرا إذا كانت محظورة في شريط المتصفح:</span>
+                                <ol class="mb-2 pe-3 ps-0 text-slate-300 leading-relaxed text-[11px]">
+                                    <li class="mb-1">انظر إلى <strong>أعلى شريط المتصفح (شريط العنوان)</strong> بجانب رابط <code>ra3yc.taalimu.com</code>.</li>
+                                    <li class="mb-1">اضغط على <strong>أيقونة الكاميرا عليها علامة خط أحمر 🚫</strong> أو <strong>أيقونة القفل / الإعدادات 🔒</strong>.</li>
+                                    <li class="mb-1">اختر <strong>السماح دائماً (Always allow)</strong> للكاميرا والميكروفون ثم اضغط <strong>تم (Done)</strong>.</li>
+                                    <li>اضغط على <strong>F5</strong> أو الزر أدناه لإعادة تشغيل الكاميرا فوراً!</li>
+                                </ol>
+                                <button type="button" onclick="triggerBrowserPermissionPrompt()" class="btn btn-sm btn-primary text-white rounded-pill px-3 text-[11px] fw-bold" style="background: var(--primary-color);">
+                                    <i class="fas fa-redo me-1"></i> إعادة طلب الإذن بعد السماح
+                                </button>
+                            </div>
+                            <button type="button" onclick="toggleUnblockInstructions()" class="btn-close btn-close-white text-xs"></button>
+                        </div>
+                    </div>
+
                     {{-- Embedded Video Container --}}
-                    <div class="flex-grow-1 position-relative bg-black d-flex align-items-center justify-content-center" id="inapp-video-wrapper" style="min-height: 520px;">
+                    <div class="flex-grow-1 position-relative bg-black d-flex align-items-center justify-content-center overflow-hidden" id="inapp-video-wrapper" style="min-height: 520px;">
+                        {{-- Native Local Camera Stream Video --}}
+                        <video id="nativeStudioVideo" autoplay playsinline muted class="w-100 h-100 object-fit-cover position-absolute top-0 start-0 d-none" style="z-index: 5;"></video>
+
+                        {{-- In-App Jitsi Container --}}
                         <div id="classroom-video-container" class="w-100 h-100"></div>
+
+                        {{-- Floating Native Controls Bar --}}
+                        <div id="nativeStudioControls" class="position-absolute bottom-0 start-50 translate-middle-x mb-3 d-flex align-items-center gap-2 px-3 py-2 rounded-pill bg-slate-900/90 border border-slate-700/80 shadow-2xl backdrop-blur-md d-none" style="z-index: 10;">
+                            <button type="button" onclick="toggleNativeMic()" id="btnNativeMic" class="btn btn-sm btn-dark rounded-circle d-flex align-items-center justify-content-center text-xs" style="width: 36px; height: 36px;" title="كتم / تشغيل الميكروفون">
+                                <i class="fas fa-microphone"></i>
+                            </button>
+                            <button type="button" onclick="toggleNativeCam()" id="btnNativeCam" class="btn btn-sm btn-dark rounded-circle d-flex align-items-center justify-content-center text-xs" style="width: 36px; height: 36px;" title="إيقاف / تشغيل الكاميرا">
+                                <i class="fas fa-video"></i>
+                            </button>
+                            <button type="button" onclick="toggleNativeScreenShare()" id="btnNativeScreen" class="btn btn-sm btn-outline-info rounded-pill px-3 text-xs fw-bold d-flex align-items-center gap-1.5" title="مشاركة الشاشة">
+                                <i class="fas fa-desktop"></i>
+                                <span>مشاركة الشاشة</span>
+                            </button>
+                            <button type="button" onclick="toggleClassroomFullscreen()" class="btn btn-sm btn-outline-light rounded-circle d-flex align-items-center justify-content-center text-xs" style="width: 36px; height: 36px;" title="ملء الشاشة">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
                     </div>
 
                     {{-- Bottom Bar with Student Link --}}
@@ -403,6 +466,105 @@ document.addEventListener('DOMContentLoaded', function() {
         initInAppClassroom();
     }
 });
+
+window.nativeStream = null;
+
+async function triggerBrowserPermissionPrompt() {
+    const btn = document.getElementById('btnRequestPermission');
+    const btnText = document.getElementById('permissionBtnText');
+    const guideBox = document.getElementById('unblockGuideBox');
+
+    if (btnText) btnText.innerText = 'جاري طلب الإذن من المتصفح...';
+
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ 
+            video: { width: { ideal: 1280 }, height: { ideal: 720 } }, 
+            audio: true 
+        });
+
+        window.nativeStream = stream;
+
+        if (btn) {
+            btn.className = 'btn btn-success btn-sm rounded-pill px-3.5 py-1.5 fw-black text-xs shadow-sm';
+            btn.innerHTML = '<i class="fas fa-check-circle me-1"></i> تم السماح وتفعيل الكاميرا ✓';
+        }
+        if (guideBox) guideBox.classList.add('d-none');
+
+        const videoElem = document.getElementById('nativeStudioVideo');
+        const controlsElem = document.getElementById('nativeStudioControls');
+        const jitsiContainer = document.getElementById('classroom-video-container');
+
+        if (videoElem) {
+            videoElem.srcObject = stream;
+            videoElem.classList.remove('d-none');
+            videoElem.play();
+        }
+        if (controlsElem) controlsElem.classList.remove('d-none');
+        if (jitsiContainer) jitsiContainer.style.display = 'none';
+
+        if (window.jitsiApiInstance) {
+            try { window.jitsiApiInstance.executeCommand('toggleVideo'); } catch(e) {}
+        }
+
+    } catch (err) {
+        console.error('Permission error:', err);
+        if (btnText) btnText.innerText = 'إظهار نافذة الإذن والضغط عليها 📹';
+        if (guideBox) {
+            guideBox.classList.remove('d-none');
+        }
+    }
+}
+
+function toggleUnblockInstructions() {
+    const guideBox = document.getElementById('unblockGuideBox');
+    if (guideBox) {
+        guideBox.classList.toggle('d-none');
+    }
+}
+
+function toggleNativeMic() {
+    if (!window.nativeStream) return;
+    const audioTrack = window.nativeStream.getAudioTracks()[0];
+    if (audioTrack) {
+        audioTrack.enabled = !audioTrack.enabled;
+        const btn = document.getElementById('btnNativeMic');
+        if (btn) {
+            btn.innerHTML = audioTrack.enabled ? '<i class="fas fa-microphone"></i>' : '<i class="fas fa-microphone-slash text-danger"></i>';
+            btn.className = audioTrack.enabled ? 'btn btn-sm btn-dark rounded-circle text-xs' : 'btn btn-sm btn-danger rounded-circle text-xs';
+        }
+    }
+}
+
+function toggleNativeCam() {
+    if (!window.nativeStream) return;
+    const videoTrack = window.nativeStream.getVideoTracks()[0];
+    if (videoTrack) {
+        videoTrack.enabled = !videoTrack.enabled;
+        const btn = document.getElementById('btnNativeCam');
+        if (btn) {
+            btn.innerHTML = videoTrack.enabled ? '<i class="fas fa-video"></i>' : '<i class="fas fa-video-slash text-danger"></i>';
+            btn.className = videoTrack.enabled ? 'btn btn-sm btn-dark rounded-circle text-xs' : 'btn btn-sm btn-danger rounded-circle text-xs';
+        }
+    }
+}
+
+async function toggleNativeScreenShare() {
+    try {
+        const screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+        const videoElem = document.getElementById('nativeStudioVideo');
+        if (videoElem) {
+            videoElem.srcObject = screenStream;
+            videoElem.play();
+        }
+        screenStream.getVideoTracks()[0].onended = () => {
+            if (window.nativeStream && videoElem) {
+                videoElem.srcObject = window.nativeStream;
+            }
+        };
+    } catch(err) {
+        console.log('Screen share cancelled:', err);
+    }
+}
 
 function toggleClassroomFullscreen() {
     const elem = document.getElementById('inapp-video-wrapper') || document.getElementById('classroom-video-container');
