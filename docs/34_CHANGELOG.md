@@ -9,12 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- **Registration Flow Separation (Google Fast vs Manual) (2026-09-21)**:
-  - Redesigned Step 1 of the tenant/instructor onboarding page (`resources/views/auth/register.blade.php`) with explicit visual separation between one-click Google fast registration and manual email registration.
-  - Added dedicated Google signup card highlighting instant passwordless signup (`auth.registration_steps.fast_google_signup`).
-  - Added clear divider and badge for 2-step manual email registration, updating continue button to explicitly guide users to personal credentials in step 2 (`auth.registration_steps.next_manual_step2`).
-  - Added backlink to Google registration from Step 2 for enhanced user flexibility.
-  - Added localized strings across all supported languages (`ar`, `en`, `fr`).
+- **Registration Flow Polish & Minimalist Separation (2026-09-21)**:
+  - Streamlined Step 1 of the onboarding page (`resources/views/auth/register.blade.php`) into an ultra-clean, minimalist presentation.
+  - Removed cluttered cards, badges, and explanatory clutter in favor of a sleek Google signup button paired with a subtle, clear divider (`أو بالبريد الإلكتروني` / `or with email`).
+  - Restored clean typography and button states for an uncluttered, high-converting SaaS onboarding experience.
 
 - **Default Meeting Link for Instructors & Live Classes (2026-09-21)**:
   - Added migration `2026_09_21_003000_add_default_meeting_link_to_instructors_table.php` adding `default_meeting_link` column to `instructors`.
