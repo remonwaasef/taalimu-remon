@@ -16,7 +16,6 @@ class OperationIssue extends Model
 
     protected $fillable = [
         'uuid',
-        'tenant_id',
         'user_id',
         'user_agent',
         'ip_address',

@@ -11,7 +11,6 @@ class OnlineClass extends Model
     use \App\Traits\BelongsToTenant, HasFactory;
 
     protected $fillable = [
-        'tenant_id',
         'instructor_id',
         'course_id',
         'title',

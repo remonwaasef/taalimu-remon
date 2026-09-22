@@ -10,7 +10,6 @@ class Waitlist extends Model
     use \App\Traits\BelongsToTenant, HasFactory;
 
     protected $fillable = [
-        'tenant_id',
         'course_id',
         'user_id',
         'name',

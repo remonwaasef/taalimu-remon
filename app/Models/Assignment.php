@@ -10,7 +10,6 @@ class Assignment extends Model
     use \App\Traits\BelongsToTenant, HasFactory;
 
     protected $fillable = [
-        'tenant_id',
         'lesson_id',
         'title',
         'description',

@@ -9,7 +9,6 @@ class VideoProgress extends Model
     use \App\Traits\BelongsToTenant;
 
     protected $fillable = [
-        'tenant_id',
         'recording_id',
         'user_id',
         'last_position_seconds',

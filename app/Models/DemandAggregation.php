@@ -12,7 +12,6 @@ class DemandAggregation extends Model
     use HasFactory, \App\Traits\BelongsToTenant;
 
     protected $fillable = [
-        'tenant_id',
         'subject',
         'level',
         'demand_count',

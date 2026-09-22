@@ -10,7 +10,6 @@ class Commission extends Model
     use \App\Traits\BelongsToTenant, HasFactory;
 
     protected $fillable = [
-        'tenant_id',
         'instructor_id',
         'sale_id',
         'sale_item_id',

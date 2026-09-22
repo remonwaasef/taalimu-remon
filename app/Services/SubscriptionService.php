@@ -47,10 +47,15 @@ class SubscriptionService
         // Usage counters from the previous package are meaningless now
         $this->forgetUsage($tenant);
 
+        // Generate a unique subscription identifier that won't collide
+        // In production, this should be set by the payment gateway (Stripe/PayPal/Paymob)
+        // For manual/admin subscriptions, we use a UUID prefix to avoid collisions
+        $subscriptionId = 'sub_manual_'.\Illuminate\Support\Str::uuid();
+
         return Subscription::forceCreate([
             'tenant_id' => $tenant->id,
             'name' => 'default',
-            'stripe_id' => 'sub_demo_'.time(),
+            'stripe_id' => $subscriptionId,
             'stripe_status' => 'active',
             'stripe_price' => $package->stripe_price_id,
             'ends_at' => Carbon::now()->addDays($package->duration_in_days),

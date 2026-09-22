@@ -19,7 +19,6 @@ class Ticket extends Model
     }
 
     protected $fillable = [
-        'tenant_id',
         'user_id',
         'subject',
         'status',

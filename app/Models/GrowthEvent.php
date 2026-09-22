@@ -12,7 +12,6 @@ class GrowthEvent extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'tenant_id',
         'eventable_type',
         'eventable_id',
         'event_name',

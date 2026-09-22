@@ -3,10 +3,12 @@
 namespace App\Services;
 
 use App\Mail\AttendanceNotificationMail;
+use App\Models\Enrollment;
 use App\Models\Schedule;
 use App\Models\Student;
 use App\Traits\HasLocaleResolution;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
@@ -28,6 +30,8 @@ class AttendanceService
 
     /**
      * Mark attendance for a student.
+     * Uses database transaction with row locking to prevent race conditions
+     * on session deduction and duplicate attendance creation.
      */
     public function markAttendance(array $data)
     {
@@ -57,78 +61,108 @@ class AttendanceService
             }
         }
 
-        $attendance = Attendance::updateOrCreate(
-            [
+        return DB::transaction(function () use ($data, $status, $lateMinutes, $lateLabel) {
+            $tenantId = $data['tenant_id'] ?? \Modules\Tenancy\Services\TenantResolver::get()->id;
+            $sessionDate = $data['session_date'] ?? today();
+
+            // Lock the attendance row for this student/schedule/date to prevent concurrent creation
+            // The unique constraint on (tenant_id, student_id, schedule_id, session_date) is the
+            // authoritative guard, but we also lock here for the session deduction logic.
+            $attendance = Attendance::lockForUpdate()->where([
                 'student_id' => $data['student_id'],
                 'schedule_id' => $data['schedule_id'],
-                'session_date' => $data['session_date'] ?? today(),
-            ],
-            [
-                'tenant_id' => $data['tenant_id'] ?? \Modules\Tenancy\Services\TenantResolver::get()->id,
-                'course_id' => $data['course_id'],
-                'check_in_time' => now(),
-                'status' => $status,
-                'late_minutes' => $lateMinutes,
-                'late_label' => $lateLabel,
-            ]
-        );
+                'session_date' => $sessionDate,
+            ])->first();
 
-        // Send WhatsApp Notification if student arrived (even if previously marked as absent)
-        $isArriving = in_array($status, ['present', 'late']);
-        $wasAlreadyPresent = ! $attendance->wasRecentlyCreated && in_array($attendance->getOriginal('status'), ['present', 'late']);
+            $isNewAttendance = false;
 
-        if ($isArriving && ! $wasAlreadyPresent) {
-            $student = Student::with('user')->find($data['student_id']);
-            $schedule = Schedule::with('course')->find($data['schedule_id']);
-            $tenant = \Modules\Tenancy\Services\TenantResolver::get();
+            if (! $attendance) {
+                $attendance = Attendance::create([
+                    'tenant_id' => $tenantId,
+                    'student_id' => $data['student_id'],
+                    'course_id' => $data['course_id'],
+                    'schedule_id' => $data['schedule_id'],
+                    'session_date' => $sessionDate,
+                    'check_in_time' => now(),
+                    'status' => $status,
+                    'late_minutes' => $lateMinutes,
+                    'late_label' => $lateLabel,
+                ]);
+                $isNewAttendance = true;
+            } else {
+                // Update existing attendance if status changed to present/late from absent/excused
+                $wasAbsent = in_array($attendance->status, ['absent', 'excused']);
+                $isArriving = in_array($status, ['present', 'late']);
 
-            if ($student && $schedule) {
-                // Deduct session from balance
-                $enrollment = \App\Models\Enrollment::where('user_id', $student->user_id)
-                    ->where('course_id', $data['course_id'])
-                    ->first();
-
-                if ($enrollment) {
-                    $totalSessions = $schedule->course->sessions_count ?? 0;
-                    $progress = 0;
-
-                    if ($totalSessions > 0) {
-                        $remaining = max(0, $enrollment->remaining_sessions - 1);
-                        $consumed = $totalSessions - $remaining;
-                        $progress = min(100, round(($consumed / $totalSessions) * 100));
-                    }
-
-                    if ($enrollment->remaining_sessions > 0) {
-                        $enrollment->decrement('remaining_sessions', 1, ['progress' => $progress]);
-                    } else {
-                        $enrollment->update(['progress' => $progress]);
-                    }
-                }
-
-                $attendanceAlertEnabled = ! isset($tenant->settings['academic']['attendance_alert']) || $tenant->settings['academic']['attendance_alert'];
-
-                if ($attendanceAlertEnabled) {
-                    // Dispatch on queue for better performance
-                    \App\Jobs\SendWhatsAppNotification::dispatch($tenant, $student, $schedule->course)->onQueue('whatsapp');
-
-                    // Send Email Notification if enabled
-                    $this->sendEmailNotification($tenant, $student, $schedule->course, $status);
-                }
-
-                // Award points for attendance (maybe reduction for late?)
-                if ($student->user) {
-                    $points = $status === 'late' ? 5 : 10;
-                    \App\Jobs\AwardGamificationPoints::dispatch(
-                        $student->user,
-                        $points,
-                        'Attended session: '.$schedule->course->title.($status === 'late' ? ' (Late)' : ''),
-                        $attendance
-                    )->onQueue('gamification');
+                if ($wasAbsent && $isArriving) {
+                    $attendance->update([
+                        'check_in_time' => now(),
+                        'status' => $status,
+                        'late_minutes' => $lateMinutes,
+                        'late_label' => $lateLabel,
+                    ]);
+                    $isNewAttendance = true; // Treat as new for deduction purposes
                 }
             }
-        }
 
-        return $attendance;
+            // Send WhatsApp Notification if student arrived (even if previously marked as absent)
+            $isArriving = in_array($status, ['present', 'late']);
+            $wasAlreadyPresent = ! $isNewAttendance && in_array($attendance->getOriginal('status') ?? $attendance->status, ['present', 'late']);
+
+            if ($isArriving && ! $wasAlreadyPresent) {
+                $student = Student::with('user')->find($data['student_id']);
+                $schedule = Schedule::with('course')->find($data['schedule_id']);
+                $tenant = \Modules\Tenancy\Services\TenantResolver::get();
+
+                if ($student && $schedule) {
+                    // Deduct session from balance atomically with row lock
+                    $enrollment = Enrollment::where('user_id', $student->user_id)
+                        ->where('course_id', $data['course_id'])
+                        ->lockForUpdate()
+                        ->first();
+
+                    if ($enrollment) {
+                        $totalSessions = $schedule->course->sessions_count ?? 0;
+                        $progress = 0;
+
+                        if ($totalSessions > 0) {
+                            $remaining = max(0, $enrollment->remaining_sessions - 1);
+                            $consumed = $totalSessions - $remaining;
+                            $progress = min(100, round(($consumed / $totalSessions) * 100));
+                        }
+
+                        if ($enrollment->remaining_sessions > 0) {
+                            $enrollment->decrement('remaining_sessions', 1, ['progress' => $progress]);
+                        } else {
+                            $enrollment->update(['progress' => $progress]);
+                        }
+                    }
+
+                    $attendanceAlertEnabled = ! isset($tenant->settings['academic']['attendance_alert']) || $tenant->settings['academic']['attendance_alert'];
+
+                    if ($attendanceAlertEnabled) {
+                        // Dispatch on queue for better performance
+                        \App\Jobs\SendWhatsAppNotification::dispatch($tenant, $student, $schedule->course)->onQueue('whatsapp');
+
+                        // Send Email Notification if enabled
+                        $this->sendEmailNotification($tenant, $student, $schedule->course, $status);
+                    }
+
+                    // Award points for attendance (maybe reduction for late?)
+                    if ($student->user) {
+                        $points = $status === 'late' ? 5 : 10;
+                        \App\Jobs\AwardGamificationPoints::dispatch(
+                            $student->user,
+                            $points,
+                            'Attended session: '.$schedule->course->title.($status === 'late' ? ' (Late)' : ''),
+                            $attendance
+                        )->onQueue('gamification');
+                    }
+                }
+            }
+
+            return $attendance;
+        });
     }
 
     /**

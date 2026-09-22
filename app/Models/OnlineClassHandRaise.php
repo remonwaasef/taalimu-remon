@@ -11,7 +11,6 @@ class OnlineClassHandRaise extends Model
     use BelongsToTenant, HasFactory;
 
     protected $fillable = [
-        'tenant_id',
         'online_class_id',
         'student_id',
         'user_id',

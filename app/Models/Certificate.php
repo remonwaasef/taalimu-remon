@@ -10,7 +10,6 @@ class Certificate extends Model
     use \App\Traits\BelongsToTenant, HasFactory;
 
     protected $fillable = [
-        'tenant_id',
         'student_id',
         'course_id',
         'uuid',

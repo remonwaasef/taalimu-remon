@@ -9,7 +9,7 @@ class QuestionCategory extends Model
 {
     use \App\Traits\BelongsToTenant, HasFactory;
 
-    protected $fillable = ['tenant_id', 'name', 'slug'];
+    protected $fillable = ['name', 'slug'];
 
     public function questions()
     {

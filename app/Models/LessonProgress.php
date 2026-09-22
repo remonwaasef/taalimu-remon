@@ -12,7 +12,6 @@ class LessonProgress extends Model
     protected $table = 'lesson_progress';
 
     protected $fillable = [
-        'tenant_id',
         'enrollment_id',
         'lesson_id',
         'completed_at',

@@ -12,7 +12,6 @@ class Schedule extends Model
     use \App\Traits\BelongsToTenant, HasFactory, LogsActivity;
 
     protected $fillable = [
-        'tenant_id',
         'course_id',
         'classroom_id',
         'location',

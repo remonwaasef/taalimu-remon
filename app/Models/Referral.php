@@ -11,7 +11,6 @@ class Referral extends Model
     use \App\Traits\BelongsToTenant, HasFactory;
 
     protected $fillable = [
-        'tenant_id',
         'referrer_id',
         'referred_id',
         'enrollment_id',

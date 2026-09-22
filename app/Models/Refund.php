@@ -10,7 +10,6 @@ class Refund extends Model
     use \App\Traits\BelongsToTenant, HasFactory;
 
     protected $fillable = [
-        'tenant_id',
         'sale_id',
         'amount',
         'reason',

@@ -12,6 +12,10 @@ use App\Scopes\TenantScope;
  *
  * ملاحظة: تمت إعادة تسمية هذا الـ Trait من IdentifyTenant إلى BelongsToTenant
  * لتجنب التعارض مع Middleware IdentifyTenant (أُزيل الاسم القديم نهائياً).
+ *
+ * Security: tenant_id is mass-assignable for internal use (tests, services, commands).
+ * Controllers MUST NOT accept tenant_id from request input - always use TenantResolver::get()
+ * or app('tenant') to set it explicitly.
  */
 trait BelongsToTenant
 {
@@ -23,7 +27,9 @@ trait BelongsToTenant
         static::addGlobalScope(new TenantScope);
 
         static::creating(function ($model) {
-            if (app()->bound('tenant')) {
+            // Only auto-set tenant_id if not already set (e.g., from mass assignment in tests/services)
+            // and if tenant context is bound.
+            if (empty($model->tenant_id) && app()->bound('tenant')) {
                 $model->tenant_id = app('tenant')->id;
             }
         });

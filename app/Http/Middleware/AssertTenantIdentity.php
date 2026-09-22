@@ -14,7 +14,7 @@ class AssertTenantIdentity
      * Runs on every web request after a tenant has been identified. If an
      * authenticated user's tenant does not match the tenant bound to the
      * request (e.g. a shared session cookie following a cross-tenant visit),
-     * the request is rejected instead of leaking data across tenants.
+     * the request is rejected with 403 instead of leaking data across tenants.
      *
      * Global accounts (tenant_id = null) are only allowed on the global
      * admin panel (/admin), never inside tenant areas.
@@ -46,12 +46,8 @@ class AssertTenantIdentity
             if ((int) $user->tenant_id === (int) $tenantId) {
                 $request->session()->put('tenant_id', $tenantId);
             } else {
-                // If user belongs to another tenant, redirect them to their own tenant dashboard/page
-                if ($user->tenant) {
-                    $targetPath = $request->path() === '/' ? '' : $request->path();
-                    return redirect()->away(tenant_url($targetPath, $user->tenant));
-                }
-                abort(403, 'Unauthorized tenant access.');
+                // Cross-tenant session mismatch - reject with 403
+                abort(403, 'Unauthorized tenant access: session bound to different tenant.');
             }
         }
 
@@ -60,11 +56,7 @@ class AssertTenantIdentity
         }
 
         if ((int) $user->tenant_id !== (int) $tenantId) {
-            // If authenticated user belongs to another tenant, gracefully redirect to their own tenant
-            if ($user->tenant) {
-                $targetPath = $request->path() === '/' ? '' : $request->path();
-                return redirect()->away(tenant_url($targetPath, $user->tenant));
-            }
+            // Cross-tenant access attempt - reject with 403
             abort(403, 'Unauthorized tenant access.');
         }
 

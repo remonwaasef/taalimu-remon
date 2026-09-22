@@ -11,7 +11,6 @@ class VideoAccessLog extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'tenant_id',
         'recording_id',
         'user_id',
         'action',

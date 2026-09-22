@@ -10,7 +10,6 @@ class QuizAttempt extends Model
     use \App\Traits\BelongsToTenant, HasFactory;
 
     protected $fillable = [
-        'tenant_id',
         'quiz_id',
         'user_id',
         'score',

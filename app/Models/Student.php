@@ -68,7 +68,6 @@ class Student extends Model
     }
 
     protected $fillable = [
-        'tenant_id',
         'user_id',
         'grade_id',
         'code',

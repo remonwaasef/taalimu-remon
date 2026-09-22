@@ -11,7 +11,6 @@ class Lesson extends Model
 
     protected $fillable = [
         'section_id',
-        'tenant_id',
         'title',
         'content',
         'video_url',

@@ -10,7 +10,6 @@ class Enrollment extends Model
     use \App\Traits\BelongsToTenant, HasFactory;
 
     protected $fillable = [
-        'tenant_id',
         'user_id',
         'course_id',
         'enrolled_at',

@@ -9,7 +9,6 @@ class Asset extends Model
     use \App\Traits\BelongsToTenant;
 
     protected $fillable = [
-        'tenant_id',
         'classroom_id',
         'name',
         'code',

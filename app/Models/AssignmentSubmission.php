@@ -10,7 +10,6 @@ class AssignmentSubmission extends Model
     use \App\Traits\BelongsToTenant, HasFactory;
 
     protected $fillable = [
-        'tenant_id',
         'assignment_id',
         'user_id',
         'file_path',

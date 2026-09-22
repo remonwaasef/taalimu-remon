@@ -10,7 +10,6 @@ class PaymentReminder extends Model
     use \App\Traits\BelongsToTenant, HasFactory;
 
     protected $fillable = [
-        'tenant_id',
         'student_id',
         'channel',
         'stage',

@@ -62,7 +62,6 @@ class Course extends Model
     }
 
     protected $fillable = [
-        'tenant_id',
         'instructor_id',
         'title',
         'slug',

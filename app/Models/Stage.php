@@ -13,7 +13,6 @@ class Stage extends Model
     use \App\Traits\BelongsToTenant, \App\Traits\ClearsDashboardCache, HasFactory, LogsActivity, SoftDeletes;
 
     protected $fillable = [
-        'tenant_id',
         'name',
         'order',
     ];

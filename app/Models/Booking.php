@@ -12,7 +12,6 @@ class Booking extends Model
     use \App\Traits\BelongsToTenant, HasFactory, LogsActivity;
 
     protected $fillable = [
-        'tenant_id',
         'student_id',
         'schedule_id',
         'status',

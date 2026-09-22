@@ -10,7 +10,6 @@ class TicketMessage extends Model
     use \App\Traits\BelongsToTenant, HasFactory;
 
     protected $fillable = [
-        'tenant_id',
         'ticket_id',
         'user_id',
         'message',

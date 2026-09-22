@@ -10,7 +10,6 @@ class PointLog extends Model
     use \App\Traits\BelongsToTenant, HasFactory;
 
     protected $fillable = [
-        'tenant_id',
         'user_id',
         'points',
         'reason',

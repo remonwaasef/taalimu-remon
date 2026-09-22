@@ -18,6 +18,9 @@ class GrowthDashboardTest extends TestCase
     {
         $tenant = $this->createTenant(['domain' => 'growth-dash-' . uniqid()]);
 
+        // Bind tenant context so BelongsToTenant trait can auto-set tenant_id
+        app()->instance('tenant', $tenant);
+
         $user = User::create([
             'tenant_id' => $tenant->id,
             'name' => 'Test Teacher',
@@ -27,7 +30,6 @@ class GrowthDashboardTest extends TestCase
         ]);
 
         $instructor = Instructor::create([
-            'tenant_id' => $tenant->id,
             'user_id' => $user->id,
             'name' => 'Test Teacher',
             'email' => 'instructor_' . uniqid() . '@test.com',
@@ -36,7 +38,6 @@ class GrowthDashboardTest extends TestCase
         ]);
 
         $profile = PublicProfile::create([
-            'tenant_id' => $tenant->id,
             'profilable_type' => Instructor::class,
             'profilable_id' => $instructor->id,
             'slug' => 'test-teacher-' . uniqid(),

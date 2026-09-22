@@ -15,7 +15,6 @@ class BugReport extends Model
     use \App\Traits\BelongsToTenant;
 
     protected $fillable = [
-        'tenant_id',
         'user_id',
         'title',
         'description',

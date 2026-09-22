@@ -9,7 +9,6 @@ class SubscriptionLog extends Model
     use \App\Traits\BelongsToTenant;
 
     protected $fillable = [
-        'tenant_id',
         'operation_type',
         'package_slug',
         'package_name',

@@ -12,7 +12,6 @@ class Guardian extends Model
     use \App\Traits\BelongsToTenant, HasFactory, LogsActivity;
 
     protected $fillable = [
-        'tenant_id',
         'user_id',
         'name',
         'phone',

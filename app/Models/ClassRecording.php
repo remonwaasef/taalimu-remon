@@ -17,7 +17,6 @@ class ClassRecording extends Model
     public const STATUS_EXPIRED = 'expired';
 
     protected $fillable = [
-        'tenant_id',
         'online_class_id',
         'provider',
         'external_recording_id',

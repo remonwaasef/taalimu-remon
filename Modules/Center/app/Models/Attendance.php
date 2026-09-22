@@ -10,7 +10,6 @@ class Attendance extends Model
     use \App\Traits\BelongsToTenant, \App\Traits\ClearsDashboardCache, HasFactory;
 
     protected $fillable = [
-        'tenant_id',
         'student_id',
         'course_id',
         'schedule_id',

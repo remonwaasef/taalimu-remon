@@ -11,7 +11,6 @@ class DemandAttribution extends Model
     use HasFactory, \App\Traits\BelongsToTenant;
 
     protected $fillable = [
-        'tenant_id',
         'demand_request_id',
         'opportunity_id',
         'enrollment_id',

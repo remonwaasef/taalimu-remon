@@ -10,7 +10,6 @@ class Expense extends Model
     use \App\Traits\BelongsToTenant, HasFactory;
 
     protected $fillable = [
-        'tenant_id',
         'category',
         'amount',
         'description',

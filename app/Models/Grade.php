@@ -13,7 +13,6 @@ class Grade extends Model
     use \App\Traits\BelongsToTenant, HasFactory, LogsActivity, SoftDeletes;
 
     protected $fillable = [
-        'tenant_id',
         'stage_id',
         'name',
         'order',

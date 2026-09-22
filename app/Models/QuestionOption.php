@@ -10,7 +10,6 @@ class QuestionOption extends Model
     use \App\Traits\BelongsToTenant, HasFactory;
 
     protected $fillable = [
-        'tenant_id',
         'question_id',
         'content',
         'is_correct',

@@ -12,7 +12,6 @@ class Review extends Model
     use \App\Traits\BelongsToTenant, HasFactory;
 
     protected $fillable = [
-        'tenant_id',
         'reviewer_id',
         'enrollment_id',
         'reviewable_type',

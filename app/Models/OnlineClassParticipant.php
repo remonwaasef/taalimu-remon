@@ -9,7 +9,6 @@ class OnlineClassParticipant extends Model
     use \App\Traits\BelongsToTenant;
 
     protected $fillable = [
-        'tenant_id',
         'online_class_id',
         'student_id',
         'user_id',

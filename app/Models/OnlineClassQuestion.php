@@ -11,7 +11,6 @@ class OnlineClassQuestion extends Model
     use BelongsToTenant, HasFactory;
 
     protected $fillable = [
-        'tenant_id',
         'online_class_id',
         'user_id',
         'student_id',
