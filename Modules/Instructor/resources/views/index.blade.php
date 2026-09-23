@@ -18,45 +18,140 @@
         </x-slot>
     </x-ui.page-header>
 
-    <!-- Setup Progress Checklist Bar (Shown only when setup < 100%) -->
+    <!-- Setup Progress Banner (Shown only when setup < 100%) -->
     @if($setupProgress < 100)
-        <div class="mb-6 px-4 py-3 bg-white dark:bg-slate-800/80 rounded-2xl border border-slate-200 dark:border-slate-700/80 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3">
-            <div class="flex items-center gap-3">
-                <span class="w-8 h-8 rounded-xl bg-brand-50 dark:bg-brand-900/30 text-brand-primary flex items-center justify-center font-bold text-xs font-mono">
-                    {{ $setupProgress }}%
-                </span>
-                <div class="flex items-center gap-2">
-                    <span class="text-xs font-bold text-slate-800 dark:text-slate-200 font-arabic">{{ __('instructor::dashboard.account_setup') }}</span>
-                    <span class="text-[11px] text-slate-400 font-arabic">({{ __('instructor::dashboard.steps_completed_ratio', ['completed' => $completedSteps ?? 0, 'total' => 4]) }})</span>
+        @if($setupProgress == 0)
+            {{-- ========== FULL ONBOARDING BANNER (New User - 0%) ========== --}}
+            <div class="mb-8 rounded-3xl overflow-hidden border border-emerald-200 dark:border-emerald-800/50 shadow-lg bg-gradient-to-br from-emerald-50 via-white to-teal-50 dark:from-slate-800 dark:via-slate-900 dark:to-emerald-950/30">
+                <div class="p-6 lg:p-8">
+                    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+                        {{-- Left: Title & Progress --}}
+                        <div class="flex-1">
+                            <h2 class="text-xl font-extrabold text-slate-800 dark:text-slate-100 mb-2 font-arabic">
+                                {{ __('instructor::sidebar.setup_banner_title') }}
+                            </h2>
+                            <p class="text-sm text-slate-500 dark:text-slate-400 mb-4 font-arabic">
+                                {{ __('instructor::sidebar.setup_banner_subtitle') }}
+                            </p>
+                            {{-- Progress Bar --}}
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="flex-1 h-2.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full transition-all duration-700" style="width: {{ $setupProgress }}%"></div>
+                                </div>
+                                <span class="text-xs font-bold text-emerald-700 dark:text-emerald-400 whitespace-nowrap">{{ $setupProgress }}%</span>
+                            </div>
+                            <p class="text-xs text-slate-400 font-arabic">{{ __('instructor::sidebar.setup_banner_progress', ['completed' => $completedSteps ?? 0, 'total' => 4]) }}</p>
+                        </div>
+                        {{-- Right: CTA Button --}}
+                        <div class="flex-shrink-0">
+                            <a href="{{ route('instructor.settings') }}"
+                               class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-sm font-bold rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+                                <i class="fas fa-cog"></i>
+                                {{ __('instructor::sidebar.setup_go_to_settings') }}
+                            </a>
+                        </div>
+                    </div>
+
+                    {{-- Step Cards Grid --}}
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-6">
+                        <button type="button" onclick="openTeachingSystemModal()"
+                                class="group p-4 rounded-2xl border-2 transition-all duration-200 text-start cursor-pointer
+                                       {{ $hasTeachingSystem ? 'border-emerald-300 bg-emerald-50/50 dark:bg-emerald-950/20 dark:border-emerald-700' : 'border-slate-200 bg-white hover:border-emerald-400 hover:shadow-md dark:bg-slate-800 dark:border-slate-700 dark:hover:border-emerald-600' }}">
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-8 h-8 rounded-lg flex items-center justify-center {{ $hasTeachingSystem ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-400 group-hover:bg-emerald-100 group-hover:text-emerald-600 dark:bg-slate-700' }}">
+                                    <i class="{{ $hasTeachingSystem ? 'fas fa-check' : 'fas fa-chalkboard-teacher' }} text-sm"></i>
+                                </div>
+                                <span class="text-[10px] font-bold {{ $hasTeachingSystem ? 'text-emerald-600' : 'text-slate-400' }}">1/4</span>
+                            </div>
+                            <h4 class="text-xs font-bold text-slate-800 dark:text-slate-200 font-arabic">{{ __('instructor::dashboard.teaching_system_step') }}</h4>
+                            <p class="text-[10px] text-slate-400 mt-0.5 font-arabic">{{ $hasTeachingSystem ? '✅ ' . __('instructor::sidebar.status_configured') : __('instructor::sidebar.status_needs_setup') }}</p>
+                        </button>
+
+                        <button type="button" onclick="openMeetingLinkModal()"
+                                class="group p-4 rounded-2xl border-2 transition-all duration-200 text-start cursor-pointer
+                                       {{ $hasLiveStream ? 'border-emerald-300 bg-emerald-50/50 dark:bg-emerald-950/20 dark:border-emerald-700' : 'border-slate-200 bg-white hover:border-emerald-400 hover:shadow-md dark:bg-slate-800 dark:border-slate-700 dark:hover:border-emerald-600' }}">
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-8 h-8 rounded-lg flex items-center justify-center {{ $hasLiveStream ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-400 group-hover:bg-emerald-100 group-hover:text-emerald-600 dark:bg-slate-700' }}">
+                                    <i class="{{ $hasLiveStream ? 'fas fa-check' : 'fas fa-video' }} text-sm"></i>
+                                </div>
+                                <span class="text-[10px] font-bold {{ $hasLiveStream ? 'text-emerald-600' : 'text-slate-400' }}">2/4</span>
+                            </div>
+                            <h4 class="text-xs font-bold text-slate-800 dark:text-slate-200 font-arabic">{{ __('instructor::dashboard.live_stream_step') }}</h4>
+                            <p class="text-[10px] text-slate-400 mt-0.5 font-arabic">{{ $hasLiveStream ? '✅ ' . __('instructor::sidebar.status_configured') : __('instructor::sidebar.status_needs_setup') }}</p>
+                        </button>
+
+                        <a href="{{ route('instructor.groups.create') }}"
+                           class="group p-4 rounded-2xl border-2 transition-all duration-200 text-start
+                                  {{ $hasGroup ? 'border-emerald-300 bg-emerald-50/50 dark:bg-emerald-950/20 dark:border-emerald-700' : 'border-slate-200 bg-white hover:border-emerald-400 hover:shadow-md dark:bg-slate-800 dark:border-slate-700 dark:hover:border-emerald-600' }}">
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-8 h-8 rounded-lg flex items-center justify-center {{ $hasGroup ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-400 group-hover:bg-emerald-100 group-hover:text-emerald-600 dark:bg-slate-700' }}">
+                                    <i class="{{ $hasGroup ? 'fas fa-check' : 'fas fa-users' }} text-sm"></i>
+                                </div>
+                                <span class="text-[10px] font-bold {{ $hasGroup ? 'text-emerald-600' : 'text-slate-400' }}">3/4</span>
+                            </div>
+                            <h4 class="text-xs font-bold text-slate-800 dark:text-slate-200 font-arabic">{{ __('instructor::dashboard.group_creation') }}</h4>
+                            <p class="text-[10px] text-slate-400 mt-0.5 font-arabic">{{ $hasGroup ? '✅ ' . __('instructor::sidebar.status_configured') : __('instructor::sidebar.status_needs_setup') }}</p>
+                        </a>
+
+                        <button type="button" onclick="openShareLinkModal()"
+                                class="group p-4 rounded-2xl border-2 transition-all duration-200 text-start cursor-pointer
+                                       {{ $hasStudents ? 'border-emerald-300 bg-emerald-50/50 dark:bg-emerald-950/20 dark:border-emerald-700' : 'border-slate-200 bg-white hover:border-emerald-400 hover:shadow-md dark:bg-slate-800 dark:border-slate-700 dark:hover:border-emerald-600' }}">
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-8 h-8 rounded-lg flex items-center justify-center {{ $hasStudents ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-400 group-hover:bg-emerald-100 group-hover:text-emerald-600 dark:bg-slate-700' }}">
+                                    <i class="{{ $hasStudents ? 'fas fa-check' : 'fas fa-share-alt' }} text-sm"></i>
+                                </div>
+                                <span class="text-[10px] font-bold {{ $hasStudents ? 'text-emerald-600' : 'text-slate-400' }}">4/4</span>
+                            </div>
+                            <h4 class="text-xs font-bold text-slate-800 dark:text-slate-200 font-arabic">{{ __('instructor::dashboard.add_students_step') }}</h4>
+                            <p class="text-[10px] text-slate-400 mt-0.5 font-arabic">{{ $hasStudents ? '✅ ' . __('instructor::sidebar.status_configured') : __('instructor::sidebar.status_needs_setup') }}</p>
+                        </button>
+                    </div>
                 </div>
             </div>
-
-            <div class="flex flex-wrap items-center gap-2">
-                <!-- Step 1 -->
-                <button type="button" onclick="openTeachingSystemModal()" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer {{ $hasTeachingSystem ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/30 dark:border-emerald-800' : 'bg-slate-50 text-slate-700 border border-slate-200 hover:border-brand-primary dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700' }}">
-                    <i class="{{ $hasTeachingSystem ? 'fas fa-check text-emerald-600' : 'far fa-circle text-slate-400' }} text-[10px]"></i>
-                    <span class="font-arabic">1. نظام التعليم</span>
-                </button>
-
-                <!-- Step 2 -->
-                <button type="button" onclick="openMeetingLinkModal()" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer {{ $hasLiveStream ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/30 dark:border-emerald-800' : 'bg-slate-50 text-slate-700 border border-slate-200 hover:border-brand-primary dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700' }}">
-                    <i class="{{ $hasLiveStream ? 'fas fa-check text-emerald-600' : 'far fa-circle text-slate-400' }} text-[10px]"></i>
-                    <span class="font-arabic">2. البث المباشر</span>
-                </button>
-
-                <!-- Step 3 -->
-                <a href="{{ route('instructor.groups.create') }}" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-medium transition-all {{ $hasGroup ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/30 dark:border-emerald-800' : 'bg-slate-50 text-slate-700 border border-slate-200 hover:border-brand-primary dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700' }}">
-                    <i class="{{ $hasGroup ? 'fas fa-check text-emerald-600' : 'far fa-circle text-slate-400' }} text-[10px]"></i>
-                    <span class="font-arabic">3. أول مجموعة</span>
+        @else
+            {{-- ========== COMPACT PROGRESS BANNER (Partial progress > 0%) ========== --}}
+            <div class="mb-6 px-5 py-4 bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-slate-800 dark:to-emerald-950/20 rounded-2xl border border-emerald-200 dark:border-emerald-800/50 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="flex items-center gap-4 flex-1">
+                    {{-- Circular Progress --}}
+                    <div class="relative flex-shrink-0">
+                        <svg class="w-14 h-14" viewBox="0 0 36 36">
+                            <path stroke="#E7EAF3" stroke-width="3" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <path stroke="#2E8B83" stroke-width="3" stroke-dasharray="{{ $setupProgress }}, 100" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        </svg>
+                        <span class="absolute inset-0 flex items-center justify-center text-sm font-extrabold text-emerald-700 dark:text-emerald-400">{{ $setupProgress }}%</span>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-800 dark:text-slate-200 font-arabic">{{ __('instructor::sidebar.setup_banner_remaining', ['count' => 4 - ($completedSteps ?? 0)]) }}</h3>
+                        <div class="flex flex-wrap items-center gap-2 mt-2">
+                            @if(!$hasTeachingSystem)
+                                <button type="button" onclick="openTeachingSystemModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-medium bg-white border border-slate-200 text-slate-600 hover:border-emerald-400 hover:text-emerald-700 transition-all cursor-pointer dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300">
+                                    <i class="far fa-circle text-[8px] text-slate-400"></i> {{ __('instructor::dashboard.teaching_system_step') }}
+                                </button>
+                            @endif
+                            @if(!$hasLiveStream)
+                                <button type="button" onclick="openMeetingLinkModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-medium bg-white border border-slate-200 text-slate-600 hover:border-emerald-400 hover:text-emerald-700 transition-all cursor-pointer dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300">
+                                    <i class="far fa-circle text-[8px] text-slate-400"></i> {{ __('instructor::dashboard.live_stream_step') }}
+                                </button>
+                            @endif
+                            @if(!$hasGroup)
+                                <a href="{{ route('instructor.groups.create') }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-medium bg-white border border-slate-200 text-slate-600 hover:border-emerald-400 hover:text-emerald-700 transition-all dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300">
+                                    <i class="far fa-circle text-[8px] text-slate-400"></i> {{ __('instructor::dashboard.group_creation') }}
+                                </a>
+                            @endif
+                            @if(!$hasStudents)
+                                <button type="button" onclick="openShareLinkModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-medium bg-white border border-slate-200 text-slate-600 hover:border-emerald-400 hover:text-emerald-700 transition-all cursor-pointer dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300">
+                                    <i class="far fa-circle text-[8px] text-slate-400"></i> {{ __('instructor::dashboard.add_students_step') }}
+                                </button>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                <a href="{{ route('instructor.settings') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-sm transition-all flex-shrink-0">
+                    <i class="fas fa-cog"></i>
+                    {{ __('instructor::sidebar.setup_go_to_settings') }}
                 </a>
-
-                <!-- Step 4 -->
-                <button type="button" onclick="openShareLinkModal()" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer {{ $hasStudents ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/30 dark:border-emerald-800' : 'bg-slate-50 text-slate-700 border border-slate-200 hover:border-brand-primary dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700' }}">
-                    <i class="{{ $hasStudents ? 'fas fa-check text-emerald-600' : 'far fa-circle text-slate-400' }} text-[10px]"></i>
-                    <span class="font-arabic">4. رابط التسجيل</span>
-                </button>
             </div>
-        </div>
+        @endif
     @endif
 
     <!-- Top Key Metrics Grid -->
