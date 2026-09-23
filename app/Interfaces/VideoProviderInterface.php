@@ -4,9 +4,10 @@ namespace App\Interfaces;
 
 use App\Models\OnlineClass;
 use App\Models\User;
+use App\Models\Video;
 
 /**
- * Contract for live video providers (Zoom today; Daily/Agora later).
+ * Contract for video providers (Zoom for live, Bunny Stream for recorded).
  * Implementations must keep all credentials server-side and never expose
  * secrets to the frontend.
  */
@@ -45,6 +46,15 @@ interface VideoProviderInterface
      * @return array{external_id: string, download_url: string, file_size: ?int, duration_seconds: ?int, recording_type: string}
      */
     public function fetchRecording(string $meetingId): array;
+
+    /**
+     * Create a direct upload authorization for recorded videos.
+     * Used for Bunny Stream TUS direct upload from browser.
+     *
+     * @param  Video  $video  The video record to authorize upload for
+     * @return array{upload_url: string, token: string, video_id: string, library_id: string}
+     */
+    public function createDirectUpload(Video $video): array;
 
     /**
      * Whether the provider integration is fully configured.

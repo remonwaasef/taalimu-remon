@@ -95,6 +95,8 @@ class User extends Authenticatable
         'locale',
         'google_id',
         'google2fa_bypass',
+        'tenant_id',
+        'email_verified_at',
     ];
 
     /**

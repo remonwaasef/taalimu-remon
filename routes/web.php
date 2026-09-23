@@ -80,6 +80,21 @@ $mainRoutes = function () {
         ->middleware('throttle:120,1')
         ->name('webhooks.zoom');
 
+    // Bunny Stream webhooks
+    Route::post('/webhooks/bunny/video', [App\Http\Controllers\BunnyWebhookController::class, 'handle'])
+        ->middleware('throttle:120,1')
+        ->name('webhooks.bunny');
+
+    // Video Playback (Student)
+    Route::middleware(['auth', 'tenant'])->prefix('video')->name('video.')->group(function () {
+        Route::post('lessons/{lesson}/authorize', [App\Http\Controllers\VideoPlaybackController::class, 'issueToken'])
+            ->middleware('throttle:60,1')
+            ->name('lessons.authorize');
+        Route::get('lessons/{lesson}/progress', [App\Http\Controllers\VideoPlaybackController::class, 'progress'])
+            ->middleware('throttle:60,1')
+            ->name('lessons.progress');
+    });
+
     // Demo Payment Routes (for testing without Stripe)
     Route::get('/payment/demo', [App\Http\Controllers\PaymentController::class, 'demo'])->name('payment.demo');
     Route::get('/payment/demo/success', [App\Http\Controllers\PaymentController::class, 'demoSuccess'])

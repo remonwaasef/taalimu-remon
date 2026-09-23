@@ -48,6 +48,7 @@ class Instructor extends Model
     }
 
     protected $fillable = [
+        'tenant_id',
         'user_id',
         'name',
         'email',

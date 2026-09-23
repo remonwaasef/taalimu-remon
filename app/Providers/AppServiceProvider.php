@@ -23,9 +23,16 @@ class AppServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
+            'bunny-stream',
+            \App\Services\BunnyStreamProvider::class
+        );
+
+        $this->app->bind(
             \App\Interfaces\VideoStorageInterface::class,
             fn () => \App\Services\VideoStorage\VideoStorageManager::default()
         );
+
+        $this->app->singleton(\App\Services\VideoProgressService::class);
     }
 
     /**

@@ -43,4 +43,9 @@ class Lesson extends Model
     {
         return $this->hasOne(Assignment::class);
     }
+
+    public function video()
+    {
+        return $this->hasOne(Video::class);
+    }
 }

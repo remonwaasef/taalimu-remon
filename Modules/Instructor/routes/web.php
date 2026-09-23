@@ -10,6 +10,7 @@ use Modules\Instructor\Http\Controllers\OnlineClassSessionController;
 use Modules\Instructor\Http\Controllers\ScheduleController;
 use Modules\Instructor\Http\Controllers\SettingsController;
 use Modules\Instructor\Http\Controllers\StudentController;
+use Modules\Instructor\Http\Controllers\VideoController;
 
 $instructorRoutes = function () {
     Route::middleware(['auth', '2fa', 'verified', 'subscription', 'instructor.role'])->prefix('instructor')->group(function () {
@@ -102,6 +103,13 @@ $instructorRoutes = function () {
         Route::prefix('recordings')->name('instructor.recordings.')->group(function () {
             Route::get('/', [ClassRecordingController::class, 'index'])->name('index');
             Route::get('{recording}', [ClassRecordingController::class, 'show'])->name('show');
+        });
+
+        // Video Upload for Lessons
+        Route::prefix('lessons/{lesson}/video')->name('instructor.lessons.video.')->group(function () {
+            Route::post('init-upload', [VideoController::class, 'initUpload'])->name('init_upload');
+            Route::get('status', [VideoController::class, 'status'])->name('status');
+            Route::delete('/', [VideoController::class, 'destroy'])->name('destroy');
         });
 
         // Instructor Schedule Management
