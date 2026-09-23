@@ -1,4 +1,4 @@
-                        <div class="tab-pane fade show active" id="general" role="tabpanel">
+                        <div>
                             <form action="{{ route('instructor.settings.update-general') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row g-4">

@@ -1,4 +1,4 @@
-                        <div class="tab-pane fade" id="whatsapp" role="tabpanel">
+                        <div >
                             <form action="{{ route('instructor.whatsapp.update') }}" method="POST">
                                 @csrf
                                 <div class="d-flex align-items-center justify-content-between mb-4">

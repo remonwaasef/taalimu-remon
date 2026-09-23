@@ -1,4 +1,4 @@
-                        <div class="tab-pane fade" id="reminders" role="tabpanel">
+                        <div >
                             @php $reminderSettings = ($tenant->settings ?? [])['payment_reminders'] ?? []; @endphp
                             <form action="{{ route('instructor.reminders.update') }}" method="POST">
                                 @csrf

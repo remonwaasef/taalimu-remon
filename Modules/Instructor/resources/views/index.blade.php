@@ -256,11 +256,14 @@
                         <span class="text-xs font-bold text-slate-800 dark:text-slate-200 leading-tight">{{ __('instructor::dashboard.smart_attendance') }}</span>
                     </a>
 
-                    <a href="{{ route('instructor.settings') }}" class="p-4 rounded-xl border border-brand-border dark:border-slate-800 hover:border-emerald-500/40 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all text-center flex flex-col items-center justify-center group">
-                        <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 text-emerald-500 flex items-center justify-center text-base mb-2 group-hover:scale-110 transition-transform">
-                            <i class="fab fa-whatsapp"></i>
+                    <a href="{{ route('instructor.settings') }}" class="p-4 rounded-xl border border-brand-border dark:border-slate-800 hover:border-amber-500/40 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all text-center flex flex-col items-center justify-center group relative">
+                        @if($setupProgress < 100)
+                            <span class="absolute top-2 end-2 w-2.5 h-2.5 bg-amber-500 rounded-full animate-pulse"></span>
+                        @endif
+                        <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 flex items-center justify-center text-base mb-2 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-cog"></i>
                         </div>
-                        <span class="text-xs font-bold text-slate-800 dark:text-slate-200 leading-tight">{{ __('instructor::dashboard.whatsapp_auto') }}</span>
+                        <span class="text-xs font-bold text-slate-800 dark:text-slate-200 leading-tight">{{ __('instructor::sidebar.settings') }}</span>
                     </a>
                 </div>
             </x-ui.card>

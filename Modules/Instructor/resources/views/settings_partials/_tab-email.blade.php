@@ -1,4 +1,4 @@
-                        <div class="tab-pane fade" id="email" role="tabpanel">
+                        <div >
                             @php
                                 $emailSettings = ($tenant->settings ?? [])['email_templates'] ?? [];
                                 $presets = config('email_templates.presets', []);
