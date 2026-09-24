@@ -30,7 +30,7 @@
                 </div>
                 <div class="d-flex flex-wrap gap-3 text-muted small mt-1">
                     <span><i class="fas fa-book-open me-1 text-primary"></i> {{ $onlineClass->course->title ?? 'عام' }}</span>
-                    <span><i class="fas fa-clock me-1 text-primary"></i> {{ $onlineClass->start_time->format('Y-m-d H:i') }} ({{ $onlineClass->duration_minutes }} دقيقة)</span>
+                    <span><i class="fas fa-clock me-1 text-primary"></i> {{ $onlineClass->start_time ? $onlineClass->start_time->format('Y-m-d H:i') : '-' }} ({{ $onlineClass->duration_minutes }} دقيقة)</span>
                     <span id="liveAttendeeCounter" class="text-emerald-600 fw-bold"><i class="fas fa-users me-1"></i> <span id="onlineCount">{{ $participants->where('status', 'joined')->count() }}</span> متواجد الآن</span>
                 </div>
             </div>
