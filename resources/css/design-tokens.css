@@ -1,103 +1,114 @@
 /* ==========================================================================
-   TAALIMU GLOBAL DESIGN TOKENS — VERSION 1.0 (BRAND IDENTITY & UI COLOR SYSTEM)
+   TAALIMU GLOBAL DESIGN TOKENS — VERSION 1.0 (BRAND IDENTITY SHEET)
    --------------------------------------------------------------------------
-   Primary Brand: #168F7C (Taalimu Green)
-   Primary Dark: #0D7465
-   Primary Soft: #E8F5F1
-   Main Text / Ink: #102033
-   Dark UI / Navy: #0D1A2B
-   Main Page BG / Cream: #FBFAF6
-   Border: #E5ECE9
-   Typography: Cairo (Arabic) + Inter (English)
+   Brand: Taalimu
+   Primary Brand: #5B5FEF (Taalimu Indigo)
+   Primary Dark:  #4548C7 (Hover & Dark Accents)
+   Primary Soft:  #EEF0FF (Selected & Soft Badges)
+   Background:    #F8FAFC (Taalimu Snow)
+   Surfaces:      #FFFFFF (White Cards & Inputs)
+   Border:        #E2E8F0
+   Text Main:     #111827
+   Text Second:   #475569
+   Text Muted:    #94A3B8
+   Typography:    Cairo (Arabic) + Inter (English & Data)
    ========================================================================== */
 
 :root {
     /* ----------------------------------------------------------------------
-       1. Primary Brand Colors (Taalimu Green #168F7C)
+       1. Primary Brand Colors (Taalimu Indigo #5B5FEF)
        ---------------------------------------------------------------------- */
-    --color-primary-50: #F2FBF8;
-    --color-primary-100: #E8F5F1;
-    --color-primary-200: #D3EBE5;
-    --color-primary-300: #A9D9D0;
-    --color-primary-400: #62BDAE;
-    --color-primary-500: #168F7C;
-    --color-primary-600: #0D7465;
-    --color-primary-700: #0A5F54;
+    --color-primary-50: #F5F6FF;
+    --color-primary-100: #EEF0FF;
+    --color-primary-200: #D7D9FD;
+    --color-primary-300: #B4B8FB;
+    --color-primary-400: #8185F7;
+    --color-primary-500: #5B5FEF;
+    --color-primary-600: #4548C7;
+    --color-primary-700: #3638A0;
+    --color-primary-800: #2A2B7C;
+    --color-primary-900: #1E1F57;
 
     /* Primary Aliases */
-    --color-primary: #168F7C;
-    --color-primary-dark: #0D7465;
-    --color-primary-soft: #E8F5F1;
-    --color-primary-hover: #0D7465;
-    --color-primary-active: #0A5F54;
-    --color-primary-light: #E8F5F1;
-    --color-primary-border: #D3EBE5;
+    --color-primary: #5B5FEF;
+    --color-primary-dark: #4548C7;
+    --color-primary-soft: #EEF0FF;
+    --color-primary-hover: #4548C7;
+    --color-primary-active: #3638A0;
+    --color-primary-light: #EEF0FF;
+    --color-primary-border: #D7D9FD;
     --color-primary-contrast: #FFFFFF;
 
     /* ----------------------------------------------------------------------
-       2. Neutrals & Core Surfaces
+       2. Neutrals & Core Surfaces (Taalimu Snow #F8FAFC & White #FFFFFF)
        ---------------------------------------------------------------------- */
-    --color-ink: #102033;
-    --color-navy: #0D1A2B;
-    --color-muted: #65717F;
-    --color-cream: #FBFAF6;
-    --color-white: #FFFFFF;
-    --color-border: #EAEFF2;
-
-    --color-bg-main: #FAFAFA;
-    --color-dashboard-bg: #FAFAFA;
+    --color-bg-main: #F8FAFC;
+    --color-dashboard-bg: #F8FAFC;
     --color-surface: #FFFFFF;
     --color-surface-elevated: #FFFFFF;
     --color-surface-hover: #F8FAFC;
-    --color-bg-sidebar: #0D1A2B;
+    --color-bg-sidebar: #FFFFFF;
     --color-bg-header: #FFFFFF;
-    --color-divider: #EAEFF2;
+    --color-border: #E2E8F0;
+    --color-divider: #E2E8F0;
+    --color-white: #FFFFFF;
 
     --card-bg: #FFFFFF;
-    --card-border: #EAEFF2;
-    --card-shadow: 0 4px 25px -4px rgba(16, 32, 51, 0.05), 0 2px 6px -1px rgba(16, 32, 51, 0.02);
+    --card-border: #E2E8F0;
+    --card-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
 
     /* Text Hierarchy */
-    --color-text-main: #102033;
-    --color-text-secondary: #65717F;
-    --color-text-muted: #65717F;
-    --color-text-disabled: #A9D9D0;
+    --color-text-main: #111827;
+    --color-text-primary: #111827;
+    --color-text-secondary: #475569;
+    --color-text-muted: #94A3B8;
+    --color-text-disabled: #CBD5E1;
     --color-text-inverse: #FFFFFF;
 
     /* Focus Ring */
-    --color-focus-ring: #168F7C;
-    --focus-ring-alpha: rgba(22, 143, 124, 0.2);
+    --color-focus-ring: #5B5FEF;
+    --focus-ring-alpha: rgba(91, 95, 239, 0.15);
+
+    /* Active Navigation */
+    --nav-active-bg: #EEF0FF;
+    --nav-active-text: #5B5FEF;
+    --nav-active-icon: #5B5FEF;
+    --nav-active-radius: 10px;
 
     /* ----------------------------------------------------------------------
        3. Functional Semantic Colors
        ---------------------------------------------------------------------- */
-    /* Success */
-    --color-success: #168F7C;
-    --color-success-soft: #E8F5F1;
-    --color-success-hover: #0D7465;
-    --color-success-border: #D3EBE5;
+    /* Success (Paid, Present, Active, Completed) */
+    --color-success: #16A34A;
+    --color-success-soft: #DCFCE7;
+    --color-success-hover: #15803D;
+    --color-success-border: #BBF7D0;
+    --color-success-text: #166534;
     --color-success-contrast: #FFFFFF;
 
-    /* Warning */
-    --color-warning: #C88924;
-    --color-warning-soft: #FFF5E1;
-    --color-warning-hover: #A66E18;
+    /* Warning (Pending, Expiring, Attention) */
+    --color-warning: #D97706;
+    --color-warning-soft: #FEF3C7;
+    --color-warning-hover: #B45309;
     --color-warning-border: #FDE68A;
+    --color-warning-text: #92400E;
     --color-warning-contrast: #FFFFFF;
 
-    /* Error / Danger */
-    --color-error: #C94A4A;
-    --color-error-soft: #FDECEC;
-    --color-error-hover: #A73838;
+    /* Error / Danger (Errors, Failed Payments, Destructive) */
+    --color-error: #DC2626;
+    --color-error-soft: #FEE2E2;
+    --color-error-hover: #B91C1C;
     --color-error-border: #FECACA;
+    --color-error-text: #991B1B;
     --color-error-contrast: #FFFFFF;
-    --color-danger: #C94A4A;
+    --color-danger: #DC2626;
 
-    /* Info */
-    --color-info: #3B82A0;
-    --color-info-soft: #EAF5F9;
-    --color-info-hover: #2B6B85;
+    /* Info (Tips, Metadata, Neutral Notifications) */
+    --color-info: #0284C7;
+    --color-info-soft: #E0F2FE;
+    --color-info-hover: #0369A1;
     --color-info-border: #BAE6FD;
+    --color-info-text: #075985;
     --color-info-contrast: #FFFFFF;
 
     /* ----------------------------------------------------------------------
@@ -107,79 +118,70 @@
     --font-family-en: 'Inter', system-ui, -apple-system, sans-serif;
     font-family: 'Cairo', sans-serif;
 
+    --font-size-display: 3rem;         /* 48px / 56px */
     --font-size-display-1: 3rem;       /* 48px */
     --font-size-display-2: 2.25rem;    /* 36px */
-    --font-size-h1: 1.75rem;           /* 28px */
-    --font-size-h2: 1.375rem;          /* 22px */
-    --font-size-h3: 1.125rem;          /* 18px */
-    --font-size-body-lg: 1rem;         /* 16px */
-    --font-size-body-md: 0.875rem;     /* 14px */
-    --font-size-body-sm: 0.75rem;      /* 12px */
+    --font-size-h1: 2.5rem;            /* 40px / 48px */
+    --font-size-h2: 2rem;              /* 32px / 40px */
+    --font-size-h3: 1.5rem;            /* 24px / 32px */
+    --font-size-h4: 1.25rem;           /* 20px / 28px */
+    --font-size-body-lg: 1.125rem;     /* 18px / 30px */
+    --font-size-body: 1rem;            /* 16px / 26px */
+    --font-size-body-md: 1rem;         /* 16px */
+    --font-size-body-sm: 0.875rem;     /* 14px / 22px */
+    --font-size-caption: 0.75rem;      /* 12px / 18px */
 
     /* ----------------------------------------------------------------------
        5. Border Radius Scale
        ---------------------------------------------------------------------- */
+    --radius-xs: 6px;
     --radius-sm: 8px;
-    --radius-md: 12px;
-    --radius-lg: 18px;
-    --radius-xl: 24px;
-    --radius-2xl: 30px;
-    --radius-full: 999px;
+    --radius-md: 10px;                 /* Buttons & Inputs */
+    --radius-lg: 12px;
+    --radius-xl: 16px;                 /* Cards */
+    --radius-2xl: 20px;                /* Modals / Dialogs */
+    --radius-pill: 9999px;             /* Badges */
+    --radius-full: 9999px;
 
-    --btn-radius: var(--radius-md);
-    --card-radius: var(--radius-lg);
+    --btn-radius: 10px;
     --input-radius: 10px;
-    --dialog-radius: var(--radius-xl);
-    --badge-radius: var(--radius-full);
+    --card-radius: 16px;
+    --dialog-radius: 20px;
+    --modal-radius: 20px;
+    --badge-radius: 9999px;
 
     /* ----------------------------------------------------------------------
-       6. Shadows / Elevation System (UI/UX Pro Max Multi-layer Elevation)
+       6. Shadows / Elevation System (Subtle & Clean)
        ---------------------------------------------------------------------- */
-    --shadow-xs: 0 1px 2px 0 rgba(16, 32, 51, 0.03), 0 2px 6px -1px rgba(16, 32, 51, 0.02);
-    --shadow-sm: 0 2px 4px 0 rgba(16, 32, 51, 0.04), 0 4px 12px -2px rgba(16, 32, 51, 0.03);
-    --shadow-md: 0 4px 8px -2px rgba(16, 32, 51, 0.04), 0 12px 24px -4px rgba(16, 32, 51, 0.06);
-    --shadow-lg: 0 8px 16px -4px rgba(16, 32, 51, 0.05), 0 20px 36px -6px rgba(16, 32, 51, 0.08);
-    --shadow-xl: 0 16px 28px -6px rgba(16, 32, 51, 0.06), 0 28px 60px -8px rgba(16, 32, 51, 0.12);
-    --shadow-bento: 0 1px 3px 0 rgba(16, 32, 51, 0.04), 0 6px 20px -2px rgba(16, 32, 51, 0.03);
-    --shadow-bento-hover: 0 12px 30px -4px rgba(22, 143, 124, 0.08), 0 4px 14px -2px rgba(16, 32, 51, 0.04);
+    --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.05);
+    --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.06);
+    --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.10);
+    --shadow-lg: 0 16px 40px rgba(15, 23, 42, 0.12);
+    --shadow-xl: 0 20px 48px rgba(15, 23, 42, 0.14);
 
-    /* UI/UX Pro Max Micro-Transitions */
-    --transition-fast: all 180ms cubic-bezier(0.16, 1, 0.3, 1);
-    --transition-smooth: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    /* Transitions (Calm & Useful: 150ms-250ms) */
+    --transition-fast: all 150ms cubic-bezier(0.16, 1, 0.3, 1);
+    --transition-smooth: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
     --transition-spring: transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1);
 
-    /* Bento Card Variables */
-    --card-bento-radius: 1.25rem; /* 20px */
-    --card-bento-bg: #FFFFFF;
-    --card-bento-border: rgba(229, 236, 233, 0.85);
-
     /* ----------------------------------------------------------------------
-        7. Button & Form Tokens
+       7. Button & Form Tokens
        ---------------------------------------------------------------------- */
     --color-secondary: #475569;
-    --color-secondary-hover: #1e293b;
+    --color-secondary-hover: #1E293B;
 
-    --btn-primary-bg: #168F7C;
-    --btn-primary-hover-bg: #0D7465;
+    --btn-primary-bg: #5B5FEF;
+    --btn-primary-hover-bg: #4548C7;
     --btn-primary-text: #FFFFFF;
 
     --btn-secondary-bg: #FFFFFF;
-    --btn-secondary-text: #334155;
-    --btn-secondary-border: #CBD5E1;
-    --btn-secondary-hover-bg: #F1F5F9;
+    --btn-secondary-text: #111827;
+    --btn-secondary-border: #E2E8F0;
+    --btn-secondary-hover-bg: #F8FAFC;
 
-    --btn-light-bg: #F1F5F9;
-    --btn-light-border: #CBD5E1;
-    --btn-light-text: #1E293B;
-    --btn-light-hover-bg: #E2E8F0;
-    --btn-light-hover-text: #0F172A;
-
-    --btn-dark-bg: #0D1A2B;
-    --btn-dark-text: #FFFFFF;
-
-    --btn-success-bg: #168F7C;
-    --btn-success-hover-bg: #0D7465;
-    --btn-success-text: #FFFFFF;
+    --btn-ghost-bg: transparent;
+    --btn-ghost-text: #5B5FEF;
+    --btn-ghost-hover-bg: #EEF0FF;
 
     --btn-danger-bg: #DC2626;
     --btn-danger-hover-bg: #B91C1C;
@@ -193,43 +195,45 @@
     --btn-info-hover-bg: #0369A1;
     --btn-info-text: #FFFFFF;
 
+    /* Input specifics */
     --input-bg: #FFFFFF;
-    --input-border: #DDE7E4;
-    --input-focus-border: #168F7C;
-    --input-focus-ring: #E8F5F1;
-    --input-text: #102033;
+    --input-border: #E2E8F0;
+    --input-focus-border: #5B5FEF;
+    --input-focus-ring: rgba(91, 95, 239, 0.15);
+    --input-text: #111827;
 }
 
 /* --------------------------------------------------------------------------
    Dark Mode Overrides
    -------------------------------------------------------------------------- */
 .dark {
-    --color-bg-main: #0D1A2B;
-    --color-dashboard-bg: #091320;
-    --color-surface: #102033;
-    --color-surface-elevated: #16283D;
-    --color-surface-hover: #192D45;
-    --color-bg-sidebar: #091320;
-    --color-bg-header: #102033;
-    --color-border: #1F3248;
-    --color-divider: #1F3248;
+    --color-bg-main: #0F172A;
+    --color-dashboard-bg: #0B1120;
+    --color-surface: #1E293B;
+    --color-surface-elevated: #334155;
+    --color-surface-hover: #26354A;
+    --color-bg-sidebar: #1E293B;
+    --color-bg-header: #1E293B;
+    --color-border: #334155;
+    --color-divider: #334155;
 
-    --color-text-main: #FBFAF6;
+    --color-text-main: #F8FAFC;
+    --color-text-primary: #F8FAFC;
     --color-text-secondary: #94A3B8;
-    --color-text-muted: #65717F;
-    --color-text-disabled: #334155;
+    --color-text-muted: #64748B;
+    --color-text-disabled: #475569;
 
-    --color-primary-light: rgba(22, 143, 124, 0.15);
-    --color-primary-border: rgba(22, 143, 124, 0.3);
+    --color-primary-light: rgba(91, 95, 239, 0.2);
+    --color-primary-border: rgba(91, 95, 239, 0.4);
 
-    --card-bg: #102033;
-    --card-border: #1F3248;
-    --card-bento-bg: rgba(16, 32, 51, 0.85);
-    --card-bento-border: rgba(31, 50, 72, 0.9);
-    --shadow-bento: 0 4px 20px -2px rgba(0, 0, 0, 0.35);
-    --shadow-bento-hover: 0 12px 30px -4px rgba(22, 143, 124, 0.2);
+    --card-bg: #1E293B;
+    --card-border: #334155;
 
-    --input-bg: #0D1A2B;
-    --input-border: #1F3248;
-    --input-text: #FBFAF6;
+    --input-bg: #0F172A;
+    --input-border: #334155;
+    --input-text: #F8FAFC;
+
+    --nav-active-bg: rgba(91, 95, 239, 0.2);
+    --nav-active-text: #8185F7;
+    --nav-active-icon: #8185F7;
 }

@@ -15,9 +15,9 @@
 
     $variants = [
         'primary' => 'bg-brand-primary hover:bg-brand-600 text-white shadow-sm hover:shadow shadow-brand-primary/20 border border-brand-primary focus-visible:ring-2 focus-visible:ring-brand-primary/40 focus-visible:ring-offset-2',
-        'secondary' => 'bg-slate-900 hover:bg-slate-800 text-white dark:bg-slate-100 dark:hover:bg-white dark:text-slate-900 shadow-sm border border-transparent focus-visible:ring-2 focus-visible:ring-slate-400',
+        'secondary' => 'bg-white hover:bg-slate-50 text-slate-900 dark:bg-slate-900 dark:hover:bg-slate-800 dark:text-slate-100 shadow-xs border border-slate-200 dark:border-slate-700 focus-visible:ring-2 focus-visible:ring-slate-300',
         'outline' => 'bg-white hover:bg-brand-50 text-slate-700 hover:text-brand-primary dark:bg-slate-900 dark:hover:bg-brand-950/40 dark:text-slate-200 dark:hover:text-brand-300 border border-slate-200 dark:border-slate-700 hover:border-brand-primary/30 dark:hover:border-brand-500/30 shadow-xs focus-visible:ring-2 focus-visible:ring-brand-primary/30',
-        'ghost' => 'bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 border border-transparent focus-visible:ring-2 focus-visible:ring-slate-300',
+        'ghost' => 'bg-transparent hover:bg-brand-50 dark:hover:bg-brand-950/40 text-brand-primary dark:text-brand-300 border border-transparent focus-visible:ring-2 focus-visible:ring-brand-primary/20',
         'danger' => 'bg-red-600 hover:bg-red-700 text-white shadow-sm shadow-red-600/20 border border-red-600 focus-visible:ring-2 focus-visible:ring-red-500/40',
         'success' => 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm shadow-emerald-600/20 border border-emerald-600 focus-visible:ring-2 focus-visible:ring-emerald-500/40',
         'warning' => 'bg-amber-500 hover:bg-amber-600 text-white shadow-sm shadow-amber-500/20 border border-amber-500 focus-visible:ring-2 focus-visible:ring-amber-400/40',
@@ -26,13 +26,13 @@
     ];
 
     $sizes = [
-        'xs' => 'text-[11px] h-7 px-2.5 rounded-lg gap-1.5',
-        'sm' => 'text-xs h-8 px-3 rounded-xl gap-1.5',
-        'md' => 'text-xs sm:text-sm h-9.5 px-4 rounded-xl gap-2',
-        'lg' => 'text-sm sm:text-base h-11 px-5 rounded-xl gap-2.5',
-        'icon' => 'w-9 h-9 p-0 rounded-xl justify-center',
-        'icon-sm' => 'w-8 h-8 p-0 rounded-lg justify-center text-xs',
-        'icon-lg' => 'w-11 h-11 p-0 rounded-xl justify-center text-base',
+        'xs' => 'text-[11px] h-7 px-2.5 rounded-[8px] gap-1.5',
+        'sm' => 'text-xs h-8 px-3 rounded-[10px] gap-1.5',
+        'md' => 'text-xs sm:text-sm h-11 px-4 rounded-[10px] gap-2 font-semibold',
+        'lg' => 'text-sm sm:text-base h-12 px-6 rounded-[10px] gap-2.5 font-semibold',
+        'icon' => 'w-10 h-10 p-0 rounded-[10px] justify-center',
+        'icon-sm' => 'w-8 h-8 p-0 rounded-[8px] justify-center text-xs',
+        'icon-lg' => 'w-12 h-12 p-0 rounded-[10px] justify-center text-base',
     ];
 
     $classes = $baseClasses . ' ' . ($variants[$variant] ?? $variants['primary']) . ' ' . ($sizes[$size] ?? $sizes['md']);

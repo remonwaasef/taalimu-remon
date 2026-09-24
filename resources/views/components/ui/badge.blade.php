@@ -12,11 +12,11 @@
     
     $variants = [
         'neutral' => 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border border-slate-200/60 dark:border-slate-700',
-        'brand' => 'bg-brand-50 text-brand-primary dark:bg-brand-900/30 dark:text-brand-300 border border-brand-200/60 dark:border-brand-800/40',
-        'success' => 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/40',
-        'warning' => 'bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300 border border-amber-200/60 dark:border-amber-800/40',
-        'danger' => 'bg-red-50 text-red-700 dark:bg-red-950/40 dark:text-red-300 border border-red-200/60 dark:border-red-800/40',
-        'info' => 'bg-sky-50 text-sky-700 dark:bg-sky-950/40 dark:text-sky-300 border border-sky-200/60 dark:border-sky-800/40',
+        'brand' => 'bg-[#EEF0FF] text-[#5B5FEF] dark:bg-brand-900/30 dark:text-brand-300 border border-brand-200/60 dark:border-brand-800/40',
+        'success' => 'bg-[#DCFCE7] text-[#166534] dark:bg-emerald-950/40 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/40',
+        'warning' => 'bg-[#FEF3C7] text-[#92400E] dark:bg-amber-950/40 dark:text-amber-300 border border-amber-200/60 dark:border-amber-800/40',
+        'danger' => 'bg-[#FEE2E2] text-[#991B1B] dark:bg-red-950/40 dark:text-red-300 border border-red-200/60 dark:border-red-800/40',
+        'info' => 'bg-[#E0F2FE] text-[#075985] dark:bg-sky-950/40 dark:text-sky-300 border border-sky-200/60 dark:border-sky-800/40',
         'outline' => 'bg-transparent text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700',
     ];
 

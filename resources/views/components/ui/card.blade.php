@@ -12,15 +12,16 @@
 
 @php
     $variants = [
-        'default' => 'bg-white dark:bg-slate-900 border border-[#EAEFF2] dark:border-slate-800 shadow-[0_4px_25px_-4px_rgba(16,32,51,0.05),0_2px_6px_-1px_rgba(16,32,51,0.02)] hover:shadow-[0_8px_35px_-6px_rgba(16,32,51,0.08),0_3px_10px_-2px_rgba(16,32,51,0.03)]',
-        'bento' => 'bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/90 shadow-[0_1px_3px_0_rgba(16,32,51,0.04),0_6px_20px_-2px_rgba(16,32,51,0.03)] dark:shadow-[0_4px_20px_-2px_rgba(0,0,0,0.35)] hover:shadow-[0_12px_30px_-4px_rgba(22,143,124,0.08),0_4px_14px_-2px_rgba(16,32,51,0.04)] dark:hover:shadow-[0_12px_30px_-4px_rgba(22,143,124,0.2)] hover:-translate-y-0.5',
-        'flat' => 'bg-slate-50/60 dark:bg-slate-900/60 border border-[#EAEFF2]/60 dark:border-slate-800',
-        'bordered' => 'bg-white dark:bg-slate-900 border-2 border-[#EAEFF2] dark:border-slate-700 shadow-[0_2px_10px_-2px_rgba(16,32,51,0.03)]',
-        'ghost' => 'bg-transparent border border-dashed border-[#EAEFF2] dark:border-slate-800',
+        'default' => 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-[0_4px_16px_rgba(15,23,42,0.06)] hover:shadow-[0_8px_24px_rgba(15,23,42,0.08)]',
+        'premium' => 'bg-[#EEF0FF] dark:bg-brand-950/40 border border-brand-primary/20 dark:border-brand-500/30 shadow-[0_4px_16px_rgba(91,95,239,0.08)]',
+        'bento' => 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-[0_2px_8px_rgba(15,23,42,0.06)] hover:shadow-[0_8px_24px_rgba(91,95,239,0.08)] hover:-translate-y-0.5',
+        'flat' => 'bg-slate-50/60 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800',
+        'bordered' => 'bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700 shadow-[0_2px_8px_rgba(15,23,42,0.04)]',
+        'ghost' => 'bg-transparent border border-dashed border-slate-200 dark:border-slate-800',
     ];
 
     $glassClass = $glass ? 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-md' : '';
-    $cardClass = ($variants[$variant] ?? $variants['default']) . ' rounded-2xl transition-all duration-200 relative overflow-hidden font-inter ' . $glassClass;
+    $cardClass = ($variants[$variant] ?? $variants['default']) . ' rounded-[16px] transition-all duration-200 relative overflow-hidden font-inter ' . $glassClass;
 @endphp
 
 <div

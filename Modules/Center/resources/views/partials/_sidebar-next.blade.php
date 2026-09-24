@@ -32,7 +32,7 @@
     $showReports = $hasFinancialReports || $hasAdvancedReports;
     $showSettings = auth()->user()->canAny(['manage users', 'manage settings', 'manage billing']);
 
-    $activeLink = "bg-brand-50 text-brand-primary dark:bg-brand-900/30 dark:text-brand-300 font-bold shadow-xs";
+    $activeLink = "bg-brand-100 text-brand-primary dark:bg-brand-900/40 dark:text-brand-300 font-semibold";
     $inactiveLink = "text-slate-600 hover:text-slate-900 hover:bg-slate-50/80 dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-800/60 font-semibold";
 @endphp
 

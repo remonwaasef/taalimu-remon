@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- **Taalimu Brand Identity Sheet v1.0 Design Tokens & Architecture Overhaul (2026-09-24)**:
+  - Formally adopted the **Taalimu Brand Identity Sheet — v1.0** across project rules, design documentation, and CSS design tokens.
+  - Migrated primary brand color to **Taalimu Indigo** (`#5B5FEF`, Dark: `#4548C7`, Soft: `#EEF0FF`).
+  - Standardized neutral background surfaces to **Taalimu Snow** (`#F8FAFC`), white card surfaces (`#FFFFFF`), and soft borders (`#E2E8F0`).
+  - Unified system radii to the official scale: Buttons (`10px`), Inputs (`10px`), Cards (`16px`), Modals (`20px`), and Badges (`9999px`).
+  - Aligned semantic status tokens: Success (`#16A34A` / soft `#DCFCE7`), Warning (`#D97706` / soft `#FEF3C7`), Error/Destructive (`#DC2626` / soft `#FEE2E2`), Info (`#0284C7` / soft `#E0F2FE`).
+  - Updated shared Blade UI components (`button`, `input`, `card`, `badge`, `modal`) and dashboard sidebars (`Center` & `Instructor`) to apply the new 10px/16px radius, Soft Indigo active navigation (`#EEF0FF` + `#5B5FEF`), and Hope UI theme integration (`taalimu-unified.css`).
+  - Updated design files: `.agents/AGENTS.md`, `.agents/DESIGN_SYSTEM.md`, `.agents/skills/blade-component/SKILL.md`, `resources/css/design-tokens.css`, `resources/css/tailwind.css`, `tailwind.config.js`, `docs/design-system/DESIGN_TOKENS_REFERENCE.md`, and `docs/23_UI_GUIDE.md`.
+
 - **Fix Fatal Error on /instructor/online-classes (2026-09-24)**:
   - Implemented missing `createDirectUpload` method in `App\Services\ZoomService` to fulfill the `VideoProviderInterface` contract, resolving the fatal PHP error that caused 500 Server Error upon accessing `/instructor/online-classes`.
   - Added null-safe formatting checks (`$lesson->start_time ? $lesson->start_time->format(...) : '-'`) in `Modules/Instructor/resources/views/online_classes/index.blade.php` to prevent view crashes when a class has an empty or unparsed start date.

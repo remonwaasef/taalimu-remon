@@ -1,296 +1,210 @@
-# Taalimu Design System 1.0
+# Taalimu Design System — Version 1.0 (Brand Identity Sheet)
 
-## Brand Identity & UI Color System
-
-### Primary Brand Colors
-
-| Token | Value | Usage |
-|-------|-------|-------|
-| `--color-primary` / `--color-primary-500` | `#168F7C` | Primary CTA, buttons, links, active states, brand accents |
-| `--color-primary-dark` / `--color-primary-600` | `#0D7465` | Hover states, high-contrast green text, dark CTA |
-| `--color-primary-soft` / `--color-primary-100` | `#E8F5F1` | Badge backgrounds, icon backgrounds, subtle highlights, success backgrounds |
-| `--color-primary-50` | `#F2FBF8` | Ultra-light backgrounds |
-| `--color-primary-200` | `#D3EBE5` | Borders, subtle highlights |
-| `--color-primary-300` | `#A9D9D0` | Secondary accents |
-| `--color-primary-400` | `#62BDAE` | Charts, illustrations |
-| `--color-primary-700` | `#0A5F54` | Dark green text |
-
-### Neutral Colors
-
-| Token | Value | Usage |
-|-------|-------|-------|
-| `--color-ink` | `#102033` | Main text, headings, navigation |
-| `--color-navy` | `#0D1A2B` | Dark UI sections, footer, sidebar |
-| `--color-muted` | `#65717F` | Secondary text, metadata, labels, helper text |
-| `--color-cream` | `#FBFAF6` | Main page background (landing) |
-| `--color-white` | `#FFFFFF` | Cards, inputs, surfaces |
-| `--color-border` | `#E5ECE9` | Borders, dividers |
-
-### Semantic Colors (Functional Only - Not Brand)
-
-| Token | Value | Usage |
-|-------|-------|-------|
-| `--color-success` | `#168F7C` | Success states (uses primary green) |
-| `--color-success-soft` | `#E8F5F1` | Success backgrounds |
-| `--color-warning` | `#C88924` | Warning states |
-| `--color-warning-soft` | `#FFF5E1` | Warning backgrounds |
-| `--color-error` / `--color-danger` | `#C94A4A` | Error/danger states |
-| `--color-error-soft` | `#FDECEC` | Error backgrounds |
-| `--color-info` | `#3B82A0` | Info states |
-| `--color-info-soft` | `#EAF5F9` | Info backgrounds |
-
-### Surface & Background Tokens
-
-| Token | Light | Dark | Usage |
-|-------|-------|------|-------|
-| `--color-bg-main` | `#FBFAF6` | `#0D1A2B` | Main page background |
-| `--color-dashboard-bg` | `#F7FAF8` | `#091320` | Dashboard background |
-| `--color-surface` | `#FFFFFF` | `#102033` | Card surfaces |
-| `--color-surface-elevated` | `#FFFFFF` | `#16283D` | Elevated surfaces |
-| `--color-surface-hover` | `#F2FBF8` | `#192D45` | Hover surfaces |
-| `--color-bg-sidebar` | `#0D1A2B` | `#091320` | Sidebar background |
-| `--color-bg-header` | `#FFFFFF` | `#102033` | Header background |
-| `--color-divider` | `#E5ECE9` | `#1F3248` | Dividers |
-
-### Text Hierarchy
-
-| Token | Light | Dark | Usage |
-|-------|-------|------|-------|
-| `--color-text-main` | `#102033` | `#FBFAF6` | Primary text |
-| `--color-text-secondary` | `#65717F` | `#94A3B8` | Secondary text |
-| `--color-text-muted` | `#65717F` | `#65717F` | Muted text |
-| `--color-text-disabled` | `#A9D9D0` | `#334155` | Disabled text |
-| `--color-text-inverse` | `#FFFFFF` | `#FFFFFF` | Inverse text |
-
-### Focus Ring
-
-| Token | Value |
-|-------|-------|
-| `--color-focus-ring` | `#168F7C` |
-| `--focus-ring-alpha` | `rgba(22, 143, 124, 0.2)` |
+> **المصدر المعتمد**: Taalimu Brand Identity Sheet — v1.0  
+> **Brand Personality**: Calm · Professional · Modern · Human · Simple  
+> **Primary Market**: Educational Centers & Independent Teachers  
+> **Brand Promise**: "ركز على تعليم طلابك.. والإدارة علينا"  
+> **Core Visual Concept**: Calm Professional SaaS (White Space + Purple/Indigo Brand + Clean UI + Human Photography + Clear Typography)
 
 ---
 
-## Typography
+## 1. Brand Identity & UI Color System
 
-### Font Families
+### Primary Brand Colors (Taalimu Indigo)
 
-| Token | Value |
-|-------|-------|
-| `--font-family-ar` | `'Cairo', system-ui, -apple-system, sans-serif` |
-| `--font-family-en` | `'Inter', system-ui, -apple-system, sans-serif` |
+| Token | HEX | RGB | الاستخدام |
+|-------|-----|-----|-----------|
+| `--color-primary` / `--color-primary-500` | `#5B5FEF` | `91, 95, 239` | الأزرار الأساسية، تمييز الشعار، القائمة النشطة، الروابط، الإحصائيات المهمة، الـ Focus، الـ CTAs الرئيسية |
+| `--color-primary-dark` / `--color-primary-600` | `#4548C7` | `69, 72, 199` | Hover على Primary button، اللمسات الداكنة، العناصر المحددة، التوكيد البصري |
+| `--color-primary-soft` / `--color-primary-100` | `#EEF0FF` | `238, 240, 255` | خلفية الأيقونات، البطاقات المحددة، الشارات الناعمة، خلفية القائمة النشطة، أقسام التمييز |
+| `--color-primary-50` | `#F5F6FF` | `245, 246, 255` | خلفيات بالغة الرقة |
+| `--color-primary-200` | `#D7D9FD` | `215, 217, 253` | الحدود واللمسات الفاتحة |
+| `--color-primary-700` | `#3638A0` | `54, 56, 160` | نصوص نيليّة داكنة عالية التباين |
 
-**Default**: Cairo (Arabic-first)
-
-### Font Sizes
-
-| Token | Value | Rem |
-|-------|-------|-----|
-| `--font-size-display-1` | `3rem` | 48px |
-| `--font-size-display-2` | `2.25rem` | 36px |
-| `--font-size-h1` | `1.75rem` | 28px |
-| `--font-size-h2` | `1.375rem` | 22px |
-| `--font-size-h3` | `1.125rem` | 18px |
-| `--font-size-body-lg` | `1rem` | 16px |
-| `--font-size-body-md` | `0.875rem` | 14px |
-| `--font-size-body-sm` | `0.75rem` | 12px |
-
-### Hierarchy Weights
-
-| Element | Weight |
-|---------|--------|
-| H1 | 800 |
-| H2 | 700-800 |
-| H3 | 700 |
-| Body | 400-500 |
-| Buttons | 700 |
-| Labels | 600-700 |
+> **قاعدة الاستخدام اللوني الأساسي**: استخدام اللون النيلي `#5B5FEF` يكون محدوداً ومقصوداً (يمثل 60%–70% من ألوان الـ Accent). **لا نملأ الشاشة بالكامل بالبنفسجي/النيلي**.
 
 ---
 
-## Border Radius Scale
+### Neutral Colors (الألوان المحايدة)
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| `--radius-sm` | `8px` | Small elements |
-| `--radius-md` | `12px` | Medium elements, buttons |
-| `--radius-lg` | `18px` | Cards |
-| `--radius-xl` | `24px` | Large sections |
-| `--radius-2xl` | `30px` | Extra large sections |
-| `--radius-full` | `999px` | Pills, badges |
-
-### Component Radius Aliases
-
-| Token | Value |
-|-------|-------|
-| `--btn-radius` | `var(--radius-md)` |
-| `--card-radius` | `var(--radius-lg)` |
-| `--input-radius` | `10px` |
-| `--dialog-radius` | `var(--radius-xl)` |
-| `--badge-radius` | `var(--radius-full)` |
+| Token | HEX | RGB | الاستخدام |
+|-------|-----|-----|-----------|
+| `--color-bg-main` / `--color-dashboard-bg` | `#F8FAFC` | `248, 250, 252` | **Taalimu Snow**: خلفية الموقع، خلفية الداشبورد، الأسطح الرئيسية للنظام |
+| `--color-white` / `--color-surface` | `#FFFFFF` | `255, 255, 255` | البطاقات، القائمة الجانبية (Sidebar)، النوافذ (Modals)، حقول الإدخال، ألواح الداشبورد |
+| `--color-text-main` / `--color-text-primary` | `#111827` | `17, 24, 39` | العناوين الرئيسية، الأرقام والقيم المهمة، نصوص الفقرات الأساسية |
+| `--color-text-secondary` | `#475569` | `71, 85, 105` | الأوصاف التوضيحية، النصوص الثانوية، تصنيفات الداشبورد |
+| `--color-text-muted` | `#94A3B8` | `148, 163, 184` | التلميحات (Hints)، البيانات الوصفية (Metadata)، العناصر المعطلة، التوقيتات |
+| `--color-border` / `--color-divider` | `#E2E8F0` | `226, 232, 240` | حدود البطاقات، حدود الحقول، الفواصل، الجداول، حدود السايدبار |
 
 ---
 
-## Shadows / Elevation
+### Semantic Colors (ألوان الحالات الوظيفية — ليست ألوان براند)
 
-| Token | Value |
-|-------|-------|
-| `--shadow-xs` | `0 2px 8px rgba(16, 32, 51, .04)` |
-| `--shadow-sm` | `0 4px 15px rgba(16, 32, 51, .05)` |
-| `--shadow-md` | `0 10px 30px rgba(16, 32, 51, .07)` |
-| `--shadow-lg` | `0 16px 45px rgba(16, 32, 51, .08)` |
-| `--shadow-xl` | `0 20px 50px rgba(16, 32, 51, .10)` |
-
-**Rule**: Light shadows only. No heavy shadows, glow effects, or neon.
+| الحالة | Token اللون | HEX الأساسي | خلفية الشارة (Soft) | نص الشارة الداكن | الاستخدام |
+|-------|------------|-------------|---------------------|-----------------|-----------|
+| **Success** | `--color-success` | `#16A34A` | `#DCFCE7` | `#166534` | مدفوع (Paid)، حاضر (Present)، نشط (Active)، مكتمل (Completed)، رسائل النجاح |
+| **Warning** | `--color-warning` | `#D97706` | `#FEF3C7` | `#92400E` | معلق (Pending)، قارب على الانتهاء (Expiring)، يتطلب انتباه |
+| **Error / Destructive** | `--color-error` | `#DC2626` | `#FEE2E2` | `#991B1B` | أخطاء، فشل الدفع، أخطاء التحقق، عمليات الحذف والإجراءات الخطرة |
+| **Info** | `--color-info` | `#0284C7` | `#E0F2FE` | `#075985` | معلومات، إرشادات وتلميحات، إشعارات محايدة |
 
 ---
 
-## Spacing System
+### قاعدة التوزيع البصري (Color Usage Rule)
 
-Base unit: **8px**
+- **70% Neutral**: خلفية Snow `#F8FAFC`، حدود `#E2E8F0`، نصوص محايدة.
+- **20% White / Surface**: بطاقات بيضاء `#FFFFFF`، حقول بيضاء، سايدبار أبيض.
+- **10% Brand + Semantic Colors**: لمسات Indigo `#5B5FEF` وشارات الحالات فقط.
 
-| Token | Value |
-|-------|-------|
-| `--spacing-1` | `8px` |
-| `--spacing-2` | `16px` |
-| `--spacing-3` | `24px` |
-| `--spacing-4` | `32px` |
-| `--spacing-5` | `40px` |
-| `--spacing-6` | `48px` |
-| `--spacing-8` | `64px` |
-| `--spacing-10` | `80px` |
-| `--spacing-12` | `96px` |
-| `--spacing-16` | `128px` |
+**ممنوع بصرياً**:
+- دمج ألوان متعددة (Purple + Green + Orange + Blue) داخل نفس المكون بدون مبرر وظيفي.
+- استخدام Gradients قوية في كل قسم.
+- ألوان نيون (Neon colors) نهائياً.
+- خلفيات سوداء قوية متكررة.
 
 ---
 
-## Component Tokens
+## 2. Typography (الخطوط ومقياس الطباعة)
 
-### Buttons
+- **اللغة العربية**: `Cairo` (العناوين العربية، النصوص، الملاحة، الأزرار، النماذج، نصوص التسويق)
+- **اللغة الإنجليزية والأرقام**: `Inter` (الواجهة الإنجليزية، الأرقام والبيانات، الداشبورد، الأزرار، الجداول، التصنيفات التقنية)
 
-| Token | Value |
-|-------|-------|
-| `--btn-primary-bg` | `#168F7C` |
-| `--btn-primary-hover-bg` | `#0D7465` |
-| `--btn-primary-text` | `#FFFFFF` |
-| `--btn-secondary-bg` | `#FFFFFF` |
-| `--btn-secondary-text` | `#168F7C` |
-| `--btn-secondary-border` | `#D3EBE5` |
-| `--btn-dark-bg` | `#0D1A2B` |
-| `--btn-dark-text` | `#FFFFFF` |
-| `--btn-font-weight` | `700` |
-| `--btn-transition` | `all 0.2s cubic-bezier(0.16, 1, 0.3, 1)` |
+### Typography Scale (مقياس الأحجام والأوزان)
 
-### Inputs
+| الدرجة | الحجم / Line Height | الوزن (Weight) | الاستخدام |
+|-------|---------------------|----------------|-----------|
+| **Display** | `48px / 56px` | `700` | عناوين الـ Hero فقط |
+| **H1** | `40px / 48px` | `700` | العناوين الرئيسية للصفحات |
+| **H2** | `32px / 40px` | `700` | عناوين الأقسام الرئيسية |
+| **H3** | `24px / 32px` | `600` | عناوين البطاقات والمجموعات |
+| **H4** | `20px / 28px` | `600` | العناوين الفرعية الداخلية |
+| **Body Large** | `18px / 30px` | `400` | مقدمات النصوص والفقرات البارزة |
+| **Body** | `16px / 26px` | `400` | نصوص المحتوى الأساسية |
+| **Body Small** | `14px / 22px` | `400` | النصوص المساعدة والبيانات الثانوية |
+| **Caption** | `12px / 18px` | `400–500` | التسميات الصغيرة والتواريخ والشارات |
 
-| Token | Value |
-|-------|-------|
-| `--input-bg` | `#FFFFFF` |
-| `--input-border` | `#DDE7E4` |
-| `--input-focus-border` | `#168F7C` |
-| `--input-focus-ring` | `#E8F5F1` |
-| `--input-text` | `#102033` |
-
-### Cards
-
-| Token | Light | Dark |
-|-------|-------|------|
-| `--card-bg` | `#FFFFFF` | `#102033` |
-| `--card-border` | `#E5ECE9` | `#1F3248` |
-| `--card-shadow` | `var(--shadow-sm)` | `var(--shadow-md)` |
-
-### Badges
-
-| Variant | Background | Text | Border |
-|---------|------------|------|--------|
-| Primary | `#E8F5F1` | `#0D7465` | `#D3EBE5` |
-| Success | `#E8F5F1` | `#0D7465` | `#D3EBE5` |
-| Warning | `#FFF5E1` | `#8A5B12` | - |
-| Danger | `#FDECEC` | `#C94A4A` | - |
-| Neutral | `#F2F5F4` | `#65717F` | - |
+> **قواعد الخطوط**:  
+> • استخدم وزن `700` للعناوين.  
+> • استخدم وزن `400` للنصوص.  
+> • استخدم وزن `500–600` للـ Labels والأزرار.  
+> • اجعل العناوين موجزة وواضحة، واستخدم `line-height` مريح ومناسب للعربية.  
+> • لا تستخدم أكثر من خطين في النظام، وتجنب الخطوط الزخرفية (Decorative).
 
 ---
 
-## Dark Mode
+## 3. Border Radius Scale (نظام انحناء الحواف)
 
-All design tokens automatically adapt via `.dark` class on `<html>`. 
-
-**Never** write hardcoded colors - always use CSS variables.
-
-```css
-/* ✅ Correct */
-.card {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    color: var(--color-text-main);
-}
-
-/* ❌ Wrong */
-.card {
-    background: #ffffff;
-    border: 1px solid #e7ecef;
-    color: #1f2937;
-}
-```
+| القياس | القيمة | الاستخدام المعتمد |
+|--------|--------|-------------------|
+| **XS** | `6px` | شارات صغيرة جداً، مؤشرات دقيقة |
+| **SM** | `8px` | عناصر صغيرة الحجم |
+| **MD (الأساسي)** | `10px` | **الأزرار (Buttons)** و **حقول الإدخال (Inputs)** |
+| **LG** | `12px` | القوائم المنسدلة والعناصر المتوسطة |
+| **XL** | `16px` | **البطاقات القياسية (Cards)** وحاويات المحتوى |
+| **2XL** | `20px` | **النوافذ المنبثقة (Modals & Dialogs)** |
+| **Pill** | `9999px` | **شارات الحالة (Badges)** والأزرار الدائرية |
 
 ---
 
-## RTL/LTR Support
+## 4. Shadows (نظام الظلال الناعمة)
 
-- Use logical properties: `margin-inline-start`, `margin-inline-end`, `padding-inline-start`, `padding-inline-end`
-- Use `text-start` / `text-end` instead of `text-left` / `text-right`
-- Use `float-start` / `float-end` instead of `float-left` / `float-right`
-- Arrow icons: `fa-arrow-start` / `fa-arrow-end` or CSS `flip`
+الافتراضي في Taalimu: **خفيف جداً أو بدون ظل**. لا ظلال ثقيلة أو متوهجة.
 
----
-
-## Iconography
-
-- **Library**: Font Awesome 6
-- **Style**: Outline only (`far` or `fas`)
-- **Default size**: `20px`
-- **No mixed icon libraries**
+| Token | القيمة | الاستخدام |
+|-------|--------|-----------|
+| `--shadow-xs` | `0 1px 2px rgba(15, 23, 42, 0.05)` | العناصر الصغيرة والأزرار الثانوية |
+| `--shadow-sm` | `0 2px 8px rgba(15, 23, 42, 0.06)` | البطاقات القياسية (Cards) |
+| `--shadow-md` | `0 8px 24px rgba(15, 23, 42, 0.10)` | القوائم المنسدلة والنوافذ المنبثقة (Modals / Dropdowns) |
+| `--shadow-lg` | `0 16px 40px rgba(15, 23, 42, 0.12)` | النوافذ الكبيرة والأسطح المرتفعة |
+| `--card-shadow` | `0 4px 16px rgba(15, 23, 42, 0.06)` | ظل البطاقات التلقائي عند الحاجة |
 
 ---
 
-## Animation
+## 5. Spacing System (نظام المسافات 4px)
 
-- **Duration**: `150ms–300ms` for micro-interactions
-- **Page reveal**: `500ms–700ms`
-- **Easing**: `cubic-bezier(0.16, 1, 0.3, 1)` (ease-out-expo)
-- **No**: bouncing, excessive parallax, infinite floating, flashy transitions
+مبني على شبكة **4px**:  
+`4 / 8 / 12 / 16 / 20 / 24 / 32 / 40 / 48 / 64 / 80 / 96`
 
----
-
-## Golden Rules
-
-1. **Taalimu Green (`#168F7C`) is the primary brand color**
-2. **Cream (`#FBFAF6`) adds warmth and humanity**
-3. **Navy (`#0D1A2B`) conveys trust and dark sections**
-4. **White is a surface, not the entire identity**
-5. **Don't overuse cards**
-6. **Every color must have a function**
-7. **Human imagery must be real, natural, documentary-style**
-8. **The product feels like a solution, not decoration**
-9. **Dashboard and Landing Page must feel like one product**
-10. **UI must be calm, not cluttered**
-11. **Design must feel like Taalimu understands the user's work**
+- **Small gap**: `8px`
+- **Normal gap**: `16px`
+- **Card Padding**: `20px–24px`
+- **Section Spacing**: `48px–64px`
+- **Large Marketing Section**: `80px–96px`
+- **Dashboard Main Content Padding**: `24px–32px` (على الموبايل: `16px–20px`)
 
 ---
 
-## File References
+## 6. Components Specification
 
-- **CSS Variables**: `resources/css/design-tokens.css`
-- **Global Components**: `resources/css/global-components.css`
-- **Landing V2**: `resources/css/landing-v2.css`
-- **SCSS Variables**: `resources/css/_colors.scss`
+### 1. Buttons (الأزرار)
+- **ارتفاع الأزرار**: `44px – 48px`
+- **انحناء الحواف**: `10px`
+- **الخط**: `14–16px / 500–600`
+- **Primary Button**: خلفية `#5B5FEF`، نص `#FFFFFF`، وعند الـ Hover خلفية `#4548C7`.
+- **Secondary Button**: خلفية `#FFFFFF`، حدود `#E2E8F0`، نص `#111827`، وعند الـ Hover خلفية `#F8FAFC`.
+- **Ghost Button**: خلفية `transparent`، نص `#5B5FEF`.
+- **Destructive Button**: خلفية `#DC2626`، نص `#FFFFFF` (للعمليات الخطرة مثل حذف طالب).
+
+### 2. Forms & Inputs (حقول الإدخال)
+- **الارتفاع**: `44px – 48px`
+- **انحناء الحواف**: `10px`
+- **الخلفية**: `#FFFFFF`
+- **الحدود**: `#E2E8F0`
+- **عند الـ Focus**: حدود `#5B5FEF` + حلقة تركيز `box-shadow: 0 0 0 3px rgba(91, 95, 239, 0.15);`
+- **حالة الخطأ**: حدود `#DC2626` + نص داعم `#DC2626`.
+
+### 3. Cards (البطاقات)
+- **الخلفية**: `#FFFFFF`
+- **الحدود**: `1px solid #E2E8F0`
+- **انحناء الحواف**: `16px`
+- **الحشوة الداخلية (Padding)**: `20px–24px`
+- **البطاقة المميزة (Premium Feature Card)**: خلفية `#EEF0FF` مع لمسات من `#5B5FEF`.
+
+### 4. Status Badges (شارات الحالات)
+- **انحناء الحواف**: `9999px` (Pill)
+- **النشط / مدفوع (Active / Paid)**: خلفية `#DCFCE7`، نص `#166534`
+- **المعلق (Pending)**: خلفية `#FEF3C7`، نص `#92400E`
+- **المنتهي / المتأخر (Expired / Due)**: خلفية `#FEE2E2`، نص `#991B1B`
+- **معلومات (Info)**: خلفية `#E0F2FE`، نص `#075985`
+
+### 5. Tables (الجداول)
+- **خلفية الجدول**: `#FFFFFF`
+- **خلفية الترويسة (Header)**: `#F8FAFC`
+- **الحدود**: `#E2E8F0`
+- **النص الأساسي**: `#111827`، والنص الثانوي: `#64748B`
+- **عند مرور الماوس (Row Hover)**: `#F8FAFC`
+
+### 6. Sidebar & Dashboard Shell (إطار لوحة التحكم)
+- **فلسفة الداشبورد**: **Clarity > Decoration** (الأرقام المهمة واضحة خلال 2-3 ثوانٍ).
+- **خلفية لوحة التحكم**: `#F8FAFC`
+- **القائمة الجانبية (Sidebar)**: خلفية `#FFFFFF`، حدود `#E2E8F0`.
+- **عنصر القائمة النشط (Active Navigation)**:
+  - الخلفية: `#EEF0FF`
+  - النص: `#5B5FEF`
+  - الأيقونة: `#5B5FEF`
+  - انحناء الحواف: `10px`
 
 ---
 
-## Brand Formula
+## 7. Motion & Animations (الحركة والانتقالات)
+
+- **المبدأ**: الحركة وظيفية وليست زخرفية (Useful, not decorative).
+- **السرعة**: `150ms – 250ms` (Fade, Slide, Scale صغير, Hover elevation).
+- **ممنوع**: أنيميشنز طويلة، Parallax مبالغ فيه، حركات مستمرة تشتت الانتباه، أو وسائط تعمل تلقائياً.
+
+---
+
+## 8. Specific Integrations Guidelines
+
+- **الذكاء الاصطناعي (AI Visual Identity)**: الـ AI جزء مكمل ولا يغير هوية النظام، يستخدم نفس خطوط وبطاقات النظام مع لمسة Accent خفيفة (`AI ≠ Neon Purple`).
+- **واتساب (WhatsApp Visual Identity)**: الأخضر يُستخدم فقط لأيقونة الواتساب والحديث عنها، ولا نجعل الأخضر جزءاً أساسياً من واجهة النظام (`UI → Taalimu Indigo + Neutral`).
+- **حضور الـ QR**: الكود بلون Black/White واضح، والأزرار بالـ Indigo، والحالة بـ Success Green، دون تحويل الشاشة لنظام بصري شاذ.
+
+---
+
+## 9. Visual Formula (المعادلة البصرية النهائية)
 
 ```
-Taalimu = Human + Calm + Trust + Simple Technology + Education
+Taalimu = Cairo + Inter + #5B5FEF + #F8FAFC + White Space + Real Product UI + Human Education Photography + Minimal Icons + Soft Rounded Cards + Clear Copy + Calm Motion
 ```
 
-**Goal**: A technical platform that *feels* human, not a technical platform *trying to look* human.
+> **"Professional education management, made simple."**

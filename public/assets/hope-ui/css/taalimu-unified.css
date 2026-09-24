@@ -1,23 +1,23 @@
-/* ===== Global Taalimu Green Theme (Matching Brand Identity v1.0) ===== */
+/* ===== Global Taalimu Indigo Theme (Matching Brand Identity v1.0) ===== */
 :root {
-    --bs-primary: var(--color-primary, #168F7C) !important;
-    --bs-primary-rgb: 22, 143, 124 !important;
-    --bs-link-color: var(--color-primary, #168F7C) !important;
-    --bs-link-hover-color: var(--color-primary-hover, #0D7465) !important;
-    --primary-color: var(--color-primary, #168F7C) !important;
-    --primary-gradient: linear-gradient(135deg, var(--color-primary, #168F7C) 0%, var(--color-primary-dark, #0D7465) 100%);
+    --bs-primary: var(--color-primary, #5B5FEF) !important;
+    --bs-primary-rgb: 91, 95, 239 !important;
+    --bs-link-color: var(--color-primary, #5B5FEF) !important;
+    --bs-link-hover-color: var(--color-primary-hover, #4548C7) !important;
+    --primary-color: var(--color-primary, #5B5FEF) !important;
+    --primary-gradient: linear-gradient(135deg, var(--color-primary, #5B5FEF) 0%, var(--color-primary-dark, #4548C7) 100%);
 
     /* Secondary & Neutrals */
     --color-secondary: #475569;
     --color-secondary-hover: #1e293b;
-    --color-secondary-bg: #f1f5f9;
+    --color-secondary-bg: #f8fafc;
 
     /* Button Tokens */
-    --btn-primary-bg: #168F7C;
-    --btn-primary-hover-bg: #0D7465;
+    --btn-primary-bg: #5B5FEF;
+    --btn-primary-hover-bg: #4548C7;
     --btn-primary-text: #FFFFFF;
-    --btn-primary-shadow: 0 1px 2px rgba(22, 143, 124, 0.2);
-    --btn-primary-hover-shadow: 0 4px 12px rgba(22, 143, 124, 0.25);
+    --btn-primary-shadow: 0 1px 2px rgba(91, 95, 239, 0.2);
+    --btn-primary-hover-shadow: 0 4px 12px rgba(91, 95, 239, 0.25);
 
     --btn-secondary-bg: #475569;
     --btn-secondary-hover-bg: #334155;
@@ -57,8 +57,8 @@
 
 body {
     font-family: 'Cairo', 'Inter', sans-serif;
-    background-color: #FBFAF6 !important;
-    color: #102033;
+    background-color: #F8FAFC !important;
+    color: #111827;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
@@ -445,41 +445,38 @@ body {
 }
 
 a {
-    color: #168F7C;
+    color: #5B5FEF;
     transition: all 0.2s ease;
 }
 
 a:hover {
-    color: #25746D;
+    color: #4548C7;
 }
 
-/* Sidebar active item - Soft Premium (All Levels) */
+/* Sidebar active item - Soft Indigo (Brand Identity Sheet v1.0) */
 .sidebar .nav-item .nav-link.active,
 .sidebar-default .sidebar-list .nav-item li>.nav-link.active {
-    background: linear-gradient(to right, rgba(46, 139, 131, 0.1), rgba(20, 184, 166, 0.1)) !important;
-    /* Soft Emerald/Teal Gradient */
-    color: #168F7C !important;
-    /* Deep Emerald */
+    background: #EEF0FF !important;
+    color: #5B5FEF !important;
     box-shadow: none !important;
     border-radius: 10px !important;
-    font-weight: 700;
+    font-weight: 600;
 }
 
 .sidebar .nav-item .nav-link.active i,
 .sidebar-default .sidebar-list .nav-item li>.nav-link.active i {
-    color: #168F7C !important;
+    color: #5B5FEF !important;
 }
 
 .sidebar .nav-item .nav-link {
     border-radius: 10px;
     font-weight: 600;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .sidebar .nav-item .nav-link:hover:not(.active) {
-    background: rgba(46, 139, 131, 0.05);
-    /* Very light emerald tint on hover */
-    color: #168F7C !important;
+    background: #F8FAFC;
+    color: #5B5FEF !important;
 }
 
 /* Header banner */

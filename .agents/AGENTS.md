@@ -228,7 +228,8 @@ public function enroll($student, $course)
 ### نظام التصميم:
 - **ارجع دائمًا لـ** `.agents/DESIGN_SYSTEM.md` قبل أي تعديل على الواجهة
 - **استخدم Design Tokens** من `resources/css/design-tokens.css` — لا تكتب ألوانًا يدوية
-- **اللون الأساسي**: `#2E8B83` — لا تغيره أبدًا
+- **اللون الأساسي**: Taalimu Indigo `#5B5FEF` (الداكن: `#4548C7`، الفاتح: `#EEF0FF`) وفق دليل الهوية المعتمد v1.0
+- **الخلفية الأساسية**: Taalimu Snow `#F8FAFC` والبطاقات `#FFFFFF` والحدود `#E2E8F0`
 - **الخطوط**: Cairo (عربي) و Inter (إنجليزي)
 - **ادعم Dark Mode** عبر CSS variables المعرّفة في `design-tokens.css`
 
