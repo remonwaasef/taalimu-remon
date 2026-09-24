@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Interfaces\VideoProviderInterface;
 use App\Models\OnlineClass;
 use App\Models\User;
+use App\Models\Video;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -164,6 +165,14 @@ class ZoomService implements VideoProviderInterface
             'duration_seconds' => isset($data['duration']) ? ((int) $data['duration'] * 60) : null,
             'recording_type' => $file['recording_type'] ?? 'unknown',
         ];
+    }
+
+    /**
+     * Direct browser uploads are handled by Bunny Stream for recorded video courses.
+     */
+    public function createDirectUpload(Video $video): array
+    {
+        throw new \BadMethodCallException('Zoom does not support direct video upload.');
     }
 
     /*

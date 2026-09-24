@@ -1,4 +1,4 @@
-﻿@extends('layouts.app-next')
+@extends('layouts.app-next')
 
 @section('title', __('instructor::online_classes.title'))
 
@@ -79,8 +79,8 @@
                                 <span class="badge bg-opacity-10 rounded-pill px-3" style="background-color: rgba(58, 12, 163, 0.1); color: var(--primary-color);">{{ $lesson->course->title ?? 'N/A' }}</span>
                             </td>
                             <td>
-                                <div>{{ $lesson->start_time->format('Y-m-d') }}</div>
-                                <div class="text-muted small">{{ $lesson->start_time->format('H:i') }} ({{ $lesson->duration_minutes }} {{ __('instructor::online_classes.minutes') }})</div>
+                                <div>{{ $lesson->start_time ? $lesson->start_time->format('Y-m-d') : '-' }}</div>
+                                <div class="text-muted small">{{ $lesson->start_time ? $lesson->start_time->format('H:i') : '-' }} ({{ $lesson->duration_minutes }} {{ __('instructor::online_classes.minutes') }})</div>
                             </td>
                             <td>
                                 <span class="badge bg-{{ $lesson->platform === 'zoom' ? 'info' : 'secondary' }} rounded-pill px-3">

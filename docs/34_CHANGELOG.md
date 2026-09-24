@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- **Fix Fatal Error on /instructor/online-classes (2026-09-24)**:
+  - Implemented missing `createDirectUpload` method in `App\Services\ZoomService` to fulfill the `VideoProviderInterface` contract, resolving the fatal PHP error that caused 500 Server Error upon accessing `/instructor/online-classes`.
+  - Added null-safe formatting checks (`$lesson->start_time ? $lesson->start_time->format(...) : '-'`) in `Modules/Instructor/resources/views/online_classes/index.blade.php` to prevent view crashes when a class has an empty or unparsed start date.
+
 - **In-App Virtual Classroom Studio with Interactive Q&A, Chat, and Hand Raises (2026-09-21)**:
   - Built an integrated virtual classroom studio (`Modules/Instructor/resources/views/online_classes/show.blade.php`) embedding a full-screen WebRTC video engine (Jitsi Meet Web API) directly inside the platform without third-party app requirements, popups, or floating mini-windows.
   - Added interactive classroom side hub with 4 dynamic tabs:
